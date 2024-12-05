@@ -1,16 +1,27 @@
-using WhiteTale.Server.Services;
+using System;
+using System.Diagnostics;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using WhiteTale.Server;
+using WhiteTale.Server.Logging;
 
-var builder = WebApplication.CreateBuilder(args);
+long startTimestamp = Stopwatch.GetTimestamp();
 
-// Add services to the container.
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddGrpc();
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IAssemblyMarker).Assembly));
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
-// Configure the HTTP request pipeline.
-app.MapGrpcService<GreeterService>();
-app.MapGet("/",
-    () =>
-        "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+await app.StartAsync().ConfigureAwait(false);
 
-app.Run();
+TimeSpan elapsedTime = Stopwatch.GetElapsedTime(startTimestamp);
+ILogger<Program> logger = app.Services.GetRequiredService<ILogger<Program>>();
+logger.AppLog($"Now listening on: {string.Join(" - ", app.Urls)}");
+logger.AppLog($"WhiteTale is Ready — It only took {(int)elapsedTime.TotalMilliseconds} milliseconds!");
+logger.AppLog("You can press Ctrl+C to shut down.");
+
+await app.WaitForShutdownAsync().ConfigureAwait(false);
