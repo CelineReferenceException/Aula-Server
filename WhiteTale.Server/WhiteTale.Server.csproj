@@ -3,7 +3,17 @@
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
 		<Nullable>enable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
+		<InvariantGlobalization>true</InvariantGlobalization>
+		<PublishAot>false</PublishAot>
+		<GenerateDocumentationFile>false</GenerateDocumentationFile>
+
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+		<RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+		<RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
+		<AnalysisLevel>latest-all</AnalysisLevel>
+		<WarningLevel>4</WarningLevel>
+		<NoWarn>1701;1702</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -12,6 +22,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="Grpc.AspNetCore" Version="2.64.0"/>
+		<PackageReference Include="FluentValidation" Version="11.11.0"/>
+		<PackageReference Include="MediatR" Version="12.4.1" />
 	</ItemGroup>
 
 </Project>
