@@ -1,11 +1,9 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WhiteTale.Server;
-using WhiteTale.Server.Common.Logging;
 
 long startTimestamp = Stopwatch.GetTimestamp();
 
@@ -15,6 +13,8 @@ builder.Services.AddGrpc();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IAssemblyMarker).Assembly));
 
 WebApplication app = builder.Build();
+
+app.UseWhiteTaleSettings();
 
 await app.StartAsync().ConfigureAwait(false);
 
