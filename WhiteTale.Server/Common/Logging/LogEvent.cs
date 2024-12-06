@@ -1,4 +1,4 @@
-﻿namespace WhiteTale.Server.Logging;
+﻿namespace WhiteTale.Server.Common.Logging;
 
 internal static class LogEvent
 {
