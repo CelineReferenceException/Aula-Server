@@ -14,7 +14,6 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IAsse
 
 WebApplication app = builder.Build();
 
-app.UseWhiteTaleSettings();
 
 await app.StartAsync().ConfigureAwait(false);
 
