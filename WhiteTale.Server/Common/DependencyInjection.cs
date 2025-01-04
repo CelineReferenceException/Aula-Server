@@ -1,3 +1,4 @@
+using WhiteTale.Server.Common.RateLimiting;
 namespace WhiteTale.Server.Common;
 
 internal static class DependencyInjection
@@ -46,6 +47,7 @@ internal static class DependencyInjection
 				options.RefreshTokenExpiration = TimeSpan.FromDays(14);
 			});
 
+		_ = builder.Services.AddRateLimiters();
 		_ = builder.Services.AddMailSender();
 		_ = builder.Services.AddSingleton<ISnowflakeGenerator, DefaultSnowflakeGenerator>();
 		_ = builder.Services.AddDbContext<ApplicationDbContext>();
@@ -56,6 +58,7 @@ internal static class DependencyInjection
 
 	internal static TApp UseCommon<TApp>(this TApp app) where TApp : IApplicationBuilder, IEndpointRouteBuilder
 	{
+		_ = app.UseRateLimiter();
 		_ = app.UseAuthentication();
 		_ = app.UseAuthorization();
 		_ = app.MapEndpoints();
