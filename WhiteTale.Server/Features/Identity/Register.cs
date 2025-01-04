@@ -53,7 +53,7 @@ internal sealed class Register : IEndpoint
 			return TypedResults.NoContent();
 		}
 
-		var newId = snowflakes.NewSnowflake();
+		var newId = snowflakes.NewSnowflakeAsync();
 		var newUser = new User(body.UserName)
 		{
 			Id = newId,
