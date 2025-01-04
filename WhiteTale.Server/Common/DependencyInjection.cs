@@ -1,4 +1,8 @@
+﻿using Microsoft.AspNetCore.Authentication.BearerToken;
+using Microsoft.Extensions.Hosting;
 using WhiteTale.Server.Common.RateLimiting;
+using WhiteTale.Server.Domain.Users;
+
 namespace WhiteTale.Server.Common;
 
 internal static class DependencyInjection
