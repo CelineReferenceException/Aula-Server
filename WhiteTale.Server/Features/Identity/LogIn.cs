@@ -1,0 +1,79 @@
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.BearerToken;
+using WhiteTale.Server.Common.RateLimiting;
+using WhiteTale.Server.Domain.Users;
+
+namespace WhiteTale.Server.Features.Identity;
+
+internal sealed class LogIn : IEndpoint
+{
+	public void Build(IEndpointRouteBuilder route)
+	{
+		_ = route.MapPost("api/identity/login", HandleAsync)
+			.RequireRateLimiting(RateLimitPolicyNames.Global);
+	}
+
+	private static async Task<Results<Ok<AccessTokenResponse>, ProblemHttpResult, EmptyHttpResult>> HandleAsync(
+		[FromBody] LogInRequestBody body,
+		[FromServices] IValidator<LogInRequestBody> bodyValidator,
+		[FromServices] UserManager<User> userManager,
+		[FromServices] SignInManager<User> signInManager)
+	{
+		var bodyValidation = await bodyValidator.ValidateAsync(body).ConfigureAwait(false);
+		if (!bodyValidation.IsValid)
+		{
+			var problemDetails = bodyValidation.Errors.ToProblemDetails();
+			return TypedResults.Problem(problemDetails);
+		}
+
+		var user = await userManager.FindByNameAsync(body.UserName).ConfigureAwait(false);
+		if (user is null)
+		{
+			return TypedResults.Problem(new ProblemDetails
+			{
+				Title = "Unknown user",
+				Status = StatusCodes.Status400BadRequest
+			});
+		}
+
+		var isPasswordCorrect = await userManager.CheckPasswordAsync(user, body.Password).ConfigureAwait(false);
+
+		if (!isPasswordCorrect)
+		{
+			_ = await userManager.AccessFailedAsync(user).ConfigureAwait(false);
+			return TypedResults.Problem(new ProblemDetails
+			{
+				Title = "A login problem has occurred",
+				Detail = "The password provided is incorrect.",
+				Status = StatusCodes.Status400BadRequest
+			});
+		}
+
+		if (await userManager.IsLockedOutAsync(user).ConfigureAwait(false))
+		{
+			return TypedResults.Problem(new ProblemDetails
+			{
+				Title = "A login problem has occurred",
+				Detail = "The account is temporarily locked out due to multiple unsuccessful login attempts.",
+				Status = StatusCodes.Status403Forbidden
+			});
+		}
+
+		if (userManager.Options.SignIn.RequireConfirmedEmail &&
+		    !await userManager.IsEmailConfirmedAsync(user).ConfigureAwait(false))
+		{
+			return TypedResults.Problem(new ProblemDetails
+			{
+				Title = "Email is not confirmed",
+				Detail = "Email confirmation is required to login.",
+				Status = StatusCodes.Status403Forbidden
+			});
+		}
+
+		signInManager.AuthenticationScheme = IdentityConstants.BearerScheme;
+		await signInManager.SignInAsync(user, new AuthenticationProperties()).ConfigureAwait(false);
+
+		// The signInManager already produced a response in the form of a bearer token.
+		return TypedResults.Empty;
+	}
+}
