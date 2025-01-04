@@ -54,7 +54,6 @@ internal sealed class ModifyOwnCharacter : IEndpoint
 		}
 		catch (DbUpdateConcurrencyException ex)
 		{
-			logger.LogDbUpdateConcurrencyProblem(nameof(User), character.Id, ex);
 			return TypedResults.InternalServerError();
 		}
 
