@@ -2,5 +2,5 @@
 
 internal interface ISnowflakeGenerator
 {
-	ValueTask<UInt64> NewSnowflakeAsync();
+	UInt64 NewSnowflake();
 }

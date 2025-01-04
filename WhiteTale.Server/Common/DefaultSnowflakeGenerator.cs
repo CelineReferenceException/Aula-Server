@@ -30,7 +30,7 @@ internal sealed class DefaultSnowflakeGenerator : ISnowflakeGenerator
 			{
 			}
 
-			_increment = 0;
+			_increment = 1;
 		}
 
 		_lastOperationTime = DateTime.UtcNow;
