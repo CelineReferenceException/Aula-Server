@@ -1,5 +1,4 @@
 ﻿using WhiteTale.Server.Domain.Characters;
-using WhiteTale.Server.Domain.Users;
 
 namespace WhiteTale.Server.Features.Characters;
 

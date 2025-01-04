@@ -1,5 +1,4 @@
 ﻿using System.Threading.Channels;
-using Microsoft.Extensions.Options;
 
 namespace WhiteTale.Server.Common.BackgroundTaskQueue;
 

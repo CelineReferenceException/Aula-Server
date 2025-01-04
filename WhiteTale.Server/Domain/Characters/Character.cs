@@ -1,6 +1,4 @@
-﻿using WhiteTale.Server.Domain.Users;
-
-namespace WhiteTale.Server.Domain.Characters;
+﻿namespace WhiteTale.Server.Domain.Characters;
 
 internal sealed class Character
 {
