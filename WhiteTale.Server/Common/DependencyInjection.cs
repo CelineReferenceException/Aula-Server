@@ -52,6 +52,8 @@ internal static class DependencyInjection
 			});
 
 		_ = builder.Services.AddCors();
+		_ = builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>(ServiceLifetime.Singleton, includeInternalTypes: true);
+
 		_ = builder.Services.AddRateLimiters();
 		_ = builder.Services.AddMailSender();
 		_ = builder.Services.AddSingleton<ISnowflakeGenerator, DefaultSnowflakeGenerator>();
