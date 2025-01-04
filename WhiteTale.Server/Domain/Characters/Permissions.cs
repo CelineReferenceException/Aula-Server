@@ -1,4 +1,4 @@
-﻿namespace WhiteTale.Server.Domain.Users;
+﻿namespace WhiteTale.Server.Domain.Characters;
 
 /// <summary>
 ///     Enumerates permissions that can be assigned to a user within the application.
