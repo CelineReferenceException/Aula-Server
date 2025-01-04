@@ -4,6 +4,11 @@ internal static class DependencyInjection
 {
 	internal static TBuilder AddCommon<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
 	{
+		_ = builder.Services.AddOptions<ApplicationOptions>()
+			.BindConfiguration(ApplicationOptions.SectionName)
+			.ValidateDataAnnotations()
+			.ValidateOnStart();
+
 		_ = builder.Services.AddEndpoints();
 
 		return builder;
