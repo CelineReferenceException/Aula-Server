@@ -9,14 +9,44 @@ indent_style = tab
 indent_size = tab
 trim_trailing_whitespace = true
 
-# ReSharper settings
-resharper_use_discard_assignment_highlighting = true:suggestion
+# Warping properties
+max_line_length = 140
+resharper_csharp_max_line_length = 140
+resharper_max_attribute_length_for_same_line = 35
 
 # ReSharper properties
-resharper_max_attribute_length_for_same_line = 1
+resharper_csharp_max_enum_members_on_line = 1
+resharper_csharp_wrap_after_declaration_lpar = true
+resharper_csharp_wrap_before_first_type_parameter_constraint = true
+resharper_csharp_wrap_parameters_style = chop_if_long
+resharper_force_chop_compound_do_expression = true
+resharper_force_chop_compound_if_expression = true
+resharper_force_chop_compound_while_expression = true
+resharper_keep_existing_declaration_parens_arrangement = false
+resharper_keep_existing_embedded_arrangement = false
+resharper_keep_existing_expr_member_arrangement = false
+resharper_keep_existing_invocation_parens_arrangement = false
+resharper_keep_existing_list_patterns_arrangement = false
+resharper_keep_existing_primary_constructor_declaration_parens_arrangement = false
+resharper_keep_existing_property_patterns_arrangement = false
+resharper_keep_existing_switch_expression_arrangement = false
+resharper_max_initializer_elements_on_line = 1
+resharper_nested_ternary_style = compact
+resharper_place_attribute_on_same_line = false
+resharper_place_simple_accessor_on_single_line = false
+resharper_place_simple_case_statement_on_same_line = true
+resharper_wrap_array_initializer_style = chop_if_long
+resharper_wrap_before_linq_expression = true
+resharper_wrap_before_primary_constructor_declaration_lpar = true
+resharper_wrap_before_primary_constructor_declaration_rpar = true
+resharper_wrap_chained_binary_patterns = chop_if_long
+resharper_wrap_chained_method_calls = chop_if_long
+resharper_wrap_linq_expressions = chop_always
+resharper_wrap_list_pattern = chop_if_long
 
 # C# files
 [*.cs]
+
 # New line preferences
 csharp_new_line_before_open_brace = all
 csharp_new_line_before_else = true
@@ -33,6 +63,7 @@ csharp_indent_case_contents = true
 csharp_indent_case_contents_when_block = false
 csharp_indent_switch_labels = true
 csharp_indent_labels = one_less_than_current
+resharper_xmldoc_alignment_tab_fill_style = use_tabs_only
 
 # Modifier preferences
 csharp_preferred_modifier_order = public, private, protected, internal, file, static, extern, new, virtual, abstract, sealed, override, readonly, unsafe, required, volatile, async:suggestion
@@ -43,12 +74,12 @@ dotnet_style_qualification_for_property = false:suggestion
 dotnet_style_qualification_for_method = false:suggestion
 dotnet_style_qualification_for_event = false:suggestion
 
-# Types: use keywords instead of BCL types, and permit var only when the type is clear
-csharp_style_var_for_built_in_types = false:suggestion
-csharp_style_var_when_type_is_apparent = false:none
-csharp_style_var_elsewhere = false:suggestion
-dotnet_style_predefined_type_for_locals_parameters_members = true:suggestion
-dotnet_style_predefined_type_for_member_access = true:suggestion
+# Use var everywhere
+csharp_style_var_elsewhere = true:suggestion
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+dotnet_style_predefined_type_for_locals_parameters_members = false:suggestion
+dotnet_style_predefined_type_for_member_access = false:suggestion
 
 # name all constant fields using PascalCase
 dotnet_naming_rule.constant_fields_should_be_pascal_case.severity = suggestion
@@ -100,7 +131,7 @@ dotnet_style_prefer_inferred_tuple_names = true:suggestion
 dotnet_style_prefer_inferred_anonymous_type_member_names = true:suggestion
 dotnet_style_prefer_auto_properties = true:suggestion
 dotnet_style_prefer_conditional_expression_over_assignment = true:silent
-dotnet_style_prefer_conditional_expression_over_return = true:silent
+dotnet_style_prefer_conditional_expression_over_return = true:none
 csharp_prefer_simple_default_expression = true:suggestion
 dotnet_style_parentheses_in_arithmetic_binary_operators = never_if_unnecessary:warning
 dotnet_style_parentheses_in_other_binary_operators = always_for_clarity:warning
@@ -156,6 +187,30 @@ csharp_space_between_method_declaration_parameter_list_parentheses = false
 csharp_space_between_parentheses = false
 csharp_space_between_square_brackets = false
 
+# IDE0160: Convert to block scoped namespace
+csharp_style_namespace_declarations = file_scoped
+dotnet_diagnostic.ide0160.severity = suggestion
+
+# IDE0058: Expression value is never used
+csharp_style_unused_value_expression_statement_preference = discard_variable
+dotnet_diagnostic.ide0058.severity = suggestion
+
+# IDE0290: Use primary constructor
+csharp_style_prefer_primary_constructors = false
+dotnet_diagnostic.ide0290.severity = suggestion
+
+# IDE0052: Remove unread private members
+dotnet_diagnostic.ide0052.severity = suggestion
+
+# IDE0055: Fix formatting
+dotnet_diagnostic.ide0055.severity = suggestion
+
+# IDE0046: Convert to conditional expression
+dotnet_diagnostic.ide0046.severity = none
+
+# CA1812: Avoid uninstantiated internal classes
+dotnet_diagnostic.CA1812.severity = silent
+
 [*.{csproj,vbproj,proj,nativeproj,locproj}]
 charset = utf-8
 
@@ -165,3 +220,4 @@ end_of_line = lf
 
 [*.{cmd,bat}]
 end_of_line = crlf
+
