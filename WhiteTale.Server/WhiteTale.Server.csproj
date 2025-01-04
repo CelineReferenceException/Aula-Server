@@ -14,7 +14,7 @@
 		<RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
 		<AnalysisLevel>latest-all</AnalysisLevel>
 		<WarningLevel>4</WarningLevel>
-		<NoWarn>1701;1702</NoWarn>
+		<NoWarn>1701;1702;RS1035</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
