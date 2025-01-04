@@ -1,26 +1,47 @@
 using System.Diagnostics;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+using MartinCostello.OpenApi;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using WhiteTale.Server;
+using Scalar.AspNetCore;
 
-long startTimestamp = Stopwatch.GetTimestamp();
+var startTimestamp = Stopwatch.GetTimestamp();
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddGrpc();
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IAssemblyMarker).Assembly));
+builder.AddCommon();
 
-WebApplication app = builder.Build();
+builder.Services.AddOpenApi();
+builder.Services.AddOpenApiExtensions(static options => options.XmlDocumentationAssemblies.Add(typeof(IAssemblyMarker).Assembly));
 
+var application = builder.Build();
 
-await app.StartAsync().ConfigureAwait(false);
+application.UseCommon();
 
-TimeSpan elapsedTime = Stopwatch.GetElapsedTime(startTimestamp);
-ILogger<Program> logger = app.Services.GetRequiredService<ILogger<Program>>();
-logger.LogMessage($"Now listening on: {string.Join(" - ", app.Urls)}");
-logger.LogMessage($"WhiteTale is Ready — It only took {(int)elapsedTime.TotalMilliseconds} milliseconds!");
-logger.LogMessage("You can press Ctrl+C to shut down.");
+if (application.Environment.IsDevelopment())
+{
+	var documentationRoute = application.MapGroup("documentation");
 
-await app.WaitForShutdownAsync().ConfigureAwait(false);
+	_ = documentationRoute.MapOpenApi();
+	_ = documentationRoute.MapScalarApiReference(options =>
+	{
+		options.WithTitle($"{nameof(WhiteTale)} API {{documentName}}")
+			.WithTheme(ScalarTheme.DeepSpace)
+			.WithDarkMode(false)
+			.WithSidebar(true)
+			.WithDefaultOpenAllTags(false)
+			.WithModels(true)
+			.WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
+			.WithEndpointPrefix("/api-reference/{documentName}")
+			.OpenApiRoutePattern = "/documentation/openapi/{documentName}.json";
+	});
+}
+
+await application.StartAsync().ConfigureAwait(false);
+
+var elapsedTime = Stopwatch.GetElapsedTime(startTimestamp);
+var logger = application.Services.GetRequiredService<ILogger<Program>>();
+
+logger.Inform($"Now listening on: {String.Join(" - ", application.Urls)}");
+logger.Inform($"{nameof(WhiteTale)} is Ready — It only took {(Int32)elapsedTime.TotalMilliseconds} milliseconds!");
+logger.Inform("You can press Ctrl+C to shut down.");
+
+await application.WaitForShutdownAsync().ConfigureAwait(false);
