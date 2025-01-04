@@ -10,6 +10,7 @@ internal static class DependencyInjection
 			.ValidateOnStart();
 
 		_ = builder.Services.AddMailSender();
+		_ = builder.Services.AddSingleton<ISnowflakeGenerator, DefaultSnowflakeGenerator>();
 		_ = builder.Services.AddDbContext<ApplicationDbContext>();
 		_ = builder.Services.AddEndpoints();
 
