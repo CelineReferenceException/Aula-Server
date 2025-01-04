@@ -51,6 +51,7 @@ internal static class DependencyInjection
 				options.RefreshTokenExpiration = TimeSpan.FromDays(14);
 			});
 
+		_ = builder.Services.AddCors();
 		_ = builder.Services.AddRateLimiters();
 		_ = builder.Services.AddMailSender();
 		_ = builder.Services.AddSingleton<ISnowflakeGenerator, DefaultSnowflakeGenerator>();
@@ -62,6 +63,7 @@ internal static class DependencyInjection
 
 	internal static TApp UseCommon<TApp>(this TApp app) where TApp : IApplicationBuilder, IEndpointRouteBuilder
 	{
+		_ = app.UseCors();
 		_ = app.UseRateLimiter();
 		_ = app.UseAuthentication();
 		_ = app.UseAuthorization();
