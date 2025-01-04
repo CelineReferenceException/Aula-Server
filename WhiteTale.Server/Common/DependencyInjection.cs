@@ -9,6 +9,7 @@ internal static class DependencyInjection
 			.ValidateDataAnnotations()
 			.ValidateOnStart();
 
+		_ = builder.Services.AddMailSender();
 		_ = builder.Services.AddEndpoints();
 
 		return builder;
