@@ -1,0 +1,45 @@
+﻿using WhiteTale.Server.Domain.Characters;
+using WhiteTale.Server.Domain.Users;
+
+namespace WhiteTale.Server.Features.Characters;
+
+/// <summary>
+///     Represents a character within the application.
+/// </summary>
+internal sealed record CharacterData
+{
+	/// <summary>
+	///     The ID of the user.
+	/// </summary>
+	public required UInt64 Id { get; init; }
+
+	/// <summary>
+	///     The name of the user.
+	/// </summary>
+	public required String DisplayName { get; init; }
+
+	/// <summary>
+	///     The description of the user.
+	/// </summary>
+	public required String? Description { get; init; }
+
+	/// <summary>
+	///     The type of the user who owns the character.
+	/// </summary>
+	public required CharacterOwnerType OwnerType { get; init; }
+
+	/// <summary>
+	///     The presence of the user.
+	/// </summary>
+	public required Presence Presence { get; init; }
+
+	/// <summary>
+	///     The permissions of the user.
+	/// </summary>
+	public required Permissions Permissions { get; init; }
+
+	/// <summary>
+	///     The ID of the current room the user resides in.
+	/// </summary>
+	public required UInt64? CurrentRoomId { get; init; }
+}
