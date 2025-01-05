@@ -60,6 +60,8 @@ internal static class DependencyInjection
 		_ = builder.Services.AddSingleton<ISnowflakeGenerator, DefaultSnowflakeGenerator>();
 		_ = builder.Services.AddPersistence();
 		_ = builder.Services.AddEndpoints();
+		_ = builder.Logging.ClearProviders();
+		_ = builder.Logging.AddLogging();
 
 		return builder;
 	}

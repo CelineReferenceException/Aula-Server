@@ -7,6 +7,7 @@ global using WhiteTale.Server.Common;
 global using WhiteTale.Server.Common.Authorization;
 global using WhiteTale.Server.Common.BackgroundTaskQueue;
 global using WhiteTale.Server.Common.Endpoints;
+global using WhiteTale.Server.Common.Logging;
 global using WhiteTale.Server.Common.Mail;
 global using WhiteTale.Server.Common.Persistence;
 global using WhiteTale.Server.Common.RateLimiting;
