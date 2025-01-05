@@ -9,6 +9,7 @@ global using WhiteTale.Server.Common.BackgroundTaskQueue;
 global using WhiteTale.Server.Common.Endpoints;
 global using WhiteTale.Server.Common.Mail;
 global using WhiteTale.Server.Common.Persistence;
+global using WhiteTale.Server.Common.RateLimiting;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Http.HttpResults;
 global using Microsoft.AspNetCore.Mvc;

@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using WhiteTale.Server.Common.RateLimiting;
 using WhiteTale.Server.Domain.Users;
 
 namespace WhiteTale.Server.Features.Identity;

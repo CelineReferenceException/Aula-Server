@@ -1,5 +1,4 @@
-﻿using WhiteTale.Server.Common.RateLimiting;
-using WhiteTale.Server.Domain.Users;
+﻿using WhiteTale.Server.Domain.Users;
 
 namespace WhiteTale.Server.Features.Characters;
 

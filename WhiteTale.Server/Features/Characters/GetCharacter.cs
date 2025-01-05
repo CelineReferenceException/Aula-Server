@@ -1,6 +1,4 @@
-﻿using WhiteTale.Server.Common.RateLimiting;
-
-namespace WhiteTale.Server.Features.Characters;
+﻿namespace WhiteTale.Server.Features.Characters;
 
 internal sealed class GetCharacter : IEndpoint
 {
