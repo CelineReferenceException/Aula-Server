@@ -43,7 +43,6 @@ internal sealed class ModifyOwnCharacter : IEndpoint
 			return TypedResults.InternalServerError();
 		}
 
-		_ = dbContext.Attach(character);
 		character.DisplayName = body.DisplayName ?? character.DisplayName;
 		character.Description = body.Description ?? character.Description;
 		character.ConcurrencyStamp = Guid.NewGuid().ToString();
