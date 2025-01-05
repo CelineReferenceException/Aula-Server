@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using WhiteTale.Server.Domain.Characters;
 using WhiteTale.Server.Domain.Messages;
 using WhiteTale.Server.Domain.Rooms;
@@ -9,10 +10,12 @@ namespace WhiteTale.Server.Common.Persistence;
 internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 {
 	private readonly IConfiguration _configuration;
+	private readonly IOptions<PersistenceOptions> _persistenceOptions;
 
-	public ApplicationDbContext(IConfiguration configuration)
+	public ApplicationDbContext(IConfiguration configuration, IOptions<PersistenceOptions> persistenceOptions)
 	{
 		_configuration = configuration;
+		_persistenceOptions = persistenceOptions;
 	}
 
 	internal DbSet<Character> Characters => Set<Character>();
@@ -25,8 +28,16 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
-		_ = optionsBuilder.UseSqlite(_configuration.GetConnectionString("Default"))
-			.LogTo(Console.WriteLine);
+		if (!_persistenceOptions.Value.UseInMemoryDatabase)
+		{
+			_ = optionsBuilder.UseSqlite(_configuration.GetConnectionString("Default"));
+		}
+		else
+		{
+			_ = optionsBuilder.UseInMemoryDatabase("InMemoryDatabase");
+		}
+
+		_ = optionsBuilder.LogTo(Console.WriteLine);
 
 		base.OnConfiguring(optionsBuilder);
 	}
