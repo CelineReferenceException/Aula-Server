@@ -50,7 +50,7 @@ internal sealed class ModifyOwnCharacter : IEndpoint
 		{
 			_ = await dbContext.SaveChangesAsync().ConfigureAwait(false);
 		}
-		catch (DbUpdateConcurrencyException ex)
+		catch (DbUpdateConcurrencyException)
 		{
 			return TypedResults.InternalServerError();
 		}
