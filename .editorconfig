@@ -130,7 +130,6 @@ dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggesti
 dotnet_style_prefer_inferred_tuple_names = true:suggestion
 dotnet_style_prefer_inferred_anonymous_type_member_names = true:suggestion
 dotnet_style_prefer_auto_properties = true:suggestion
-dotnet_style_prefer_conditional_expression_over_assignment = true:silent
 dotnet_style_prefer_conditional_expression_over_return = true:none
 csharp_prefer_simple_default_expression = true:suggestion
 dotnet_style_parentheses_in_arithmetic_binary_operators = never_if_unnecessary:warning
@@ -207,6 +206,10 @@ dotnet_diagnostic.ide0055.severity = suggestion
 
 # IDE0046: Convert to conditional expression
 dotnet_diagnostic.ide0046.severity = none
+
+# IDE0045: Use conditional expression for assignment
+dotnet_style_prefer_conditional_expression_over_assignment = true
+dotnet_diagnostic.IDE0045.severity = suggestion
 
 # CA1812: Avoid uninstantiated internal classes
 dotnet_diagnostic.CA1812.severity = silent
