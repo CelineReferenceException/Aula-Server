@@ -12,7 +12,7 @@ trim_trailing_whitespace = true
 # Warping properties
 max_line_length = 140
 resharper_csharp_max_line_length = 140
-resharper_max_attribute_length_for_same_line = 35
+resharper_max_attribute_length_for_same_line = 70
 
 # ReSharper properties
 resharper_csharp_max_enum_members_on_line = 1
