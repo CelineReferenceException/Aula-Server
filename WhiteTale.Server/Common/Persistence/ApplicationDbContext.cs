@@ -54,14 +54,14 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 		_ = userModel.Property(x => x.Id)
 			.IsRequired()
 			.ValueGeneratedNever();
-		_ = userModel.HasKey(u => u.Id);
+		_ = userModel.HasKey(x => x.Id);
 
 		var characterModel = modelBuilder.Entity<Character>();
 
 		_ = characterModel.Property(x => x.Id)
 			.IsRequired()
 			.ValueGeneratedNever();
-		_ = characterModel.HasKey(u => u.Id);
+		_ = characterModel.HasKey(x => x.Id);
 
 		_ = characterModel.Property(x => x.DisplayName)
 			.IsRequired()
