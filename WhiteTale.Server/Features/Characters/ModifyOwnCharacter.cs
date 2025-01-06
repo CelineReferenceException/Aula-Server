@@ -35,7 +35,7 @@ internal sealed class ModifyOwnCharacter : IEndpoint
 		var character = await dbContext.Characters
 			.AsTracking()
 			.Where(character => character.Id == userId)
-			.SingleOrDefaultAsync()
+			.FirstOrDefaultAsync()
 			.ConfigureAwait(false);
 		if (character is null)
 		{

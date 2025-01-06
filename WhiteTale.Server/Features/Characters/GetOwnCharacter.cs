@@ -36,7 +36,7 @@ internal sealed class GetOwnCharacter : IEndpoint
 					Presence = character.Presence,
 					Permissions = character.Permissions
 				})
-			.SingleOrDefaultAsync()
+			.FirstOrDefaultAsync()
 			.ConfigureAwait(false);
 		if (character is null)
 		{
