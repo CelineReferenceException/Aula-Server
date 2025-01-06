@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using WhiteTale.Server.Domain.Characters;
 using WhiteTale.Server.Domain.Messages;
@@ -26,6 +27,7 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 
 	internal DbSet<Message> Messages => Set<Message>();
 
+	[SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope")]
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
 		if (!_persistenceOptions.Value.UseInMemoryDatabase)
@@ -37,7 +39,8 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 			_ = optionsBuilder.UseInMemoryDatabase("InMemoryDatabase");
 		}
 
-		_ = optionsBuilder.LogTo(Console.WriteLine);
+		var loggerFactory = LoggerFactory.Create(builder => builder.AddLogging());
+		_ = optionsBuilder.UseLoggerFactory(loggerFactory);
 
 		base.OnConfiguring(optionsBuilder);
 	}
