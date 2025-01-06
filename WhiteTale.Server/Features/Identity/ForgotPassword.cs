@@ -19,7 +19,7 @@ internal sealed class ForgotPassword : IEndpoint
 	private static async Task<NoContent> HandleAsync(
 		[FromQuery] String email,
 		[FromQuery] String? resetUri,
-		[FromServices] HttpRequest httpRequest,
+		HttpRequest httpRequest,
 		[FromServices] UserManager<User> userManager,
 		[FromServices] IEmailSender emailSender)
 	{

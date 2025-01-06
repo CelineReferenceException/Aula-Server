@@ -22,7 +22,7 @@ internal sealed class ConfirmEmail : IEndpoint
 		[FromQuery] String email,
 		[FromQuery] String? token,
 		[FromQuery] String? redirectUri,
-		[FromServices] HttpRequest httpRequest,
+		HttpRequest httpRequest,
 		[FromServices] UserManager<User> userManager,
 		[FromServices] IEmailSender emailSender,
 		[FromServices] IOptions<ApplicationOptions> applicationOptions,
