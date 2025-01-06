@@ -25,8 +25,7 @@ internal sealed class ConfirmEmail : IEndpoint
 		[FromQuery(Name = RedirectUriQueryParameterName)] String? redirectUri,
 		[FromServices] UserManager<User> userManager,
 		HttpRequest httpRequest,
-		[FromServices] ConfirmEmailEmailSender confirmEmailEmailSender,
-		[FromServices] ILogger<ConfirmEmail> logger)
+		[FromServices] ConfirmEmailEmailSender confirmEmailEmailSender)
 	{
 		email = WebUtility.UrlDecode(email);
 		redirectUri = WebUtility.UrlDecode(redirectUri);
