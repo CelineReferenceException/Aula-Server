@@ -143,5 +143,7 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 
 		_ = messageModel.Property(x => x.CreationTime)
 			.IsRequired();
+
+		base.OnModelCreating(modelBuilder);
 	}
 }
