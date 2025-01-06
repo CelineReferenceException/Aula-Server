@@ -1,6 +1,4 @@
-﻿using System.Text;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.Extensions.Options;
+﻿using System.Net;
 using WhiteTale.Server.Domain.Characters;
 using WhiteTale.Server.Domain.Users;
 
@@ -20,9 +18,15 @@ internal sealed class Register : IEndpoint
 		[FromServices] ISnowflakeGenerator snowflakes,
 		[FromServices] UserManager<User> userManager,
 		[FromServices] ApplicationDbContext dbContext,
-		[FromServices] IEmailSender emailSender,
-		[FromServices] IOptions<ApplicationOptions> applicationOptions)
+		HttpRequest httpRequest,
+		[FromServices] ConfirmEmailEmailSender confirmEmailEmailSender,
+		[FromServices] ResetPasswordEmailSender resetPasswordEmailSender,
+		[FromQuery] String? confirmEmailRedirectUri,
+		[FromQuery] String? resetPasswordUri)
 	{
+		confirmEmailRedirectUri = WebUtility.UrlDecode(confirmEmailRedirectUri);
+		resetPasswordUri = WebUtility.UrlDecode(resetPasswordUri);
+
 		var bodyValidation = await bodyValidator.ValidateAsync(body).ConfigureAwait(false);
 		if (!bodyValidation.IsValid)
 		{
@@ -33,21 +37,7 @@ internal sealed class Register : IEndpoint
 		var currentUser = await userManager.FindByEmailAsync(body.Email).ConfigureAwait(false);
 		if (currentUser is not null)
 		{
-			var resetToken = await userManager.GeneratePasswordResetTokenAsync(currentUser).ConfigureAwait(false);
-			resetToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(resetToken));
-			var applicationName = applicationOptions.Value.Name;
-			var content =
-				$"""
-				 <p>It looks like someone tried to create a new account using your email address on {applicationName}.
-				 However, an account with this email already exists.</p>
-				 <p>If you forgot your password, Here's your user ID and a reset token:</p>
-				 <ul>
-				 	<li><strong>User ID:</strong> <code>{currentUser.Id}</code></li>
-				 	<li><strong>Reset Token:</strong> <code>{resetToken}</code></li>
-				 </ul>
-				 """;
-
-			await emailSender.SendEmailAsync(body.Email, "Email already registered", content).ConfigureAwait(false);
+			await resetPasswordEmailSender.SendEmailAsync(currentUser, resetPasswordUri).ConfigureAwait(false);
 			return TypedResults.NoContent();
 		}
 
@@ -77,6 +67,7 @@ internal sealed class Register : IEndpoint
 		_ = dbContext.Characters.Add(newCharacter);
 		_ = await dbContext.SaveChangesAsync().ConfigureAwait(false);
 
+		await confirmEmailEmailSender.SendEmailAsync(newUser, confirmEmailRedirectUri, httpRequest).ConfigureAwait(false);
 		return TypedResults.NoContent();
 	}
 }

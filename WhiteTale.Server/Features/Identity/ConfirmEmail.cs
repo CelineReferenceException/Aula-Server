@@ -1,14 +1,15 @@
 ﻿using System.Net;
 using System.Text;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.Extensions.Options;
 using WhiteTale.Server.Domain.Users;
 
 namespace WhiteTale.Server.Features.Identity;
 
 internal sealed class ConfirmEmail : IEndpoint
 {
-	private const String Route = "api/identity/confirmEmail";
+	internal const String EmailQueryParameterName = "email";
+	internal const String TokenQueryParameterName = "token";
+	internal const String RedirectUriQueryParameterName = "redirectUri";
+	internal const String Route = "api/identity/confirmEmail";
 
 	public void Build(IEndpointRouteBuilder route)
 	{
@@ -19,13 +20,12 @@ internal sealed class ConfirmEmail : IEndpoint
 	}
 
 	private static async Task<Results<NoContent, RedirectHttpResult>> HandleAsync(
-		[FromQuery] String email,
-		[FromQuery] String? token,
-		[FromQuery] String? redirectUri,
-		HttpRequest httpRequest,
+		[FromQuery(Name = EmailQueryParameterName)] String email,
+		[FromQuery(Name = TokenQueryParameterName)] String? token,
+		[FromQuery(Name = RedirectUriQueryParameterName)] String? redirectUri,
 		[FromServices] UserManager<User> userManager,
-		[FromServices] IEmailSender emailSender,
-		[FromServices] IOptions<ApplicationOptions> applicationOptions,
+		HttpRequest httpRequest,
+		[FromServices] ConfirmEmailEmailSender confirmEmailEmailSender,
 		[FromServices] ILogger<ConfirmEmail> logger)
 	{
 		email = WebUtility.UrlDecode(email);
@@ -45,23 +45,7 @@ internal sealed class ConfirmEmail : IEndpoint
 
 		if (token is null)
 		{
-			var confirmationToken = await userManager.GenerateEmailConfirmationTokenAsync(user).ConfigureAwait(false);
-			confirmationToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));
-			var confirmationUrl =
-				$"{httpRequest.Scheme}://{httpRequest.Host}{httpRequest.PathBase}/{Route}?" +
-				$"{nameof(email)}={email}&" +
-				$"{nameof(token)}={confirmationToken}&" +
-				(redirectUri is not null ? $"{nameof(redirectUri)}={redirectUri}" : String.Empty);
-			var applicationName = applicationOptions.Value.Name;
-
-			var content =
-				$"""
-				 <p>Hello {user.UserName}, Welcome to {applicationName}!</p>
-				 <p>To complete your registration and verify your email address, you can go to the following link:
-				 <a href='{confirmationUrl}'>{confirmationUrl}</a></p>
-				 <p>If you didn’t sign up for {applicationName}, you can ignore this email.</p>
-				 """;
-			await emailSender.SendEmailAsync(user.Email!, "Confirm this email", content).ConfigureAwait(false);
+			await confirmEmailEmailSender.SendEmailAsync(user, redirectUri, httpRequest).ConfigureAwait(false);
 			return RedirectOrSendNoContent(redirectUri);
 		}
 

@@ -2,12 +2,14 @@ using System.Diagnostics;
 using MartinCostello.OpenApi;
 using Microsoft.Extensions.Hosting;
 using Scalar.AspNetCore;
+using WhiteTale.Server.Features.Identity;
 
 var startTimestamp = Stopwatch.GetTimestamp();
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddCommon();
+builder.Services.AddIdentityFeatures();
 
 builder.Services.AddOpenApi();
 builder.Services.AddOpenApiExtensions(static options => options.XmlDocumentationAssemblies.Add(typeof(IAssemblyMarker).Assembly));
