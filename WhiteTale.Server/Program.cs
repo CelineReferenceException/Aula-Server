@@ -14,6 +14,11 @@ builder.Services.AddOpenApiExtensions(static options => options.XmlDocumentation
 
 var application = builder.Build();
 
+if (!application.Environment.IsDevelopment())
+{
+	_ = application.UseHttpsRedirection();
+}
+
 application.UseCommon();
 
 if (application.Environment.IsDevelopment())
