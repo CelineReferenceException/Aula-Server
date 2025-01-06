@@ -7,7 +7,7 @@ namespace WhiteTale.Server.Features.Identity;
 
 internal sealed class ConfirmEmailEmailSender
 {
-	private readonly IOptions<ApplicationOptions> _applicationOptions;
+	private readonly String _applicationName;
 	private readonly IEmailSender _emailSender;
 	private readonly UserManager<User> _userManager;
 
@@ -18,7 +18,7 @@ internal sealed class ConfirmEmailEmailSender
 	{
 		_userManager = userManager;
 		_emailSender = emailSender;
-		_applicationOptions = applicationOptions;
+		_applicationName = applicationOptions.Value.Name;
 	}
 
 	internal async Task SendEmailAsync(User user, String? redirectUri, HttpRequest httpRequest)
@@ -30,13 +30,12 @@ internal sealed class ConfirmEmailEmailSender
 			$"{ConfirmEmail.EmailQueryParameterName}={user.Email}&" +
 			$"{ConfirmEmail.TokenQueryParameterName}={confirmationToken}&" +
 			(redirectUri is not null ? $"{ConfirmEmail.RedirectUriQueryParameterName}={redirectUri}" : String.Empty);
-		var applicationName = _applicationOptions.Value.Name;
 
 		var content =
 			$"""
-			 <p>Hello {user.UserName}, Welcome to {applicationName}!</p>
+			 <p>Hello {user.UserName}, Welcome to {_applicationName}!</p>
 			 <p>To complete your registration and verify your email address, you can <a href='{confirmationUrl}'>click here</a>.
-			 <p>If you didn’t sign up for {applicationName}, you can ignore this email.</p>
+			 <p>If you didn’t sign up for {_applicationName}, you can ignore this email.</p>
 			 """;
 		await _emailSender.SendEmailAsync(user.Email!, "Confirm your email", content).ConfigureAwait(false);
 	}
