@@ -2,7 +2,7 @@
 
 internal static class ConfigurationExtensions
 {
-	public static T GetRequiredValue<T>(this IConfiguration configuration, String key) where T : notnull
+	internal static T GetRequiredValue<T>(this IConfiguration configuration, String key) where T : notnull
 	{
 		ArgumentNullException.ThrowIfNull(configuration, nameof(configuration));
 		ArgumentNullException.ThrowIfNull(key, nameof(key));
