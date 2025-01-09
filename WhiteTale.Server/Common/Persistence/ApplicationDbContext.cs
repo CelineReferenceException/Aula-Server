@@ -12,7 +12,7 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 {
 	private readonly IConfiguration _configuration;
 
-	public ApplicationDbContext(IConfiguration configuration)
+	public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration): base(options)
 	{
 		_configuration = configuration;
 	}
