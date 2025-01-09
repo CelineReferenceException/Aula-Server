@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.BearerToken;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authentication.BearerToken;
 using WhiteTale.Server.Configuration;
 using WhiteTale.Server.Domain.Users;
 
@@ -22,6 +23,7 @@ internal static class DependencyInjection
 			{
 				var settings = new IdentityOptions();
 				configuration.GetSection(IdentityOptions.SectionName).Bind(settings);
+				Validator.ValidateObject(settings, new ValidationContext(settings));
 
 				options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz._";
 				options.User.RequireUniqueEmail = true;
