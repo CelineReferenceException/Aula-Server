@@ -27,9 +27,9 @@ internal sealed class ConfirmEmailEmailSender
 		confirmationToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));
 		var confirmationUrl =
 			$"{httpRequest.Scheme}://{httpRequest.Host}{httpRequest.PathBase}/{ConfirmEmail.Route}?" +
-			$"{ConfirmEmail.EmailQueryParameterName}={user.Email}&" +
-			$"{ConfirmEmail.TokenQueryParameterName}={confirmationToken}&" +
-			(redirectUri is not null ? $"{ConfirmEmail.RedirectUriQueryParameterName}={redirectUri}" : String.Empty);
+			$"{ConfirmEmail.EmailQueryParameter}={user.Email}&" +
+			$"{ConfirmEmail.TokenQueryParameter}={confirmationToken}&" +
+			(redirectUri is not null ? $"{ConfirmEmail.RedirectUriQueryParameter}={redirectUri}" : String.Empty);
 
 		var content =
 			$"""

@@ -6,9 +6,9 @@ namespace WhiteTale.Server.Features.Identity;
 
 internal sealed class ConfirmEmail : IEndpoint
 {
-	internal const String EmailQueryParameterName = "email";
-	internal const String TokenQueryParameterName = "token";
-	internal const String RedirectUriQueryParameterName = "redirectUri";
+	internal const String EmailQueryParameter = "email";
+	internal const String TokenQueryParameter = "token";
+	internal const String RedirectUriQueryParameter = "redirectUri";
 	internal const String Route = "api/identity/confirmEmail";
 
 	public void Build(IEndpointRouteBuilder route)
@@ -20,9 +20,9 @@ internal sealed class ConfirmEmail : IEndpoint
 	}
 
 	private static async Task<Results<NoContent, RedirectHttpResult>> HandleAsync(
-		[FromQuery(Name = EmailQueryParameterName)] String email,
-		[FromQuery(Name = TokenQueryParameterName)] String? token,
-		[FromQuery(Name = RedirectUriQueryParameterName)] String? redirectUri,
+		[FromQuery(Name = EmailQueryParameter)] String email,
+		[FromQuery(Name = TokenQueryParameter)] String? token,
+		[FromQuery(Name = RedirectUriQueryParameter)] String? redirectUri,
 		[FromServices] UserManager<User> userManager,
 		HttpRequest httpRequest,
 		[FromServices] ConfirmEmailEmailSender confirmEmailEmailSender)
