@@ -6,6 +6,9 @@ namespace WhiteTale.Server.Features.Identity;
 
 internal sealed class Register : IEndpoint
 {
+	private const String ConfirmEmailRedirectUriQueryParameter = "confirmEmailRedirectUri";
+	private const String ResetPasswordUriQueryParameter = "resetPasswordUri";
+
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapPost("api/identity/register", HandleAsync)
@@ -21,8 +24,8 @@ internal sealed class Register : IEndpoint
 		HttpRequest httpRequest,
 		[FromServices] ConfirmEmailEmailSender confirmEmailEmailSender,
 		[FromServices] ResetPasswordEmailSender resetPasswordEmailSender,
-		[FromQuery] String? confirmEmailRedirectUri,
-		[FromQuery] String? resetPasswordUri)
+		[FromQuery(Name = ConfirmEmailRedirectUriQueryParameter)] String? confirmEmailRedirectUri,
+		[FromQuery(Name = ResetPasswordUriQueryParameter)] String? resetPasswordUri)
 	{
 		confirmEmailRedirectUri = WebUtility.UrlDecode(confirmEmailRedirectUri);
 		resetPasswordUri = WebUtility.UrlDecode(resetPasswordUri);
