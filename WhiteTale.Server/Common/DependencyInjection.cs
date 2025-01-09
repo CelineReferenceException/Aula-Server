@@ -13,7 +13,7 @@ internal static class DependencyInjection
 			.ValidateDataAnnotations()
 			.ValidateOnStart();
 
-		_ = builder.Services.AddIdentity();
+		_ = builder.Services.AddIdentity(builder.Configuration);
 
 		_ = builder.Services.AddCors();
 		_ = builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>(ServiceLifetime.Singleton, includeInternalTypes: true);

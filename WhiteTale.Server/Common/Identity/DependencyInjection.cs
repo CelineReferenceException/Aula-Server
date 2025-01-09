@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication.BearerToken;
+using WhiteTale.Server.Configuration;
 using WhiteTale.Server.Domain.Users;
 
 namespace WhiteTale.Server.Common.Identity;
 
 internal static class DependencyInjection
 {
-	internal static IServiceCollection AddIdentity(this IServiceCollection services)
+	internal static IServiceCollection AddIdentity(this IServiceCollection services, IConfiguration configuration)
 	{
 		_ = services.AddAuthentication()
 			.AddBearerToken(IdentityConstants.BearerScheme);
@@ -19,22 +20,24 @@ internal static class DependencyInjection
 
 		_ = services.AddIdentityCore<User>(options =>
 			{
+				var settings = configuration.GetRequiredValue<IdentityOptions>(IdentityOptions.SectionName);
+
 				options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz._";
 				options.User.RequireUniqueEmail = true;
 
-				options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
-				options.Lockout.MaxFailedAccessAttempts = 10;
-				options.Lockout.AllowedForNewUsers = true;
+				options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(settings.Lockout.LockoutMinutes);
+				options.Lockout.MaxFailedAccessAttempts = settings.Lockout.MaximumFailedAccessAttempts;
+				options.Lockout.AllowedForNewUsers = settings.Lockout.AllowedForNewUsers;
 
-				options.Password.RequireUppercase = true;
-				options.Password.RequireLowercase = true;
-				options.Password.RequireDigit = true;
-				options.Password.RequireNonAlphanumeric = true;
-				options.Password.RequiredUniqueChars = 0;
-				options.Password.RequiredLength = 8;
+				options.Password.RequireUppercase = settings.Password.RequireUppercase;
+				options.Password.RequireLowercase = settings.Password.RequireLowercase;
+				options.Password.RequireDigit = settings.Password.RequireDigit;
+				options.Password.RequireNonAlphanumeric = settings.Password.RequireNonAlphanumeric;
+				options.Password.RequiredUniqueChars = settings.Password.RequiredUniqueChars;
+				options.Password.RequiredLength = settings.Password.RequiredLength;
 
 				options.SignIn.RequireConfirmedAccount = false;
-				options.SignIn.RequireConfirmedEmail = true;
+				options.SignIn.RequireConfirmedEmail = settings.SignIn.RequireConfirmedEmail;
 				options.SignIn.RequireConfirmedPhoneNumber = false;
 			})
 			.AddEntityFrameworkStores<ApplicationDbContext>()
