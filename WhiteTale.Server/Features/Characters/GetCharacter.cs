@@ -1,4 +1,6 @@
-﻿namespace WhiteTale.Server.Features.Characters;
+﻿using WhiteTale.Server.Common.Identity;
+
+namespace WhiteTale.Server.Features.Characters;
 
 internal sealed class GetCharacter : IEndpoint
 {
@@ -6,7 +8,7 @@ internal sealed class GetCharacter : IEndpoint
 	{
 		_ = route.MapGet("api/characters/{characterId}", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
-			.RequireAuthorization(AuthorizationPolicyNames.BearerToken);
+			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken);
 	}
 
 	private static async Task<Results<Ok<CharacterData>, NotFound>> HandleAsync(

@@ -1,4 +1,5 @@
-﻿using WhiteTale.Server.Domain.Users;
+﻿using WhiteTale.Server.Common.Identity;
+using WhiteTale.Server.Domain.Users;
 
 namespace WhiteTale.Server.Features.Characters;
 
@@ -8,7 +9,7 @@ internal sealed class ModifyOwnCharacter : IEndpoint
 	{
 		_ = builder.MapPatch("api/characters/@me", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
-			.RequireAuthorization(AuthorizationPolicyNames.BearerToken);
+			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken);
 	}
 
 	private static async Task<Results<Ok<CharacterData>, ProblemHttpResult, InternalServerError>> HandleAsync(
