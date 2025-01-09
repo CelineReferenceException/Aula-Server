@@ -11,12 +11,10 @@ namespace WhiteTale.Server.Common.Persistence;
 internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 {
 	private readonly IConfiguration _configuration;
-	private readonly IOptions<PersistenceOptions> _persistenceOptions;
 
-	public ApplicationDbContext(IConfiguration configuration, IOptions<PersistenceOptions> persistenceOptions)
+	public ApplicationDbContext(IConfiguration configuration)
 	{
 		_configuration = configuration;
-		_persistenceOptions = persistenceOptions;
 	}
 
 	internal DbSet<Character> Characters => Set<Character>();
@@ -30,15 +28,6 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 	[SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope")]
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
-		if (!_persistenceOptions.Value.UseInMemoryDatabase)
-		{
-			_ = optionsBuilder.UseSqlite(_configuration.GetConnectionString("Default"));
-		}
-		else
-		{
-			_ = optionsBuilder.UseInMemoryDatabase("InMemoryDatabase");
-		}
-
 		var loggerFactory = LoggerFactory.Create(builder => builder.AddLogging());
 		_ = optionsBuilder.UseLoggerFactory(loggerFactory);
 
