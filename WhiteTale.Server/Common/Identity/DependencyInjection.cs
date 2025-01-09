@@ -20,7 +20,8 @@ internal static class DependencyInjection
 
 		_ = services.AddIdentityCore<User>(options =>
 			{
-				var settings = configuration.GetRequiredValue<IdentityOptions>(IdentityOptions.SectionName);
+				var settings = new IdentityOptions();
+				configuration.GetSection(IdentityOptions.SectionName).Bind(settings);
 
 				options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz._";
 				options.User.RequireUniqueEmail = true;
