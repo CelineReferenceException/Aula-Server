@@ -23,8 +23,8 @@ internal sealed class DefaultEmailSender : IEmailSender
 		var address = mailOptions.Value.Address;
 		var password = mailOptions.Value.Password;
 		var smtpHost = mailOptions.Value.SmtpHost;
-		var smtpPort = mailOptions.Value.SmtpPort;
-		var enableSsl = mailOptions.Value.EnableSsl;
+		var smtpPort = mailOptions.Value.SmtpPort.Value;
+		var enableSsl = mailOptions.Value.EnableSsl.Value;
 
 		_mailAddress = new MailAddress(address, applicationName);
 

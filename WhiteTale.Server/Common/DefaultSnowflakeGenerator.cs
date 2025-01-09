@@ -12,7 +12,7 @@ internal sealed class DefaultSnowflakeGenerator : ISnowflakeGenerator
 
 	public DefaultSnowflakeGenerator(IOptions<ApplicationOptions> applicationOptions)
 	{
-		var workerId = applicationOptions.Value.WorkerId;
+		var workerId = applicationOptions.Value.WorkerId.Value;
 		ArgumentOutOfRangeException.ThrowIfLessThan<UInt32>(workerId, 0);
 		ArgumentOutOfRangeException.ThrowIfGreaterThan<UInt32>(workerId, 1023);
 

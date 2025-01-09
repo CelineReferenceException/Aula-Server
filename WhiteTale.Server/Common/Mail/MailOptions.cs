@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace WhiteTale.Server.Common.Mail;
 
 internal sealed class MailOptions
 {
 	internal const String SectionName = "Mail";
-	
+
 	[Required]
 	public required String Address { get; set; }
 
@@ -16,8 +17,10 @@ internal sealed class MailOptions
 	public required String SmtpHost { get; set; }
 
 	[Required]
-	public required Int32 SmtpPort { get; set; }
+	[NotNull]
+	public required Int32? SmtpPort { get; set; }
 
 	[Required]
-	public required Boolean EnableSsl { get; set; }
+	[NotNull]
+	public required Boolean? EnableSsl { get; set; }
 }
