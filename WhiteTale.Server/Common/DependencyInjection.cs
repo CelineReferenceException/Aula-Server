@@ -19,7 +19,6 @@ internal static class DependencyInjection
 			.AddBearerToken(IdentityConstants.BearerScheme);
 
 		_ = builder.Services.AddAuthorizationBuilder()
-			.AddBearerTokenPolicy();
 
 		_ = builder.Services.AddIdentityCore<User>(static options =>
 			{
@@ -44,6 +43,7 @@ internal static class DependencyInjection
 			.AddEntityFrameworkStores<ApplicationDbContext>()
 			.AddSignInManager()
 			.AddDefaultTokenProviders();
+			.AddIdentityBearerTokenPolicy();
 
 		_ = builder.Services.AddOptions<BearerTokenOptions>(IdentityConstants.BearerScheme)
 			.Configure(static options =>
