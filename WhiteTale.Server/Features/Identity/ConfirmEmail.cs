@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text;
+using Microsoft.Extensions.Options;
 using WhiteTale.Server.Domain.Users;
 
 namespace WhiteTale.Server.Features.Identity;
@@ -8,7 +9,6 @@ internal sealed class ConfirmEmail : IEndpoint
 {
 	internal const String EmailQueryParameter = "email";
 	internal const String TokenQueryParameter = "token";
-	internal const String RedirectUriQueryParameter = "redirectUri";
 	internal const String Route = "api/identity/confirmEmail";
 
 	public void Build(IEndpointRouteBuilder route)
@@ -22,13 +22,13 @@ internal sealed class ConfirmEmail : IEndpoint
 	private static async Task<Results<NoContent, RedirectHttpResult>> HandleAsync(
 		[FromQuery(Name = EmailQueryParameter)] String email,
 		[FromQuery(Name = TokenQueryParameter)] String? token,
-		[FromQuery(Name = RedirectUriQueryParameter)] String? redirectUri,
 		[FromServices] UserManager<User> userManager,
 		HttpRequest httpRequest,
-		[FromServices] ConfirmEmailEmailSender confirmEmailEmailSender)
+		[FromServices] ConfirmEmailEmailSender confirmEmailEmailSender,
+		[FromServices] IOptions<IdentityFeatureOptions> featureOptions)
 	{
 		email = WebUtility.UrlDecode(email);
-		redirectUri = WebUtility.UrlDecode(redirectUri);
+		var redirectUri = featureOptions.Value.ConfirmEmailRedirectUri?.ToString();
 
 		var user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
 		if (user is null)
@@ -44,7 +44,7 @@ internal sealed class ConfirmEmail : IEndpoint
 
 		if (token is null)
 		{
-			await confirmEmailEmailSender.SendEmailAsync(user, redirectUri, httpRequest).ConfigureAwait(false);
+			await confirmEmailEmailSender.SendEmailAsync(user, httpRequest).ConfigureAwait(false);
 			return RedirectOrSendNoContent(redirectUri);
 		}
 

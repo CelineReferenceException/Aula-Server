@@ -4,5 +4,7 @@ internal sealed class IdentityFeatureOptions
 {
 	internal const String SectionName = "Identity";
 
+	public Uri? ConfirmEmailRedirectUri { get; set; }
+
 	public Uri? ResetPasswordRedirectUri { get; set; }
 }

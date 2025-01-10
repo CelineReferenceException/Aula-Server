@@ -22,11 +22,8 @@ internal sealed class Register : IEndpoint
 		[FromServices] ApplicationDbContext dbContext,
 		HttpRequest httpRequest,
 		[FromServices] ConfirmEmailEmailSender confirmEmailEmailSender,
-		[FromServices] ResetPasswordEmailSender resetPasswordEmailSender,
-		[FromQuery(Name = ConfirmEmailRedirectUriQueryParameter)] String? confirmEmailRedirectUri)
+		[FromServices] ResetPasswordEmailSender resetPasswordEmailSender)
 	{
-		confirmEmailRedirectUri = WebUtility.UrlDecode(confirmEmailRedirectUri);
-
 		var bodyValidation = await bodyValidator.ValidateAsync(body).ConfigureAwait(false);
 		if (!bodyValidation.IsValid)
 		{
@@ -67,7 +64,7 @@ internal sealed class Register : IEndpoint
 		_ = dbContext.Characters.Add(newCharacter);
 		_ = await dbContext.SaveChangesAsync().ConfigureAwait(false);
 
-		await confirmEmailEmailSender.SendEmailAsync(newUser, confirmEmailRedirectUri, httpRequest).ConfigureAwait(false);
+		await confirmEmailEmailSender.SendEmailAsync(newUser, httpRequest).ConfigureAwait(false);
 		return TypedResults.NoContent();
 	}
 }

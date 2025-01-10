@@ -21,15 +21,14 @@ internal sealed class ConfirmEmailEmailSender
 		_applicationName = applicationOptions.Value.Name;
 	}
 
-	internal async Task SendEmailAsync(User user, String? redirectUri, HttpRequest httpRequest)
+	internal async Task SendEmailAsync(User user, HttpRequest httpRequest)
 	{
 		var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user).ConfigureAwait(false);
 		confirmationToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));
 		var confirmationUrl =
 			$"{httpRequest.Scheme}://{httpRequest.Host}{httpRequest.PathBase}/{ConfirmEmail.Route}?" +
 			$"{ConfirmEmail.EmailQueryParameter}={user.Email}&" +
-			$"{ConfirmEmail.TokenQueryParameter}={confirmationToken}&" +
-			(redirectUri is not null ? $"{ConfirmEmail.RedirectUriQueryParameter}={redirectUri}" : String.Empty);
+			$"{ConfirmEmail.TokenQueryParameter}={confirmationToken}";
 
 		var content =
 			$"""
