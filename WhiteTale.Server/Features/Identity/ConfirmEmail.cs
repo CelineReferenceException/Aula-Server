@@ -48,7 +48,15 @@ internal sealed class ConfirmEmail : IEndpoint
 			return RedirectOrSendNoContent(redirectUri);
 		}
 
-		token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
+		try
+		{
+			token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
+		}
+		catch (FormatException)
+		{
+			return RedirectOrSendNoContent(redirectUri);
+		}
+
 		_ = await userManager.ConfirmEmailAsync(user, token).ConfigureAwait(false);
 
 		return RedirectOrSendNoContent(redirectUri);
