@@ -13,7 +13,7 @@ internal sealed class GetOwnCharacter : IEndpoint
 	}
 
 	private static async Task<Results<Ok<CharacterData>, InternalServerError>> HandleAsync(
-		[FromServices] HttpContext httpContext,
+		HttpContext httpContext,
 		[FromServices] UserManager<User> userManager,
 		[FromServices] ApplicationDbContext dbContext)
 	{

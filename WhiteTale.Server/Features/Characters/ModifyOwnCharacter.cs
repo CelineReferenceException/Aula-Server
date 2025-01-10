@@ -14,7 +14,7 @@ internal sealed class ModifyOwnCharacter : IEndpoint
 
 	private static async Task<Results<Ok<CharacterData>, ProblemHttpResult, InternalServerError>> HandleAsync(
 		[FromBody] ModifyOwnCharacterRequestBody body,
-		[FromServices] HttpContext httpContext,
+		HttpContext httpContext,
 		[FromServices] UserManager<User> userManager,
 		[FromServices] IValidator<ModifyOwnCharacterRequestBody> bodyValidator,
 		[FromServices] ApplicationDbContext dbContext,
