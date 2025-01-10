@@ -38,8 +38,7 @@ internal sealed class ResetPassword : IEndpoint
 			});
 		}
 
-		var resetTokenProvided = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(body.ResetToken));
-		var passwordReset = await userManager.ResetPasswordAsync(user, resetTokenProvided, body.NewPassword).ConfigureAwait(false);
+		var passwordReset = await userManager.ResetPasswordAsync(user, body.ResetToken, body.NewPassword).ConfigureAwait(false);
 		if (!passwordReset.Succeeded)
 		{
 			var problemDetails = passwordReset.Errors.ToProblemDetails();
