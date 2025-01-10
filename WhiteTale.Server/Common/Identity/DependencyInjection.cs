@@ -9,6 +9,11 @@ internal static class DependencyInjection
 {
 	internal static IServiceCollection AddIdentity(this IServiceCollection services, IConfiguration configuration)
 	{
+		_ = services.AddOptions<IdentityOptions>()
+			.BindConfiguration(IdentityOptions.SectionName)
+			.ValidateDataAnnotations()
+			.ValidateOnStart();
+
 		_ = services.AddAuthentication()
 			.AddBearerToken(IdentityConstants.BearerScheme);
 

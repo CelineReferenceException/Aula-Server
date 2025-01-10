@@ -37,4 +37,7 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="WhiteTale.Server.IntegrationTests" />
+	</ItemGroup>
 </Project>
