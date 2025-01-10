@@ -18,7 +18,7 @@ internal sealed class ModifyOwnCharacter : IEndpoint
 		[FromServices] UserManager<User> userManager,
 		[FromServices] IValidator<ModifyOwnCharacterRequestBody> bodyValidator,
 		[FromServices] ApplicationDbContext dbContext,
-		[FromServices] ILogger logger)
+		[FromServices] ILogger<ModifyOwnCharacter> logger)
 	{
 		var bodyValidation = await bodyValidator.ValidateAsync(body).ConfigureAwait(false);
 		if (!bodyValidation.IsValid)
