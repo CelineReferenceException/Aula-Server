@@ -6,7 +6,6 @@ namespace WhiteTale.Server.Features.Identity;
 internal sealed class ForgotPassword : IEndpoint
 {
 	private const String EmailQueryParameter = "email";
-	private const String ResetUriQueryParameter = "resetUri";
 
 	public void Build(IEndpointRouteBuilder route)
 	{
@@ -18,12 +17,10 @@ internal sealed class ForgotPassword : IEndpoint
 
 	private static async Task<NoContent> HandleAsync(
 		[FromQuery(Name = EmailQueryParameter)] String email,
-		[FromQuery(Name = ResetUriQueryParameter)] String? resetUri,
 		[FromServices] UserManager<User> userManager,
 		[FromServices] ResetPasswordEmailSender resetPasswordEmailSender)
 	{
 		email = WebUtility.UrlDecode(email);
-		resetUri = WebUtility.UrlDecode(resetUri);
 
 		var user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
 		if (user is null)
@@ -32,7 +29,7 @@ internal sealed class ForgotPassword : IEndpoint
 			return TypedResults.NoContent();
 		}
 
-		await resetPasswordEmailSender.SendEmailAsync(user, resetUri).ConfigureAwait(false);
+		await resetPasswordEmailSender.SendEmailAsync(user).ConfigureAwait(false);
 		return TypedResults.NoContent();
 	}
 }
