@@ -19,7 +19,7 @@ internal static class DependencyInjection
 
 			_ = options.AddPolicy(RateLimitPolicyNames.Global, httpContext =>
 			{
-				var userManager = httpContext.RequestServices.GetRequiredService<UserManager<User>>();
+				var userManager = ServiceProviderServiceExtensions.GetRequiredService<UserManager<User>>(httpContext.RequestServices);
 
 				var userId = userManager.GetUserId(httpContext.User);
 				var partitionKey = userId ?? httpContext.Connection.RemoteIpAddress?.ToString() ?? String.Empty;
@@ -39,7 +39,7 @@ internal static class DependencyInjection
 
 			_ = options.AddPolicy(RateLimitPolicyNames.Strict, httpContext =>
 			{
-				var userManager = httpContext.RequestServices.GetRequiredService<UserManager<User>>();
+				var userManager = ServiceProviderServiceExtensions.GetRequiredService<UserManager<User>>(httpContext.RequestServices);
 				var request = httpContext.Request;
 
 				var userId = userManager.GetUserId(httpContext.User);
@@ -61,7 +61,7 @@ internal static class DependencyInjection
 
 			_ = options.AddPolicy(RateLimitPolicyNames.NoConcurrency, httpContext =>
 			{
-				var userManager = httpContext.RequestServices.GetRequiredService<UserManager<User>>();
+				var userManager = ServiceProviderServiceExtensions.GetRequiredService<UserManager<User>>(httpContext.RequestServices);
 				var request = httpContext.Request;
 
 				var userId = userManager.GetUserId(httpContext.User);
@@ -69,10 +69,7 @@ internal static class DependencyInjection
 				partitionKey += $"{request.Method}{request.Scheme}{request.Host}{request.PathBase}{request.Path}";
 
 				return RateLimitPartition.GetConcurrencyLimiter(partitionKey,
-					_ => new ConcurrencyLimiterOptions()
-					{
-						PermitLimit = 1
-					});
+					_ => new ConcurrencyLimiterOptions { PermitLimit = 1 });
 			});
 		});
 

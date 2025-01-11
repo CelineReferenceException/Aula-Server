@@ -1,5 +1,4 @@
-﻿using WhiteTale.Server.Common.Identity;
-using WhiteTale.Server.Domain.Users;
+﻿using WhiteTale.Server.Domain.Users;
 
 namespace WhiteTale.Server.Features.Characters;
 
@@ -63,7 +62,7 @@ internal sealed class ModifyOwnCharacter : IEndpoint
 			Description = character.Description,
 			CurrentRoomId = character.CurrentRoomId,
 			Presence = character.Presence,
-			OwnerType = character.OwnerType,
+			OwnerType = character.OwnerType
 		});
 	}
 }

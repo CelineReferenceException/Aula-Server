@@ -1,5 +1,4 @@
-﻿using System.Text;
-using WhiteTale.Server.Domain.Users;
+﻿using WhiteTale.Server.Domain.Users;
 
 namespace WhiteTale.Server.Features.Identity;
 

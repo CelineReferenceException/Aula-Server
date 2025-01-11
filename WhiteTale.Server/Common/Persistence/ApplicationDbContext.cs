@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using WhiteTale.Server.Domain.Characters;
 using WhiteTale.Server.Domain.Messages;
 using WhiteTale.Server.Domain.Rooms;
@@ -12,7 +11,7 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 {
 	private readonly IConfiguration _configuration;
 
-	public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration): base(options)
+	public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration) : base(options)
 	{
 		_configuration = configuration;
 	}

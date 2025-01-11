@@ -20,7 +20,7 @@ internal static class DependencyInjection
 			_ = settings.Provider switch
 			{
 				DatabaseProvider.InMemory => builder.UseInMemoryDatabase(nameof(DatabaseProvider.InMemory)),
-				DatabaseProvider.Sqlite or _ => builder.UseSqlite(settings.ConnectionString),
+				DatabaseProvider.Sqlite or _ => builder.UseSqlite(settings.ConnectionString)
 			};
 		});
 

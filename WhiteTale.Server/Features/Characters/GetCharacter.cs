@@ -1,6 +1,4 @@
-﻿using WhiteTale.Server.Common.Identity;
-
-namespace WhiteTale.Server.Features.Characters;
+﻿namespace WhiteTale.Server.Features.Characters;
 
 internal sealed class GetCharacter : IEndpoint
 {
@@ -26,7 +24,7 @@ internal sealed class GetCharacter : IEndpoint
 					Description = character.Description,
 					CurrentRoomId = character.CurrentRoomId,
 					OwnerType = character.OwnerType,
-					Presence = character.Presence,
+					Presence = character.Presence
 				})
 			.FirstOrDefaultAsync()
 			.ConfigureAwait(false);
