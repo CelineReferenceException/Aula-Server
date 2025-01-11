@@ -27,7 +27,6 @@ internal sealed class GetCharacter : IEndpoint
 					CurrentRoomId = character.CurrentRoomId,
 					OwnerType = character.OwnerType,
 					Presence = character.Presence,
-					Permissions = character.Permissions
 				})
 			.FirstOrDefaultAsync()
 			.ConfigureAwait(false);

@@ -11,4 +11,6 @@ internal sealed class User : IdentityUser<UInt64>
 		get => base.Id;
 		init => base.Id = value;
 	}
+
+	public Permissions Permissions { get; set; }
 }

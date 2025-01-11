@@ -17,8 +17,6 @@ internal sealed class Character
 
 	public required CharacterOwnerType OwnerType { get; init; }
 
-	public Permissions Permissions { get; set; }
-
 	public Presence Presence { get; set; }
 
 	public UInt64? CurrentRoomId { get; set; }

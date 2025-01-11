@@ -56,7 +56,6 @@ public sealed class ModifyOwnCharacterTest
 		_ = responseBody!.Id.Should().Be(userToModify!.Id);
 		_ = responseBody.DisplayName.Should().Be(requestBody.DisplayName);
 		_ = responseBody.Description.Should().Be(requestBody.Description);
-		_ = responseBody.Permissions.Should().Be(0);
 		_ = responseBody.Presence.Should().Be(Presence.Offline);
 		_ = responseBody.OwnerType.Should().Be(CharacterOwnerType.Standard);
 		_ = responseBody.CurrentRoomId.Should().BeNull();

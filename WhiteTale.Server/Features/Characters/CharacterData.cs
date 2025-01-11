@@ -33,11 +33,6 @@ internal sealed record CharacterData
 	public required Presence Presence { get; init; }
 
 	/// <summary>
-	///     The permissions of the user.
-	/// </summary>
-	public required Permissions Permissions { get; init; }
-
-	/// <summary>
 	///     The ID of the current room the user resides in.
 	/// </summary>
 	public required UInt64? CurrentRoomId { get; init; }

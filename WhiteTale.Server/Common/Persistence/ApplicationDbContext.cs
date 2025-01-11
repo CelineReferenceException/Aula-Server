@@ -45,6 +45,9 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 			.ValueGeneratedNever();
 		_ = userModel.HasKey(x => x.Id);
 
+		_ = userModel.Property(x => x.Permissions)
+			.IsRequired();
+
 		var characterModel = modelBuilder.Entity<Character>();
 
 		_ = characterModel.Property(x => x.Id)
@@ -60,9 +63,6 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 			.HasMaxLength(Character.DescriptionMaximumLength);
 
 		_ = characterModel.Property(x => x.OwnerType)
-			.IsRequired();
-
-		_ = characterModel.Property(x => x.Permissions)
 			.IsRequired();
 
 		_ = characterModel.Property(x => x.Presence)

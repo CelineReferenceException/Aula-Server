@@ -47,7 +47,6 @@ public sealed class GetCharacterTest
 		_ = responseBody!.Id.Should().Be(userToGet!.Id);
 		_ = responseBody.DisplayName.Should().Be(userSeed.DisplayName);
 		_ = responseBody.Description.Should().BeNull();
-		_ = responseBody.Permissions.Should().Be(0);
 		_ = responseBody.Presence.Should().Be(Presence.Offline);
 		_ = responseBody.OwnerType.Should().Be(CharacterOwnerType.Standard);
 		_ = responseBody.CurrentRoomId.Should().BeNull();
