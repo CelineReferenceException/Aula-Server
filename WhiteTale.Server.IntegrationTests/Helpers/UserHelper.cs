@@ -14,25 +14,34 @@ namespace WhiteTale.Server.IntegrationTests.Helpers;
 
 internal static class UserHelper
 {
-	internal static async Task SeedUserAsync(this ApplicationInstance application, UserSeed userSeed)
+	private static UserSeed DefaultUserSeed { get; } = new UserSeed
+	{
+		Id = 0,
+		DisplayName = "TestUser",
+		UserName = "test_user",
+		Password = "TestPassword1!",
+		Email = "test_address@example.com",
+		EmailConfirmed = true
+	};
+
+	internal static async Task<SeedUserResult> SeedUserAsync(this ApplicationInstance application, UserSeed? userSeed = null)
 	{
 		using var scope = application.Services.CreateScope();
 		var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
 		var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-		var snowflakeGenerator = scope.ServiceProvider.GetRequiredService<ISnowflakeGenerator>();
 
-		var userId = snowflakeGenerator.NewSnowflake();
+		userSeed ??= DefaultUserSeed;
 
 		var user = new User(userSeed.UserName)
 		{
-			Id = userId,
+			Id = userSeed.Id,
 			Email = userSeed.Email,
 			EmailConfirmed = userSeed.EmailConfirmed
 		};
 
 		var character = new Character
 		{
-			Id = userId,
+			Id = userSeed.Id,
 			DisplayName = userSeed.DisplayName ?? userSeed.UserName,
 			OwnerType = CharacterOwnerType.Standard,
 			CreationTime = DateTime.UtcNow,
@@ -42,6 +51,13 @@ internal static class UserHelper
 		_ = await userManager.CreateAsync(user, userSeed.Password);
 		_ = dbContext.Characters.Add(character);
 		_ = await dbContext.SaveChangesAsync();
+
+		return new SeedUserResult
+		{
+			Seed = userSeed,
+			User = user,
+			Character = character
+		};
 	}
 
 	internal static async Task<AccessTokenResponse> LoginUserAsync(this ApplicationInstance application, String userName, String password)

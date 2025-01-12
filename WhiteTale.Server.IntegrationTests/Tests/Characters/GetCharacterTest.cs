@@ -9,6 +9,9 @@ using WhiteTale.Server.Features.Characters;
 
 namespace WhiteTale.Server.IntegrationTests.Tests.Characters;
 
+// TODO: Do a commit updating things related to user seeding, then do another commit doing a general cleanup,
+//       after that make a commit updating the Domain.Rooms.Room.Description to be nullable and commit the RoomHelper & related.
+//       (do not commit Room related tests yet)
 public sealed class GetCharacterTest
 {
 	[Fact]
@@ -18,23 +21,10 @@ public sealed class GetCharacterTest
 		await using var application = new ApplicationInstance(nameof(GetCharacter_ValidOperation_ReturnsOkWithCharacter));
 		using var httpClient = application.CreateClient();
 
-		var userSeed = new UserSeed
-		{
-			DisplayName = "TestUser",
-			UserName = "test_user",
-			Password = "TestPassword1!",
-			Email = "test_address@example.com",
-			EmailConfirmed = true
-		};
-		await application.SeedUserAsync(userSeed);
+		var userInfo = await application.SeedUserAsync();
+		var credentials = await application.LoginUserAsync(userInfo.Seed.UserName, userInfo.Seed.Password);
 
-		using var arrangementScope = application.Services.CreateScope();
-		var arrangementUserManager = arrangementScope.ServiceProvider.GetRequiredService<UserManager<User>>();
-		var userToGet = await arrangementUserManager.FindByNameAsync(userSeed.UserName);
-
-		var credentials = await application.LoginUserAsync(userSeed.UserName, userSeed.Password);
-
-		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/characters/{userToGet!.Id}");
+		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/characters/{userInfo.Seed.Id}");
 		request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", credentials.AccessToken);
 
 		// Act
@@ -44,12 +34,12 @@ public sealed class GetCharacterTest
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.OK);
 		var responseBody = await response.Content.ReadFromJsonAsync<CharacterData>();
 		_ = responseBody.Should().NotBeNull();
-		_ = responseBody!.Id.Should().Be(userToGet!.Id);
-		_ = responseBody.DisplayName.Should().Be(userSeed.DisplayName);
-		_ = responseBody.Description.Should().BeNull();
-		_ = responseBody.Presence.Should().Be(Presence.Offline);
-		_ = responseBody.OwnerType.Should().Be(CharacterOwnerType.Standard);
-		_ = responseBody.CurrentRoomId.Should().BeNull();
+		_ = responseBody!.Id.Should().Be(userInfo.Character!.Id);
+		_ = responseBody.DisplayName.Should().Be(userInfo.Character.DisplayName);
+		_ = responseBody.Description.Should().BeNull(userInfo.Character.Description);
+		_ = responseBody.Presence.Should().Be(userInfo.Character.Presence);
+		_ = responseBody.OwnerType.Should().Be(userInfo.Character.OwnerType);
+		_ = responseBody.CurrentRoomId.Should().Be(userInfo.Character.CurrentRoomId);
 	}
 
 	[Fact]
@@ -59,22 +49,10 @@ public sealed class GetCharacterTest
 		await using var application = new ApplicationInstance(nameof(GetCharacter_WithoutAuthorization_ReturnsUnauthorized));
 		using var httpClient = application.CreateClient();
 
-		var userSeed = new UserSeed
-		{
-			DisplayName = "TestUser",
-			UserName = "test_user",
-			Password = "TestPassword1!",
-			Email = "test_address@example.com",
-			EmailConfirmed = true
-		};
-		await application.SeedUserAsync(userSeed);
-
-		using var arrangementScope = application.Services.CreateScope();
-		var arrangementUserManager = arrangementScope.ServiceProvider.GetRequiredService<UserManager<User>>();
-		var userToGet = await arrangementUserManager.FindByNameAsync(userSeed.UserName);
+		var userInfo = await application.SeedUserAsync();
 
 		// Act
-		using var response = await httpClient.GetAsync($"api/characters/{userToGet!.Id}");
+		using var response = await httpClient.GetAsync($"api/characters/{userInfo.Seed.Id}");
 
 		// Arrange
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.Unauthorized);
@@ -87,19 +65,10 @@ public sealed class GetCharacterTest
 		await using var application = new ApplicationInstance(nameof(GetCharacter_TargetUnknownCharacter_ReturnsNotFound));
 		using var httpClient = application.CreateClient();
 
-		var userSeed = new UserSeed
-		{
-			DisplayName = "TestUser",
-			UserName = "test_user",
-			Password = "TestPassword1!",
-			Email = "test_address@example.com",
-			EmailConfirmed = true
-		};
-		await application.SeedUserAsync(userSeed);
+		var userInfo = await application.SeedUserAsync();
+		var credentials = await application.LoginUserAsync(userInfo.Seed.UserName, userInfo.Seed.Password);
 
-		var credentials = await application.LoginUserAsync(userSeed.UserName, userSeed.Password);
-
-		using var request = new HttpRequestMessage(HttpMethod.Get, "api/characters/0");
+		using var request = new HttpRequestMessage(HttpMethod.Get, "api/characters/1");
 		request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", credentials.AccessToken);
 
 		// Act

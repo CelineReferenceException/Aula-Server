@@ -51,22 +51,15 @@ public sealed class ResetPasswordTest
 		await using var application = new ApplicationInstance(nameof(ResetPassword_ValidOperation_ReturnsNoContent));
 		using var httpClient = application.CreateClient();
 
-		var userSeed = new UserSeed
-		{
-			UserName = "test_user",
-			Password = "TestPassword1!",
-			Email = "test_address@example.com"
-		};
-		await application.SeedUserAsync(userSeed);
+		var userSeed = await application.SeedUserAsync();
 
 		using var arrangementScope = application.Services.CreateScope();
 		var arrangementUserManager = arrangementScope.ServiceProvider.GetRequiredService<UserManager<User>>();
-		var userToConfirm = await arrangementUserManager.FindByEmailAsync(userSeed.Email);
-		var resetToken = await arrangementUserManager.GeneratePasswordResetTokenAsync(userToConfirm!);
+		var resetToken = await arrangementUserManager.GeneratePasswordResetTokenAsync(userSeed.User);
 
 		var requestBody = new ResetPasswordRequestBody
 		{
-			UserId = userToConfirm!.Id,
+			UserId = userSeed.User.Id,
 			ResetToken = resetToken,
 			NewPassword = "NewTestPassword1!"
 		};
@@ -82,25 +75,18 @@ public sealed class ResetPasswordTest
 	public async Task ResetPassword_WithAnInvalidNewPassword_BadRequest()
 	{
 		// Arrange
-		await using var application = new ApplicationInstance(nameof(ResetPassword_WithAnInvalidNewPassword_BadRequest));
+		await using var application = new ApplicationInstance(nameof(ResetPassword_WithAnInvalidResetToken_BadRequest));
 		using var httpClient = application.CreateClient();
 
-		var userSeed = new UserSeed
-		{
-			UserName = "test_user",
-			Password = "TestPassword1!",
-			Email = "test_address@example.com"
-		};
-		await application.SeedUserAsync(userSeed);
+		var userSeed = await application.SeedUserAsync();
 
 		using var arrangementScope = application.Services.CreateScope();
 		var arrangementUserManager = arrangementScope.ServiceProvider.GetRequiredService<UserManager<User>>();
-		var userToConfirm = await arrangementUserManager.FindByEmailAsync(userSeed.Email);
-		var resetToken = await arrangementUserManager.GeneratePasswordResetTokenAsync(userToConfirm!);
+		var resetToken = await arrangementUserManager.GeneratePasswordResetTokenAsync(userSeed.User);
 
 		var requestBody = new ResetPasswordRequestBody
 		{
-			UserId = userToConfirm!.Id,
+			UserId = userSeed.Seed.Id,
 			ResetToken = resetToken,
 			NewPassword = "0"
 		};
@@ -119,22 +105,15 @@ public sealed class ResetPasswordTest
 		await using var application = new ApplicationInstance(nameof(ResetPassword_WithAnInvalidResetToken_BadRequest));
 		using var httpClient = application.CreateClient();
 
-		var userSeed = new UserSeed
-		{
-			UserName = "test_user",
-			Password = "TestPassword1!",
-			Email = "test_address@example.com"
-		};
-		await application.SeedUserAsync(userSeed);
+		var userSeed = await application.SeedUserAsync();
 
 		using var arrangementScope = application.Services.CreateScope();
 		var arrangementUserManager = arrangementScope.ServiceProvider.GetRequiredService<UserManager<User>>();
-		var userToConfirm = await arrangementUserManager.FindByEmailAsync(userSeed.Email);
-		var resetToken = await arrangementUserManager.GeneratePasswordResetTokenAsync(userToConfirm!);
+		var resetToken = await arrangementUserManager.GeneratePasswordResetTokenAsync(userSeed.User);
 
 		var requestBody = new ResetPasswordRequestBody
 		{
-			UserId = userToConfirm!.Id,
+			UserId = userSeed.Seed.Id,
 			ResetToken = resetToken,
 			NewPassword = "0"
 		};

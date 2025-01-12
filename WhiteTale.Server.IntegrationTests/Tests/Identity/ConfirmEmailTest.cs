@@ -17,15 +17,9 @@ public sealed class ConfirmEmailTest
 		await using var application = new ApplicationInstance(nameof(ConfirmEmail_TryToStartConfirmation_ReturnsNoContent));
 		using var httpClient = application.CreateClient();
 
-		var userSeed = new UserSeed
-		{
-			UserName = "test_user",
-			Password = "TestPassword1!",
-			Email = "test_address@example.com"
-		};
-		await application.SeedUserAsync(userSeed);
+		var userSeed = await application.SeedUserAsync();
 
-		var email = WebUtility.UrlEncode(userSeed.Email);
+		var email = WebUtility.UrlEncode(userSeed.Seed.Email);
 
 		// Act
 		using var response = await httpClient.GetAsync($"api/identity/confirmEmail?email={email}");
@@ -35,7 +29,7 @@ public sealed class ConfirmEmailTest
 
 		using var assertionsScope = application.Services.CreateScope();
 		var assertionsUserManager = assertionsScope.ServiceProvider.GetRequiredService<UserManager<User>>();
-		var userAfterRequest = await assertionsUserManager.FindByEmailAsync(userSeed.Email);
+		var userAfterRequest = await assertionsUserManager.FindByEmailAsync(userSeed.Seed.Email);
 
 		_ = userAfterRequest!.EmailConfirmed.Should().BeFalse();
 	}
@@ -63,20 +57,14 @@ public sealed class ConfirmEmailTest
 		await using var application = new ApplicationInstance(nameof(ConfirmEmail_TryToConfirm_ReturnsNoContent));
 		using var httpClient = application.CreateClient();
 
-		var userSeed = new UserSeed
-		{
-			UserName = "test_user",
-			Password = "TestPassword1!",
-			Email = "test_address@example.com"
-		};
-		await application.SeedUserAsync(userSeed);
+		var userSeed =await application.SeedUserAsync();
 
 		using var arrangementScope = application.Services.CreateScope();
 		var arrangementUserManager = arrangementScope.ServiceProvider.GetRequiredService<UserManager<User>>();
-		var userToConfirm = await arrangementUserManager.FindByEmailAsync(userSeed.Email);
+		var userToConfirm = await arrangementUserManager.FindByEmailAsync(userSeed.Seed.Email);
 		var confirmationToken = await arrangementUserManager.GenerateEmailConfirmationTokenAsync(userToConfirm!);
 
-		var emailUrlEncoded = WebUtility.UrlEncode(userSeed.Email);
+		var emailUrlEncoded = WebUtility.UrlEncode(userSeed.Seed.Email);
 		var confirmationTokenBase64Encoded = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));
 
 		// Act
@@ -89,7 +77,7 @@ public sealed class ConfirmEmailTest
 
 		using var assertionsScope = application.Services.CreateScope();
 		var assertionsUserManager = assertionsScope.ServiceProvider.GetRequiredService<UserManager<User>>();
-		var userAfterConfirmation = await assertionsUserManager.FindByEmailAsync(userSeed.Email);
+		var userAfterConfirmation = await assertionsUserManager.FindByEmailAsync(userSeed.Seed.Email);
 
 		_ = userAfterConfirmation!.EmailConfirmed.Should().BeTrue();
 	}
@@ -101,15 +89,9 @@ public sealed class ConfirmEmailTest
 		await using var application = new ApplicationInstance(nameof(ConfirmEmail_TryToConfirmWithInvalidToken_ReturnsNoContent));
 		using var httpClient = application.CreateClient();
 
-		var userSeed = new UserSeed
-		{
-			UserName = "test_user",
-			Password = "TestPassword1!",
-			Email = "test_address@example.com"
-		};
-		await application.SeedUserAsync(userSeed);
+		var userSeed = await application.SeedUserAsync();
 
-		var email = WebUtility.UrlEncode(userSeed.Email);
+		var email = WebUtility.UrlEncode(userSeed.Seed.Email);
 
 		// Act
 		using var response = await httpClient.GetAsync($"api/identity/confirmEmail?email={email}&token=0");
@@ -119,7 +101,7 @@ public sealed class ConfirmEmailTest
 
 		using var assertionsScope = application.Services.CreateScope();
 		var assertionsUserManager = assertionsScope.ServiceProvider.GetRequiredService<UserManager<User>>();
-		var userAfterConfirmation = await assertionsUserManager.FindByEmailAsync(userSeed.Email);
+		var userAfterConfirmation = await assertionsUserManager.FindByEmailAsync(userSeed.Seed.Email);
 
 		_ = userAfterConfirmation!.EmailConfirmed.Should().BeFalse();
 	}

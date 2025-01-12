@@ -18,21 +18,8 @@ public sealed class GetOwnCharacterTest
 		await using var application = new ApplicationInstance(nameof(GetOwnCharacter_ValidOperation_ReturnsOkWithCharacter));
 		using var httpClient = application.CreateClient();
 
-		var userSeed = new UserSeed
-		{
-			DisplayName = "TestUser",
-			UserName = "test_user",
-			Password = "TestPassword1!",
-			Email = "test_address@example.com",
-			EmailConfirmed = true
-		};
-		await application.SeedUserAsync(userSeed);
-
-		using var arrangementScope = application.Services.CreateScope();
-		var arrangementUserManager = arrangementScope.ServiceProvider.GetRequiredService<UserManager<User>>();
-		var userToGet = await arrangementUserManager.FindByNameAsync(userSeed.UserName);
-
-		var credentials = await application.LoginUserAsync(userSeed.UserName, userSeed.Password);
+		var userSeed = await application.SeedUserAsync();
+		var credentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
 		using var request = new HttpRequestMessage(HttpMethod.Get, "api/characters/@me");
 		request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", credentials.AccessToken);
@@ -44,12 +31,12 @@ public sealed class GetOwnCharacterTest
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.OK);
 		var responseBody = await response.Content.ReadFromJsonAsync<CharacterData>();
 		_ = responseBody.Should().NotBeNull();
-		_ = responseBody!.Id.Should().Be(userToGet!.Id);
-		_ = responseBody.DisplayName.Should().Be(userSeed.DisplayName);
-		_ = responseBody.Description.Should().BeNull();
-		_ = responseBody.Presence.Should().Be(Presence.Offline);
-		_ = responseBody.OwnerType.Should().Be(CharacterOwnerType.Standard);
-		_ = responseBody.CurrentRoomId.Should().BeNull();
+		_ = responseBody!.Id.Should().Be(userSeed.Character!.Id);
+		_ = responseBody.DisplayName.Should().Be(userSeed.Character.DisplayName);
+		_ = responseBody.Description.Should().BeNull(userSeed.Character.Description);
+		_ = responseBody.Presence.Should().Be(userSeed.Character.Presence);
+		_ = responseBody.OwnerType.Should().Be(userSeed.Character.OwnerType);
+		_ = responseBody.CurrentRoomId.Should().Be(userSeed.Character.CurrentRoomId);
 	}
 
 	[Fact]
@@ -58,16 +45,6 @@ public sealed class GetOwnCharacterTest
 		// Arrange
 		await using var application = new ApplicationInstance(nameof(GetOwnCharacter_WithoutAuthorization_ReturnsUnauthorized));
 		using var httpClient = application.CreateClient();
-
-		var userSeed = new UserSeed
-		{
-			DisplayName = "TestUser",
-			UserName = "test_user",
-			Password = "TestPassword1!",
-			Email = "test_address@example.com",
-			EmailConfirmed = true
-		};
-		await application.SeedUserAsync(userSeed);
 
 		// Act
 		using var response = await httpClient.GetAsync("api/characters/@me");

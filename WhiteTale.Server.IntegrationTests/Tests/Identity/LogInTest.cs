@@ -17,19 +17,12 @@ public sealed class LogInTest
 		await using var application = new ApplicationInstance(nameof(LogIn_WithValidCredentials_ReturnsOkWithAccessTokenResponse));
 		using var httpClient = application.CreateClient();
 
-		var userSeed = new UserSeed
-		{
-			UserName = "test_user",
-			Password = "TestPassword1!",
-			Email = "test_address@example.com",
-			EmailConfirmed = true
-		};
-		await application.SeedUserAsync(userSeed);
+		var userSeed = await application.SeedUserAsync();
 
 		var requestBody = new LogInRequestBody
 		{
-			UserName = userSeed.UserName,
-			Password = userSeed.Password
+			UserName = userSeed.Seed.UserName,
+			Password = userSeed.Seed.Password
 		};
 
 		// Act
@@ -72,18 +65,11 @@ public sealed class LogInTest
 		await using var application = new ApplicationInstance(nameof(LogIn_WithIncorrectPassword_ReturnsBadRequest));
 		using var httpClient = application.CreateClient();
 
-		var userSeed = new UserSeed
-		{
-			UserName = "test_user",
-			Password = "TestPassword1!",
-			Email = "test_address@example.com",
-			EmailConfirmed = true
-		};
-		await application.SeedUserAsync(userSeed);
+		var userSeed = await application.SeedUserAsync();
 
 		var requestBody = new LogInRequestBody
 		{
-			UserName = userSeed.UserName,
+			UserName = userSeed.Seed.UserName,
 			Password = "0"
 		};
 
@@ -101,18 +87,12 @@ public sealed class LogInTest
 		await using var application = new ApplicationInstance(nameof(LogIn_WithoutNoConfirmedEmail_ReturnsForbidden));
 		using var httpClient = application.CreateClient();
 
-		var userSeed = new UserSeed
-		{
-			UserName = "test_user",
-			Password = "TestPassword1!",
-			Email = "test_address@example.com"
-		};
-		await application.SeedUserAsync(userSeed);
+		var userSeed = await application.SeedUserAsync();
 
 		var requestBody = new LogInRequestBody
 		{
-			UserName = userSeed.UserName,
-			Password = userSeed.Password
+			UserName = userSeed.Seed.UserName,
+			Password = userSeed.Seed.Password
 		};
 
 		// Act
@@ -129,24 +109,17 @@ public sealed class LogInTest
 		await using var application = new ApplicationInstance(nameof(LogIn_WithAnActiveLockout_ReturnsForbidden));
 		using var httpClient = application.CreateClient();
 
-		var userSeed = new UserSeed
-		{
-			UserName = "test_user",
-			Password = "TestPassword1!",
-			Email = "test_address@example.com"
-		};
-		await application.SeedUserAsync(userSeed);
+		var userSeed = await application.SeedUserAsync();
 
 		using var arrangementScope = application.Services.CreateScope();
 		var arrangementUserManager = arrangementScope.ServiceProvider.GetRequiredService<UserManager<User>>();
-		var userToLockOut = await arrangementUserManager.FindByNameAsync(userSeed.UserName);
-		_ = arrangementUserManager.SetLockoutEndDateAsync(userToLockOut!, DateTimeOffset.UtcNow.AddDays(7));
-		_ = arrangementUserManager.SetLockoutEnabledAsync(userToLockOut!, true);
+		_ = arrangementUserManager.SetLockoutEndDateAsync(userSeed.User, DateTimeOffset.UtcNow.AddDays(7));
+		_ = arrangementUserManager.SetLockoutEnabledAsync(userSeed.User, true);
 
 		var requestBody = new LogInRequestBody
 		{
-			UserName = userSeed.UserName,
-			Password = userSeed.Password
+			UserName = userSeed.Seed.UserName,
+			Password = userSeed.Seed.Password
 		};
 
 		// Act
