@@ -78,17 +78,14 @@ public sealed class ModifyOwnCharacterTest
 		};
 		await application.SeedUserAsync(userSeed);
 
-		using var request = new HttpRequestMessage(HttpMethod.Patch, "api/characters/@me");
 		var requestBody = new ModifyOwnCharacterRequestBody
 		{
 			DisplayName = "NewTestUser",
 			Description = "NewDescription"
 		};
-		var requestBodyString = JsonSerializer.Serialize(requestBody, JsonSerializerOptions.Web);
-		request.Content = new StringContent(requestBodyString, Encoding.UTF8, "application/json");
 
 		// Act
-		using var response = await httpClient.SendAsync(request);
+		using var response = await httpClient.PatchAsJsonAsync("api/characters/@me", requestBody);
 
 		// Arrange
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.Unauthorized);
