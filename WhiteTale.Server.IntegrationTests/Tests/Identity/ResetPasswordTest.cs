@@ -20,7 +20,7 @@ public sealed class ResetPasswordTest
 		{
 			UserId = 0,
 			ResetToken = "0",
-			NewPassword = "0"
+			NewPassword = "NewTestPassword1!"
 		};
 
 		// Act
@@ -107,15 +107,11 @@ public sealed class ResetPasswordTest
 
 		var userSeed = await application.SeedUserAsync();
 
-		using var arrangementScope = application.Services.CreateScope();
-		var arrangementUserManager = arrangementScope.ServiceProvider.GetRequiredService<UserManager<User>>();
-		var resetToken = await arrangementUserManager.GeneratePasswordResetTokenAsync(userSeed.User);
-
 		var requestBody = new ResetPasswordRequestBody
 		{
 			UserId = userSeed.Seed.Id,
-			ResetToken = resetToken,
-			NewPassword = "0"
+			ResetToken = "0",
+			NewPassword = "NewTestPassword1!"
 		};
 
 		// Act

@@ -48,7 +48,7 @@ public sealed class LogInTest
 		var requestBody = new LogInRequestBody
 		{
 			UserName = "0",
-			Password = "0"
+			Password = "NewTestPassword1!"
 		};
 
 		// Act
