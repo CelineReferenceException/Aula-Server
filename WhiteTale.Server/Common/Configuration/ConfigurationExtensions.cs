@@ -1,4 +1,4 @@
-﻿namespace WhiteTale.Server.Configuration;
+﻿namespace WhiteTale.Server.Common.Configuration;
 
 internal static class ConfigurationExtensions
 {
