@@ -36,7 +36,8 @@ internal static class UserHelper
 		{
 			Id = userSeed.Id,
 			Email = userSeed.Email,
-			EmailConfirmed = userSeed.EmailConfirmed
+			EmailConfirmed = userSeed.EmailConfirmed,
+			Permissions = userSeed.Permissions
 		};
 
 		var character = new Character
