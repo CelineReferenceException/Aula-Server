@@ -16,7 +16,7 @@ internal static class UserHelper
 {
 	private static UserSeed DefaultUserSeed { get; } = new UserSeed
 	{
-		Id = 0,
+		Id = 1,
 		DisplayName = "TestUser",
 		UserName = "test_user",
 		Password = "TestPassword1!",
