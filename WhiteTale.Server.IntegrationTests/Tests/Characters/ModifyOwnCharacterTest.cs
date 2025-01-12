@@ -29,9 +29,8 @@ public sealed class ModifyOwnCharacterTest
 			DisplayName = "NewTestUser",
 			Description = "NewDescription"
 		};
-		var requestBodyString = JsonSerializer.Serialize(requestBody, JsonSerializerOptions.Web);
-		request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", credentials.AccessToken);
-		request.Content = new StringContent(requestBodyString, Encoding.UTF8, "application/json");
+		request.SetJsonContent(requestBody);
+		request.SetAuthorization("Bearer", credentials.AccessToken);
 
 		// Act
 		using var response = await httpClient.SendAsync(request);

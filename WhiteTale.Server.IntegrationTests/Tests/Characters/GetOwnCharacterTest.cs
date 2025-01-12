@@ -22,7 +22,7 @@ public sealed class GetOwnCharacterTest
 		var credentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
 		using var request = new HttpRequestMessage(HttpMethod.Get, "api/characters/@me");
-		request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", credentials.AccessToken);
+		request.SetAuthorization("Bearer", credentials.AccessToken);
 
 		// Act
 		using var response = await httpClient.SendAsync(request);

@@ -25,7 +25,7 @@ public sealed class GetCharacterTest
 		var credentials = await application.LoginUserAsync(userInfo.Seed.UserName, userInfo.Seed.Password);
 
 		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/characters/{userInfo.Seed.Id}");
-		request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", credentials.AccessToken);
+		request.SetAuthorization("Bearer", credentials.AccessToken);
 
 		// Act
 		using var response = await httpClient.SendAsync(request);
@@ -69,7 +69,7 @@ public sealed class GetCharacterTest
 		var credentials = await application.LoginUserAsync(userInfo.Seed.UserName, userInfo.Seed.Password);
 
 		using var request = new HttpRequestMessage(HttpMethod.Get, "api/characters/1");
-		request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", credentials.AccessToken);
+		request.SetAuthorization("Bearer", credentials.AccessToken);
 
 		// Act
 		using var response = await httpClient.SendAsync(request);
