@@ -4,7 +4,6 @@ using System.Net.Http.Json;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using WhiteTale.Server.Common;
 using WhiteTale.Server.Common.Persistence;
 using WhiteTale.Server.Domain.Characters;
 using WhiteTale.Server.Domain.Users;
@@ -14,7 +13,7 @@ namespace WhiteTale.Server.IntegrationTests.Helpers;
 
 internal static class UserHelper
 {
-	private static UserSeed DefaultUserSeed { get; } = new UserSeed
+	internal static UserSeed DefaultUserSeed { get; } = new()
 	{
 		Id = 1,
 		DisplayName = "TestUser",
