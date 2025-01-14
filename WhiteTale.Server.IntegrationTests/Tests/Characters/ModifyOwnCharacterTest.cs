@@ -40,8 +40,8 @@ public sealed class ModifyOwnCharacterTest
 		var responseBody = await response.Content.ReadFromJsonAsync<CharacterData>();
 		_ = responseBody.Should().NotBeNull();
 		_ = responseBody!.Id.Should().Be(userSeed.Character.Id);
-		_ = responseBody.DisplayName.Should().Be(userSeed.Character.DisplayName);
-		_ = responseBody.Description.Should().Be(userSeed.Character.Description);
+		_ = responseBody.DisplayName.Should().Be(requestBody.DisplayName);
+		_ = responseBody.Description.Should().Be(requestBody.Description);
 		_ = responseBody.Presence.Should().Be(userSeed.Character.Presence);
 		_ = responseBody.OwnerType.Should().Be(userSeed.Character.OwnerType);
 		_ = responseBody.CurrentRoomId.Should().Be(userSeed.Character.CurrentRoomId);
