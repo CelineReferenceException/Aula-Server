@@ -18,14 +18,14 @@ internal sealed class LogIn : IEndpoint
 		[FromServices] UserManager<User> userManager,
 		[FromServices] SignInManager<User> signInManager)
 	{
-		var bodyValidation = await bodyValidator.ValidateAsync(body).ConfigureAwait(false);
+		var bodyValidation = await bodyValidator.ValidateAsync(body);
 		if (!bodyValidation.IsValid)
 		{
 			var problemDetails = bodyValidation.Errors.ToProblemDetails();
 			return TypedResults.Problem(problemDetails);
 		}
 
-		var user = await userManager.FindByNameAsync(body.UserName).ConfigureAwait(false);
+		var user = await userManager.FindByNameAsync(body.UserName);
 		if (user is null)
 		{
 			return TypedResults.Problem(new ProblemDetails
@@ -35,11 +35,11 @@ internal sealed class LogIn : IEndpoint
 			});
 		}
 
-		var isPasswordCorrect = await userManager.CheckPasswordAsync(user, body.Password).ConfigureAwait(false);
+		var isPasswordCorrect = await userManager.CheckPasswordAsync(user, body.Password);
 
 		if (!isPasswordCorrect)
 		{
-			_ = await userManager.AccessFailedAsync(user).ConfigureAwait(false);
+			_ = await userManager.AccessFailedAsync(user);
 			return TypedResults.Problem(new ProblemDetails
 			{
 				Title = "A login problem has occurred",
@@ -48,7 +48,7 @@ internal sealed class LogIn : IEndpoint
 			});
 		}
 
-		if (await userManager.IsLockedOutAsync(user).ConfigureAwait(false))
+		if (await userManager.IsLockedOutAsync(user))
 		{
 			return TypedResults.Problem(new ProblemDetails
 			{
@@ -59,7 +59,7 @@ internal sealed class LogIn : IEndpoint
 		}
 
 		if (userManager.Options.SignIn.RequireConfirmedEmail &&
-		    !await userManager.IsEmailConfirmedAsync(user).ConfigureAwait(false))
+		    !await userManager.IsEmailConfirmedAsync(user))
 		{
 			return TypedResults.Problem(new ProblemDetails
 			{
@@ -70,7 +70,7 @@ internal sealed class LogIn : IEndpoint
 		}
 
 		signInManager.AuthenticationScheme = IdentityConstants.BearerScheme;
-		await signInManager.SignInAsync(user, new AuthenticationProperties()).ConfigureAwait(false);
+		await signInManager.SignInAsync(user, new AuthenticationProperties());
 
 		// The signInManager already produced a response in the form of a bearer token.
 		return TypedResults.Empty;

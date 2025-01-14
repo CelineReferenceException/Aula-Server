@@ -20,7 +20,7 @@ internal sealed class PermissionHandler : AuthorizationHandler<PermissionRequire
 		}
 
 		var userManager = httpContext.RequestServices.GetRequiredService<UserManager<User>>();
-		var user = await userManager.GetUserAsync(httpContext.User).ConfigureAwait(false);
+		var user = await userManager.GetUserAsync(httpContext.User);
 		if (user is null)
 		{
 			return;

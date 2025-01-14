@@ -26,8 +26,7 @@ internal sealed class GetCharacter : IEndpoint
 					OwnerType = character.OwnerType,
 					Presence = character.Presence
 				})
-			.FirstOrDefaultAsync()
-			.ConfigureAwait(false);
+			.FirstOrDefaultAsync();
 		if (character is null)
 		{
 			return TypedResults.NotFound();

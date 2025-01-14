@@ -23,17 +23,17 @@ internal sealed class Register : IEndpoint
 		[FromServices] ConfirmEmailEmailSender confirmEmailEmailSender,
 		[FromServices] ResetPasswordEmailSender resetPasswordEmailSender)
 	{
-		var bodyValidation = await bodyValidator.ValidateAsync(body).ConfigureAwait(false);
+		var bodyValidation = await bodyValidator.ValidateAsync(body);
 		if (!bodyValidation.IsValid)
 		{
 			var problemDetails = bodyValidation.Errors.ToProblemDetails();
 			return TypedResults.Problem(problemDetails);
 		}
 
-		var currentUser = await userManager.FindByEmailAsync(body.Email).ConfigureAwait(false);
+		var currentUser = await userManager.FindByEmailAsync(body.Email);
 		if (currentUser is not null)
 		{
-			await resetPasswordEmailSender.SendEmailAsync(currentUser).ConfigureAwait(false);
+			await resetPasswordEmailSender.SendEmailAsync(currentUser);
 			return TypedResults.NoContent();
 		}
 
@@ -53,7 +53,7 @@ internal sealed class Register : IEndpoint
 			ConcurrencyStamp = Guid.NewGuid().ToString()
 		};
 
-		var identityCreation = await userManager.CreateAsync(newUser, body.Password).ConfigureAwait(false);
+		var identityCreation = await userManager.CreateAsync(newUser, body.Password);
 		if (!identityCreation.Succeeded)
 		{
 			var problemDetails = identityCreation.Errors.ToProblemDetails();
@@ -61,9 +61,9 @@ internal sealed class Register : IEndpoint
 		}
 
 		_ = dbContext.Characters.Add(newCharacter);
-		_ = await dbContext.SaveChangesAsync().ConfigureAwait(false);
+		_ = await dbContext.SaveChangesAsync();
 
-		await confirmEmailEmailSender.SendEmailAsync(newUser, httpRequest).ConfigureAwait(false);
+		await confirmEmailEmailSender.SendEmailAsync(newUser, httpRequest);
 		return TypedResults.NoContent();
 	}
 }

@@ -23,7 +23,7 @@ internal sealed class ConfirmEmailEmailSender
 
 	internal async Task SendEmailAsync(User user, HttpRequest httpRequest)
 	{
-		var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user).ConfigureAwait(false);
+		var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 		confirmationToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));
 		var confirmationUrl =
 			$"{httpRequest.Scheme}://{httpRequest.Host}{httpRequest.PathBase}/{ConfirmEmail.Route}?" +
@@ -36,6 +36,6 @@ internal sealed class ConfirmEmailEmailSender
 			 <p>To complete your registration and verify your email address, you can <a href='{confirmationUrl}'>click here</a>.
 			 <p>If you didn’t sign up for {_applicationName}, you can ignore this email.</p>
 			 """;
-		await _emailSender.SendEmailAsync(user.Email!, "Confirm your email", content).ConfigureAwait(false);
+		await _emailSender.SendEmailAsync(user.Email!, "Confirm your email", content);
 	}
 }

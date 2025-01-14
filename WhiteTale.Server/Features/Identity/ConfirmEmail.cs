@@ -30,21 +30,21 @@ internal sealed class ConfirmEmail : IEndpoint
 		email = WebUtility.UrlDecode(email);
 		var redirectUri = featureOptions.Value.ConfirmEmailRedirectUri?.ToString();
 
-		var user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
+		var user = await userManager.FindByEmailAsync(email);
 		if (user is null)
 		{
 			// We could return NotFound, but it feels like unnecessary information.
 			return RedirectOrSendNoContent(redirectUri);
 		}
 
-		if (await userManager.IsEmailConfirmedAsync(user).ConfigureAwait(false))
+		if (await userManager.IsEmailConfirmedAsync(user))
 		{
 			return RedirectOrSendNoContent(redirectUri);
 		}
 
 		if (token is null)
 		{
-			await confirmEmailEmailSender.SendEmailAsync(user, httpRequest).ConfigureAwait(false);
+			await confirmEmailEmailSender.SendEmailAsync(user, httpRequest);
 			return RedirectOrSendNoContent(redirectUri);
 		}
 
@@ -57,7 +57,7 @@ internal sealed class ConfirmEmail : IEndpoint
 			return RedirectOrSendNoContent(redirectUri);
 		}
 
-		_ = await userManager.ConfirmEmailAsync(user, token).ConfigureAwait(false);
+		_ = await userManager.ConfirmEmailAsync(user, token);
 
 		return RedirectOrSendNoContent(redirectUri);
 	}

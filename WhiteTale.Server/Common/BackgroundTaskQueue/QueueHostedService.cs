@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.Hosting;
 
 namespace WhiteTale.Server.Common.BackgroundTaskQueue;
 
@@ -21,8 +20,8 @@ internal sealed class QueueHostedService<T> : BackgroundService
 		{
 			try
 			{
-				var workItem = await _taskQueue.DequeueAsync(stoppingToken).ConfigureAwait(false);
-				await workItem(stoppingToken).ConfigureAwait(false);
+				var workItem = await _taskQueue.DequeueAsync(stoppingToken);
+				await workItem(stoppingToken);
 			}
 			catch (OperationCanceledException)
 			{

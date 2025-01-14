@@ -21,16 +21,16 @@ internal sealed class DefaultBackgroundTaskQueue<TOwner> : IBackgroundTaskQueue<
 	{
 		ArgumentNullException.ThrowIfNull(workItem, nameof(workItem));
 
-		_ = await _taskQueue.Writer.WaitToWriteAsync().ConfigureAwait(false);
+		_ = await _taskQueue.Writer.WaitToWriteAsync();
 		_logger.Trace("Queueing background work item");
-		await _taskQueue.Writer.WriteAsync(workItem).ConfigureAwait(false);
+		await _taskQueue.Writer.WriteAsync(workItem);
 	}
 
 	public async ValueTask<Func<CancellationToken, ValueTask>> DequeueAsync(CancellationToken ct)
 	{
-		_ = await _taskQueue.Reader.WaitToReadAsync(ct).ConfigureAwait(false);
+		_ = await _taskQueue.Reader.WaitToReadAsync(ct);
 		_logger.Trace("Dequeueing background work item");
-		var workItem = await _taskQueue.Reader.ReadAsync(ct).ConfigureAwait(false);
+		var workItem = await _taskQueue.Reader.ReadAsync(ct);
 
 		return workItem;
 	}

@@ -22,14 +22,14 @@ internal sealed class ForgotPassword : IEndpoint
 	{
 		email = WebUtility.UrlDecode(email);
 
-		var user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
+		var user = await userManager.FindByEmailAsync(email);
 		if (user is null)
 		{
 			// We could return NotFound, but it feels like unnecessary information.
 			return TypedResults.NoContent();
 		}
 
-		await resetPasswordEmailSender.SendEmailAsync(user).ConfigureAwait(false);
+		await resetPasswordEmailSender.SendEmailAsync(user);
 		return TypedResults.NoContent();
 	}
 }

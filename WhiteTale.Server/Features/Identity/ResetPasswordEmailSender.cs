@@ -28,7 +28,7 @@ internal sealed class ResetPasswordEmailSender
 			return;
 		}
 
-		var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
+		var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 		resetToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(resetToken));
 		var content =
 			$"""
@@ -44,6 +44,6 @@ internal sealed class ResetPasswordEmailSender
 			content += $"<p>You can reset your password by <a href='{_redirectUri}'>clicking here</a></p>";
 		}
 
-		await _emailSender.SendEmailAsync(user.Email, "Reset your password", content).ConfigureAwait(false);
+		await _emailSender.SendEmailAsync(user.Email, "Reset your password", content);
 	}
 }

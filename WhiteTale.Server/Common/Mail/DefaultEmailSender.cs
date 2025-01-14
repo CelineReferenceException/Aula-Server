@@ -42,16 +42,15 @@ internal sealed class DefaultEmailSender : IEmailSender
 		ArgumentNullException.ThrowIfNull(htmlMessage, nameof(htmlMessage));
 
 		await _taskQueue.QueueBackgroundWorkItemAsync(async ct =>
-			{
-				using var message = new MailMessage();
-				message.From = _mailAddress;
-				message.To.Add(email);
-				message.Subject = subject;
-				message.Body = htmlMessage;
-				message.IsBodyHtml = true;
+		{
+			using var message = new MailMessage();
+			message.From = _mailAddress;
+			message.To.Add(email);
+			message.Subject = subject;
+			message.Body = htmlMessage;
+			message.IsBodyHtml = true;
 
-				await _smtpClient.SendMailAsync(message, ct).ConfigureAwait(false);
-			})
-			.ConfigureAwait(false);
+			await _smtpClient.SendMailAsync(message, ct);
+		});
 	}
 }

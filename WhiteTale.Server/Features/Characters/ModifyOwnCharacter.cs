@@ -19,7 +19,7 @@ internal sealed class ModifyOwnCharacter : IEndpoint
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] ILogger<ModifyOwnCharacter> logger)
 	{
-		var bodyValidation = await bodyValidator.ValidateAsync(body).ConfigureAwait(false);
+		var bodyValidation = await bodyValidator.ValidateAsync(body);
 		if (!bodyValidation.IsValid)
 		{
 			var problemDetails = bodyValidation.Errors.ToProblemDetails();
@@ -35,8 +35,7 @@ internal sealed class ModifyOwnCharacter : IEndpoint
 		var character = await dbContext.Characters
 			.AsTracking()
 			.Where(character => character.Id == userId)
-			.FirstOrDefaultAsync()
-			.ConfigureAwait(false);
+			.FirstOrDefaultAsync();
 		if (character is null)
 		{
 			return TypedResults.InternalServerError();
@@ -48,7 +47,7 @@ internal sealed class ModifyOwnCharacter : IEndpoint
 
 		try
 		{
-			_ = await dbContext.SaveChangesAsync().ConfigureAwait(false);
+			_ = await dbContext.SaveChangesAsync();
 		}
 		catch (DbUpdateConcurrencyException)
 		{

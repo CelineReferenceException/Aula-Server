@@ -19,14 +19,14 @@ internal sealed class ResetPassword : IEndpoint
 		[FromServices] IValidator<ResetPasswordRequestBody> bodyValidator,
 		[FromServices] UserManager<User> userManager)
 	{
-		var bodyValidation = await bodyValidator.ValidateAsync(body).ConfigureAwait(false);
+		var bodyValidation = await bodyValidator.ValidateAsync(body);
 		if (!bodyValidation.IsValid)
 		{
 			var problemDetails = bodyValidation.Errors.ToProblemDetails();
 			return TypedResults.Problem(problemDetails);
 		}
 
-		var user = await userManager.FindByIdAsync(body.UserId.ToString()).ConfigureAwait(false);
+		var user = await userManager.FindByIdAsync(body.UserId.ToString());
 		if (user is null)
 		{
 			return TypedResults.Problem(new ProblemDetails
@@ -37,7 +37,7 @@ internal sealed class ResetPassword : IEndpoint
 			});
 		}
 
-		var passwordReset = await userManager.ResetPasswordAsync(user, body.ResetToken, body.NewPassword).ConfigureAwait(false);
+		var passwordReset = await userManager.ResetPasswordAsync(user, body.ResetToken, body.NewPassword);
 		if (!passwordReset.Succeeded)
 		{
 			var problemDetails = passwordReset.Errors.ToProblemDetails();
