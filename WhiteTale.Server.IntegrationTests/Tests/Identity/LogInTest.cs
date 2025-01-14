@@ -113,8 +113,12 @@ public sealed class LogInTest
 
 		using var arrangementScope = application.Services.CreateScope();
 		var arrangementUserManager = arrangementScope.ServiceProvider.GetRequiredService<UserManager<User>>();
-		_ = arrangementUserManager.SetLockoutEndDateAsync(userSeed.User, DateTimeOffset.UtcNow.AddDays(7));
-		_ = arrangementUserManager.SetLockoutEnabledAsync(userSeed.User, true);
+		var userToLockout = await arrangementUserManager.FindByIdAsync(userSeed.Seed.Id.ToString());
+		var availableAttempts = arrangementUserManager.Options.Lockout.MaxFailedAccessAttempts;
+		for (var i = 0; i < availableAttempts; i++)
+		{
+			_ = await arrangementUserManager.AccessFailedAsync(userToLockout!);
+		}
 
 		var requestBody = new LogInRequestBody
 		{
