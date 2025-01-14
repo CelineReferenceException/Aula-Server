@@ -24,7 +24,7 @@ application.UseCommon();
 
 if (application.Environment.IsDevelopment())
 {
-	var documentationRoute = application.MapGroup("documentation");
+	var documentationRoute = application.MapGroup("docs");
 
 	_ = documentationRoute.MapOpenApi();
 	_ = documentationRoute.MapScalarApiReference(options =>
@@ -37,7 +37,7 @@ if (application.Environment.IsDevelopment())
 			.WithModels(true)
 			.WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
 			.WithEndpointPrefix("/api-reference/{documentName}")
-			.OpenApiRoutePattern = "/documentation/openapi/{documentName}.json";
+			.OpenApiRoutePattern = "/docs/openapi/{documentName}.json";
 	});
 }
 
