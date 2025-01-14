@@ -14,6 +14,7 @@ internal static class DependencyInjection
 			.ValidateOnStart();
 
 		_ = builder.Services.AddIdentity(builder.Configuration);
+		_ = builder.Services.AddAuthorizationRequirements();
 
 		_ = builder.Services.AddCors();
 		_ = builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>(ServiceLifetime.Singleton, includeInternalTypes: true);
