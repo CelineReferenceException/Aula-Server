@@ -14,4 +14,6 @@ internal sealed class Room
 	public String? Description { get; set; }
 
 	public Boolean IsEntrance { get; set; }
+
+	public required String ConcurrencyStamp { get; set; }
 }

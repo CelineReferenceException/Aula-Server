@@ -95,6 +95,11 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 		_ = roomModel.Property(x => x.IsEntrance)
 			.IsRequired();
 
+		_ = roomModel.Property(x => x.ConcurrencyStamp)
+			.IsRequired()
+			.IsConcurrencyToken()
+			.HasMaxLength(guidMaximumCharacterLength);
+
 		var roomConnectionModel = modelBuilder.Entity<RoomConnection>();
 
 		_ = roomConnectionModel.Property(x => x.Id)
