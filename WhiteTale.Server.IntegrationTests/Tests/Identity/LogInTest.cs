@@ -87,7 +87,7 @@ public sealed class LogInTest
 		await using var application = new ApplicationInstance(nameof(LogIn_WithoutNoConfirmedEmail_ReturnsForbidden));
 		using var httpClient = application.CreateClient();
 
-		var userSeed = await application.SeedUserAsync();
+		var userSeed = await application.SeedUserAsync(UserHelper.DefaultUserSeed with { EmailConfirmed = false });
 
 		var requestBody = new LogInRequestBody
 		{
