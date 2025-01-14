@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
-
-namespace WhiteTale.Server.Common;
+﻿namespace WhiteTale.Server.Common;
 
 internal static class DependencyInjection
 {

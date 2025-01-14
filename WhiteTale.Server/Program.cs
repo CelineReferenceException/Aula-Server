@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using MartinCostello.OpenApi;
-using Microsoft.Extensions.Hosting;
 using Scalar.AspNetCore;
 using WhiteTale.Server.Features.Identity;
 
