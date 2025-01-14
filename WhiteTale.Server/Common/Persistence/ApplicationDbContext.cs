@@ -90,7 +90,6 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 			.HasMaxLength(Room.NameMaximumLength);
 
 		_ = roomModel.Property(x => x.Description)
-			.IsRequired()
 			.HasMaxLength(Room.DescriptionMaximumLength);
 
 		_ = roomModel.Property(x => x.IsEntrance)
