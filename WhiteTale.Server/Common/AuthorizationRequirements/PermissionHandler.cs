@@ -30,6 +30,7 @@ internal sealed class PermissionHandler : AuthorizationHandler<PermissionRequire
 		    || requiredPermissions.Any(permission => user.Permissions.HasFlag(permission)))
 		{
 			context.Succeed(requirement);
+			return;
 		}
 
 		context.Fail();
