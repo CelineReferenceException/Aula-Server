@@ -34,6 +34,7 @@ internal static class DependencyInjection
 		_ = app.UseRateLimiter();
 		_ = app.UseAuthentication();
 		_ = app.UseAuthorization();
+		_ = app.UseWebSockets();
 		_ = app.MapEndpoints();
 
 		return app;

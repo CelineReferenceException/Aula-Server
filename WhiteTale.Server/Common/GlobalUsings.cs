@@ -19,6 +19,7 @@ global using Microsoft.AspNetCore.Routing;
 global using Microsoft.AspNetCore.WebUtilities;
 global using Microsoft.AspNetCore.Builder;
 global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.WebSockets;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
