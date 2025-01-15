@@ -16,5 +16,5 @@ internal sealed class Message
 
 	public required String Content { get; init; }
 
-	public required DateTimeOffset CreationTime { get; init; }
+	public required DateTime CreationTime { get; init; }
 }
