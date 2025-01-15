@@ -13,15 +13,7 @@ namespace WhiteTale.Server.IntegrationTests.Helpers;
 
 internal static class UserHelper
 {
-	internal static UserSeed DefaultUserSeed { get; } = new()
-	{
-		Id = 1,
-		DisplayName = "TestUser",
-		UserName = "test_user",
-		Password = "TestPassword1!",
-		Email = "test_address@example.com",
-		EmailConfirmed = true
-	};
+
 
 	internal static async Task<SeedUserResult> SeedUserAsync(this ApplicationInstance application, UserSeed? userSeed = null)
 	{
@@ -29,7 +21,7 @@ internal static class UserHelper
 		var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
 		var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-		userSeed ??= DefaultUserSeed;
+		userSeed ??= UserSeed.Default;
 
 		var user = new User(userSeed.UserName)
 		{

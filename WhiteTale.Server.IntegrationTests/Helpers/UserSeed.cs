@@ -7,6 +7,16 @@ namespace WhiteTale.Server.IntegrationTests.Helpers;
 /// </summary>
 internal sealed record UserSeed
 {
+	internal static UserSeed Default { get; } = new()
+	{
+		Id = 1,
+		DisplayName = "TestUser",
+		UserName = "test_user",
+		Password = "TestPassword1!",
+		Email = "test_address@example.com",
+		EmailConfirmed = true
+	};
+
 	public required UInt64 Id { get; init; }
 
 	public String? DisplayName { get; init; }
