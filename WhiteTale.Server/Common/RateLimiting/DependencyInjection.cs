@@ -39,7 +39,7 @@ internal static class DependencyInjection
 
 			_ = options.AddPolicy(RateLimitPolicyNames.Strict, httpContext =>
 			{
-				var userManager = ServiceProviderServiceExtensions.GetRequiredService<UserManager<User>>(httpContext.RequestServices);
+				var userManager = httpContext.RequestServices.GetRequiredService<UserManager<User>>();
 				var request = httpContext.Request;
 
 				var userId = userManager.GetUserId(httpContext.User);
