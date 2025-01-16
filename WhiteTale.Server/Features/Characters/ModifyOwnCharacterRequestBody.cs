@@ -1,4 +1,6 @@
-﻿namespace WhiteTale.Server.Features.Characters;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace WhiteTale.Server.Features.Characters;
 
 internal sealed class ModifyOwnCharacterRequestBody
 {
@@ -9,7 +11,8 @@ internal sealed class ModifyOwnCharacterRequestBody
 	/// <summary>
 	///     The name of the character.
 	/// </summary>
-	public String? DisplayName
+	[MaybeNull]
+	public String DisplayName
 	{
 		get => _displayName;
 		init => _displayName = value?.Trim();
@@ -18,7 +21,8 @@ internal sealed class ModifyOwnCharacterRequestBody
 	/// <summary>
 	///     The description of the character.
 	/// </summary>
-	public String? Description
+	[MaybeNull]
+	public String Description
 	{
 		get => _description;
 		init => _description = value?.Trim();
