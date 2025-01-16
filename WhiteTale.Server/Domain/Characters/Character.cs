@@ -80,7 +80,7 @@ internal sealed class Character : DomainEntity
 		AddEvent(new CharacterPresenceUpdatedEvent(Id, Presence));
 	}
 
-	internal void SetCurrentRoom(UInt64 currentRoomId)
+	internal void SetCurrentRoom(UInt64? currentRoomId)
 	{
 		if (CurrentRoomId == currentRoomId)
 		{
