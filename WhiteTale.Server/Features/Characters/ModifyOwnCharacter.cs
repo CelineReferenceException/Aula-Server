@@ -41,7 +41,7 @@ internal sealed class ModifyOwnCharacter : IEndpoint
 			return TypedResults.InternalServerError();
 		}
 
-		character.Update(body.DisplayName, body.Description);
+		character.Modify(body.DisplayName, body.Description);
 
 		try
 		{

@@ -40,7 +40,7 @@ internal sealed class Room : DomainEntity
 		return room;
 	}
 
-	internal void Update(String? name = null, String? description = null, Boolean? isEntrance = null)
+	internal void Modify(String? name = null, String? description = null, Boolean? isEntrance = null)
 	{
 		var modified = false;
 

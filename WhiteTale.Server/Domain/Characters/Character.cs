@@ -40,7 +40,7 @@ internal sealed class Character : DomainEntity
 		return character;
 	}
 
-	internal void Update(String? displayName = null, String? description = null)
+	internal void Modify(String? displayName = null, String? description = null)
 	{
 		var modified = false;
 
