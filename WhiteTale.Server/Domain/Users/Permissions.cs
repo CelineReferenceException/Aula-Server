@@ -9,5 +9,10 @@ internal enum Permissions
 	/// <summary>
 	///     Grants the user privileges over the entire application.
 	/// </summary>
-	Administrator = 1 << 0
+	Administrator = 1 << 0,
+
+	/// <summary>
+	///	Allows to create, modify and delete rooms.
+	/// </summary>
+	ManageRooms = 1 << 1
 }
