@@ -24,7 +24,7 @@ internal sealed class Room : DomainEntity
 
 	internal Boolean IsRemoved { get; private set; }
 
-	internal static Room Create(UInt64 id, String name, String description, Boolean isEntrance)
+	internal static Room Create(UInt64 id, String name, String? description, Boolean isEntrance)
 	{
 		var room = new Room
 		{
