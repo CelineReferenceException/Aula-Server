@@ -22,7 +22,7 @@ internal sealed class Room : DomainEntity
 
 	internal String ConcurrencyStamp { get; private set; }
 
-	internal Boolean IsDeleted { get; private set; }
+	internal Boolean IsRemoved { get; private set; }
 
 	internal static Room Create(UInt64 id, String name, String description, Boolean isEntrance)
 	{
@@ -74,9 +74,9 @@ internal sealed class Room : DomainEntity
 		AddEvent(new RoomUpdatedEvent(this));
 	}
 
-	internal void Delete()
+	internal void Remove()
 	{
-		IsDeleted = true;
-		AddEvent(new RoomDeletedEvent(this));
+		IsRemoved = true;
+		AddEvent(new RoomRemovedEvent(this));
 	}
 }

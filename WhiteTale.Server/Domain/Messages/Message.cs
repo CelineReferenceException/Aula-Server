@@ -23,7 +23,7 @@ internal sealed class Message : DomainEntity
 
 	internal DateTime CreationTime { get; private init; }
 
-	internal Boolean IsDeleted { get; private set; }
+	internal Boolean IsRemoved { get; private set; }
 
 	internal static Message Create(
 		UInt64 id,
@@ -49,9 +49,9 @@ internal sealed class Message : DomainEntity
 		return message;
 	}
 
-	internal void Delete()
+	internal void Remove()
 	{
-		IsDeleted = true;
-		AddEvent(new MessageDeletedEvent(this));
+		IsRemoved = true;
+		AddEvent(new MessageRemovedEvent(this));
 	}
 }
