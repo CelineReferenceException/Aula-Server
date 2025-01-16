@@ -31,14 +31,7 @@ internal static class UserHelper
 			Permissions = userSeed.Permissions
 		};
 
-		var character = new Character
-		{
-			Id = userSeed.Id,
-			DisplayName = userSeed.DisplayName ?? userSeed.UserName,
-			OwnerType = CharacterOwnerType.Standard,
-			CreationTime = DateTime.UtcNow,
-			ConcurrencyStamp = Guid.NewGuid().ToString()
-		};
+		var character = Character.Create(userSeed.Id, userSeed.DisplayName ?? userSeed.UserName, CharacterOwnerType.Standard);
 
 		_ = await userManager.CreateAsync(user, userSeed.Password);
 		_ = dbContext.Characters.Add(character);
