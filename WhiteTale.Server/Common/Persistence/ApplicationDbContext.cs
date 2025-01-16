@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using MediatR;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using WhiteTale.Server.Domain;
 using WhiteTale.Server.Domain.Characters;
 using WhiteTale.Server.Domain.Messages;
 using WhiteTale.Server.Domain.Rooms;
@@ -10,10 +12,15 @@ namespace WhiteTale.Server.Common.Persistence;
 internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 {
 	private readonly IConfiguration _configuration;
+	private readonly IPublisher _publisher;
 
-	public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration) : base(options)
+	public ApplicationDbContext(
+		DbContextOptions<ApplicationDbContext> options,
+		IConfiguration configuration,
+		IPublisher publisher) : base(options)
 	{
 		_configuration = configuration;
+		_publisher = publisher;
 	}
 
 	internal DbSet<Character> Characters => Set<Character>();
@@ -140,5 +147,19 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 			.IsRequired();
 
 		base.OnModelCreating(modelBuilder);
+	}
+
+	public override async Task<Int32> SaveChangesAsync(CancellationToken cancellationToken = default)
+	{
+		var domainEvents = ChangeTracker
+			.Entries<DomainEntity>()
+			.SelectMany(x => x.Entity.DomainEvents);
+
+		foreach (var domainEvent in domainEvents)
+		{
+			await _publisher.Publish(domainEvent, cancellationToken);
+		}
+
+		return await base.SaveChangesAsync(cancellationToken);
 	}
 }

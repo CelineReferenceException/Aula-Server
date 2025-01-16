@@ -1,20 +1,57 @@
-﻿namespace WhiteTale.Server.Domain.Messages;
+﻿#pragma warning disable CS8618
+namespace WhiteTale.Server.Domain.Messages;
 
-internal sealed class Message
+internal sealed class Message : DomainEntity
 {
 	internal const Int32 ContentMaximumLength = 2048;
 
-	public required UInt64 Id { get; init; }
+	private Message()
+	{
+	}
 
-	public required MessageFlags Flags { get; init; }
+	internal UInt64 Id { get; private init; }
 
-	public required UInt64 AuthorId { get; init; }
+	internal MessageFlags Flags { get; private init; }
 
-	public required MessageTarget Target { get; init; }
+	internal UInt64 AuthorId { get; private init; }
 
-	public UInt64? RoomId { get; init; }
+	internal MessageTarget Target { get; private init; }
 
-	public required String Content { get; init; }
+	internal UInt64? RoomId { get; private init; }
 
-	public required DateTimeOffset CreationTime { get; init; }
+	internal String Content { get; private init; }
+
+	internal DateTime CreationTime { get; private init; }
+
+	internal Boolean IsDeleted { get; private set; }
+
+	internal static Message Create(
+		UInt64 id,
+		MessageFlags flags,
+		UInt64 authorId,
+		MessageTarget target,
+		String content,
+		UInt64? roomId = null)
+	{
+		var message = new Message
+		{
+			Id = id,
+			Flags = flags,
+			AuthorId = authorId,
+			Target = target,
+			RoomId = roomId,
+			Content = content,
+			CreationTime = DateTime.UtcNow
+		};
+
+		message.AddEvent(new MessageCreatedEvent(message));
+
+		return message;
+	}
+
+	internal void Delete()
+	{
+		IsDeleted = true;
+		AddEvent(new MessageDeletedEvent(this));
+	}
 }

@@ -44,14 +44,7 @@ internal sealed class Register : IEndpoint
 			Email = body.Email
 		};
 
-		var newCharacter = new Character
-		{
-			Id = newId,
-			DisplayName = body.DisplayName ?? body.UserName,
-			OwnerType = CharacterOwnerType.Standard,
-			CreationTime = DateTime.UtcNow,
-			ConcurrencyStamp = Guid.NewGuid().ToString()
-		};
+		var newCharacter = Character.Create(newId, body.DisplayName ?? body.UserName, CharacterOwnerType.Standard);
 
 		var identityCreation = await userManager.CreateAsync(newUser, body.Password);
 		if (!identityCreation.Succeeded)

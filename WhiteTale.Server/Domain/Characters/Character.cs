@@ -1,6 +1,7 @@
-﻿namespace WhiteTale.Server.Domain.Characters;
+﻿#pragma warning disable CS8618
+namespace WhiteTale.Server.Domain.Characters;
 
-internal sealed class Character
+internal sealed class Character : DomainEntity
 {
 	internal const Int32 DisplayNameMinimumLength = 3;
 	internal const Int32 DisplayNameMaximumLength = 32;
@@ -9,19 +10,86 @@ internal sealed class Character
 	internal const Int32 DescriptionMinimumLength = 1;
 	internal const Int32 DescriptionMaximumLength = 1024;
 
-	public required UInt64 Id { get; init; }
+	internal UInt64 Id { get; private init; }
 
-	public required String DisplayName { get; set; }
+	internal String DisplayName { get; private set; }
 
-	public String? Description { get; set; }
+	internal String? Description { get; private set; }
 
-	public required CharacterOwnerType OwnerType { get; init; }
+	internal CharacterOwnerType OwnerType { get; private init; }
 
-	public Presence Presence { get; set; }
+	internal Presence Presence { get; private set; }
 
-	public UInt64? CurrentRoomId { get; set; }
+	internal UInt64? CurrentRoomId { get; private set; }
 
-	public required DateTime CreationTime { get; init; }
+	internal DateTime CreationTime { get; private init; }
 
-	public required String ConcurrencyStamp { get; set; }
+	internal String ConcurrencyStamp { get; private set; }
+
+	internal static Character Create(UInt64 id, String displayName, CharacterOwnerType ownerType)
+	{
+		var character = new Character
+		{
+			Id = id,
+			DisplayName = displayName,
+			OwnerType = ownerType,
+			CreationTime = DateTime.UtcNow,
+			ConcurrencyStamp = Guid.NewGuid().ToString("N")
+		};
+
+		return character;
+	}
+
+	internal void Update(String? displayName = null, String? description = null)
+	{
+		var modified = false;
+
+		if (displayName is not null &&
+		    displayName != DisplayName)
+		{
+			DisplayName = displayName;
+			modified = true;
+		}
+
+		if (description is not null &&
+		    description != Description)
+		{
+			Description = description;
+			modified = true;
+		}
+
+		if (!modified)
+		{
+			return;
+		}
+
+		ConcurrencyStamp = Guid.NewGuid().ToString("N");
+		AddEvent(new CharacterUpdatedEvent(this));
+	}
+
+	internal void SetPresence(Presence presence)
+	{
+		if (Presence == presence)
+		{
+			return;
+		}
+
+		ConcurrencyStamp = Guid.NewGuid().ToString("N");
+		Presence = presence;
+
+		AddEvent(new CharacterPresenceUpdatedEvent(Id, Presence));
+	}
+
+	internal void SetCurrentRoom(UInt64 currentRoomId)
+	{
+		if (CurrentRoomId == currentRoomId)
+		{
+			return;
+		}
+
+		ConcurrencyStamp = Guid.NewGuid().ToString("N");
+		CurrentRoomId = currentRoomId;
+
+		AddEvent(new CharacterCurrentRoomUpdatedEvent(Id, CurrentRoomId));
+	}
 }
