@@ -1,0 +1,58 @@
+﻿using System.Net;
+using System.Net.Http.Json;
+using WhiteTale.Server.Domain.Users;
+using WhiteTale.Server.Features.Rooms;
+
+namespace WhiteTale.Server.IntegrationTests.Tests.Rooms;
+
+public sealed class RemoveRoomTests
+{
+	[Fact]
+	public async Task RemoveRoom_ValidOperation_ReturnsOkWithRoom()
+	{
+		// Arrange
+		await using var application = new ApplicationInstance(nameof(RemoveRoom_ValidOperation_ReturnsOkWithRoom));
+		using var client = application.CreateClient();
+
+		var userSeed = await application.SeedUserAsync(UserSeed.Default with { Permissions = Permissions.ManageRooms });
+		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
+
+		var roomSeed = await application.SeedRoomAsync();
+		var room = roomSeed.Room;
+
+		using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/rooms/{room.Id}");
+		request.SetAuthorization("Bearer", userCredentials.AccessToken);
+
+		// Act
+		using var response = await client.SendAsync(request);
+
+		// Assert
+		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.OK);
+		var responseBody = await response.Content.ReadFromJsonAsync<RoomData>();
+		_ = responseBody.Should().NotBeNull();
+		_ = responseBody!.Id.Should().Be(room.Id);
+		_ = responseBody.Name.Should().Be(room.Name);
+		_ = responseBody.Description.Should().Be(room.Description);
+		_ = responseBody.IsEntrance.Should().Be(room.IsEntrance);
+	}
+
+	[Fact]
+	public async Task RemoveRoom_UnknownRoom_ReturnsNotFound()
+	{
+		// Arrange
+		await using var application = new ApplicationInstance(nameof(RemoveRoom_UnknownRoom_ReturnsNotFound));
+		using var client = application.CreateClient();
+
+		var userSeed = await application.SeedUserAsync(UserSeed.Default with { Permissions = Permissions.ManageRooms });
+		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
+
+		using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/rooms/0");
+		request.SetAuthorization("Bearer", userCredentials.AccessToken);
+
+		// Act
+		using var response = await client.SendAsync(request);
+
+		// Assert
+		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.NotFound);
+	}
+}
