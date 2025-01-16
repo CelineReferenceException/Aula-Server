@@ -8,6 +8,10 @@ internal sealed class Room : DomainEntity
 	internal const Int32 DescriptionMinimumLength = 1;
 	internal const Int32 DescriptionMaximumLength = 2048;
 
+	private Room()
+	{
+	}
+
 	internal UInt64 Id { get; private init; }
 
 	internal String Name { get; private set; }
@@ -19,10 +23,6 @@ internal sealed class Room : DomainEntity
 	internal String ConcurrencyStamp { get; private set; }
 
 	internal Boolean IsDeleted { get; private set; }
-
-	private Room()
-	{
-	}
 
 	internal static Room Create(UInt64 id, String name, String description, Boolean isEntrance)
 	{
@@ -44,19 +44,22 @@ internal sealed class Room : DomainEntity
 	{
 		var modified = false;
 
-		if (name is not null && name != Name)
+		if (name is not null &&
+		    name != Name)
 		{
 			Name = name;
 			modified = true;
 		}
 
-		if (description is not null && description != Description)
+		if (description is not null &&
+		    description != Description)
 		{
 			Description = description;
 			modified = true;
 		}
 
-		if (isEntrance is not null && isEntrance != IsEntrance)
+		if (isEntrance is not null &&
+		    isEntrance != IsEntrance)
 		{
 			IsEntrance = (Boolean)isEntrance;
 			modified = true;

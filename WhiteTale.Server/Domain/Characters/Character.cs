@@ -44,13 +44,15 @@ internal sealed class Character : DomainEntity
 	{
 		var modified = false;
 
-		if (displayName is not null && displayName != DisplayName)
+		if (displayName is not null &&
+		    displayName != DisplayName)
 		{
 			DisplayName = displayName;
 			modified = true;
 		}
 
-		if (description is not null && description != Description)
+		if (description is not null &&
+		    description != Description)
 		{
 			Description = description;
 			modified = true;

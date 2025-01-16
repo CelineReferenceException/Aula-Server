@@ -5,6 +5,10 @@ internal sealed class Message : DomainEntity
 {
 	internal const Int32 ContentMaximumLength = 2048;
 
+	private Message()
+	{
+	}
+
 	internal UInt64 Id { get; private init; }
 
 	internal MessageFlags Flags { get; private init; }
@@ -21,11 +25,13 @@ internal sealed class Message : DomainEntity
 
 	internal Boolean IsDeleted { get; private set; }
 
-	private Message()
-	{
-	}
-
-	internal static Message Create(UInt64 id, MessageFlags flags, UInt64 authorId, MessageTarget target, String content, UInt64? roomId = null)
+	internal static Message Create(
+		UInt64 id,
+		MessageFlags flags,
+		UInt64 authorId,
+		MessageTarget target,
+		String content,
+		UInt64? roomId = null)
 	{
 		var message = new Message
 		{
