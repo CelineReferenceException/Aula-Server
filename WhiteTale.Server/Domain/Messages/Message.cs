@@ -11,6 +11,8 @@ internal sealed class Message : DomainEntity
 
 	internal UInt64 Id { get; private init; }
 
+	internal MessageType Type { get; private init; }
+
 	internal MessageFlags Flags { get; private init; }
 
 	internal UInt64 AuthorId { get; private init; }
@@ -27,6 +29,7 @@ internal sealed class Message : DomainEntity
 
 	internal static Message Create(
 		UInt64 id,
+		MessageType type,
 		MessageFlags flags,
 		UInt64 authorId,
 		MessageTarget target,
@@ -36,6 +39,7 @@ internal sealed class Message : DomainEntity
 		var message = new Message
 		{
 			Id = id,
+			Type = type,
 			Flags = flags,
 			AuthorId = authorId,
 			Target = target,
