@@ -19,7 +19,7 @@ internal sealed class Message : DomainEntity
 
 	internal MessageTarget Target { get; private init; }
 
-	internal UInt64? TargetId { get; private init; }
+	internal UInt64 TargetId { get; private init; }
 
 	internal String Content { get; private init; }
 
@@ -34,7 +34,7 @@ internal sealed class Message : DomainEntity
 		UInt64 authorId,
 		MessageTarget target,
 		String content,
-		UInt64? roomId = null)
+		UInt64 roomId)
 	{
 		var message = new Message
 		{
