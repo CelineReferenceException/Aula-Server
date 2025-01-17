@@ -34,7 +34,7 @@ internal sealed class Message : DomainEntity
 		UInt64 authorId,
 		MessageTarget target,
 		String content,
-		UInt64 roomId)
+		UInt64 targetId)
 	{
 		var message = new Message
 		{
@@ -43,7 +43,7 @@ internal sealed class Message : DomainEntity
 			Flags = flags,
 			AuthorId = authorId,
 			Target = target,
-			TargetId = roomId,
+			TargetId = targetId,
 			Content = content,
 			CreationTime = DateTime.UtcNow
 		};
