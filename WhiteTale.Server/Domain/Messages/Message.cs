@@ -17,7 +17,7 @@ internal sealed class Message : DomainEntity
 
 	internal MessageTarget Target { get; private init; }
 
-	internal UInt64? RoomId { get; private init; }
+	internal UInt64? TargetId { get; private init; }
 
 	internal String Content { get; private init; }
 
@@ -39,7 +39,7 @@ internal sealed class Message : DomainEntity
 			Flags = flags,
 			AuthorId = authorId,
 			Target = target,
-			RoomId = roomId,
+			TargetId = roomId,
 			Content = content,
 			CreationTime = DateTime.UtcNow
 		};

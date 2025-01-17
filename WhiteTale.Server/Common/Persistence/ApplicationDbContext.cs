@@ -136,7 +136,7 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 		_ = messageModel.Property(x => x.Target)
 			.IsRequired();
 
-		_ = messageModel.Property(x => x.RoomId)
+		_ = messageModel.Property(x => x.TargetId)
 			.IsRequired(false);
 
 		_ = messageModel.Property(x => x.Content)
