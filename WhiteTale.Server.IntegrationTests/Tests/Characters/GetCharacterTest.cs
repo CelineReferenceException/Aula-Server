@@ -9,9 +9,6 @@ using WhiteTale.Server.Features.Characters;
 
 namespace WhiteTale.Server.IntegrationTests.Tests.Characters;
 
-// TODO: Do a commit updating things related to user seeding, then do another commit doing a general cleanup,
-//       after that make a commit updating the Domain.Rooms.Room.Description to be nullable and commit the RoomHelper & related.
-//       (do not commit Room related tests yet)
 public sealed class GetCharacterTest
 {
 	[Fact]

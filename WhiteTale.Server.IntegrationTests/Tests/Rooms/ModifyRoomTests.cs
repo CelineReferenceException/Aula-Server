@@ -68,6 +68,4 @@ public sealed class ModifyRoomTests
 		// Assert
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.BadRequest);
 	}
-
-	// TODO: Invalid operations
 }
