@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace WhiteTale.Server.Features.Identity;
+﻿namespace WhiteTale.Server.Features.Identity;
 
 /// <summary>
 ///     Represents the data required to register a new user.
@@ -16,8 +14,7 @@ internal sealed class RegisterRequestBody
 	/// <summary>
 	///     The display name for this user. Defaults to the <see cref="UserName">userName</see>.
 	/// </summary>
-	[MaybeNull]
-	public String DisplayName
+	public String? DisplayName
 	{
 		get => _displayName;
 		init => _displayName = value?.Trim();
