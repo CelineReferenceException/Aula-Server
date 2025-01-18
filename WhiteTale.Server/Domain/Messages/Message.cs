@@ -21,7 +21,7 @@ internal sealed class Message : DomainEntity
 
 	internal UInt64 TargetId { get; private init; }
 
-	internal String Content { get; private init; }
+	internal String? Content { get; private init; }
 
 	internal DateTime CreationTime { get; private init; }
 
@@ -33,7 +33,7 @@ internal sealed class Message : DomainEntity
 		MessageFlags flags,
 		UInt64 authorId,
 		MessageTarget target,
-		String content,
+		String? content,
 		UInt64 targetId)
 	{
 		var message = new Message
