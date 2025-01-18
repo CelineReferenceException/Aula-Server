@@ -18,7 +18,7 @@ internal sealed class RemoveRoom : IEndpoint
 	{
 		var room = await dbContext.Rooms
 			.AsTracking()
-			.Where(room => room.Id == roomId)
+			.Where(room => room.Id == roomId && !room.IsRemoved)
 			.FirstOrDefaultAsync();
 		if (room is null)
 		{
