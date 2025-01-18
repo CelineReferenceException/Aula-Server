@@ -13,6 +13,7 @@ internal sealed class GetAllRooms : IEndpoint
 	{
 		var rooms = await dbContext.Rooms
 			.AsNoTracking()
+			.Where(room => !room.IsRemoved)
 			.Select(room =>
 				new RoomData
 				{

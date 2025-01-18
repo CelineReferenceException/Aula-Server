@@ -15,7 +15,7 @@ internal sealed class GetRoom : IEndpoint
 	{
 		var room = await dbContext.Rooms
 			.AsNoTracking()
-			.Where(room => room.Id == roomId)
+			.Where(room => room.Id == roomId && !room.IsRemoved)
 			.Select(room =>
 				new RoomData
 				{

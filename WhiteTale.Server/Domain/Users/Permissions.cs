@@ -12,7 +12,7 @@ internal enum Permissions
 	Administrator = 1 << 0,
 
 	/// <summary>
-	///	Allows to create, modify and delete rooms.
+	///	Allows to create, modify and remove rooms.
 	/// </summary>
 	ManageRooms = 1 << 1
 }

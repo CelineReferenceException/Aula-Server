@@ -107,6 +107,9 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 			.IsConcurrencyToken()
 			.HasMaxLength(guidMaximumCharacterLength);
 
+		_ = roomModel.Property(x => x.IsRemoved)
+			.IsRequired();
+
 		var roomConnectionModel = modelBuilder.Entity<RoomConnection>();
 
 		_ = roomConnectionModel.Property(x => x.Id)
@@ -144,6 +147,9 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 			.HasMaxLength(Message.ContentMaximumLength);
 
 		_ = messageModel.Property(x => x.CreationTime)
+			.IsRequired();
+
+		_ = messageModel.Property(x => x.IsRemoved)
 			.IsRequired();
 
 		base.OnModelCreating(modelBuilder);
