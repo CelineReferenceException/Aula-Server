@@ -39,7 +39,7 @@ public sealed class ModifyRoomTests
 		_ = responseBody!.Id.Should().Be(roomSeed.Room.Id);
 		_ = responseBody!.Name.Should().Be(requestBody.Name);
 		_ = responseBody.Description.Should().Be(requestBody.Description);
-		_ = responseBody.IsEntrance.Should().Be(requestBody.IsEntrance);
+		_ = responseBody.IsEntrance.Should().Be(requestBody.IsEntrance.Value);
 	}
 
 	[Fact]

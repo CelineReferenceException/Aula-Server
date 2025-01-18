@@ -36,7 +36,7 @@ public sealed class CreateRoomTests
 		_ = responseBody.Should().NotBeNull();
 		_ = responseBody!.Name.Should().Be(requestBody.Name);
 		_ = responseBody.Description.Should().Be(requestBody.Description);
-		_ = responseBody.IsEntrance.Should().Be(requestBody.IsEntrance);
+		_ = responseBody.IsEntrance.Should().Be(requestBody.IsEntrance.Value);
 	}
 
 	[Fact]
