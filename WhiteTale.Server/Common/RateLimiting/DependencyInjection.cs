@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Threading.RateLimiting;
 using Microsoft.Extensions.Options;
 using WhiteTale.Server.Domain.Users;
@@ -13,38 +14,22 @@ internal static class DependencyInjection
 			.ValidateDataAnnotations()
 			.ValidateOnStart();
 
+		_ = services.PostConfigure<RateLimitOptions>(CommonRateLimitPolicyNames.Global, options =>
+		{
+			options.WindowMilliseconds ??= 1000;
+			options.PermitLimit ??= 30;
+		});
+
 		_ = services.AddRateLimiter(options =>
 		{
 			options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 
-			_ = options.AddPolicy(RateLimitPolicyNames.Global, httpContext =>
-			{
-				var userManager = ServiceProviderServiceExtensions.GetRequiredService<UserManager<User>>(httpContext.RequestServices);
-
-				var userId = userManager.GetUserId(httpContext.User);
-				var partitionKey = userId ?? httpContext.Connection.RemoteIpAddress?.ToString() ?? String.Empty;
-
-				var rateLimitersOptions = httpContext.RequestServices.GetRequiredService<IOptions<RateLimitersOptions>>();
-				var permitLimit = rateLimitersOptions.Value.Global.PermitLimit.Value;
-				var window = TimeSpan.FromMilliseconds(rateLimitersOptions.Value.Global.WindowMilliseconds.Value);
-
-				return RateLimitPartition.GetFixedWindowLimiter(partitionKey,
-					_ => new FixedWindowRateLimiterOptions
-					{
-						PermitLimit = permitLimit,
-						Window = window,
-						AutoReplenishment = true
-					});
-			});
-
 			_ = options.AddPolicy(CommonRateLimitPolicyNames.Global, httpContext =>
 			{
 				var userManager = httpContext.RequestServices.GetRequiredService<UserManager<User>>();
-				var request = httpContext.Request;
 
 				var userId = userManager.GetUserId(httpContext.User);
 				var partitionKey = userId ?? httpContext.Connection.RemoteIpAddress?.ToString() ?? String.Empty;
-				partitionKey += $"{request.Method}{request.Scheme}{request.Host}{request.PathBase}{request.Path}";
 
 				var rateLimit = httpContext.RequestServices
 					.GetRequiredService<IOptionsSnapshot<RateLimitOptions>>()
