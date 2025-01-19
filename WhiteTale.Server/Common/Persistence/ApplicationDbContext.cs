@@ -127,7 +127,8 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 
 		_ = messageModel.Property(x => x.Id)
 			.IsRequired()
-			.ValueGeneratedNever();
+			.ValueGeneratedNever()
+			.HasConversion<Int64>();
 		_ = messageModel.HasKey(x => x.Id);
 
 		_ = messageModel.Property(x => x.Flags)
