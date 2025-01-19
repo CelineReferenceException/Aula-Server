@@ -5,7 +5,7 @@ internal sealed class GetAllRooms : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapGet("api/rooms", HandleAsync)
-			.RequireRateLimiting(RateLimitPolicyNames.Global)
+			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken);
 	}
 

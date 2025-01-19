@@ -9,7 +9,7 @@ internal sealed class SendMessage : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapPost("api/rooms/{roomId}/messages", HandleAsync)
-			.RequireRateLimiting(RateLimitPolicyNames.Global)
+			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
 			.RequirePermission(Permissions.SendMessages);
 	}

@@ -9,7 +9,7 @@ internal sealed class LogIn : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapPost("api/identity/login", HandleAsync)
-			.RequireRateLimiting(RateLimitPolicyNames.Global);
+			.RequireRateLimiting(CommonRateLimitPolicyNames.Global);
 	}
 
 	private static async Task<Results<Ok<AccessTokenResponse>, ProblemHttpResult, EmptyHttpResult>> HandleAsync(

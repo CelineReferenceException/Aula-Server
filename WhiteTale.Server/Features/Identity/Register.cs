@@ -10,7 +10,7 @@ internal sealed class Register : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapPost("api/identity/register", HandleAsync)
-			.RequireRateLimiting(RateLimitPolicyNames.Global);
+			.RequireRateLimiting(CommonRateLimitPolicyNames.Global);
 	}
 
 	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(

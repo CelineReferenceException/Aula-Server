@@ -7,7 +7,7 @@ internal sealed class GetOwnCharacter : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapGet("api/characters/@me", HandleAsync)
-			.RequireRateLimiting(RateLimitPolicyNames.Global)
+			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken);
 	}
 

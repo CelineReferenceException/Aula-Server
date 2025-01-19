@@ -9,9 +9,8 @@ internal sealed class ResetPassword : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapPost(Route, HandleAsync)
-			.RequireRateLimiting(RateLimitPolicyNames.Global)
-			.RequireRateLimiting(RateLimitPolicyNames.Strict)
-			.RequireRateLimiting(RateLimitPolicyNames.NoConcurrency);
+			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
+			.RequireRateLimiting(CommonRateLimitPolicyNames.NoConcurrency);
 	}
 
 	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(

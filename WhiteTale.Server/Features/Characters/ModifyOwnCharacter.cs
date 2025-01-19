@@ -7,7 +7,7 @@ internal sealed class ModifyOwnCharacter : IEndpoint
 	public void Build(IEndpointRouteBuilder builder)
 	{
 		_ = builder.MapPatch("api/characters/@me", HandleAsync)
-			.RequireRateLimiting(RateLimitPolicyNames.Global)
+			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken);
 	}
 

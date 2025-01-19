@@ -7,8 +7,8 @@ internal sealed class GetMessage : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapGet("api/rooms/{roomId}/messages/{messageId}", HandleAsync)
-			.RequireRateLimiting(RateLimitPolicyNames.Global)
-			.RequireRateLimiting(RateLimitPolicyNames.NoConcurrency)
+			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
+			.RequireRateLimiting(CommonRateLimitPolicyNames.NoConcurrency)
 			.RequirePermission(Permissions.ReadMessages);
 	}
 

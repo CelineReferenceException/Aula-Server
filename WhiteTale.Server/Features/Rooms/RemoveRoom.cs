@@ -7,7 +7,7 @@ internal sealed class RemoveRoom : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapDelete("api/rooms/{roomId}", HandleAsync)
-			.RequireRateLimiting(RateLimitPolicyNames.Global)
+			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
 			.RequirePermission(Permissions.ManageRooms);
 	}

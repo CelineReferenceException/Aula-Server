@@ -8,8 +8,8 @@ internal static class DependencyInjection
 {
 	internal static IServiceCollection AddRateLimiters(this IServiceCollection services)
 	{
-		_ = services.AddOptions<RateLimitersOptions>()
-			.BindConfiguration(RateLimitersOptions.SectionName)
+		_ = services.AddOptions<RateLimitOptions>(CommonRateLimitPolicyNames.Global)
+			.BindConfiguration($"RateLimiters:{nameof(CommonRateLimitPolicyNames.Global)}")
 			.ValidateDataAnnotations()
 			.ValidateOnStart();
 
@@ -37,7 +37,7 @@ internal static class DependencyInjection
 					});
 			});
 
-			_ = options.AddPolicy(RateLimitPolicyNames.Strict, httpContext =>
+			_ = options.AddPolicy(CommonRateLimitPolicyNames.Global, httpContext =>
 			{
 				var userManager = httpContext.RequestServices.GetRequiredService<UserManager<User>>();
 				var request = httpContext.Request;
@@ -59,7 +59,7 @@ internal static class DependencyInjection
 					});
 			});
 
-			_ = options.AddPolicy(RateLimitPolicyNames.NoConcurrency, httpContext =>
+			_ = options.AddPolicy(CommonRateLimitPolicyNames.NoConcurrency, httpContext =>
 			{
 				var userManager = ServiceProviderServiceExtensions.GetRequiredService<UserManager<User>>(httpContext.RequestServices);
 				var request = httpContext.Request;
