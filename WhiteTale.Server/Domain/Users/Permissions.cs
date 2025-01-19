@@ -20,4 +20,9 @@ internal enum Permissions
 	///     Allows retrieving previously sent messages.
 	/// </summary>
 	ReadMessages = 1 << 2,
+
+	/// <summary>
+	///     Allows to send messages.
+	/// </summary>
+	SendMessages = 1 << 3,
 }

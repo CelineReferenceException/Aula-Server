@@ -3,6 +3,8 @@ namespace WhiteTale.Server.Domain.Messages;
 
 internal sealed class Message : DomainEntity
 {
+	internal const MessageFlags StandardTypeAllowedFlags = MessageFlags.HideAuthor;
+
 	internal const Int32 ContentMaximumLength = 2048;
 
 	private Message()
