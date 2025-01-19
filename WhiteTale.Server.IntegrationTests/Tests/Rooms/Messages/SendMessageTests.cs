@@ -69,10 +69,10 @@ public sealed class SendMessageTests
 	}
 
 	[Fact]
-	public async Task SendMessage_StandardTypeWithUnknownFlags_ReturnsBadRequest()
+	public async Task SendMessage_StandardTypeWithUnknownFlags_ReturnsOkWithMessage()
 	{
 		// Arrange
-		await using var application = new ApplicationInstance(nameof(SendMessage_StandardTypeWithUnknownFlags_ReturnsBadRequest));
+		await using var application = new ApplicationInstance(nameof(SendMessage_StandardTypeWithUnknownFlags_ReturnsOkWithMessage));
 		using var client = application.CreateClient();
 
 		var userSeed = await application.SeedUserAsync(UserSeed.Default with { Permissions = Permissions.SendMessages });
