@@ -2,7 +2,9 @@ namespace WhiteTale.Server.Common.RateLimiting;
 
 internal static class CommonRateLimitPolicyNames
 {
-	internal const String Global = $"{nameof(CommonRateLimitPolicyNames)}:{nameof(Global)}";
+	private const String Prefix = nameof(CommonRateLimitPolicyNames);
 
-	internal const String NoConcurrency = $"{nameof(CommonRateLimitPolicyNames)}:{nameof(NoConcurrency)}";
+	internal const String Global = $"{Prefix}.{nameof(Global)}";
+
+	internal const String NoConcurrency = $"{Prefix}.{nameof(NoConcurrency)}";
 }
