@@ -143,7 +143,7 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 			.IsRequired();
 
 		_ = messageModel.Property(x => x.Content)
-			.IsRequired()
+			.IsRequired(false)
 			.HasMaxLength(Message.ContentMaximumLength);
 
 		_ = messageModel.Property(x => x.CreationTime)
