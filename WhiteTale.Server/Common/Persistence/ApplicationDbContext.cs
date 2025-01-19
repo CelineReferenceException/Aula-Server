@@ -140,7 +140,7 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 			.IsRequired();
 
 		_ = messageModel.Property(x => x.TargetId)
-			.IsRequired(false);
+			.IsRequired();
 
 		_ = messageModel.Property(x => x.Content)
 			.IsRequired()
