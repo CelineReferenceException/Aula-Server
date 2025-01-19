@@ -25,4 +25,9 @@ internal enum Permissions
 	///     Allows to send messages.
 	/// </summary>
 	SendMessages = 1 << 3,
+
+	/// <summary>
+	///     Allows to delete messages.
+	/// </summary>
+	ManageMessages = 1 << 4
 }
