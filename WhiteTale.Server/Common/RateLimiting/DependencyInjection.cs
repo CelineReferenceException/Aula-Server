@@ -46,9 +46,11 @@ internal static class DependencyInjection
 				var partitionKey = userId ?? httpContext.Connection.RemoteIpAddress?.ToString() ?? String.Empty;
 				partitionKey += $"{request.Method}{request.Scheme}{request.Host}{request.PathBase}{request.Path}";
 
-				var rateLimitersOptions = httpContext.RequestServices.GetRequiredService<IOptions<RateLimitersOptions>>();
-				var permitLimit = rateLimitersOptions.Value.Strict.PermitLimit.Value;
-				var window = TimeSpan.FromMilliseconds(rateLimitersOptions.Value.Strict.WindowMilliseconds.Value);
+				var rateLimit = httpContext.RequestServices
+					.GetRequiredService<IOptionsSnapshot<RateLimitOptions>>()
+					.Get(CommonRateLimitPolicyNames.Global);
+				var permitLimit = rateLimit.PermitLimit!.Value;
+				var window = TimeSpan.FromMilliseconds(rateLimit.WindowMilliseconds!.Value);
 
 				return RateLimitPartition.GetFixedWindowLimiter(partitionKey,
 					_ => new FixedWindowRateLimiterOptions
