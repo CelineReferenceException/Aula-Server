@@ -10,8 +10,7 @@ internal sealed class ForgotPassword : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapPost("api/identity/forgotpassword", HandleAsync)
-			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
-			.RequireRateLimiting(CommonRateLimitPolicyNames.NoConcurrency);
+			.RequireRateLimiting(CommonRateLimitPolicyNames.Global);
 	}
 
 	private static async Task<NoContent> HandleAsync(
