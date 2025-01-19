@@ -127,7 +127,8 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 
 		_ = messageModel.Property(x => x.Id)
 			.IsRequired()
-			.ValueGeneratedNever();
+			.ValueGeneratedNever()
+			.HasConversion<Int64>();
 		_ = messageModel.HasKey(x => x.Id);
 
 		_ = messageModel.Property(x => x.Flags)
@@ -139,11 +140,11 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 		_ = messageModel.Property(x => x.Target)
 			.IsRequired();
 
-		_ = messageModel.Property(x => x.RoomId)
-			.IsRequired(false);
+		_ = messageModel.Property(x => x.TargetId)
+			.IsRequired();
 
 		_ = messageModel.Property(x => x.Content)
-			.IsRequired()
+			.IsRequired(false)
 			.HasMaxLength(Message.ContentMaximumLength);
 
 		_ = messageModel.Property(x => x.CreationTime)

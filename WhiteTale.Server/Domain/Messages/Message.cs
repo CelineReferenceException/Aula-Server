@@ -3,6 +3,8 @@ namespace WhiteTale.Server.Domain.Messages;
 
 internal sealed class Message : DomainEntity
 {
+	internal const MessageFlags StandardTypeAllowedFlags = MessageFlags.HideAuthor;
+
 	internal const Int32 ContentMaximumLength = 2048;
 
 	private Message()
@@ -11,15 +13,17 @@ internal sealed class Message : DomainEntity
 
 	internal UInt64 Id { get; private init; }
 
+	internal MessageType Type { get; private init; }
+
 	internal MessageFlags Flags { get; private init; }
 
 	internal UInt64 AuthorId { get; private init; }
 
 	internal MessageTarget Target { get; private init; }
 
-	internal UInt64? RoomId { get; private init; }
+	internal UInt64 TargetId { get; private init; }
 
-	internal String Content { get; private init; }
+	internal String? Content { get; private init; }
 
 	internal DateTime CreationTime { get; private init; }
 
@@ -27,19 +31,21 @@ internal sealed class Message : DomainEntity
 
 	internal static Message Create(
 		UInt64 id,
+		MessageType type,
 		MessageFlags flags,
 		UInt64 authorId,
 		MessageTarget target,
-		String content,
-		UInt64? roomId = null)
+		String? content,
+		UInt64 targetId)
 	{
 		var message = new Message
 		{
 			Id = id,
+			Type = type,
 			Flags = flags,
 			AuthorId = authorId,
 			Target = target,
-			RoomId = roomId,
+			TargetId = targetId,
 			Content = content,
 			CreationTime = DateTime.UtcNow
 		};
