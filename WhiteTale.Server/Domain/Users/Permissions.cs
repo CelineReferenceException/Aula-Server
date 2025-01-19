@@ -14,5 +14,10 @@ internal enum Permissions
 	/// <summary>
 	///	Allows to create, modify and remove rooms.
 	/// </summary>
-	ManageRooms = 1 << 1
+	ManageRooms = 1 << 1,
+
+	/// <summary>
+	///     Allows retrieving previously sent messages.
+	/// </summary>
+	ReadMessages = 1 << 2,
 }
