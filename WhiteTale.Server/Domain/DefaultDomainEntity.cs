@@ -4,7 +4,7 @@ internal abstract class DefaultDomainEntity : IDomainEntity
 {
 	private readonly List<DomainEvent> _events = [];
 
-	public IReadOnlyList<DomainEvent> Events => _events;
+	IReadOnlyList<DomainEvent> IDomainEntity.Events => _events;
 
 	private protected void AddEvent(DomainEvent domainEvent)
 	{

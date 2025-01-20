@@ -2,5 +2,5 @@
 
 internal interface IDomainEntity
 {
-	IReadOnlyList<DomainEvent> Events { get; }
+	internal IReadOnlyList<DomainEvent> Events { get; }
 }
