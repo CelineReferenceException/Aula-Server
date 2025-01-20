@@ -4,7 +4,7 @@ internal abstract class DomainEntity
 {
 	private readonly List<DomainEvent> _domainEvents = [];
 
-	internal IReadOnlyCollection<DomainEvent> DomainEvents => _domainEvents;
+	internal IReadOnlyList<DomainEvent> DomainEvents => _domainEvents;
 
 	private protected void AddEvent(DomainEvent domainEvent)
 	{
