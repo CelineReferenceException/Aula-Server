@@ -1,7 +1,7 @@
 ﻿#pragma warning disable CS8618
 namespace WhiteTale.Server.Domain.Characters;
 
-internal sealed class Character : DomainEntity
+internal sealed class Character : DefaultDomainEntity
 {
 	internal const Int32 DisplayNameMinimumLength = 3;
 	internal const Int32 DisplayNameMaximumLength = 32;

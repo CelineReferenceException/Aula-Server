@@ -159,8 +159,8 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 	public override async Task<Int32> SaveChangesAsync(CancellationToken cancellationToken = default)
 	{
 		var domainEvents = ChangeTracker
-			.Entries<DomainEntity>()
-			.SelectMany(x => x.Entity.DomainEvents);
+			.Entries<IDomainEntity>()
+			.SelectMany(x => x.Entity.Events);
 
 		foreach (var domainEvent in domainEvents)
 		{
