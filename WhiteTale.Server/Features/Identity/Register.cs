@@ -21,7 +21,7 @@ internal sealed class Register : IEndpoint
 	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(
 		[FromBody] RegisterRequestBody body,
 		[FromServices] IValidator<RegisterRequestBody> bodyValidator,
-		[FromServices] ISnowflakeGenerator snowflakes,
+		[FromServices] SnowflakeGenerator snowflakes,
 		[FromServices] UserManager<User> userManager,
 		[FromServices] ApplicationDbContext dbContext,
 		HttpRequest httpRequest,

@@ -20,7 +20,7 @@ internal sealed class CreateRoom : IEndpoint
 		[FromBody] CreateRoomRequestBody body,
 		[FromServices] CreateRoomRequestBodyValidator bodyValidator,
 		[FromServices] ApplicationDbContext dbContext,
-		[FromServices] ISnowflakeGenerator snowflakeGenerator)
+		[FromServices] SnowflakeGenerator snowflakeGenerator)
 	{
 		var validation = await bodyValidator.ValidateAsync(body);
 		if (!validation.IsValid)

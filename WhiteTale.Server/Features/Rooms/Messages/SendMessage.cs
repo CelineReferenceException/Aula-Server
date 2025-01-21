@@ -26,7 +26,7 @@ internal sealed class SendMessage : IEndpoint
 		HttpContext httpContext,
 		[FromServices] UserManager<User> userManager,
 		[FromServices] ApplicationDbContext dbContext,
-		[FromServices] ISnowflakeGenerator snowflakeGenerator)
+		[FromServices] SnowflakeGenerator snowflakeGenerator)
 	{
 		var validation = await bodyValidator.ValidateAsync(body);
 		if (!validation.IsValid)
