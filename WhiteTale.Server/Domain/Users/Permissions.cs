@@ -30,4 +30,14 @@ internal enum Permissions
 	///     Allows to delete messages sent by other users.
 	/// </summary>
 	ManageMessages = 1 << 4,
+
+	/// <summary>
+	///     Allows the user to set their current room.
+	/// </summary>
+	SetOwnCurrentRoom = 1 << 5,
+
+	/// <summary>
+	///     Allows to set the current room of any user.
+	/// </summary>
+	SetCurrentRoom = 1 << 6,
 }
