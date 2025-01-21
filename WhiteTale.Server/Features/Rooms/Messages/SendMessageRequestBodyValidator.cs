@@ -14,6 +14,10 @@ internal sealed class SendMessageRequestBodyValidator : AbstractValidator<SendMe
 		{
 			_ = RuleFor(x => x.Content)
 				.NotEmpty()
+				.WithErrorCode($"{nameof(SendMessageRequestBody.Content)} is empty")
+				.WithMessage($"{nameof(SendMessageRequestBody.Content)} cannot be empty.");
+
+			_ = RuleFor(x => x.Content)
 				.MaximumLength(Message.ContentMaximumLength)
 				.WithErrorCode($"{nameof(Message.Content)} is too long")
 				.WithMessage($"{nameof(Message.Content)} length must be at most {Message.ContentMaximumLength}");
