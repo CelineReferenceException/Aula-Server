@@ -31,6 +31,16 @@ internal sealed class AddConnection : IEndpoint
 			return TypedResults.Problem(problemDetails);
 		}
 
+		if (roomId == body.RoomId)
+		{
+			return TypedResults.Problem(new ProblemDetails
+			{
+				Title = "Invalid target room",
+				Detail = "The target room cannot be the same as the source room.",
+				Status = StatusCodes.Status400BadRequest,
+			});
+		}
+
 		var sourceRoomExists = await dbContext.Rooms
 			.AsNoTracking()
 			.AnyAsync(room => room.Id == roomId);
