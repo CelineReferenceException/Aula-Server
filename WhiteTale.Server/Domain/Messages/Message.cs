@@ -1,7 +1,7 @@
 ﻿#pragma warning disable CS8618
 namespace WhiteTale.Server.Domain.Messages;
 
-internal sealed class Message : DomainEntity
+internal sealed class Message : DefaultDomainEntity
 {
 	internal const MessageFlags StandardTypeAllowedFlags = MessageFlags.HideAuthor;
 

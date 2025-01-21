@@ -1,7 +1,7 @@
 ﻿#pragma warning disable CS8618
 namespace WhiteTale.Server.Domain.Rooms;
 
-internal sealed class Room : DomainEntity
+internal sealed class Room : DefaultDomainEntity
 {
 	internal const Int32 NameMinimumLength = 3;
 	internal const Int32 NameMaximumLength = 32;

@@ -1,5 +1,4 @@
-﻿using WhiteTale.Server.Domain.Characters;
-using WhiteTale.Server.Domain.Users;
+﻿using WhiteTale.Server.Domain.Users;
 
 namespace WhiteTale.Server.Features.Identity;
 
@@ -37,14 +36,8 @@ internal sealed class Register : IEndpoint
 			return TypedResults.NoContent();
 		}
 
-		var newId = snowflakes.NewSnowflake();
-		var newUser = new User(body.UserName)
-		{
-			Id = newId,
-			Email = body.Email
-		};
-
-		var newCharacter = Character.Create(newId, body.DisplayName ?? body.UserName, CharacterOwnerType.Standard);
+		// TODO: Get default permissions from configuration.
+		var newUser = User.Create(snowflakes.NewSnowflake(), body.Email, body.UserName, body.DisplayName, UserOwnerType.Standard, 0);
 
 		var identityCreation = await userManager.CreateAsync(newUser, body.Password);
 		if (!identityCreation.Succeeded)
@@ -53,7 +46,6 @@ internal sealed class Register : IEndpoint
 			return TypedResults.Problem(problemDetails);
 		}
 
-		_ = dbContext.Characters.Add(newCharacter);
 		_ = await dbContext.SaveChangesAsync();
 
 		await confirmEmailEmailSender.SendEmailAsync(newUser, httpRequest);

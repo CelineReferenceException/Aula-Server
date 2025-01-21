@@ -1,4 +1,4 @@
-﻿using WhiteTale.Server.Domain.Characters;
+﻿using WhiteTale.Server.Domain.Users;
 
 namespace WhiteTale.Server.Features.Identity;
 
@@ -7,14 +7,14 @@ internal sealed class RegisterRequestBodyValidator : AbstractValidator<RegisterR
 	public RegisterRequestBodyValidator()
 	{
 		_ = RuleFor(x => x.DisplayName)
-			.MinimumLength(Character.DisplayNameMinimumLength)
+			.MinimumLength(User.DisplayNameMinimumLength)
 			.WithErrorCode($"{nameof(RegisterRequestBody.DisplayName)} is too short")
-			.WithMessage($"{nameof(RegisterRequestBody.DisplayName)} length must be at least {Character.DisplayNameMinimumLength}");
+			.WithMessage($"{nameof(RegisterRequestBody.DisplayName)} length must be at least {User.DisplayNameMinimumLength}");
 
 		_ = RuleFor(x => x.DisplayName)
-			.MaximumLength(Character.DisplayNameMaximumLength)
+			.MaximumLength(User.DisplayNameMaximumLength)
 			.WithErrorCode($"{nameof(RegisterRequestBody.DisplayName)} is too long")
-			.WithMessage($"{nameof(RegisterRequestBody.DisplayName)} length must be at most {Character.DisplayNameMaximumLength}");
+			.WithMessage($"{nameof(RegisterRequestBody.DisplayName)} length must be at most {User.DisplayNameMaximumLength}");
 
 		_ = RuleFor(x => x.UserName)
 			.NotEmpty()
@@ -22,14 +22,14 @@ internal sealed class RegisterRequestBodyValidator : AbstractValidator<RegisterR
 			.WithMessage($"{nameof(RegisterRequestBody.UserName)} cannot be empty.");
 
 		_ = RuleFor(x => x.UserName)
-			.MinimumLength(Character.UserNameMinimumLength)
+			.MinimumLength(User.UserNameMinimumLength)
 			.WithErrorCode($"{nameof(RegisterRequestBody.UserName)} is too short")
-			.WithMessage($"{nameof(RegisterRequestBody.UserName)} length must be at least {Character.DisplayNameMinimumLength}");
+			.WithMessage($"{nameof(RegisterRequestBody.UserName)} length must be at least {User.DisplayNameMinimumLength}");
 
 		_ = RuleFor(x => x.UserName)
-			.MaximumLength(Character.UserNameMaximumLength)
+			.MaximumLength(User.UserNameMaximumLength)
 			.WithErrorCode($"{nameof(RegisterRequestBody.UserName)} is too long")
-			.WithMessage($"{nameof(RegisterRequestBody.UserName)} length must be at most {Character.DisplayNameMaximumLength}");
+			.WithMessage($"{nameof(RegisterRequestBody.UserName)} length must be at most {User.DisplayNameMaximumLength}");
 
 		_ = RuleFor(x => x.Email)
 			.NotEmpty()
