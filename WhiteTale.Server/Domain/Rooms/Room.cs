@@ -22,6 +22,8 @@ internal sealed class Room : DefaultDomainEntity
 
 	internal String ConcurrencyStamp { get; private set; }
 
+	internal DateTime CreationTime { get; private init; }
+
 	internal Boolean IsRemoved { get; private set; }
 
 	internal static Room Create(UInt64 id, String name, String? description, Boolean isEntrance)
@@ -33,6 +35,7 @@ internal sealed class Room : DefaultDomainEntity
 			Description = description,
 			IsEntrance = isEntrance,
 			ConcurrencyStamp = Guid.NewGuid().ToString("N"),
+			CreationTime = DateTime.UtcNow,
 		};
 
 		room.AddEvent(new RoomCreatedEvent(room));

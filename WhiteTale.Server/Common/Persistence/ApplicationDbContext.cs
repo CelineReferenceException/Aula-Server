@@ -89,6 +89,9 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 		_ = roomModel.Property(x => x.IsEntrance)
 			.IsRequired();
 
+		_ = roomModel.Property(x => x.CreationTime)
+			.IsRequired();
+
 		_ = roomModel.Property(x => x.ConcurrencyStamp)
 			.IsRequired()
 			.IsConcurrencyToken()

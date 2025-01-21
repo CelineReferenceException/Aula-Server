@@ -30,6 +30,7 @@ internal sealed class GetRoom : IEndpoint
 					Name = room.Name,
 					Description = room.Description,
 					IsEntrance = room.IsEntrance,
+					CreationTime = room.CreationTime,
 				})
 			.FirstOrDefaultAsync();
 		if (room is null)

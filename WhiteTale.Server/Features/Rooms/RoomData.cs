@@ -9,4 +9,6 @@ internal sealed record RoomData
 	public String? Description { get; init; }
 
 	public required Boolean IsEntrance { get; init; }
+
+	public required DateTime CreationTime { get; init; }
 }

@@ -56,6 +56,7 @@ internal sealed class ModifyRoom : IEndpoint
 			Name = room.Name,
 			Description = room.Description,
 			IsEntrance = room.IsEntrance,
+			CreationTime = room.CreationTime,
 		});
 	}
 }

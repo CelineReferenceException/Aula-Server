@@ -28,6 +28,7 @@ internal sealed class GetAllRooms : IEndpoint
 					Name = room.Name,
 					Description = room.Description,
 					IsEntrance = room.IsEntrance,
+					CreationTime = room.CreationTime,
 				})
 			.ToListAsync();
 
