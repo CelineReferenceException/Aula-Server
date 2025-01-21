@@ -14,10 +14,14 @@ public class GetMessagesTests
 		await using var application = new ApplicationInstance(nameof(GetMessages_ValidOperation_ReturnsOkWithMessages));
 		using var client = application.CreateClient();
 
-		var userSeed = await application.SeedUserAsync(UserSeed.Default with { Permissions = Permissions.ReadMessages });
+		var userSeed = await application.SeedUserAsync(UserSeed.Default with
+		{
+			Permissions = Permissions.ReadMessages,
+			CurrentRoomId = 1
+		});
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		var roomSeed = await application.SeedRoomAsync();
+		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with { Id = userSeed.Seed.CurrentRoomId });
 		var messageSeed = await application.SeedMessageAsync(MessageSeed.StandardTypeDefault with
 		{
 			AuthorId = userSeed.Seed.Id,
@@ -50,10 +54,14 @@ public class GetMessagesTests
 		await using var application = new ApplicationInstance(nameof(GetMessages_AfterMessage_ReturnsOkWithMessages));
 		using var client = application.CreateClient();
 
-		var userSeed = await application.SeedUserAsync(UserSeed.Default with { Permissions = Permissions.ReadMessages });
+		var userSeed = await application.SeedUserAsync(UserSeed.Default with
+		{
+			Permissions = Permissions.ReadMessages,
+			CurrentRoomId = 1
+		});
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		var roomSeed = await application.SeedRoomAsync();
+		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with { Id = userSeed.Seed.CurrentRoomId });
 		var firstMessageSeed = await application.SeedMessageAsync(MessageSeed.StandardTypeDefault with
 		{
 			Id = 1,
@@ -95,10 +103,14 @@ public class GetMessagesTests
 		await using var application = new ApplicationInstance(nameof(GetMessages_BeforeMessage_ReturnsOkWithMessages));
 		using var client = application.CreateClient();
 
-		var userSeed = await application.SeedUserAsync(UserSeed.Default with { Permissions = Permissions.ReadMessages });
+		var userSeed = await application.SeedUserAsync(UserSeed.Default with
+		{
+			Permissions = Permissions.ReadMessages,
+			CurrentRoomId = 1
+		});
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		var roomSeed = await application.SeedRoomAsync();
+		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with { Id = userSeed.Seed.CurrentRoomId });
 		var firstMessageSeed = await application.SeedMessageAsync(MessageSeed.StandardTypeDefault with
 		{
 			Id = 1,
@@ -131,5 +143,36 @@ public class GetMessagesTests
 		_ = responseBody[0].Target.Should().Be(firstMessageSeed.Seed.Target);
 		_ = responseBody[0].TargetId.Should().Be(firstMessageSeed.Seed.TargetId);
 		_ = responseBody[0].AuthorId.Should().Be(firstMessageSeed.Seed.AuthorId);
+	}
+
+	[Fact]
+	public async Task GetMessages_InDifferentRoom_ReturnsForbidden()
+	{
+		// Arrange
+		await using var application = new ApplicationInstance(nameof(GetMessages_InDifferentRoom_ReturnsForbidden));
+		using var client = application.CreateClient();
+
+		var userSeed = await application.SeedUserAsync(UserSeed.Default with
+		{
+			Permissions = Permissions.ReadMessages,
+			CurrentRoomId = 1
+		});
+		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
+
+		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with { Id = 2 });
+		var messageSeed = await application.SeedMessageAsync(MessageSeed.StandardTypeDefault with
+		{
+			AuthorId = userSeed.Seed.Id,
+			TargetId = roomSeed.Seed.Id
+		});
+
+		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/rooms/{roomSeed.Seed.Id}/messages");
+		request.SetAuthorization("Bearer", userCredentials.AccessToken);
+
+		// Act
+		var response = await client.SendAsync(request);
+
+		// Assert
+		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.Forbidden);
 	}
 }

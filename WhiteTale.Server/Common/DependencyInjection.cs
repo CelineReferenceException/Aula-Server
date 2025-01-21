@@ -1,4 +1,6 @@
-﻿namespace WhiteTale.Server.Common;
+﻿using WhiteTale.Server.Common.JsonSerialization;
+
+namespace WhiteTale.Server.Common;
 
 internal static class DependencyInjection
 {
@@ -17,6 +19,7 @@ internal static class DependencyInjection
 		_ = builder.Services.AddCors();
 		_ = builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>(ServiceLifetime.Singleton, includeInternalTypes: true);
 		_ = builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<IAssemblyMarker>());
+		_ = builder.Services.AddJsonSerialization();
 
 		_ = builder.Services.AddRateLimiters();
 		_ = builder.Services.AddMailSender();

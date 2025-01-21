@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using WhiteTale.Server.Common.Persistence;
-using WhiteTale.Server.Domain.Characters;
 using WhiteTale.Server.Domain.Users;
 using WhiteTale.Server.Features.Identity;
 
@@ -19,29 +18,19 @@ internal static class UserHelper
 	{
 		using var scope = application.Services.CreateScope();
 		var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-		var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
 		userSeed ??= UserSeed.Default;
 
-		var user = new User(userSeed.UserName)
-		{
-			Id = userSeed.Id,
-			Email = userSeed.Email,
-			EmailConfirmed = userSeed.EmailConfirmed,
-			Permissions = userSeed.Permissions
-		};
-
-		var character = Character.Create(userSeed.Id, userSeed.DisplayName ?? userSeed.UserName, CharacterOwnerType.Standard);
+		var user = User.Create(userSeed.Id, userSeed.Email, userSeed.UserName, userSeed.DisplayName, UserOwnerType.Standard, userSeed.Permissions);
+		user.EmailConfirmed = userSeed.EmailConfirmed;
+		user.SetCurrentRoom(userSeed.CurrentRoomId);
 
 		_ = await userManager.CreateAsync(user, userSeed.Password);
-		_ = dbContext.Characters.Add(character);
-		_ = await dbContext.SaveChangesAsync();
 
 		return new SeedUserResult
 		{
 			Seed = userSeed,
-			User = user,
-			Character = character
+			User = user
 		};
 	}
 

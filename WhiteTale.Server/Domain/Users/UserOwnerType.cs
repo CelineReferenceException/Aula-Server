@@ -1,9 +1,9 @@
-﻿namespace WhiteTale.Server.Domain.Characters;
+﻿namespace WhiteTale.Server.Domain.Users;
 
 /// <summary>
 ///     Defines the owner types that a character can have.
 /// </summary>
-internal enum CharacterOwnerType
+internal enum UserOwnerType
 {
 	/// <summary>
 	///     The character is owned by a standard user.

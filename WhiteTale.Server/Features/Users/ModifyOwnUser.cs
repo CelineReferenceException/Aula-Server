@@ -1,23 +1,23 @@
 ﻿using WhiteTale.Server.Domain.Users;
 
-namespace WhiteTale.Server.Features.Characters;
+namespace WhiteTale.Server.Features.Users;
 
-internal sealed class ModifyOwnCharacter : IEndpoint
+internal sealed class ModifyOwnUser : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder builder)
 	{
-		_ = builder.MapPatch("api/characters/@me", HandleAsync)
+		_ = builder.MapPatch("api/users/@me", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken);
 	}
 
-	private static async Task<Results<Ok<CharacterData>, ProblemHttpResult, InternalServerError>> HandleAsync(
-		[FromBody] ModifyOwnCharacterRequestBody body,
+	private static async Task<Results<Ok<UserData>, ProblemHttpResult, InternalServerError>> HandleAsync(
+		[FromBody] ModifyOwnUserRequestBody body,
 		HttpContext httpContext,
 		[FromServices] UserManager<User> userManager,
-		[FromServices] IValidator<ModifyOwnCharacterRequestBody> bodyValidator,
+		[FromServices] IValidator<ModifyOwnUserRequestBody> bodyValidator,
 		[FromServices] ApplicationDbContext dbContext,
-		[FromServices] ILogger<ModifyOwnCharacter> logger)
+		[FromServices] ILogger<ModifyOwnUser> logger)
 	{
 		var bodyValidation = await bodyValidator.ValidateAsync(body);
 		if (!bodyValidation.IsValid)
@@ -32,16 +32,16 @@ internal sealed class ModifyOwnCharacter : IEndpoint
 			return TypedResults.InternalServerError();
 		}
 
-		var character = await dbContext.Characters
+		var user = await dbContext.Users
 			.AsTracking()
-			.Where(character => character.Id == userId)
+			.Where(x => x.Id == userId)
 			.FirstOrDefaultAsync();
-		if (character is null)
+		if (user is null)
 		{
 			return TypedResults.InternalServerError();
 		}
 
-		character.Modify(body.DisplayName, body.Description);
+		user.Modify(body.DisplayName, body.Description);
 
 		try
 		{
@@ -52,14 +52,14 @@ internal sealed class ModifyOwnCharacter : IEndpoint
 			return TypedResults.InternalServerError();
 		}
 
-		return TypedResults.Ok(new CharacterData
+		return TypedResults.Ok(new UserData
 		{
-			Id = character.Id,
-			DisplayName = character.DisplayName,
-			Description = character.Description,
-			CurrentRoomId = character.CurrentRoomId,
-			Presence = character.Presence,
-			OwnerType = character.OwnerType
+			Id = user.Id,
+			DisplayName = user.DisplayName,
+			Description = user.Description,
+			CurrentRoomId = user.CurrentRoomId,
+			Presence = user.Presence,
+			OwnerType = user.OwnerType
 		});
 	}
 }

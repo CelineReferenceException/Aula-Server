@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using WhiteTale.Server.Domain;
-using WhiteTale.Server.Domain.Characters;
 using WhiteTale.Server.Domain.Messages;
 using WhiteTale.Server.Domain.Rooms;
 using WhiteTale.Server.Domain.Users;
@@ -22,8 +21,6 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 		_configuration = configuration;
 		_publisher = publisher;
 	}
-
-	internal DbSet<Character> Characters => Set<Character>();
 
 	internal DbSet<Room> Rooms => Set<Room>();
 
@@ -54,7 +51,7 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 		_ = userModel.Property(x => x.Permissions)
 			.IsRequired();
 
-		var characterModel = modelBuilder.Entity<Character>();
+		var characterModel = modelBuilder.Entity<User>();
 
 		_ = characterModel.Property(x => x.Id)
 			.IsRequired()
@@ -63,10 +60,10 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 
 		_ = characterModel.Property(x => x.DisplayName)
 			.IsRequired()
-			.HasMaxLength(Character.DisplayNameMaximumLength);
+			.HasMaxLength(User.DisplayNameMaximumLength);
 
 		_ = characterModel.Property(x => x.Description)
-			.HasMaxLength(Character.DescriptionMaximumLength);
+			.HasMaxLength(User.DescriptionMaximumLength);
 
 		_ = characterModel.Property(x => x.OwnerType)
 			.IsRequired();
@@ -159,8 +156,8 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 	public override async Task<Int32> SaveChangesAsync(CancellationToken cancellationToken = default)
 	{
 		var domainEvents = ChangeTracker
-			.Entries<DomainEntity>()
-			.SelectMany(x => x.Entity.DomainEvents);
+			.Entries<IDomainEntity>()
+			.SelectMany(x => x.Entity.Events);
 
 		foreach (var domainEvent in domainEvents)
 		{
