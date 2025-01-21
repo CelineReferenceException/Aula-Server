@@ -1,11 +1,11 @@
-﻿using WhiteTale.Server.Domain.Characters;
+﻿using WhiteTale.Server.Domain.Users;
 
-namespace WhiteTale.Server.Features.Characters;
+namespace WhiteTale.Server.Features.Users;
 
 /// <summary>
 ///     Represents a character within the application.
 /// </summary>
-internal sealed record CharacterData
+internal sealed record UserData
 {
 	/// <summary>
 	///     The ID of the user.
@@ -25,7 +25,7 @@ internal sealed record CharacterData
 	/// <summary>
 	///     The type of the user who owns the character.
 	/// </summary>
-	public required CharacterOwnerType OwnerType { get; init; }
+	public required UserOwnerType OwnerType { get; init; }
 
 	/// <summary>
 	///     The presence of the user.

@@ -1,4 +1,4 @@
-﻿namespace WhiteTale.Server.Domain.Characters;
+﻿namespace WhiteTale.Server.Domain.Users;
 
 /// <summary>
 ///     Defines presence statuses for a character.

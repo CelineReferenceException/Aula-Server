@@ -1,17 +1,17 @@
 ﻿using WhiteTale.Server.Domain.Users;
 
-namespace WhiteTale.Server.Features.Characters;
+namespace WhiteTale.Server.Features.Users;
 
-internal sealed class GetOwnCharacter : IEndpoint
+internal sealed class GetOwnUser : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapGet("api/characters/@me", HandleAsync)
+		_ = route.MapGet("api/users/@me", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken);
 	}
 
-	private static async Task<Results<Ok<CharacterData>, InternalServerError>> HandleAsync(
+	private static async Task<Results<Ok<UserData>, InternalServerError>> HandleAsync(
 		HttpContext httpContext,
 		[FromServices] UserManager<User> userManager,
 		[FromServices] ApplicationDbContext dbContext)
@@ -22,25 +22,25 @@ internal sealed class GetOwnCharacter : IEndpoint
 			return TypedResults.InternalServerError();
 		}
 
-		var character = await dbContext.Characters
+		var user = await dbContext.Users
 			.AsNoTracking()
-			.Where(character => character.Id == userId)
-			.Select(character =>
-				new CharacterData
+			.Where(x => x.Id == userId)
+			.Select(x =>
+				new UserData
 				{
 					Id = userId,
-					DisplayName = character.DisplayName,
-					Description = character.Description,
-					CurrentRoomId = character.CurrentRoomId,
-					OwnerType = character.OwnerType,
-					Presence = character.Presence
+					DisplayName = x.DisplayName,
+					Description = x.Description,
+					CurrentRoomId = x.CurrentRoomId,
+					OwnerType = x.OwnerType,
+					Presence = x.Presence
 				})
 			.FirstOrDefaultAsync();
-		if (character is null)
+		if (user is null)
 		{
 			return TypedResults.InternalServerError();
 		}
 
-		return TypedResults.Ok(character);
+		return TypedResults.Ok(user);
 	}
 }

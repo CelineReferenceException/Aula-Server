@@ -1,6 +1,6 @@
-﻿namespace WhiteTale.Server.Features.Characters;
+﻿namespace WhiteTale.Server.Features.Users;
 
-internal sealed class ModifyOwnCharacterRequestBody
+internal sealed class ModifyOwnUserRequestBody
 {
 	private readonly String? _description;
 
