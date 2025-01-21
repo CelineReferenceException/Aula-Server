@@ -45,7 +45,7 @@ internal sealed class RemoveConnection : IEndpoint
 
 		var targetRoomExists = dbContext.Rooms
 			.AsNoTracking()
-			.Any(room => room.Id == body.TargetId);
+			.Any(room => room.Id == body.RoomId);
 		if (!targetRoomExists)
 		{
 			return TypedResults.Problem(new ProblemDetails
@@ -56,7 +56,7 @@ internal sealed class RemoveConnection : IEndpoint
 		}
 
 		var connection = await dbContext.RoomConnections
-			.Where(connection => connection.SourceRoomId == roomId && connection.TargetRoomId == body.TargetId)
+			.Where(connection => connection.SourceRoomId == roomId && connection.TargetRoomId == body.RoomId)
 			.FirstOrDefaultAsync();
 		if (connection is null)
 		{

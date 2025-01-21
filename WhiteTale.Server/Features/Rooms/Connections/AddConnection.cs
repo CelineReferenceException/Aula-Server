@@ -45,7 +45,7 @@ internal sealed class AddConnection : IEndpoint
 
 		var targetRoomExists = dbContext.Rooms
 			.AsNoTracking()
-			.Any(room => room.Id == body.TargetId);
+			.Any(room => room.Id == body.RoomId);
 		if (!targetRoomExists)
 		{
 			return TypedResults.Problem(new ProblemDetails
@@ -55,7 +55,7 @@ internal sealed class AddConnection : IEndpoint
 			});
 		}
 
-		var roomConnection = RoomConnection.Create(snowflakeGenerator.NewSnowflake(), roomId, body.TargetId);
+		var roomConnection = RoomConnection.Create(snowflakeGenerator.NewSnowflake(), roomId, body.RoomId);
 
 		_ = await dbContext.AddAsync(roomConnection);
 		_ = await dbContext.SaveChangesAsync();

@@ -6,9 +6,9 @@ internal sealed class RemoveConnectionRequestBodyValidator : AbstractValidator<R
 {
 	public RemoveConnectionRequestBodyValidator()
 	{
-		_ = RuleFor(x => x.TargetId)
+		_ = RuleFor(x => x.RoomId)
 			.NotEmpty()
-			.WithErrorCode($"{nameof(AddConnectionRequestBody.TargetId)} is empty")
-			.WithMessage($"{nameof(AddConnectionRequestBody.TargetId)} cannot be empty.");
+			.WithErrorCode($"{nameof(AddConnectionRequestBody.RoomId)} is empty")
+			.WithMessage($"{nameof(AddConnectionRequestBody.RoomId)} cannot be empty.");
 	}
 }

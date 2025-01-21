@@ -2,5 +2,5 @@
 
 internal sealed class AddConnectionRequestBody
 {
-	public required UInt64 TargetId { get; init; }
+	public required UInt64 RoomId { get; init; }
 }
