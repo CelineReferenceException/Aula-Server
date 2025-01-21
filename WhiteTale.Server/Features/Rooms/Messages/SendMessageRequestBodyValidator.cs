@@ -1,4 +1,4 @@
-﻿using WhiteTale.Server.Domain.Messages;
+﻿using FluentValidation;
 
 namespace WhiteTale.Server.Features.Rooms.Messages;
 

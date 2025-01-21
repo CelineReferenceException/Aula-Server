@@ -1,7 +1,8 @@
-using System.Diagnostics;
 using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using WhiteTale.Server.Domain.Users;
 
 namespace WhiteTale.Server.Common.RateLimiting;
 
@@ -26,7 +27,7 @@ internal static class DependencyInjection
 
 			_ = options.AddPolicy(CommonRateLimitPolicyNames.Global, httpContext =>
 			{
-				var userManager = httpContext.RequestServices.GetRequiredService<UserManager<User>>();
+				var userManager = ServiceProviderServiceExtensions.GetRequiredService<UserManager<User>>(httpContext.RequestServices);
 
 				var userId = userManager.GetUserId(httpContext.User);
 				var partitionKey = userId ?? httpContext.Connection.RemoteIpAddress?.ToString() ?? String.Empty;

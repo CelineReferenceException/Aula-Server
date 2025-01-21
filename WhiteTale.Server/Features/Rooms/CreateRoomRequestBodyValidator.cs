@@ -1,4 +1,4 @@
-﻿using WhiteTale.Server.Domain.Rooms;
+﻿using FluentValidation;
 
 namespace WhiteTale.Server.Features.Rooms;
 

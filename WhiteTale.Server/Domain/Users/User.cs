@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Identity;
 
 #pragma warning disable CS8618
 namespace WhiteTale.Server.Domain.Users;

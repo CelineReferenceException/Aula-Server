@@ -1,4 +1,11 @@
-﻿namespace WhiteTale.Server.Features.Users;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
+
+namespace WhiteTale.Server.Features.Users;
 
 internal sealed class GetUser : IEndpoint
 {

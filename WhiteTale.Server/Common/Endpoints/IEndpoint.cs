@@ -1,4 +1,6 @@
-﻿namespace WhiteTale.Server.Common.Endpoints;
+﻿using Microsoft.AspNetCore.Routing;
+
+namespace WhiteTale.Server.Common.Endpoints;
 
 internal interface IEndpoint
 {

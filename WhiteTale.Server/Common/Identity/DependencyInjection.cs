@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authentication.BearerToken;
-using WhiteTale.Server.Domain.Users;
+using Microsoft.AspNetCore.Identity;
 
 namespace WhiteTale.Server.Common.Identity;
 

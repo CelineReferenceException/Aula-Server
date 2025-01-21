@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using WhiteTale.Server.Domain.Users;
 
 namespace WhiteTale.Server.Common.AuthorizationRequirements;
 

@@ -1,4 +1,4 @@
-﻿using WhiteTale.Server.Domain.Users;
+﻿using FluentValidation;
 
 namespace WhiteTale.Server.Features.Users;
 

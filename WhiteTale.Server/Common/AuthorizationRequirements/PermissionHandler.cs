@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
-using WhiteTale.Server.Domain.Users;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace WhiteTale.Server.Common.AuthorizationRequirements;
 

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text.Json.Serialization;
-using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
+using Microsoft.AspNetCore.Http.Json;
 
 namespace WhiteTale.Server.Common.JsonSerialization;
 
