@@ -23,7 +23,14 @@ internal static class UserHelper
 		user.EmailConfirmed = userSeed.EmailConfirmed;
 		user.SetCurrentRoom(userSeed.CurrentRoomId);
 
-		_ = await userManager.CreateAsync(user, userSeed.Password);
+		var identityResult = await userManager.CreateAsync(user, userSeed.Password);
+		if (!identityResult.Succeeded)
+		{
+			var exceptionMessage = identityResult.Errors
+				.Select(error => $"{error.Code}: {error.Description}")
+				.Aggregate((a, b) => $"{a}{Environment.NewLine}{b}");
+			throw new InvalidOperationException();
+		}
 
 		return new SeedUserResult
 		{
