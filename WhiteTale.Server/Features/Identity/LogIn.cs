@@ -37,7 +37,7 @@ internal sealed class LogIn : IEndpoint
 			return TypedResults.Problem(new ProblemDetails
 			{
 				Title = "Unknown user",
-				Status = StatusCodes.Status400BadRequest
+				Status = StatusCodes.Status400BadRequest,
 			});
 		}
 
@@ -50,7 +50,7 @@ internal sealed class LogIn : IEndpoint
 			{
 				Title = "A login problem has occurred",
 				Detail = "The password provided is incorrect.",
-				Status = StatusCodes.Status400BadRequest
+				Status = StatusCodes.Status400BadRequest,
 			});
 		}
 
@@ -60,7 +60,7 @@ internal sealed class LogIn : IEndpoint
 			{
 				Title = "A login problem has occurred",
 				Detail = "The account is temporarily locked out due to multiple unsuccessful login attempts.",
-				Status = StatusCodes.Status403Forbidden
+				Status = StatusCodes.Status403Forbidden,
 			});
 		}
 
@@ -71,7 +71,7 @@ internal sealed class LogIn : IEndpoint
 			{
 				Title = "Email is not confirmed",
 				Detail = "Email confirmation is required to login.",
-				Status = StatusCodes.Status403Forbidden
+				Status = StatusCodes.Status403Forbidden,
 			});
 		}
 

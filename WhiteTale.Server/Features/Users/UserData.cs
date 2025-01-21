@@ -1,6 +1,4 @@
-﻿using WhiteTale.Server.Domain.Users;
-
-namespace WhiteTale.Server.Features.Users;
+﻿namespace WhiteTale.Server.Features.Users;
 
 /// <summary>
 ///     Represents a character within the application.

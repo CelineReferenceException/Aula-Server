@@ -14,10 +14,13 @@ public sealed class CreateRoomTests
 		await using var application = new ApplicationInstance(nameof(CreateRoom_ValidOperation_ReturnsOkWithRoom));
 		using var client = application.CreateClient();
 
-		var userSeed = await application.SeedUserAsync(UserSeed.Default with { Permissions = Permissions.ManageRooms });
+		var userSeed = await application.SeedUserAsync(UserSeed.Default with
+		{
+			Permissions = Permissions.ManageRooms,
+		});
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		using var request = new HttpRequestMessage(HttpMethod.Post, $"api/rooms");
+		using var request = new HttpRequestMessage(HttpMethod.Post, "api/rooms");
 		var requestBody = new CreateRoomRequestBody
 		{
 			Name = "Test Room",
@@ -46,10 +49,13 @@ public sealed class CreateRoomTests
 		await using var application = new ApplicationInstance(nameof(CreateRoom_InvalidArguments_ReturnsBadRequest));
 		using var client = application.CreateClient();
 
-		var userSeed = await application.SeedUserAsync(UserSeed.Default with { Permissions = Permissions.ManageRooms });
+		var userSeed = await application.SeedUserAsync(UserSeed.Default with
+		{
+			Permissions = Permissions.ManageRooms,
+		});
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		using var request = new HttpRequestMessage(HttpMethod.Post, $"api/rooms");
+		using var request = new HttpRequestMessage(HttpMethod.Post, "api/rooms");
 		var requestBody = new CreateRoomRequestBody
 		{
 			Name = "0",

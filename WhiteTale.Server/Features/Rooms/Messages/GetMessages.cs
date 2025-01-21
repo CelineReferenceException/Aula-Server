@@ -40,7 +40,7 @@ internal sealed class GetMessages : IEndpoint
 			{
 				Title = "Invalid room ID",
 				Detail = "The room does not exist",
-				Status = StatusCodes.Status400BadRequest
+				Status = StatusCodes.Status400BadRequest,
 			});
 		}
 
@@ -56,7 +56,7 @@ internal sealed class GetMessages : IEndpoint
 			{
 				Title = "Invalid room",
 				Detail = "The user is not in the room",
-				Status = StatusCodes.Status403Forbidden
+				Status = StatusCodes.Status403Forbidden,
 			});
 		}
 
@@ -67,7 +67,7 @@ internal sealed class GetMessages : IEndpoint
 			{
 				Title = "Invalid message count.",
 				Detail = "The message count must be between 1 and 100.",
-				Status = StatusCodes.Status400BadRequest
+				Status = StatusCodes.Status400BadRequest,
 			});
 		}
 
@@ -85,7 +85,7 @@ internal sealed class GetMessages : IEndpoint
 				{
 					Title = $"Invalid '{BeforeQueryParameter}' message id.",
 					Detail = $"The '{BeforeQueryParameter}' message was not found.",
-					Status = StatusCodes.Status400BadRequest
+					Status = StatusCodes.Status400BadRequest,
 				});
 			}
 
@@ -102,7 +102,7 @@ internal sealed class GetMessages : IEndpoint
 					Target = message.Target,
 					TargetId = message.TargetId,
 					Content = message.Content,
-					CreationTime = message.CreationTime
+					CreationTime = message.CreationTime,
 				})
 				.Take(count.Value);
 
@@ -120,7 +120,7 @@ internal sealed class GetMessages : IEndpoint
 				{
 					Title = $"Invalid '{AfterQueryParameter}' message id.",
 					Detail = $"The '{AfterQueryParameter}' message was not found.",
-					Status = StatusCodes.Status400BadRequest
+					Status = StatusCodes.Status400BadRequest,
 				});
 			}
 
@@ -137,7 +137,7 @@ internal sealed class GetMessages : IEndpoint
 					Target = message.Target,
 					TargetId = message.TargetId,
 					Content = message.Content,
-					CreationTime = message.CreationTime
+					CreationTime = message.CreationTime,
 				})
 				.Take(count.Value);
 
@@ -158,7 +158,7 @@ internal sealed class GetMessages : IEndpoint
 					Target = message.Target,
 					TargetId = message.TargetId,
 					Content = message.Content,
-					CreationTime = message.CreationTime
+					CreationTime = message.CreationTime,
 				})
 				.Take(count.Value);
 

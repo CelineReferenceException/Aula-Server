@@ -20,7 +20,7 @@ public sealed class ModifyOwnUserTest
 		var requestBody = new ModifyOwnUserRequestBody
 		{
 			DisplayName = "NewTestUser",
-			Description = "NewDescription"
+			Description = "NewDescription",
 		};
 		request.SetJsonContent(requestBody);
 		request.SetAuthorization("Bearer", credentials.AccessToken);
@@ -50,7 +50,7 @@ public sealed class ModifyOwnUserTest
 		var requestBody = new ModifyOwnUserRequestBody
 		{
 			DisplayName = "NewTestUser",
-			Description = "NewDescription"
+			Description = "NewDescription",
 		};
 
 		// Act

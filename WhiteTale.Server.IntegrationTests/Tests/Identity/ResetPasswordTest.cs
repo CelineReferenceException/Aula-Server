@@ -20,7 +20,7 @@ public sealed class ResetPasswordTest
 		{
 			UserId = 0,
 			ResetToken = "0",
-			NewPassword = "NewTestPassword1!"
+			NewPassword = "NewTestPassword1!",
 		};
 
 		// Act
@@ -61,7 +61,7 @@ public sealed class ResetPasswordTest
 		{
 			UserId = userSeed.User.Id,
 			ResetToken = resetToken,
-			NewPassword = "NewTestPassword1!"
+			NewPassword = "NewTestPassword1!",
 		};
 
 		// Act
@@ -88,7 +88,7 @@ public sealed class ResetPasswordTest
 		{
 			UserId = userSeed.Seed.Id,
 			ResetToken = resetToken,
-			NewPassword = "0"
+			NewPassword = "0",
 		};
 
 		// Act
@@ -111,7 +111,7 @@ public sealed class ResetPasswordTest
 		{
 			UserId = userSeed.Seed.Id,
 			ResetToken = "0",
-			NewPassword = "NewTestPassword1!"
+			NewPassword = "NewTestPassword1!",
 		};
 
 		// Act

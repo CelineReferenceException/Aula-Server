@@ -22,7 +22,7 @@ internal static class MessageHelper
 		return new SeedMessageResult
 		{
 			Seed = messageSeed,
-			Message = message
+			Message = message,
 		};
 	}
 }

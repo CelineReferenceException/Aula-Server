@@ -14,7 +14,7 @@ internal sealed class Int64StringConverter : JsonConverter<Int64>
 		{
 			JsonTokenType.Number => reader.GetInt64(),
 			JsonTokenType.String => Int64.Parse(reader.ValueSpan, CultureInfo.InvariantCulture),
-			_ => throw new JsonException()
+			_ => throw new JsonException(),
 		};
 	}
 

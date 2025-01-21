@@ -1,9 +1,4 @@
-﻿using System.Diagnostics;
-using System.Threading.RateLimiting;
-using Microsoft.Extensions.Options;
-using WhiteTale.Server.Domain.Users;
-
-namespace WhiteTale.Server.Features.Identity;
+﻿namespace WhiteTale.Server.Features.Identity;
 
 internal static class DependencyInjection
 {

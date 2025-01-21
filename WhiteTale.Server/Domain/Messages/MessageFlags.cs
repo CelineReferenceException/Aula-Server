@@ -9,5 +9,5 @@ internal enum MessageFlags
 	/// <summary>
 	///     The author of the message should be hidden.
 	/// </summary>
-	HideAuthor = 1 << 0
+	HideAuthor = 1 << 0,
 }

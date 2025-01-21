@@ -6,5 +6,5 @@ namespace WhiteTale.Server.Common.Persistence;
 internal enum DatabaseProvider
 {
 	InMemory,
-	Sqlite
+	Sqlite,
 }

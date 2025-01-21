@@ -39,7 +39,7 @@ internal sealed class GetOwnUser : IEndpoint
 					Description = x.Description,
 					CurrentRoomId = x.CurrentRoomId,
 					OwnerType = x.OwnerType,
-					Presence = x.Presence
+					Presence = x.Presence,
 				})
 			.FirstOrDefaultAsync();
 		if (user is null)

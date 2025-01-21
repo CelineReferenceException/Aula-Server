@@ -17,7 +17,7 @@ public sealed class RegisterTest
 		{
 			UserName = "test_user",
 			Password = "TestPassword1!",
-			Email = "test_address@example.com"
+			Email = "test_address@example.com",
 		};
 
 		// Act
@@ -51,13 +51,13 @@ public sealed class RegisterTest
 		{
 			UserName = "first_test_user",
 			Password = "TestPassword1!",
-			Email = "test_address@example.com"
+			Email = "test_address@example.com",
 		};
 		var secondRequestBody = new RegisterRequestBody
 		{
 			UserName = "second_test_user",
 			Password = "TestPassword1!",
-			Email = firstRequestBody.Email
+			Email = firstRequestBody.Email,
 		};
 
 		using var firstResponse = await httpClient.PostAsJsonAsync("api/identity/register", firstRequestBody);
@@ -80,13 +80,13 @@ public sealed class RegisterTest
 		{
 			UserName = "test_user",
 			Password = "TestPassword1!",
-			Email = "testa_ddress_1@example.com"
+			Email = "testa_ddress_1@example.com",
 		};
 		var secondRequestBody = new RegisterRequestBody
 		{
 			UserName = firstRequestBody.UserName,
 			Password = "TestPassword1!",
-			Email = "testa_ddress_2@example.com"
+			Email = "testa_ddress_2@example.com",
 		};
 
 		using var firstResponse = await httpClient.PostAsJsonAsync("api/identity/register", firstRequestBody);

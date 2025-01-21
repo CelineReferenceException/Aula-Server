@@ -37,7 +37,7 @@ internal sealed class ResetPassword : IEndpoint
 			{
 				Title = "User not found",
 				Detail = "There is no user with the given ID.",
-				Status = StatusCodes.Status404NotFound
+				Status = StatusCodes.Status404NotFound,
 			});
 		}
 

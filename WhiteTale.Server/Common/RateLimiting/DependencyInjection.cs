@@ -43,7 +43,7 @@ internal static class DependencyInjection
 					{
 						PermitLimit = permitLimit,
 						Window = window,
-						AutoReplenishment = true
+						AutoReplenishment = true,
 					});
 			});
 
@@ -57,7 +57,10 @@ internal static class DependencyInjection
 				partitionKey += $"{request.Method}{request.Scheme}{request.Host}{request.PathBase}{request.Path}";
 
 				return RateLimitPartition.GetConcurrencyLimiter(partitionKey,
-					_ => new ConcurrencyLimiterOptions { PermitLimit = 1 });
+					_ => new ConcurrencyLimiterOptions
+					{
+						PermitLimit = 1,
+					});
 			});
 		});
 

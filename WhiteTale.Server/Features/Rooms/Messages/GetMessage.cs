@@ -33,7 +33,7 @@ internal sealed class GetMessage : IEndpoint
 			{
 				Title = "Invalid room ID",
 				Detail = "The room does not exist",
-				Status = StatusCodes.Status400BadRequest
+				Status = StatusCodes.Status400BadRequest,
 			});
 		}
 
@@ -49,7 +49,7 @@ internal sealed class GetMessage : IEndpoint
 			{
 				Title = "Invalid room",
 				Detail = "The user is not in the room",
-				Status = StatusCodes.Status403Forbidden
+				Status = StatusCodes.Status403Forbidden,
 			});
 		}
 
@@ -65,7 +65,7 @@ internal sealed class GetMessage : IEndpoint
 				Target = message.Target,
 				TargetId = message.TargetId,
 				Content = message.Content,
-				CreationTime = message.CreationTime
+				CreationTime = message.CreationTime,
 			})
 			.FirstOrDefaultAsync();
 		if (message is null)

@@ -32,7 +32,7 @@ internal sealed class Room : DefaultDomainEntity
 			Name = name,
 			Description = description,
 			IsEntrance = isEntrance,
-			ConcurrencyStamp = Guid.NewGuid().ToString("N")
+			ConcurrencyStamp = Guid.NewGuid().ToString("N"),
 		};
 
 		room.AddEvent(new RoomCreatedEvent(room));

@@ -46,7 +46,7 @@ internal sealed class RemoveRoom : IEndpoint
 			Id = room.Id,
 			Name = room.Name,
 			Description = room.Description,
-			IsEntrance = room.IsEntrance
+			IsEntrance = room.IsEntrance,
 		});
 	}
 }

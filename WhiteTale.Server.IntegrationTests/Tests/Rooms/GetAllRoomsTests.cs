@@ -16,10 +16,16 @@ public sealed class GetAllRoomsTests
 		var userSeed = await application.SeedUserAsync();
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		var firstRoomSeed = await application.SeedRoomAsync(RoomSeed.Default with { Id = 1 });
-		var secondRoomSeed = await application.SeedRoomAsync(RoomSeed.Default with { Id = 2 });
+		var firstRoomSeed = await application.SeedRoomAsync(RoomSeed.Default with
+		{
+			Id = 1,
+		});
+		var secondRoomSeed = await application.SeedRoomAsync(RoomSeed.Default with
+		{
+			Id = 2,
+		});
 
-		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/rooms");
+		using var request = new HttpRequestMessage(HttpMethod.Get, "api/rooms");
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
 
 		// Act

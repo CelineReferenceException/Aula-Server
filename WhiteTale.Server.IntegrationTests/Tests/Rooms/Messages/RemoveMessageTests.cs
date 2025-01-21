@@ -21,7 +21,7 @@ public sealed class RemoveMessageTests
 		var messageSeed = await application.SeedMessageAsync(MessageSeed.StandardTypeDefault with
 		{
 			AuthorId = userSeed.Seed.Id,
-			TargetId = roomSeed.Seed.Id
+			TargetId = roomSeed.Seed.Id,
 		});
 
 		using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/rooms/{roomSeed.Seed.Id}/messages/{messageSeed.Seed.Id}");
@@ -50,14 +50,17 @@ public sealed class RemoveMessageTests
 			new ApplicationInstance(nameof(RemoveMessage_RemoveNotOwnedMessageWithoutPermissions_ReturnsForbidden));
 		using var client = application.CreateClient();
 
-		var userSeed = await application.SeedUserAsync(UserSeed.Default with { Id = 1 });
+		var userSeed = await application.SeedUserAsync(UserSeed.Default with
+		{
+			Id = 1,
+		});
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
 		var roomSeed = await application.SeedRoomAsync();
 		var messageSeed = await application.SeedMessageAsync(MessageSeed.StandardTypeDefault with
 		{
 			AuthorId = 2,
-			TargetId = roomSeed.Seed.Id
+			TargetId = roomSeed.Seed.Id,
 		});
 
 		using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/rooms/{roomSeed.Seed.Id}/messages/{messageSeed.Seed.Id}");
@@ -81,7 +84,7 @@ public sealed class RemoveMessageTests
 		var userSeed = await application.SeedUserAsync(UserSeed.Default with
 		{
 			Id = 1,
-			Permissions = Permissions.ManageMessages
+			Permissions = Permissions.ManageMessages,
 		});
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
@@ -89,7 +92,7 @@ public sealed class RemoveMessageTests
 		var messageSeed = await application.SeedMessageAsync(MessageSeed.StandardTypeDefault with
 		{
 			AuthorId = 2,
-			TargetId = roomSeed.Seed.Id
+			TargetId = roomSeed.Seed.Id,
 		});
 
 		using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/rooms/{roomSeed.Seed.Id}/messages/{messageSeed.Seed.Id}");

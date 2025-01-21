@@ -17,7 +17,10 @@ public sealed class ConfirmEmailTest
 		await using var application = new ApplicationInstance(nameof(ConfirmEmail_TryToStartConfirmation_ReturnsNoContent));
 		using var httpClient = application.CreateClient();
 
-		var userSeed = await application.SeedUserAsync(UserSeed.Default with { EmailConfirmed = false });
+		var userSeed = await application.SeedUserAsync(UserSeed.Default with
+		{
+			EmailConfirmed = false,
+		});
 
 		var email = WebUtility.UrlEncode(userSeed.Seed.Email);
 
@@ -57,7 +60,7 @@ public sealed class ConfirmEmailTest
 		await using var application = new ApplicationInstance(nameof(ConfirmEmail_TryToConfirm_ReturnsNoContent));
 		using var httpClient = application.CreateClient();
 
-		var userSeed =await application.SeedUserAsync();
+		var userSeed = await application.SeedUserAsync();
 
 		using var arrangementScope = application.Services.CreateScope();
 		var arrangementUserManager = arrangementScope.ServiceProvider.GetRequiredService<UserManager<User>>();
@@ -89,7 +92,10 @@ public sealed class ConfirmEmailTest
 		await using var application = new ApplicationInstance(nameof(ConfirmEmail_TryToConfirmWithInvalidToken_ReturnsNoContent));
 		using var httpClient = application.CreateClient();
 
-		var userSeed = await application.SeedUserAsync(UserSeed.Default with { EmailConfirmed = false });
+		var userSeed = await application.SeedUserAsync(UserSeed.Default with
+		{
+			EmailConfirmed = false,
+		});
 
 		var email = WebUtility.UrlEncode(userSeed.Seed.Email);
 

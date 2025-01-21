@@ -1,5 +1,3 @@
-using WhiteTale.Server.Domain.Users;
-
 namespace WhiteTale.Server.Common.AuthorizationRequirements;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]

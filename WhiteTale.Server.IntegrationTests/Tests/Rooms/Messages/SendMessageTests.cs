@@ -18,17 +18,20 @@ public sealed class SendMessageTests
 		var userSeed = await application.SeedUserAsync(UserSeed.Default with
 		{
 			Permissions = Permissions.SendMessages,
-			CurrentRoomId = 1
+			CurrentRoomId = 1,
 		});
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with { Id = userSeed.Seed.CurrentRoomId });
+		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with
+		{
+			Id = userSeed.Seed.CurrentRoomId,
+		});
 
 		using var request = new HttpRequestMessage(HttpMethod.Post, $"api/rooms/{roomSeed.Seed.Id}/messages");
 		var requestBody = new SendMessageRequestBody
 		{
 			Type = MessageType.Standard,
-			Content = "Hello world"
+			Content = "Hello world",
 		};
 		request.SetJsonContent(requestBody);
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
@@ -58,14 +61,20 @@ public sealed class SendMessageTests
 		var userSeed = await application.SeedUserAsync(UserSeed.Default with
 		{
 			Permissions = Permissions.SendMessages,
-			CurrentRoomId = 1
+			CurrentRoomId = 1,
 		});
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with { Id = userSeed.Seed.CurrentRoomId });
+		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with
+		{
+			Id = userSeed.Seed.CurrentRoomId,
+		});
 
 		using var request = new HttpRequestMessage(HttpMethod.Post, $"api/rooms/{roomSeed.Seed.Id}/messages");
-		var requestBody = new SendMessageRequestBody { Type = MessageType.Standard };
+		var requestBody = new SendMessageRequestBody
+		{
+			Type = MessageType.Standard,
+		};
 		request.SetJsonContent(requestBody);
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
 
@@ -86,18 +95,21 @@ public sealed class SendMessageTests
 		var userSeed = await application.SeedUserAsync(UserSeed.Default with
 		{
 			Permissions = Permissions.SendMessages,
-			CurrentRoomId = 1
+			CurrentRoomId = 1,
 		});
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with { Id = userSeed.Seed.CurrentRoomId });
+		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with
+		{
+			Id = userSeed.Seed.CurrentRoomId,
+		});
 
 		using var request = new HttpRequestMessage(HttpMethod.Post, $"api/rooms/{roomSeed.Seed.Id}/messages");
 		var requestBody = new SendMessageRequestBody
 		{
 			Type = MessageType.Standard,
 			Content = "Hello world",
-			Flags = (MessageFlags)1
+			Flags = (MessageFlags)1,
 		};
 		request.SetJsonContent(requestBody);
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
@@ -127,14 +139,20 @@ public sealed class SendMessageTests
 		var userSeed = await application.SeedUserAsync(UserSeed.Default with
 		{
 			Permissions = Permissions.SendMessages,
-			CurrentRoomId = 1
+			CurrentRoomId = 1,
 		});
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with { Id = userSeed.Seed.CurrentRoomId });
+		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with
+		{
+			Id = userSeed.Seed.CurrentRoomId,
+		});
 
 		using var request = new HttpRequestMessage(HttpMethod.Post, $"api/rooms/{roomSeed.Seed.Id}/messages");
-		var requestBody = new SendMessageRequestBody { Type = (MessageType)Int32.MaxValue };
+		var requestBody = new SendMessageRequestBody
+		{
+			Type = (MessageType)Int32.MaxValue,
+		};
 		request.SetJsonContent(requestBody);
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
 
@@ -155,17 +173,20 @@ public sealed class SendMessageTests
 		var userSeed = await application.SeedUserAsync(UserSeed.Default with
 		{
 			Permissions = Permissions.SendMessages,
-			CurrentRoomId = 1
+			CurrentRoomId = 1,
 		});
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with { Id = 2 });
+		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with
+		{
+			Id = 2,
+		});
 
 		using var request = new HttpRequestMessage(HttpMethod.Post, $"api/rooms/{roomSeed.Seed.Id}/messages");
 		var requestBody = new SendMessageRequestBody
 		{
 			Type = MessageType.Standard,
-			Content = "Hello world"
+			Content = "Hello world",
 		};
 		request.SetJsonContent(requestBody);
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);

@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace WhiteTale.Server.Common.JsonSerialization;
+
 internal sealed class UInt64JsonConverter : JsonConverter<UInt64>
 {
 	[SuppressMessage("Style", "IDE0072:Add missing cases")]
@@ -13,7 +14,7 @@ internal sealed class UInt64JsonConverter : JsonConverter<UInt64>
 		{
 			JsonTokenType.Number => reader.GetUInt64(),
 			JsonTokenType.String => UInt64.Parse(reader.ValueSpan, CultureInfo.InvariantCulture),
-			_ => throw new JsonException()
+			_ => throw new JsonException(),
 		};
 	}
 

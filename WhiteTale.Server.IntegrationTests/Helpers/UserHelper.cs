@@ -4,7 +4,6 @@ using System.Net.Http.Json;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using WhiteTale.Server.Common.Persistence;
 using WhiteTale.Server.Domain.Users;
 using WhiteTale.Server.Features.Identity;
 
@@ -12,8 +11,6 @@ namespace WhiteTale.Server.IntegrationTests.Helpers;
 
 internal static class UserHelper
 {
-
-
 	internal static async Task<SeedUserResult> SeedUserAsync(this ApplicationInstance application, UserSeed? userSeed = null)
 	{
 		using var scope = application.Services.CreateScope();
@@ -21,7 +18,8 @@ internal static class UserHelper
 
 		userSeed ??= UserSeed.Default;
 
-		var user = User.Create(userSeed.Id, userSeed.Email, userSeed.UserName, userSeed.DisplayName, UserOwnerType.Standard, userSeed.Permissions);
+		var user = User.Create(userSeed.Id, userSeed.Email, userSeed.UserName, userSeed.DisplayName, UserOwnerType.Standard,
+			userSeed.Permissions);
 		user.EmailConfirmed = userSeed.EmailConfirmed;
 		user.SetCurrentRoom(userSeed.CurrentRoomId);
 
@@ -30,7 +28,7 @@ internal static class UserHelper
 		return new SeedUserResult
 		{
 			Seed = userSeed,
-			User = user
+			User = user,
 		};
 	}
 
@@ -40,7 +38,7 @@ internal static class UserHelper
 		var requestBody = new LogInRequestBody
 		{
 			UserName = userName,
-			Password = password
+			Password = password,
 		};
 
 		using var response = await httpClient.PostAsJsonAsync("api/identity/login", requestBody);

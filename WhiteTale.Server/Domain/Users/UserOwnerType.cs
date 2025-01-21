@@ -13,5 +13,5 @@ internal enum UserOwnerType
 	/// <summary>
 	///     The character is owned by a bot user.
 	/// </summary>
-	Bot = 1
+	Bot = 1,
 }

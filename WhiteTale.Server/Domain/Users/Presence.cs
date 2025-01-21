@@ -13,5 +13,5 @@ internal enum Presence
 	/// <summary>
 	///     The character is online.
 	/// </summary>
-	Online = 1
+	Online = 1,
 }

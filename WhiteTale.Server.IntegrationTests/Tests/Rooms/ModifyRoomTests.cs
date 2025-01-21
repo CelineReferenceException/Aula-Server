@@ -14,7 +14,10 @@ public sealed class ModifyRoomTests
 		await using var application = new ApplicationInstance(nameof(ModifyRoom_ValidOperation_ReturnsOkWithRoom));
 		using var client = application.CreateClient();
 
-		var userSeed = await application.SeedUserAsync(UserSeed.Default with { Permissions = Permissions.ManageRooms });
+		var userSeed = await application.SeedUserAsync(UserSeed.Default with
+		{
+			Permissions = Permissions.ManageRooms,
+		});
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
 		var roomSeed = await application.SeedRoomAsync();
@@ -24,7 +27,7 @@ public sealed class ModifyRoomTests
 		{
 			Name = "New Test Room",
 			Description = "New Room Description",
-			IsEntrance = true
+			IsEntrance = true,
 		};
 		request.SetJsonContent(requestBody);
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
@@ -49,7 +52,10 @@ public sealed class ModifyRoomTests
 		await using var application = new ApplicationInstance(nameof(ModifyRoom_InvalidArguments_ReturnsBadRequest));
 		using var client = application.CreateClient();
 
-		var userSeed = await application.SeedUserAsync(UserSeed.Default with { Permissions = Permissions.ManageRooms });
+		var userSeed = await application.SeedUserAsync(UserSeed.Default with
+		{
+			Permissions = Permissions.ManageRooms,
+		});
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
 		var roomSeed = await application.SeedRoomAsync();

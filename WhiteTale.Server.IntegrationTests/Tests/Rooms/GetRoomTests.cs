@@ -45,7 +45,7 @@ public sealed class GetRoomTests
 		var userSeed = await application.SeedUserAsync();
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/rooms/0");
+		using var request = new HttpRequestMessage(HttpMethod.Get, "api/rooms/0");
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
 
 		// Act

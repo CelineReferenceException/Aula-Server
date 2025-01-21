@@ -13,5 +13,5 @@ internal enum MessageTarget
 	/// <summary>
 	///     Targets all available rooms.
 	/// </summary>
-	AllRooms = 1
+	AllRooms = 1,
 }

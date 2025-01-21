@@ -33,7 +33,7 @@ internal sealed class RemoveMessage : IEndpoint
 			{
 				Title = "Invalid room ID",
 				Detail = "The room does not exist",
-				Status = StatusCodes.Status400BadRequest
+				Status = StatusCodes.Status400BadRequest,
 			});
 		}
 
@@ -78,7 +78,7 @@ internal sealed class RemoveMessage : IEndpoint
 			Target = message.Target,
 			TargetId = message.TargetId,
 			Content = message.Content,
-			CreationTime = message.CreationTime
+			CreationTime = message.CreationTime,
 		});
 	}
 }

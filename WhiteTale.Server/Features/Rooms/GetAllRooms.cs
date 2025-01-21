@@ -27,7 +27,7 @@ internal sealed class GetAllRooms : IEndpoint
 					Id = room.Id,
 					Name = room.Name,
 					Description = room.Description,
-					IsEntrance = room.IsEntrance
+					IsEntrance = room.IsEntrance,
 				})
 			.ToListAsync();
 

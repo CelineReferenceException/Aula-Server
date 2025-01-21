@@ -6,16 +6,13 @@ namespace WhiteTale.Server.Domain.Users;
 
 internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 {
-	private readonly List<DomainEvent> _events = [];
-
-	IReadOnlyList<DomainEvent> IDomainEntity.Events => _events;
-
 	internal const Int32 DisplayNameMinimumLength = 3;
 	internal const Int32 DisplayNameMaximumLength = 32;
 	internal const Int32 UserNameMinimumLength = 6;
 	internal const Int32 UserNameMaximumLength = 32;
 	internal const Int32 DescriptionMinimumLength = 1;
 	internal const Int32 DescriptionMaximumLength = 1024;
+	private readonly List<DomainEvent> _events = [];
 
 	internal new UInt64 Id
 	{
@@ -49,9 +46,17 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 		set => base.ConcurrencyStamp = value;
 	}
 
-	internal static User Create(UInt64 id, String email, String userName, String? displayName, UserOwnerType ownerType, Permissions permissions)
+	IReadOnlyList<DomainEvent> IDomainEntity.Events => _events;
+
+	internal static User Create(
+		UInt64 id,
+		String email,
+		String userName,
+		String? displayName,
+		UserOwnerType ownerType,
+		Permissions permissions)
 	{
-		var character = new User()
+		var character = new User
 		{
 			Id = id,
 			Email = email,
@@ -60,7 +65,7 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 			Permissions = permissions,
 			OwnerType = ownerType,
 			CreationTime = DateTime.UtcNow,
-			ConcurrencyStamp = Guid.NewGuid().ToString("N")
+			ConcurrencyStamp = Guid.NewGuid().ToString("N"),
 		};
 
 		return character;

@@ -5,8 +5,8 @@ internal sealed record RoomSeed
 	internal static RoomSeed Default { get; } = new()
 	{
 		Id = 1,
-		Name = $"Test Room",
-		IsEntrance = true
+		Name = "Test Room",
+		IsEntrance = true,
 	};
 
 	internal required UInt64 Id { get; init; }

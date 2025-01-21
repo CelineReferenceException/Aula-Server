@@ -44,7 +44,7 @@ internal sealed class SendMessage : IEndpoint
 			{
 				Title = "Invalid room",
 				Detail = "The room does not exist",
-				Status = StatusCodes.Status400BadRequest
+				Status = StatusCodes.Status400BadRequest,
 			});
 		}
 
@@ -60,7 +60,7 @@ internal sealed class SendMessage : IEndpoint
 			{
 				Title = "Invalid room",
 				Detail = "The user is not in the room",
-				Status = StatusCodes.Status403Forbidden
+				Status = StatusCodes.Status403Forbidden,
 			});
 		}
 
@@ -69,7 +69,7 @@ internal sealed class SendMessage : IEndpoint
 		var allowedFlags = body.Type switch
 		{
 			MessageType.Standard => Message.StandardTypeAllowedFlags,
-			_ => throw new UnreachableException()
+			_ => throw new UnreachableException(),
 		};
 		var flags = body.Flags ?? 0;
 		if (flags is not 0)
@@ -95,7 +95,7 @@ internal sealed class SendMessage : IEndpoint
 			Target = message.Target,
 			TargetId = message.TargetId,
 			Content = message.Content,
-			CreationTime = message.CreationTime
+			CreationTime = message.CreationTime,
 		});
 	}
 }

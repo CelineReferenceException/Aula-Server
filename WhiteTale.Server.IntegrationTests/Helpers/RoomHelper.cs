@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using WhiteTale.Server.Common;
 using WhiteTale.Server.Common.Persistence;
 using WhiteTale.Server.Domain.Rooms;
 
@@ -7,8 +6,6 @@ namespace WhiteTale.Server.IntegrationTests.Helpers;
 
 internal static class RoomHelper
 {
-
-
 	internal static async Task<SeedRoomResult> SeedRoomAsync(this ApplicationInstance application, RoomSeed? roomSeed = null)
 	{
 		using var scope = application.Services.CreateScope();
@@ -24,7 +21,7 @@ internal static class RoomHelper
 		return new SeedRoomResult
 		{
 			Seed = roomSeed,
-			Room = room
+			Room = room,
 		};
 	}
 }

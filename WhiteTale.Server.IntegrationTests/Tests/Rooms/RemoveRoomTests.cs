@@ -14,7 +14,10 @@ public sealed class RemoveRoomTests
 		await using var application = new ApplicationInstance(nameof(RemoveRoom_ValidOperation_ReturnsOkWithRoom));
 		using var client = application.CreateClient();
 
-		var userSeed = await application.SeedUserAsync(UserSeed.Default with { Permissions = Permissions.ManageRooms });
+		var userSeed = await application.SeedUserAsync(UserSeed.Default with
+		{
+			Permissions = Permissions.ManageRooms,
+		});
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
 		var roomSeed = await application.SeedRoomAsync();
@@ -43,10 +46,13 @@ public sealed class RemoveRoomTests
 		await using var application = new ApplicationInstance(nameof(RemoveRoom_UnknownRoom_ReturnsNotFound));
 		using var client = application.CreateClient();
 
-		var userSeed = await application.SeedUserAsync(UserSeed.Default with { Permissions = Permissions.ManageRooms });
+		var userSeed = await application.SeedUserAsync(UserSeed.Default with
+		{
+			Permissions = Permissions.ManageRooms,
+		});
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/rooms/0");
+		using var request = new HttpRequestMessage(HttpMethod.Delete, "api/rooms/0");
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
 
 		// Act

@@ -12,7 +12,10 @@ internal sealed class DefaultBackgroundTaskQueue<TOwner> : IBackgroundTaskQueue<
 	{
 		_logger = logger;
 
-		var queueOptions = new BoundedChannelOptions(DefaultCapacity) { FullMode = BoundedChannelFullMode.Wait };
+		var queueOptions = new BoundedChannelOptions(DefaultCapacity)
+		{
+			FullMode = BoundedChannelFullMode.Wait,
+		};
 		_taskQueue = Channel.CreateBounded<Func<CancellationToken, ValueTask>>(queueOptions);
 	}
 

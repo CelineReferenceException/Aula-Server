@@ -22,7 +22,7 @@ public sealed class LogInTest
 		var requestBody = new LogInRequestBody
 		{
 			UserName = userSeed.Seed.UserName,
-			Password = userSeed.Seed.Password
+			Password = userSeed.Seed.Password,
 		};
 
 		// Act
@@ -48,7 +48,7 @@ public sealed class LogInTest
 		var requestBody = new LogInRequestBody
 		{
 			UserName = "0",
-			Password = "NewTestPassword1!"
+			Password = "NewTestPassword1!",
 		};
 
 		// Act
@@ -70,7 +70,7 @@ public sealed class LogInTest
 		var requestBody = new LogInRequestBody
 		{
 			UserName = userSeed.Seed.UserName,
-			Password = "0"
+			Password = "0",
 		};
 
 		// Act
@@ -87,12 +87,15 @@ public sealed class LogInTest
 		await using var application = new ApplicationInstance(nameof(LogIn_WithoutNoConfirmedEmail_ReturnsForbidden));
 		using var httpClient = application.CreateClient();
 
-		var userSeed = await application.SeedUserAsync(UserSeed.Default with { EmailConfirmed = false });
+		var userSeed = await application.SeedUserAsync(UserSeed.Default with
+		{
+			EmailConfirmed = false,
+		});
 
 		var requestBody = new LogInRequestBody
 		{
 			UserName = userSeed.Seed.UserName,
-			Password = userSeed.Seed.Password
+			Password = userSeed.Seed.Password,
 		};
 
 		// Act
@@ -123,7 +126,7 @@ public sealed class LogInTest
 		var requestBody = new LogInRequestBody
 		{
 			UserName = userSeed.Seed.UserName,
-			Password = userSeed.Seed.Password
+			Password = userSeed.Seed.Password,
 		};
 
 		// Act

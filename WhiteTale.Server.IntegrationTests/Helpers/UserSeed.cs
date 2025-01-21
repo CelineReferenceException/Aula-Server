@@ -15,7 +15,7 @@ internal sealed record UserSeed
 		Password = "TestPassword1!",
 		Email = "test_address@example.com",
 		EmailConfirmed = true,
-		CurrentRoomId = 1
+		CurrentRoomId = 1,
 	};
 
 	public required UInt64 Id { get; init; }

@@ -1,6 +1,4 @@
-﻿using WhiteTale.Server.Domain.Messages;
-
-namespace WhiteTale.Server.Features.Rooms.Messages;
+﻿namespace WhiteTale.Server.Features.Rooms.Messages;
 
 internal sealed class SendMessageRequestBody
 {

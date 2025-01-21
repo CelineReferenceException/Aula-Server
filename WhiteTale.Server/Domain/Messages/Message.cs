@@ -47,7 +47,7 @@ internal sealed class Message : DefaultDomainEntity
 			Target = target,
 			TargetId = targetId,
 			Content = content,
-			CreationTime = DateTime.UtcNow
+			CreationTime = DateTime.UtcNow,
 		};
 
 		message.AddEvent(new MessageCreatedEvent(message));

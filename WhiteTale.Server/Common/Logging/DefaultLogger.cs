@@ -61,7 +61,7 @@ internal sealed class DefaultLogger : ILogger
 			LogLevel.Warning => ConsoleColor.Yellow,
 			LogLevel.Error => ConsoleColor.Red,
 			LogLevel.Critical => ConsoleColor.DarkRed,
-			LogLevel.None or _ => throw new ArgumentOutOfRangeException(nameof(logLevel), logLevel, null)
+			LogLevel.None or _ => throw new ArgumentOutOfRangeException(nameof(logLevel), logLevel, null),
 		};
 	}
 
@@ -75,7 +75,7 @@ internal sealed class DefaultLogger : ILogger
 			LogLevel.Warning => nameof(LogLevel.Warning),
 			LogLevel.Error => nameof(LogLevel.Error),
 			LogLevel.Critical => nameof(LogLevel.Critical),
-			LogLevel.None or _ => throw new ArgumentOutOfRangeException(nameof(logLevel), logLevel, null)
+			LogLevel.None or _ => throw new ArgumentOutOfRangeException(nameof(logLevel), logLevel, null),
 		};
 	}
 }
