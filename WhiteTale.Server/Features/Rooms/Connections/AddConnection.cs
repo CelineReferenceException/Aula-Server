@@ -50,6 +50,7 @@ internal sealed class AddConnection : IEndpoint
 			{
 				Title = "Invalid room",
 				Detail = "The room does not exist.",
+				Status = StatusCodes.Status400BadRequest,
 			});
 		}
 
@@ -62,6 +63,7 @@ internal sealed class AddConnection : IEndpoint
 			{
 				Title = "Invalid target room",
 				Detail = "The target room does not exist.",
+				Status = StatusCodes.Status400BadRequest,
 			});
 		}
 
