@@ -48,7 +48,7 @@ public sealed class SendMessageTests
 	public async Task SendMessage_StandardTypeWithMissingContent_ReturnsBadRequest()
 	{
 		// Arrange
-		await using var application = new ApplicationInstance(nameof(SendMessage_StandardType_ReturnsOkWithMessage));
+		await using var application = new ApplicationInstance(nameof(SendMessage_StandardTypeWithMissingContent_ReturnsBadRequest));
 		using var client = application.CreateClient();
 
 		var userSeed = await application.SeedUserAsync(UserSeed.Default with { Permissions = Permissions.SendMessages });
