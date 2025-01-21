@@ -48,33 +48,26 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 		_ = userModel.Property(x => x.Permissions)
 			.IsRequired();
 
-		var characterModel = modelBuilder.Entity<User>();
-
-		_ = characterModel.Property(x => x.Id)
-			.IsRequired()
-			.ValueGeneratedNever();
-		_ = characterModel.HasKey(x => x.Id);
-
-		_ = characterModel.Property(x => x.DisplayName)
+		_ = userModel.Property(x => x.DisplayName)
 			.IsRequired()
 			.HasMaxLength(User.DisplayNameMaximumLength);
 
-		_ = characterModel.Property(x => x.Description)
+		_ = userModel.Property(x => x.Description)
 			.HasMaxLength(User.DescriptionMaximumLength);
 
-		_ = characterModel.Property(x => x.OwnerType)
+		_ = userModel.Property(x => x.OwnerType)
 			.IsRequired();
 
-		_ = characterModel.Property(x => x.Presence)
+		_ = userModel.Property(x => x.Presence)
 			.IsRequired();
 
-		_ = characterModel.Property(x => x.CreationTime)
+		_ = userModel.Property(x => x.CreationTime)
 			.IsRequired();
 
-		_ = characterModel.Property(x => x.CurrentRoomId)
+		_ = userModel.Property(x => x.CurrentRoomId)
 			.IsRequired(false);
 
-		_ = characterModel.Property(x => x.ConcurrencyStamp)
+		_ = userModel.Property(x => x.ConcurrencyStamp)
 			.IsRequired()
 			.IsConcurrencyToken()
 			.HasMaxLength(guidMaximumCharacterLength);
