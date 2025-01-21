@@ -63,6 +63,7 @@ internal sealed class RemoveConnection : IEndpoint
 			return TypedResults.NoContent();
 		}
 
+		connection.Remove();
 		_ = dbContext.RoomConnections.Remove(connection);
 		_ = await dbContext.SaveChangesAsync();
 
