@@ -37,16 +37,26 @@ internal sealed class SendMessage : IEndpoint
 		{
 			return TypedResults.Problem(new ProblemDetails
 			{
-				Title = "Invalid room ID",
+				Title = "Invalid room",
 				Detail = "The room does not exist",
 				Status = StatusCodes.Status400BadRequest
 			});
 		}
 
-		var userIdClaimValue = userManager.GetUserId(httpContext.User);
-		if (!UInt64.TryParse(userIdClaimValue, out var userId))
+		var user = await userManager.GetUserAsync(httpContext.User);
+		if (user is null)
 		{
 			return TypedResults.InternalServerError();
+		}
+
+		if (user.CurrentRoomId != roomId)
+		{
+			return TypedResults.Problem(new ProblemDetails
+			{
+				Title = "Invalid room",
+				Detail = "The user is not in the room",
+				Status = StatusCodes.Status403Forbidden
+			});
 		}
 
 		var messageId = snowflakeGenerator.NewSnowflake();
@@ -65,7 +75,7 @@ internal sealed class SendMessage : IEndpoint
 				.Aggregate((x, y) => x | y);
 		}
 
-		var message = Message.Create(messageId, body.Type, flags, userId, body.Target ?? MessageTarget.Room, body.Content,
+		var message = Message.Create(messageId, body.Type, flags, user.Id, body.Target ?? MessageTarget.Room, body.Content,
 			roomId);
 
 		_ = dbContext.Messages.Add(message);

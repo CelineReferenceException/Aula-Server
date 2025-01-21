@@ -23,6 +23,7 @@ internal static class UserHelper
 
 		var user = User.Create(userSeed.Id, userSeed.Email, userSeed.UserName, userSeed.DisplayName, UserOwnerType.Standard, userSeed.Permissions);
 		user.EmailConfirmed = userSeed.EmailConfirmed;
+		user.SetCurrentRoom(userSeed.CurrentRoomId);
 
 		_ = await userManager.CreateAsync(user, userSeed.Password);
 

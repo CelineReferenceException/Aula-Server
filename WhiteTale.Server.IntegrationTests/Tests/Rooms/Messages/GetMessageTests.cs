@@ -14,10 +14,14 @@ public sealed class GetMessageTests
 		await using var application = new ApplicationInstance(nameof(GetMessage_ValidOperation_ReturnsOkWithMessage));
 		using var client = application.CreateClient();
 
-		var userSeed = await application.SeedUserAsync(UserSeed.Default with { Permissions = Permissions.ReadMessages });
+		var userSeed = await application.SeedUserAsync(UserSeed.Default with
+		{
+			Permissions = Permissions.ReadMessages,
+			CurrentRoomId = 1
+		});
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		var roomSeed = await application.SeedRoomAsync();
+		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with { Id = userSeed.Seed.CurrentRoomId });
 		var messageSeed = await application.SeedMessageAsync(MessageSeed.StandardTypeDefault with
 		{
 			AuthorId = userSeed.Seed.Id,
@@ -41,5 +45,37 @@ public sealed class GetMessageTests
 		_ = responseBody.Target.Should().Be(messageSeed.Seed.Target);
 		_ = responseBody.TargetId.Should().Be(messageSeed.Seed.TargetId);
 		_ = responseBody.AuthorId.Should().Be(messageSeed.Seed.AuthorId);
+	}
+
+	[Fact]
+	public async Task GetMessage_InDifferentRoom_ReturnsForbidden()
+	{
+		// Arrange
+		await using var application = new ApplicationInstance(nameof(GetMessage_InDifferentRoom_ReturnsForbidden));
+		using var client = application.CreateClient();
+
+		var userSeed = await application.SeedUserAsync(UserSeed.Default with
+		{
+			Permissions = Permissions.ReadMessages,
+			CurrentRoomId = 1
+		});
+		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
+
+		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with { Id = 2 });
+		var messageSeed = await application.SeedMessageAsync(MessageSeed.StandardTypeDefault with
+		{
+			AuthorId = userSeed.Seed.Id,
+			TargetId = roomSeed.Seed.Id
+		});
+
+		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/rooms/{roomSeed.Seed.Id}/messages/{messageSeed.Seed.Id}");
+		request.SetAuthorization("Bearer", userCredentials.AccessToken);
+
+
+		// Act
+		var response = await client.SendAsync(request);
+
+		// Assert
+		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.Forbidden);
 	}
 }

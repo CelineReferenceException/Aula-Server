@@ -16,12 +16,14 @@ internal sealed class GetMessages : IEndpoint
 			.RequirePermission(Permissions.ReadMessages);
 	}
 
-	private static async Task<Results<Ok<List<MessageData>>, ProblemHttpResult>> HandleAsync(
+	private static async Task<Results<Ok<List<MessageData>>, ProblemHttpResult, InternalServerError>> HandleAsync(
 		[FromRoute] UInt64 roomId,
 		[FromQuery(Name = BeforeQueryParameter)] UInt64? beforeId,
 		[FromQuery(Name = AfterQueryParameter)] UInt64? afterId,
 		[FromQuery(Name = CountQueryParameter)] Int32? count,
-		[FromServices] ApplicationDbContext dbContext)
+		[FromServices] ApplicationDbContext dbContext,
+		[FromServices] UserManager<User> userManager,
+		HttpContext httpContext)
 	{
 		var roomExists = await dbContext.Rooms
 			.AsNoTracking()
@@ -33,6 +35,22 @@ internal sealed class GetMessages : IEndpoint
 				Title = "Invalid room ID",
 				Detail = "The room does not exist",
 				Status = StatusCodes.Status400BadRequest
+			});
+		}
+
+		var user = await userManager.GetUserAsync(httpContext.User);
+		if (user is null)
+		{
+			return TypedResults.InternalServerError();
+		}
+
+		if (user.CurrentRoomId != roomId)
+		{
+			return TypedResults.Problem(new ProblemDetails
+			{
+				Title = "Invalid room",
+				Detail = "The user is not in the room",
+				Status = StatusCodes.Status403Forbidden
 			});
 		}
 
