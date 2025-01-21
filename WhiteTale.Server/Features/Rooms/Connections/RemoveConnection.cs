@@ -11,29 +11,21 @@ internal sealed class RemoveConnection : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapDelete("api/rooms/{roomId}/connections", HandleAsync)
+		_ = route.MapDelete("api/rooms/{sourceRoomId}/connections/{targetRoomId}", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
 			.RequirePermission(Permissions.ManageRooms);
 	}
 
 	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(
-		[FromRoute] UInt64 roomId,
-		[FromBody] RemoveConnectionRequestBody body,
-		[FromServices] RemoveConnectionRequestBodyValidator bodyValidator,
+		[FromRoute] UInt64 sourceRoomId,
+		[FromRoute] UInt64 targetRoomId,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] SnowflakeGenerator snowflakeGenerator)
 	{
-		var validation = await bodyValidator.ValidateAsync(body);
-		if (!validation.IsValid)
-		{
-			var problemDetails = validation.Errors.ToProblemDetails();
-			return TypedResults.Problem(problemDetails);
-		}
-
 		var sourceRoomExists = await dbContext.Rooms
 			.AsNoTracking()
-			.AnyAsync(room => room.Id == roomId);
+			.AnyAsync(room => room.Id == sourceRoomId);
 		if (!sourceRoomExists)
 		{
 			return TypedResults.Problem(new ProblemDetails
@@ -45,7 +37,7 @@ internal sealed class RemoveConnection : IEndpoint
 
 		var targetRoomExists = dbContext.Rooms
 			.AsNoTracking()
-			.Any(room => room.Id == body.RoomId);
+			.Any(room => room.Id == targetRoomId);
 		if (!targetRoomExists)
 		{
 			return TypedResults.Problem(new ProblemDetails
@@ -56,7 +48,7 @@ internal sealed class RemoveConnection : IEndpoint
 		}
 
 		var connection = await dbContext.RoomConnections
-			.Where(connection => connection.SourceRoomId == roomId && connection.TargetRoomId == body.RoomId)
+			.Where(connection => connection.SourceRoomId == sourceRoomId && connection.TargetRoomId == targetRoomId)
 			.FirstOrDefaultAsync();
 		if (connection is null)
 		{
