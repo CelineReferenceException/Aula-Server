@@ -24,7 +24,7 @@ public sealed class SendMessageTests
 
 		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with
 		{
-			Id = userSeed.Seed.CurrentRoomId,
+			Id = userSeed.Seed.CurrentRoomId!.Value,
 		});
 
 		using var request = new HttpRequestMessage(HttpMethod.Post, $"api/rooms/{roomSeed.Seed.Id}/messages");
@@ -67,7 +67,7 @@ public sealed class SendMessageTests
 
 		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with
 		{
-			Id = userSeed.Seed.CurrentRoomId,
+			Id = userSeed.Seed.CurrentRoomId!.Value,
 		});
 
 		using var request = new HttpRequestMessage(HttpMethod.Post, $"api/rooms/{roomSeed.Seed.Id}/messages");
@@ -101,7 +101,7 @@ public sealed class SendMessageTests
 
 		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with
 		{
-			Id = userSeed.Seed.CurrentRoomId,
+			Id = userSeed.Seed.CurrentRoomId!.Value,
 		});
 
 		using var request = new HttpRequestMessage(HttpMethod.Post, $"api/rooms/{roomSeed.Seed.Id}/messages");
@@ -145,7 +145,7 @@ public sealed class SendMessageTests
 
 		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with
 		{
-			Id = userSeed.Seed.CurrentRoomId,
+			Id = userSeed.Seed.CurrentRoomId!.Value,
 		});
 
 		using var request = new HttpRequestMessage(HttpMethod.Post, $"api/rooms/{roomSeed.Seed.Id}/messages");

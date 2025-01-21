@@ -23,7 +23,7 @@ public class GetMessagesTests
 
 		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with
 		{
-			Id = userSeed.Seed.CurrentRoomId,
+			Id = userSeed.Seed.CurrentRoomId!.Value,
 		});
 		var messageSeed = await application.SeedMessageAsync(MessageSeed.StandardTypeDefault with
 		{
@@ -66,7 +66,7 @@ public class GetMessagesTests
 
 		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with
 		{
-			Id = userSeed.Seed.CurrentRoomId,
+			Id = userSeed.Seed.CurrentRoomId!.Value,
 		});
 		var firstMessageSeed = await application.SeedMessageAsync(MessageSeed.StandardTypeDefault with
 		{
@@ -118,7 +118,7 @@ public class GetMessagesTests
 
 		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with
 		{
-			Id = userSeed.Seed.CurrentRoomId,
+			Id = userSeed.Seed.CurrentRoomId!.Value,
 		});
 		var firstMessageSeed = await application.SeedMessageAsync(MessageSeed.StandardTypeDefault with
 		{
