@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WhiteTale.Server.Features.Rooms.Connections;
 
-internal sealed class GetRoomConnections : IEndpoint
+internal sealed class GetConnections : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
