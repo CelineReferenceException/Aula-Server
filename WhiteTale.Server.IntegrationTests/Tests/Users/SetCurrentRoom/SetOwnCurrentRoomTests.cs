@@ -19,7 +19,10 @@ public sealed class SetOwnCurrentRoomTests
 		});
 		var credentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		var roomSeed = await application.SeedRoomAsync();
+		var roomSeed = await application.SeedRoomAsync(RoomSeed.Default with
+		{
+			IsEntrance = true,
+		});
 
 		using var request = new HttpRequestMessage(HttpMethod.Put, "api/users/@me/set-current-room");
 		var requestBody = new SetCurrentRoomRequestBody

@@ -6,7 +6,7 @@ internal sealed record RoomSeed
 	{
 		Id = 1,
 		Name = "Test Room",
-		IsEntrance = true,
+		IsEntrance = false,
 	};
 
 	internal required UInt64 Id { get; init; }
