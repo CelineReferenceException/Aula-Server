@@ -47,15 +47,16 @@ internal sealed class SetOwnCurrentRoom : IEndpoint
 			return TypedResults.InternalServerError();
 		}
 
-		var roomExists = await dbContext.Rooms
+		var connectionExists = await dbContext.RoomConnections
 			.AsNoTracking()
-			.AnyAsync(room => room.Id == body.RoomId);
-		if (!roomExists)
+			.Where(connection => connection.SourceRoomId == user.CurrentRoomId && connection.TargetRoomId == body.RoomId)
+			.AnyAsync();
+		if (!connectionExists)
 		{
 			return TypedResults.Problem(new ProblemDetails
 			{
-				Title = "Invalid room",
-				Detail = "The room does not exist.",
+				Title = "No room connection",
+				Detail = "There's no room connection to this room.",
 				Status = StatusCodes.Status400BadRequest,
 			});
 		}
