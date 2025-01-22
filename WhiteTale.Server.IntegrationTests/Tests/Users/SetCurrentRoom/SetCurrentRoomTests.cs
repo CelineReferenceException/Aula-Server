@@ -86,4 +86,44 @@ public sealed class SetCurrentRoomTests
 		// Arrange
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.BadRequest);
 	}
+
+	[Fact]
+	public async Task SetCurrentRoom_FirstRoomNotEntrance_ReturnsBadRequest()
+	{
+		// Arrange
+		await using var application = new ApplicationInstance(nameof(SetCurrentRoom_FirstRoomNotEntrance_ReturnsBadRequest));
+		using var httpClient = application.CreateClient();
+
+		var executorUserSeed = await application.SeedUserAsync(UserSeed.Default with
+		{
+			Id = 1,
+			UserName = "test_user_x",
+			Email = "test_address_1@example.com",
+			Permissions = Permissions.SetCurrentRoom,
+		});
+		var credentials = await application.LoginUserAsync(executorUserSeed.Seed.UserName, executorUserSeed.Seed.Password);
+
+		var targetUserId = await application.SeedUserAsync(UserSeed.Default with
+		{
+			Id = 2,
+			UserName = "test_user_y",
+			Email = "test_address_2@example.com",
+		});
+
+		var roomSeed = await application.SeedRoomAsync();
+
+		using var request = new HttpRequestMessage(HttpMethod.Put, $"api/users/{targetUserId.Seed.Id}/set-current-room");
+		var requestBody = new SetCurrentRoomRequestBody
+		{
+			RoomId = roomSeed.Seed.Id,
+		};
+		request.SetJsonContent(requestBody);
+		request.SetAuthorization("Bearer", credentials.AccessToken);
+
+		// Act
+		using var response = await httpClient.SendAsync(request);
+
+		// Arrange
+		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.BadRequest);
+	}
 }
