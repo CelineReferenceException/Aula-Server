@@ -40,6 +40,13 @@ internal sealed class RemoveRoom : IEndpoint
 		connections.ForEach(connection => connection.Remove());
 		dbContext.RoomConnections.RemoveRange(connections);
 
+		var usersInRoom = await dbContext.Users
+			.AsTracking()
+			.Where(user => user.CurrentRoomId == roomId)
+			.ToListAsync();
+
+		usersInRoom.ForEach(user => user.SetCurrentRoom(null));
+
 		try
 		{
 			_ = await dbContext.SaveChangesAsync();
