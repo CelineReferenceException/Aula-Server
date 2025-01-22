@@ -72,6 +72,7 @@ internal sealed class SetCurrentRoom : IEndpoint
 			{
 				Title = "Invalid room",
 				Detail = "The first room to join must be an entrance.",
+				Status = StatusCodes.Status400BadRequest,
 			});
 		}
 
