@@ -32,6 +32,14 @@ internal sealed class RemoveRoom : IEndpoint
 
 		room.Remove();
 
+		var connections = await dbContext.RoomConnections
+			.AsTracking()
+			.Where(connection => connection.SourceRoomId == roomId || connection.TargetRoomId == roomId)
+			.ToListAsync();
+
+		connections.ForEach(connection => connection.Remove());
+		dbContext.RoomConnections.RemoveRange(connections);
+
 		try
 		{
 			_ = await dbContext.SaveChangesAsync();
