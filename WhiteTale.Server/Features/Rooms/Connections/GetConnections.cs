@@ -22,7 +22,7 @@ internal sealed class GetConnections : IEndpoint
 	{
 		var roomExists = await dbContext.Rooms
 			.AsNoTracking()
-			.AnyAsync(room => room.Id == roomId);
+			.AnyAsync(room => room.Id == roomId && !room.IsRemoved);
 		if (!roomExists)
 		{
 			return TypedResults.Problem(new ProblemDetails

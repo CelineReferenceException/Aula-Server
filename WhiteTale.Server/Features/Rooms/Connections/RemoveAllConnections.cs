@@ -24,7 +24,7 @@ internal sealed class RemoveAllConnections : IEndpoint
 	{
 		var sourceRoomExists = await dbContext.Rooms
 			.AsNoTracking()
-			.AnyAsync(room => room.Id == sourceRoomId);
+			.AnyAsync(room => room.Id == sourceRoomId && !room.IsRemoved);
 		if (!sourceRoomExists)
 		{
 			return TypedResults.Problem(new ProblemDetails

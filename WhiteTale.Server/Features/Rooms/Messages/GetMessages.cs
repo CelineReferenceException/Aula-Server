@@ -77,7 +77,7 @@ internal sealed class GetMessages : IEndpoint
 		{
 			var targetExists = await dbContext.Messages
 				.AsNoTracking()
-				.AnyAsync(message => message.Id == beforeId);
+				.AnyAsync(message => message.Id == beforeId && !message.IsRemoved);
 
 			if (!targetExists)
 			{
@@ -112,7 +112,7 @@ internal sealed class GetMessages : IEndpoint
 		{
 			var targetExists = await dbContext.Messages
 				.AsNoTracking()
-				.AnyAsync(message => message.Id == afterId);
+				.AnyAsync(message => message.Id == afterId && !message.IsRemoved);
 
 			if (!targetExists)
 			{

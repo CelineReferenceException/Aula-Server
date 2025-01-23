@@ -43,7 +43,7 @@ internal sealed class AddConnection : IEndpoint
 
 		var sourceRoomExists = await dbContext.Rooms
 			.AsNoTracking()
-			.AnyAsync(room => room.Id == roomId);
+			.AnyAsync(room => room.Id == roomId && !room.IsRemoved);
 		if (!sourceRoomExists)
 		{
 			return TypedResults.Problem(new ProblemDetails
@@ -56,7 +56,7 @@ internal sealed class AddConnection : IEndpoint
 
 		var targetRoomExists = dbContext.Rooms
 			.AsNoTracking()
-			.Any(room => room.Id == body.RoomId);
+			.Any(room => room.Id == body.RoomId && !room.IsRemoved);
 		if (!targetRoomExists)
 		{
 			return TypedResults.Problem(new ProblemDetails
