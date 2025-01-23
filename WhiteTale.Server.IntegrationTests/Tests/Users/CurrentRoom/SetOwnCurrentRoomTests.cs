@@ -2,7 +2,7 @@
 using WhiteTale.Server.Domain.Users;
 using WhiteTale.Server.Features.Users.CurrentRoom;
 
-namespace WhiteTale.Server.IntegrationTests.Tests.Users.SetCurrentRoom;
+namespace WhiteTale.Server.IntegrationTests.Tests.Users.CurrentRoom;
 
 public sealed class SetOwnCurrentRoomTests
 {
