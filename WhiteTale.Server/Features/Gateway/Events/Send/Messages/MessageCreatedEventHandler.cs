@@ -1,0 +1,76 @@
+﻿using System.Text.Json;
+using MediatR;
+using Microsoft.AspNetCore.Http.Json;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using WhiteTale.Server.Features.Rooms.Messages;
+
+namespace WhiteTale.Server.Features.Gateway.Events.Send.Messages;
+
+internal sealed class MessageCreatedEventHandler : INotificationHandler<MessageCreatedEvent>
+{
+	private readonly ApplicationDbContext _dbContext;
+	private readonly JsonSerializerOptions _jsonSerializerOptions;
+
+	public MessageCreatedEventHandler(IOptions<JsonOptions> jsonOptions, ApplicationDbContext dbContext)
+	{
+		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
+		_dbContext = dbContext;
+	}
+
+	public async Task Handle(MessageCreatedEvent notification, CancellationToken cancellationToken)
+	{
+		var operations = new List<Task>();
+
+		var message = notification.Message;
+		var payload = new GatewayPayload<MessageData>
+		{
+			Operation = OperationType.Dispatch,
+			Event = EventType.MessageCreated,
+			Data = new MessageData
+			{
+				Id = message.Id,
+				Type = message.Type,
+				Flags = message.Flags,
+				AuthorId = message.AuthorId,
+				Target = message.Target,
+				TargetId = message.TargetId,
+				Content = message.Content,
+				CreationTime = message.CreationTime,
+			},
+		};
+		var payloadBytes = JsonSerializer.SerializeToUtf8Bytes(payload, _jsonSerializerOptions);
+
+		var sessionUserIds = ConnectToGateway.Sessions.Values
+			.Select(session => session.UserId);
+
+		var usersCurrentRoomId = await _dbContext.Users
+			.Where(user => sessionUserIds.Contains(user.Id))
+			.Select(user => new
+			{
+				user.Id,
+				user.CurrentRoomId,
+			})
+			.ToDictionaryAsync(user => user.Id, user => user.CurrentRoomId, cancellationToken);
+
+		foreach (var session in ConnectToGateway.Sessions.Values)
+		{
+			if (!session.Intents.HasFlag(Intents.Messages))
+			{
+				continue;
+			}
+
+			var userCurrentRoomId = usersCurrentRoomId[session.UserId];
+			if (userCurrentRoomId is null ||
+			    userCurrentRoomId != message.TargetId)
+			{
+				continue;
+			}
+
+			var operation = session.QueueEventAsync(payloadBytes, cancellationToken);
+			operations.Add(operation);
+		}
+
+		await Task.WhenAll(operations);
+	}
+}
