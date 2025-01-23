@@ -45,13 +45,13 @@ internal sealed class MessageCreatedEventHandler : INotificationHandler<MessageC
 			.Select(session => session.UserId);
 
 		var usersCurrentRoomId = await _dbContext.Users
-			.Where(user => sessionUserIds.Contains(user.Id))
-			.Select(user => new
+			.Where(u => sessionUserIds.Contains(u.Id))
+			.Select(u => new
 			{
-				user.Id,
-				user.CurrentRoomId,
+				u.Id,
+				u.CurrentRoomId,
 			})
-			.ToDictionaryAsync(user => user.Id, user => user.CurrentRoomId, cancellationToken);
+			.ToDictionaryAsync(u => u.Id, u => u.CurrentRoomId, cancellationToken);
 
 		foreach (var session in ConnectToGateway.Sessions.Values)
 		{

@@ -55,17 +55,17 @@ internal sealed class GetMessage : IEndpoint
 
 		var message = await dbContext.Messages
 			.AsNoTracking()
-			.Where(message => message.Id == messageId && !message.IsRemoved)
-			.Select(message => new MessageData
+			.Where(m => m.Id == messageId && !m.IsRemoved)
+			.Select(m => new MessageData
 			{
-				Id = message.Id,
-				Type = message.Type,
-				Flags = message.Flags,
-				AuthorId = message.AuthorId,
-				Target = message.Target,
-				TargetId = message.TargetId,
-				Content = message.Content,
-				CreationTime = message.CreationTime,
+				Id = m.Id,
+				Type = m.Type,
+				Flags = m.Flags,
+				AuthorId = m.AuthorId,
+				Target = m.Target,
+				TargetId = m.TargetId,
+				Content = m.Content,
+				CreationTime = m.CreationTime,
 			})
 			.FirstOrDefaultAsync();
 		if (message is null)
