@@ -134,7 +134,7 @@ internal sealed class GatewaySession : IDisposable
 	{
 		try
 		{
-			var buffer = new Byte[1024].AsMemory();
+			var buffer = new Byte[1024 / 4].AsMemory();
 			do
 			{
 				using var payloadStream = new MemoryStream();
