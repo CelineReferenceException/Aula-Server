@@ -137,6 +137,7 @@ internal sealed class GatewaySession : IDisposable
 					await payloadStream.WriteAsync(buffer[..received.Count], CancellationToken.None);
 				} while (!received.EndOfMessage);
 
+				_ = payloadStream.Seek(0, SeekOrigin.Begin);
 				var payload = await JsonSerializer.DeserializeAsync<GatewayPayload>(payloadStream, _jsonOptions);
 				if (payload is null)
 				{
