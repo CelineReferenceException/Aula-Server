@@ -37,7 +37,7 @@ internal sealed class DefaultLogger : ILogger
 		var logLevelName = GetLogLevelString(logLevel);
 
 		Console.ForegroundColor = ConsoleColor.Gray;
-		Console.Write($"{now.Hour:D2}:{now.Minute:D2}:{now.Second:D2}:{now.Millisecond:D3}");
+		Console.Write($"{now.Year}/{now.Month}/{now.Day} {now.Hour:D2}:{now.Minute:D2}:{now.Second:D2}:{now.Millisecond:D3}");
 		Console.ForegroundColor = logLevelColor;
 		Console.WriteLine($" [ {eventId.Id}: {logLevelName} ]");
 
