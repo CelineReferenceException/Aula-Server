@@ -35,7 +35,7 @@ internal sealed class SetCurrentRoom : IEndpoint
 
 		var user = await dbContext.Users
 			.AsTracking()
-			.Where(x => x.Id == userId)
+			.Where(u => u.Id == userId)
 			.FirstOrDefaultAsync();
 		if (user is null)
 		{
@@ -49,7 +49,7 @@ internal sealed class SetCurrentRoom : IEndpoint
 
 		var roomExists = await dbContext.Rooms
 			.AsNoTracking()
-			.AnyAsync(room => room.Id == body.RoomId && !room.IsRemoved);
+			.AnyAsync(r => r.Id == body.RoomId && !r.IsRemoved);
 		if (!roomExists)
 		{
 			return TypedResults.Problem(new ProblemDetails

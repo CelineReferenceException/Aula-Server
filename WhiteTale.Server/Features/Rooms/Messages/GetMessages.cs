@@ -77,7 +77,7 @@ internal sealed class GetMessages : IEndpoint
 		{
 			var targetExists = await dbContext.Messages
 				.AsNoTracking()
-				.AnyAsync(message => message.Id == beforeId && !message.IsRemoved);
+				.AnyAsync(m => m.Id == beforeId && !m.IsRemoved);
 
 			if (!targetExists)
 			{
@@ -91,18 +91,18 @@ internal sealed class GetMessages : IEndpoint
 
 			var messagesBefore = dbContext.Messages
 				.AsNoTracking()
-				.Where(message => message.Id < beforeId && !message.IsRemoved)
-				.OrderByDescending(message => message.Id)
-				.Select(message => new MessageData
+				.Where(m => m.Id < beforeId && !m.IsRemoved)
+				.OrderByDescending(m => m.Id)
+				.Select(m => new MessageData
 				{
-					Id = message.Id,
-					Type = message.Type,
-					Flags = message.Flags,
-					AuthorId = message.AuthorId,
-					Target = message.Target,
-					TargetId = message.TargetId,
-					Content = message.Content,
-					CreationTime = message.CreationTime,
+					Id = m.Id,
+					Type = m.Type,
+					Flags = m.Flags,
+					AuthorId = m.AuthorId,
+					Target = m.Target,
+					TargetId = m.TargetId,
+					Content = m.Content,
+					CreationTime = m.CreationTime,
 				})
 				.Take(count.Value);
 
@@ -112,7 +112,7 @@ internal sealed class GetMessages : IEndpoint
 		{
 			var targetExists = await dbContext.Messages
 				.AsNoTracking()
-				.AnyAsync(message => message.Id == afterId && !message.IsRemoved);
+				.AnyAsync(m => m.Id == afterId && !m.IsRemoved);
 
 			if (!targetExists)
 			{
@@ -126,18 +126,18 @@ internal sealed class GetMessages : IEndpoint
 
 			var messagesAfter = dbContext.Messages
 				.AsNoTracking()
-				.Where(message => message.Id > afterId && !message.IsRemoved)
-				.OrderByDescending(message => message.Id)
-				.Select(message => new MessageData
+				.Where(m => m.Id > afterId && !m.IsRemoved)
+				.OrderByDescending(m => m.Id)
+				.Select(m => new MessageData
 				{
-					Id = message.Id,
-					Type = message.Type,
-					Flags = message.Flags,
-					AuthorId = message.AuthorId,
-					Target = message.Target,
-					TargetId = message.TargetId,
-					Content = message.Content,
-					CreationTime = message.CreationTime,
+					Id = m.Id,
+					Type = m.Type,
+					Flags = m.Flags,
+					AuthorId = m.AuthorId,
+					Target = m.Target,
+					TargetId = m.TargetId,
+					Content = m.Content,
+					CreationTime = m.CreationTime,
 				})
 				.Take(count.Value);
 
@@ -147,18 +147,18 @@ internal sealed class GetMessages : IEndpoint
 		{
 			var lastMessages = dbContext.Messages
 				.AsNoTracking()
-				.Where(message => !message.IsRemoved)
-				.OrderByDescending(message => message.Id)
-				.Select(message => new MessageData
+				.Where(m => !m.IsRemoved)
+				.OrderByDescending(m => m.Id)
+				.Select(m => new MessageData
 				{
-					Id = message.Id,
-					Type = message.Type,
-					Flags = message.Flags,
-					AuthorId = message.AuthorId,
-					Target = message.Target,
-					TargetId = message.TargetId,
-					Content = message.Content,
-					CreationTime = message.CreationTime,
+					Id = m.Id,
+					Type = m.Type,
+					Flags = m.Flags,
+					AuthorId = m.AuthorId,
+					Target = m.Target,
+					TargetId = m.TargetId,
+					Content = m.Content,
+					CreationTime = m.CreationTime,
 				})
 				.Take(count.Value);
 

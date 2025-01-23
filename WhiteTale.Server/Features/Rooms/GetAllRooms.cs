@@ -20,15 +20,15 @@ internal sealed class GetAllRooms : IEndpoint
 	{
 		var rooms = await dbContext.Rooms
 			.AsNoTracking()
-			.Where(room => !room.IsRemoved)
-			.Select(room =>
+			.Where(r => !r.IsRemoved)
+			.Select(r =>
 				new RoomData
 				{
-					Id = room.Id,
-					Name = room.Name,
-					Description = room.Description,
-					IsEntrance = room.IsEntrance,
-					CreationTime = room.CreationTime,
+					Id = r.Id,
+					Name = r.Name,
+					Description = r.Description,
+					IsEntrance = r.IsEntrance,
+					CreationTime = r.CreationTime,
 				})
 			.ToListAsync();
 

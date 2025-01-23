@@ -49,7 +49,7 @@ internal sealed class SetOwnCurrentRoom : IEndpoint
 
 		var roomExists = await dbContext.Rooms
 			.AsNoTracking()
-			.AnyAsync(room => room.Id == body.RoomId && !room.IsRemoved);
+			.AnyAsync(r => r.Id == body.RoomId && !r.IsRemoved);
 		if (!roomExists)
 		{
 			return TypedResults.Problem(new ProblemDetails
