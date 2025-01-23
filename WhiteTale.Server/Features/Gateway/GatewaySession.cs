@@ -11,7 +11,6 @@ namespace WhiteTale.Server.Features.Gateway;
 internal sealed class GatewaySession : IDisposable
 {
 	private readonly Channel<Byte[]> _eventsQueue = Channel.CreateUnbounded<Byte[]>();
-	private readonly IPublisher _publisher;
 	private readonly JsonSerializerOptions _jsonOptions;
 	private Boolean _isDisposed;
 	private Boolean _isFirstConnection = true;
@@ -20,13 +19,11 @@ internal sealed class GatewaySession : IDisposable
 	private CancellationTokenSource _sendingEventsCancellation = null!;
 	private WebSocket _webSocket;
 
-	internal GatewaySession(UInt64 userId, Intents intents, WebSocket webSocket, IPublisher publisher)
-	internal GatewaySession(UInt64 userId, Intents intents, WebSocket webSocket, IPublisher publisher, JsonSerializerOptions jsonOptions)
+	internal GatewaySession(UInt64 userId, Intents intents, WebSocket webSocket, JsonSerializerOptions jsonOptions)
 	{
 		UserId = userId;
 		Intents = intents;
 		_webSocket = webSocket;
-		_publisher = publisher;
 		_jsonOptions = jsonOptions;
 		Id = Guid.NewGuid().ToString("N");
 	}
@@ -47,7 +44,7 @@ internal sealed class GatewaySession : IDisposable
 		GC.SuppressFinalize(this);
 	}
 
-	internal async Task RunAsync()
+	internal async Task RunAsync(IPublisher publisher)
 	{
 		ObjectDisposedException.ThrowIf(_isDisposed, this);
 
@@ -64,12 +61,12 @@ internal sealed class GatewaySession : IDisposable
 		CloseTime = null;
 		_sendingEventsCancellation = new CancellationTokenSource();
 
-		var receiving = StartReceivingEventsAsync();
+		var receiving = StartReceivingEventsAsync(publisher);
 		var sending = StartSendingEventsAsync();
 
 		if (_isFirstConnection)
 		{
-			await _publisher.Publish(new HelloEvent
+			await publisher.Publish(new HelloEvent
 			{
 				Session = this,
 			});
@@ -122,7 +119,7 @@ internal sealed class GatewaySession : IDisposable
 		}
 	}
 
-	private async Task StartReceivingEventsAsync()
+	private async Task StartReceivingEventsAsync(IPublisher publisher)
 	{
 		try
 		{
@@ -145,7 +142,7 @@ internal sealed class GatewaySession : IDisposable
 					return;
 				}
 
-				await _publisher.Publish(new PayloadReceivedEvent
+				await publisher.Publish(new PayloadReceivedEvent
 				{
 					Session = this,
 					Payload = payload,

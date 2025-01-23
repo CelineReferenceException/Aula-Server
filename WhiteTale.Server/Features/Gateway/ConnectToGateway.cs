@@ -67,11 +67,11 @@ internal sealed class ConnectToGateway : IEndpoint
 		else
 		{
 			socket = await httpContext.WebSockets.AcceptWebSocketAsync();
-			session = new GatewaySession(userId, intents, socket, publisher, jsonOptions.Value.JsonSerializerOptions);
+			session = new GatewaySession(userId, intents, socket, jsonOptions.Value.JsonSerializerOptions);
 			_ = s_sessions.TryAdd(session.Id, session);
 		}
 
-		await session.RunAsync();
+		await session.RunAsync(publisher);
 		socket.Dispose();
 
 		return TypedResults.Empty;
