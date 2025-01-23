@@ -26,7 +26,7 @@ internal sealed class RemoveMessage : IEndpoint
 	{
 		var roomExists = await dbContext.Rooms
 			.AsNoTracking()
-			.AnyAsync(room => room.Id == roomId && !room.IsRemoved);
+			.AnyAsync(r => r.Id == roomId && !r.IsRemoved);
 		if (!roomExists)
 		{
 			return TypedResults.Problem(new ProblemDetails
@@ -39,7 +39,7 @@ internal sealed class RemoveMessage : IEndpoint
 
 		var message = await dbContext.Messages
 			.AsTracking()
-			.Where(message => message.Id == messageId && !message.IsRemoved)
+			.Where(m => m.Id == messageId && !m.IsRemoved)
 			.FirstOrDefaultAsync();
 		if (message is null)
 		{

@@ -32,7 +32,7 @@ internal sealed class ModifyRoom : IEndpoint
 
 		var room = await dbContext.Rooms
 			.AsTracking()
-			.Where(room => room.Id == roomId && !room.IsRemoved)
+			.Where(r => r.Id == roomId && !r.IsRemoved)
 			.FirstOrDefaultAsync();
 		if (room is null)
 		{

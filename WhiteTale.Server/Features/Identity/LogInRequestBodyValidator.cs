@@ -10,6 +10,7 @@ internal sealed class LogInRequestBodyValidator : AbstractValidator<LogInRequest
 			.NotEmpty()
 			.WithErrorCode($"{nameof(LogInRequestBody.UserName)} is empty")
 			.WithMessage($"{nameof(LogInRequestBody.UserName)} cannot be empty.");
+
 		_ = RuleFor(x => x.Password)
 			.NotEmpty()
 			.WithErrorCode($"{nameof(LogInRequestBody.Password)} is empty")

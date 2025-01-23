@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Options;
+using WhiteTale.Server.Features.Gateway.Events.Receive.Presences;
 
 namespace WhiteTale.Server.Features.Gateway;
 
@@ -21,7 +23,7 @@ internal sealed class ConnectToGateway : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.Map("/api/gateway", HandleAsync)
-			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
+			.RequireRateLimiting(GatewayRateLimitPolicyNames.Default)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken);
 	}
 
@@ -29,10 +31,12 @@ internal sealed class ConnectToGateway : IEndpoint
 		HttpContext httpContext,
 		[FromHeader(Name = "X-Intents")] Intents intents,
 		[FromHeader(Name = "X-SessionId")] String? sessionId,
+		[FromHeader(Name = "X-Presence")] PresenceOptions? presence,
 		[FromServices] UserManager<User> userManager,
 		SignInManager<User> signInManager,
 		[FromServices] ApplicationDbContext dbContext,
-		[FromServices] IPublisher publisher)
+		[FromServices] IPublisher publisher,
+		[FromServices] IOptions<JsonOptions> jsonOptions)
 	{
 		if (!httpContext.WebSockets.IsWebSocketRequest)
 		{
@@ -65,11 +69,11 @@ internal sealed class ConnectToGateway : IEndpoint
 		else
 		{
 			socket = await httpContext.WebSockets.AcceptWebSocketAsync();
-			session = new GatewaySession(userId, intents, socket, publisher);
+			session = new GatewaySession(userId, intents, socket, jsonOptions.Value.JsonSerializerOptions);
 			_ = s_sessions.TryAdd(session.Id, session);
 		}
 
-		await session.RunAsync();
+		await session.RunAsync(publisher, presence ?? PresenceOptions.Online);
 		socket.Dispose();
 
 		return TypedResults.Empty;

@@ -6,19 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 
-namespace WhiteTale.Server.Features.Users.SetCurrentRoom;
+namespace WhiteTale.Server.Features.Users.CurrentRoom;
 
-internal sealed class SetOwnCurrentRoom : IEndpoint
+internal sealed class SetCurrentRoom : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapPut("api/users/@me/set-current-room/", HandleAsync)
+		_ = route.MapPut("api/users/{userId}/current-room/", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
-			.RequirePermission(Permissions.SetOwnCurrentRoom);
+			.RequirePermission(Permissions.SetCurrentRoom);
 	}
 
 	private static async Task<Results<NoContent, ProblemHttpResult, InternalServerError>> HandleAsync(
+		[FromRoute] UInt64 userId,
 		[FromBody] SetCurrentRoomRequestBody body,
 		[FromServices] SetCurrentRoomRequestBodyValidator bodyValidator,
 		[FromServices] ApplicationDbContext dbContext,
@@ -32,60 +33,29 @@ internal sealed class SetOwnCurrentRoom : IEndpoint
 			return TypedResults.Problem(problemDetails);
 		}
 
-		var userIdClaimValue = userManager.GetUserId(httpContext.User);
-		if (!UInt64.TryParse(userIdClaimValue, out var userId))
-		{
-			return TypedResults.InternalServerError();
-		}
-
 		var user = await dbContext.Users
 			.AsTracking()
-			.Where(x => x.Id == userId)
+			.Where(u => u.Id == userId)
 			.FirstOrDefaultAsync();
 		if (user is null)
 		{
-			return TypedResults.InternalServerError();
+			return TypedResults.Problem(new ProblemDetails
+			{
+				Title = "Invalid user",
+				Detail = "The specified user does not exist.",
+				Status = StatusCodes.Status400BadRequest,
+			});
 		}
 
-		var room = await dbContext.Rooms
+		var roomExists = await dbContext.Rooms
 			.AsNoTracking()
-			.Where(room => room.Id == body.RoomId)
-			.Select(room => new
-			{
-				room.IsEntrance,
-			})
-			.FirstOrDefaultAsync();
-		if (room is null)
+			.AnyAsync(r => r.Id == body.RoomId && !r.IsRemoved);
+		if (!roomExists)
 		{
 			return TypedResults.Problem(new ProblemDetails
 			{
 				Title = "Invalid room",
 				Detail = "The room does not exist.",
-				Status = StatusCodes.Status400BadRequest,
-			});
-		}
-
-		if (user.CurrentRoomId is null &&
-		    !room.IsEntrance)
-		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid room",
-				Detail = "The first room to join must be an entrance.",
-				Status = StatusCodes.Status400BadRequest,
-			});
-		}
-
-		var connectionsToTarget = dbContext.RoomConnections
-			.AsNoTracking()
-			.Where(connection => connection.SourceRoomId == user.CurrentRoomId && connection.TargetRoomId == body.RoomId);
-		if (user.CurrentRoomId is not null &&
-		    !await connectionsToTarget.AnyAsync())
-		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "No room connection",
-				Detail = "There's no room connection to this room.",
 				Status = StatusCodes.Status400BadRequest,
 			});
 		}

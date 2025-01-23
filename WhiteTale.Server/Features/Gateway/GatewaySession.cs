@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Threading.Channels;
 using MediatR;
 using WhiteTale.Server.Features.Gateway.Events.Receive;
+using WhiteTale.Server.Features.Gateway.Events.Receive.Presences;
 using WhiteTale.Server.Features.Gateway.Events.Send.Hello;
 
 namespace WhiteTale.Server.Features.Gateway;
@@ -11,7 +12,7 @@ namespace WhiteTale.Server.Features.Gateway;
 internal sealed class GatewaySession : IDisposable
 {
 	private readonly Channel<Byte[]> _eventsQueue = Channel.CreateUnbounded<Byte[]>();
-	private readonly IPublisher _publisher;
+	private readonly JsonSerializerOptions _jsonOptions;
 	private Boolean _isDisposed;
 	private Boolean _isFirstConnection = true;
 	private Boolean _isRunning;
@@ -19,12 +20,12 @@ internal sealed class GatewaySession : IDisposable
 	private CancellationTokenSource _sendingEventsCancellation = null!;
 	private WebSocket _webSocket;
 
-	internal GatewaySession(UInt64 userId, Intents intents, WebSocket webSocket, IPublisher publisher)
+	internal GatewaySession(UInt64 userId, Intents intents, WebSocket webSocket, JsonSerializerOptions jsonOptions)
 	{
 		UserId = userId;
 		Intents = intents;
 		_webSocket = webSocket;
-		_publisher = publisher;
+		_jsonOptions = jsonOptions;
 		Id = Guid.NewGuid().ToString("N");
 	}
 
@@ -44,7 +45,7 @@ internal sealed class GatewaySession : IDisposable
 		GC.SuppressFinalize(this);
 	}
 
-	internal async Task RunAsync()
+	internal async Task RunAsync(IPublisher publisher, PresenceOptions presence)
 	{
 		ObjectDisposedException.ThrowIf(_isDisposed, this);
 
@@ -61,12 +62,12 @@ internal sealed class GatewaySession : IDisposable
 		CloseTime = null;
 		_sendingEventsCancellation = new CancellationTokenSource();
 
-		var receiving = StartReceivingEventsAsync();
+		var receiving = StartReceivingEventsAsync(publisher);
 		var sending = StartSendingEventsAsync();
 
 		if (_isFirstConnection)
 		{
-			await _publisher.Publish(new HelloEvent
+			await publisher.Publish(new HelloEvent
 			{
 				Session = this,
 			});
@@ -74,12 +75,24 @@ internal sealed class GatewaySession : IDisposable
 			_isFirstConnection = false;
 		}
 
+		await publisher.Publish(new GatewayConnectedEvent
+		{
+			Session = this,
+			Presence = presence,
+		});
+
 		await Task.WhenAll(receiving, sending);
 
+		await publisher.Publish(new GatewayDisconnectedEvent
+		{
+			Session = this,
+		});
+
+		CloseTime = DateTime.UtcNow;
 		_isRunning = false;
 	}
 
-	private async Task StopAsync(WebSocketCloseStatus closeStatus)
+	internal async Task StopAsync(WebSocketCloseStatus closeStatus)
 	{
 		if (!_isRunning)
 		{
@@ -93,8 +106,6 @@ internal sealed class GatewaySession : IDisposable
 		{
 			await _webSocket.CloseOutputAsync(closeStatus, String.Empty, CancellationToken.None);
 		}
-
-		CloseTime = DateTime.UtcNow;
 	}
 
 	private async Task StartSendingEventsAsync()
@@ -119,29 +130,35 @@ internal sealed class GatewaySession : IDisposable
 		}
 	}
 
-	private async Task StartReceivingEventsAsync()
+	private async Task StartReceivingEventsAsync(IPublisher publisher)
 	{
 		try
 		{
-			var buffer = new Byte[1024].AsMemory();
+			var buffer = new Byte[1024 / 4].AsMemory();
 			do
 			{
 				using var payloadStream = new MemoryStream();
 				ValueWebSocketReceiveResult received;
 				do
 				{
+					if (payloadStream.Length > 4095)
+					{
+						await StopAsync(WebSocketCloseStatus.MessageTooBig);
+						return;
+					}
 					received = await _webSocket.ReceiveAsync(buffer, CancellationToken.None);
 					await payloadStream.WriteAsync(buffer[..received.Count], CancellationToken.None);
 				} while (!received.EndOfMessage);
 
-				var payload = await JsonSerializer.DeserializeAsync<GatewayPayload>(payloadStream);
+				_ = payloadStream.Seek(0, SeekOrigin.Begin);
+				var payload = await JsonSerializer.DeserializeAsync<GatewayPayload>(payloadStream, _jsonOptions);
 				if (payload is null)
 				{
 					await StopAsync(WebSocketCloseStatus.InvalidPayloadData);
 					return;
 				}
 
-				await _publisher.Publish(new PayloadReceivedEvent
+				await publisher.Publish(new PayloadReceivedEvent
 				{
 					Session = this,
 					Payload = payload,
@@ -150,7 +167,7 @@ internal sealed class GatewaySession : IDisposable
 
 			await StopAsync(WebSocketCloseStatus.NormalClosure);
 		}
-		catch (WebSocketException)
+		catch (Exception ex) when (ex is WebSocketException or JsonException)
 		{
 			await StopAsync(WebSocketCloseStatus.InternalServerError);
 		}

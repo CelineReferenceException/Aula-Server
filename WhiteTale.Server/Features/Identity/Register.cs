@@ -10,8 +10,6 @@ namespace WhiteTale.Server.Features.Identity;
 
 internal sealed class Register : IEndpoint
 {
-	private const String ConfirmEmailRedirectUriQueryParameter = "confirmEmailRedirectUri";
-
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapPost("api/identity/register", HandleAsync)

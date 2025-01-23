@@ -22,7 +22,7 @@ internal sealed class GetConnections : IEndpoint
 	{
 		var roomExists = await dbContext.Rooms
 			.AsNoTracking()
-			.AnyAsync(room => room.Id == roomId);
+			.AnyAsync(r => r.Id == roomId && !r.IsRemoved);
 		if (!roomExists)
 		{
 			return TypedResults.Problem(new ProblemDetails
@@ -33,8 +33,8 @@ internal sealed class GetConnections : IEndpoint
 		}
 
 		var connections = await dbContext.RoomConnections
-			.Where(connection => connection.SourceRoomId == roomId)
-			.Select(connection => connection.TargetRoomId)
+			.Where(c => c.SourceRoomId == roomId)
+			.Select(c => c.TargetRoomId)
 			.ToListAsync();
 
 		return TypedResults.Ok(connections);

@@ -32,6 +32,7 @@ internal sealed class UserUpdatedEventHandler : INotificationHandler<UserUpdated
 				Description = user.Description,
 				OwnerType = user.OwnerType,
 				Presence = user.Presence,
+				Permissions = user.Permissions,
 				CurrentRoomId = user.CurrentRoomId,
 			},
 		};

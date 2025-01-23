@@ -1,8 +1,8 @@
 ﻿using System.Net;
 using WhiteTale.Server.Domain.Users;
-using WhiteTale.Server.Features.Users.SetCurrentRoom;
+using WhiteTale.Server.Features.Users.CurrentRoom;
 
-namespace WhiteTale.Server.IntegrationTests.Tests.Users.SetCurrentRoom;
+namespace WhiteTale.Server.IntegrationTests.Tests.Users.CurrentRoom;
 
 public sealed class SetOwnCurrentRoomTests
 {
@@ -24,7 +24,7 @@ public sealed class SetOwnCurrentRoomTests
 			IsEntrance = true,
 		});
 
-		using var request = new HttpRequestMessage(HttpMethod.Put, "api/users/@me/set-current-room");
+		using var request = new HttpRequestMessage(HttpMethod.Put, "api/users/@me/current-room");
 		var requestBody = new SetCurrentRoomRequestBody
 		{
 			RoomId = roomSeed.Seed.Id,
@@ -52,7 +52,7 @@ public sealed class SetOwnCurrentRoomTests
 		});
 		var credentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		using var request = new HttpRequestMessage(HttpMethod.Put, "api/users/@me/set-current-room");
+		using var request = new HttpRequestMessage(HttpMethod.Put, "api/users/@me/current-room");
 		var requestBody = new SetCurrentRoomRequestBody
 		{
 			RoomId = 0,

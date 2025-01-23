@@ -24,7 +24,7 @@ internal sealed class RemoveAllConnections : IEndpoint
 	{
 		var sourceRoomExists = await dbContext.Rooms
 			.AsNoTracking()
-			.AnyAsync(room => room.Id == sourceRoomId);
+			.AnyAsync(r => r.Id == sourceRoomId && !r.IsRemoved);
 		if (!sourceRoomExists)
 		{
 			return TypedResults.Problem(new ProblemDetails
@@ -36,13 +36,13 @@ internal sealed class RemoveAllConnections : IEndpoint
 
 		var connections = await dbContext.RoomConnections
 			.AsTracking()
-			.Where(connection => connection.SourceRoomId == sourceRoomId)
+			.Where(c => c.SourceRoomId == sourceRoomId)
 			.ToListAsync();
 
-		connections.ForEach(connection => connection.Remove());
+		connections.ForEach(c => c.Remove());
 		dbContext.RoomConnections.RemoveRange(connections);
 		_ = await dbContext.SaveChangesAsync();
 
-		return TypedResults.Ok(connections.Select(connection => connection.TargetRoomId));
+		return TypedResults.Ok(connections.Select(c => c.TargetRoomId));
 	}
 }

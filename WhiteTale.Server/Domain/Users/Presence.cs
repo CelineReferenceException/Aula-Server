@@ -1,17 +1,17 @@
 ﻿namespace WhiteTale.Server.Domain.Users;
 
 /// <summary>
-///     Defines presence statuses for a character.
+///     Defines presence statuses for a user.
 /// </summary>
 internal enum Presence
 {
 	/// <summary>
-	///     The character is offline.
+	///     The user is offline.
 	/// </summary>
 	Offline = 0,
 
 	/// <summary>
-	///     The character is online.
+	///     The user is online.
 	/// </summary>
 	Online = 1,
 }

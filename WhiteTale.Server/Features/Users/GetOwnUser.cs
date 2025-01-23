@@ -30,16 +30,17 @@ internal sealed class GetOwnUser : IEndpoint
 
 		var user = await dbContext.Users
 			.AsNoTracking()
-			.Where(x => x.Id == userId)
-			.Select(x =>
+			.Where(u => u.Id == userId)
+			.Select(u =>
 				new UserData
 				{
 					Id = userId,
-					DisplayName = x.DisplayName,
-					Description = x.Description,
-					CurrentRoomId = x.CurrentRoomId,
-					OwnerType = x.OwnerType,
-					Presence = x.Presence,
+					DisplayName = u.DisplayName,
+					Description = u.Description,
+					CurrentRoomId = u.CurrentRoomId,
+					OwnerType = u.OwnerType,
+					Presence = u.Presence,
+					Permissions = u.Permissions,
 				})
 			.FirstOrDefaultAsync();
 		if (user is null)

@@ -41,7 +41,7 @@ internal sealed class ModifyOwnUser : IEndpoint
 
 		var user = await dbContext.Users
 			.AsTracking()
-			.Where(x => x.Id == userId)
+			.Where(u => u.Id == userId)
 			.FirstOrDefaultAsync();
 		if (user is null)
 		{
@@ -67,6 +67,7 @@ internal sealed class ModifyOwnUser : IEndpoint
 			CurrentRoomId = user.CurrentRoomId,
 			Presence = user.Presence,
 			OwnerType = user.OwnerType,
+			Permissions = user.Permissions,
 		});
 	}
 }

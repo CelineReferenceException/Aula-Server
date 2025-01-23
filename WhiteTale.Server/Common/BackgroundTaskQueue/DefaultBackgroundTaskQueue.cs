@@ -4,19 +4,13 @@ namespace WhiteTale.Server.Common.BackgroundTaskQueue;
 
 internal sealed class DefaultBackgroundTaskQueue<TOwner> : IBackgroundTaskQueue<TOwner>
 {
-	private const Int32 DefaultCapacity = 64;
 	private readonly ILogger<DefaultBackgroundTaskQueue<TOwner>> _logger;
 	private readonly Channel<Func<CancellationToken, ValueTask>> _taskQueue;
 
 	public DefaultBackgroundTaskQueue(ILogger<DefaultBackgroundTaskQueue<TOwner>> logger)
 	{
 		_logger = logger;
-
-		var queueOptions = new BoundedChannelOptions(DefaultCapacity)
-		{
-			FullMode = BoundedChannelFullMode.Wait,
-		};
-		_taskQueue = Channel.CreateBounded<Func<CancellationToken, ValueTask>>(queueOptions);
+		_taskQueue = Channel.CreateUnbounded<Func<CancellationToken, ValueTask>>();
 	}
 
 

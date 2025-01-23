@@ -22,15 +22,15 @@ internal sealed class GetRoom : IEndpoint
 	{
 		var room = await dbContext.Rooms
 			.AsNoTracking()
-			.Where(room => room.Id == roomId && !room.IsRemoved)
-			.Select(room =>
+			.Where(r => r.Id == roomId && !r.IsRemoved)
+			.Select(r =>
 				new RoomData
 				{
-					Id = room.Id,
-					Name = room.Name,
-					Description = room.Description,
-					IsEntrance = room.IsEntrance,
-					CreationTime = room.CreationTime,
+					Id = r.Id,
+					Name = r.Name,
+					Description = r.Description,
+					IsEntrance = r.IsEntrance,
+					CreationTime = r.CreationTime,
 				})
 			.FirstOrDefaultAsync();
 		if (room is null)
