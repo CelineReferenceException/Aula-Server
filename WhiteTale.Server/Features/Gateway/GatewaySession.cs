@@ -92,7 +92,7 @@ internal sealed class GatewaySession : IDisposable
 		_isRunning = false;
 	}
 
-	private async Task StopAsync(WebSocketCloseStatus closeStatus)
+	internal async Task StopAsync(WebSocketCloseStatus closeStatus)
 	{
 		if (!_isRunning)
 		{

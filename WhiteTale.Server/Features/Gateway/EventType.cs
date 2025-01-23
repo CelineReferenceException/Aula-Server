@@ -8,6 +8,8 @@ namespace WhiteTale.Server.Features.Gateway;
 [JsonConverter(typeof(JsonStringEnumConverter<EventType>))]
 internal enum EventType
 {
+	#region Send
+
 	/// <summary>
 	///     A new room has been created.
 	/// </summary>
@@ -52,4 +54,15 @@ internal enum EventType
 	///     A message has been deleted.
 	/// </summary>
 	MessageRemoved,
+
+	#endregion
+
+	#region Receive
+
+	/// <summary>
+	///     Updates the current presence status for the current user.
+	/// </summary>
+	UpdatePresence,
+
+	#endregion
 }
