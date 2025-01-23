@@ -67,6 +67,7 @@ internal sealed class ModifyOwnUser : IEndpoint
 			CurrentRoomId = user.CurrentRoomId,
 			Presence = user.Presence,
 			OwnerType = user.OwnerType,
+			Permissions = user.Permissions,
 		});
 	}
 }

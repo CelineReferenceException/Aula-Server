@@ -31,6 +31,7 @@ public sealed class GetOwnUserTest
 		_ = responseBody.Description.Should().BeNull(userSeed.User.Description);
 		_ = responseBody.Presence.Should().Be(userSeed.User.Presence);
 		_ = responseBody.OwnerType.Should().Be(userSeed.User.OwnerType);
+		_ = responseBody.Permissions.Should().Be(userSeed.User.Permissions);
 		_ = responseBody.CurrentRoomId.Should().Be(userSeed.User.CurrentRoomId);
 	}
 
