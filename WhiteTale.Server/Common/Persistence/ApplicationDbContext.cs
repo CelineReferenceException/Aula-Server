@@ -7,15 +7,12 @@ namespace WhiteTale.Server.Common.Persistence;
 
 internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 {
-	private readonly IConfiguration _configuration;
 	private readonly IPublisher _publisher;
 
 	public ApplicationDbContext(
 		DbContextOptions<ApplicationDbContext> options,
-		IConfiguration configuration,
 		IPublisher publisher) : base(options)
 	{
-		_configuration = configuration;
 		_publisher = publisher;
 	}
 
