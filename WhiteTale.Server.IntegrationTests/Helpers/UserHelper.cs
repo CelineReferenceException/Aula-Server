@@ -29,7 +29,7 @@ internal static class UserHelper
 			var exceptionMessage = identityResult.Errors
 				.Select(error => $"{error.Code}: {error.Description}")
 				.Aggregate((a, b) => $"{a}{Environment.NewLine}{b}");
-			throw new InvalidOperationException();
+			throw new InvalidOperationException(exceptionMessage);
 		}
 
 		return new SeedUserResult
