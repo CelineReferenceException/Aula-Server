@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using WhiteTale.Server.Common.JsonSerialization;
+using WhiteTale.Server.Features.Gateway;
 
 namespace WhiteTale.Server.Common;
 
@@ -29,6 +30,8 @@ internal static class DependencyInjection
 		_ = builder.Services.AddSingleton<SnowflakeGenerator>();
 		_ = builder.Services.AddPersistence(builder.Configuration);
 		_ = builder.Services.AddEndpoints();
+		_ = builder.Services.AddGateway();
+
 		_ = builder.Logging.ClearProviders();
 		_ = builder.Logging.AddLogging();
 
