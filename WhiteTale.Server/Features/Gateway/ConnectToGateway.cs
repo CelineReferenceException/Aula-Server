@@ -23,7 +23,7 @@ internal sealed class ConnectToGateway : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.Map("/api/gateway", HandleAsync)
-			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
+			.RequireRateLimiting(GatewayRateLimitPolicyNames.Default)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken);
 	}
 
