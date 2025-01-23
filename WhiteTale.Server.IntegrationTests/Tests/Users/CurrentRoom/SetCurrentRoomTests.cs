@@ -1,8 +1,8 @@
 ﻿using System.Net;
 using WhiteTale.Server.Domain.Users;
-using WhiteTale.Server.Features.Users.SetCurrentRoom;
+using WhiteTale.Server.Features.Users.CurrentRoom;
 
-namespace WhiteTale.Server.IntegrationTests.Tests.Users.SetCurrentRoom;
+namespace WhiteTale.Server.IntegrationTests.Tests.Users.CurrentRoom;
 
 public sealed class SetCurrentRoomTests
 {
@@ -32,7 +32,7 @@ public sealed class SetCurrentRoomTests
 
 		var roomSeed = await application.SeedRoomAsync();
 
-		using var request = new HttpRequestMessage(HttpMethod.Put, $"api/users/{targetUserId.Seed.Id}/set-current-room");
+		using var request = new HttpRequestMessage(HttpMethod.Put, $"api/users/{targetUserId.Seed.Id}/current-room");
 		var requestBody = new SetCurrentRoomRequestBody
 		{
 			RoomId = roomSeed.Seed.Id,
@@ -70,7 +70,7 @@ public sealed class SetCurrentRoomTests
 			Email = "test_address_2@example.com",
 		});
 
-		using var request = new HttpRequestMessage(HttpMethod.Put, $"api/users/{targetUserId.Seed.Id}/set-current-room");
+		using var request = new HttpRequestMessage(HttpMethod.Put, $"api/users/{targetUserId.Seed.Id}/current-room");
 		var requestBody = new SetCurrentRoomRequestBody
 		{
 			RoomId = 0,
