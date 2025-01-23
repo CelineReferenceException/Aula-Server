@@ -76,6 +76,7 @@ internal sealed class GatewaySession : IDisposable
 
 		await Task.WhenAll(receiving, sending);
 
+		CloseTime = DateTime.UtcNow;
 		_isRunning = false;
 	}
 
@@ -93,8 +94,6 @@ internal sealed class GatewaySession : IDisposable
 		{
 			await _webSocket.CloseOutputAsync(closeStatus, String.Empty, CancellationToken.None);
 		}
-
-		CloseTime = DateTime.UtcNow;
 	}
 
 	private async Task StartSendingEventsAsync()
