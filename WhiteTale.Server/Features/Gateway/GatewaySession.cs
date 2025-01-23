@@ -141,6 +141,11 @@ internal sealed class GatewaySession : IDisposable
 				ValueWebSocketReceiveResult received;
 				do
 				{
+					if (payloadStream.Length > 4095)
+					{
+						await StopAsync(WebSocketCloseStatus.MessageTooBig);
+						return;
+					}
 					received = await _webSocket.ReceiveAsync(buffer, CancellationToken.None);
 					await payloadStream.WriteAsync(buffer[..received.Count], CancellationToken.None);
 				} while (!received.EndOfMessage);
