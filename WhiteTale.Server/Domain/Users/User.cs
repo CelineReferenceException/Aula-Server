@@ -82,8 +82,7 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 			modified = true;
 		}
 
-		if (description is not null &&
-		    description != Description)
+		if (description != Description)
 		{
 			Description = description;
 			modified = true;

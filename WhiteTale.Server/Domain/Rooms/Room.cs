@@ -54,8 +54,7 @@ internal sealed class Room : DefaultDomainEntity
 			modified = true;
 		}
 
-		if (description is not null &&
-		    description != Description)
+		if (description != Description)
 		{
 			Description = description;
 			modified = true;
