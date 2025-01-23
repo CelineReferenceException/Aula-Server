@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Threading.Channels;
 using MediatR;
 using WhiteTale.Server.Features.Gateway.Events.Receive;
+using WhiteTale.Server.Features.Gateway.Events.Receive.Presences;
 using WhiteTale.Server.Features.Gateway.Events.Send.Hello;
 
 namespace WhiteTale.Server.Features.Gateway;
@@ -44,7 +45,7 @@ internal sealed class GatewaySession : IDisposable
 		GC.SuppressFinalize(this);
 	}
 
-	internal async Task RunAsync(IPublisher publisher)
+	internal async Task RunAsync(IPublisher publisher, PresenceOptions presence)
 	{
 		ObjectDisposedException.ThrowIf(_isDisposed, this);
 
@@ -74,7 +75,18 @@ internal sealed class GatewaySession : IDisposable
 			_isFirstConnection = false;
 		}
 
+		await publisher.Publish(new GatewayConnectedEvent
+		{
+			Session = this,
+			Presence = presence,
+		});
+
 		await Task.WhenAll(receiving, sending);
+
+		await publisher.Publish(new GatewayDisconnectedEvent
+		{
+			Session = this,
+		});
 
 		CloseTime = DateTime.UtcNow;
 		_isRunning = false;
