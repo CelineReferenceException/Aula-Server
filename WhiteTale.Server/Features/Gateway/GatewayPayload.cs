@@ -1,7 +1,9 @@
-﻿namespace WhiteTale.Server.Features.Gateway;
+﻿using System.Text.Json;
+
+namespace WhiteTale.Server.Features.Gateway;
 
 /// <inheritdoc />
-internal sealed class GatewayPayload : GatewayPayload<String>;
+internal sealed class GatewayPayload : GatewayPayload<JsonElement>;
 
 /// <summary>
 ///     Represents a payload sent over a Gateway connection.
