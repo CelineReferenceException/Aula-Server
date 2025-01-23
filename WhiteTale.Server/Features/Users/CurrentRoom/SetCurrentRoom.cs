@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 
-namespace WhiteTale.Server.Features.Users.SetCurrentRoom;
+namespace WhiteTale.Server.Features.Users.CurrentRoom;
 
 internal sealed class SetCurrentRoom : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapPut("api/users/{userId}/set-current-room/", HandleAsync)
+		_ = route.MapPut("api/users/{userId}/current-room/", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
 			.RequirePermission(Permissions.SetCurrentRoom);

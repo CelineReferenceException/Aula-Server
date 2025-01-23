@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace WhiteTale.Server.Features.Users.SetCurrentRoom;
+namespace WhiteTale.Server.Features.Users.CurrentRoom;
 
 internal sealed class SetCurrentRoomRequestBodyValidator : AbstractValidator<SetCurrentRoomRequestBody>
 {
