@@ -154,7 +154,7 @@ internal sealed class GatewaySession : IDisposable
 
 			await StopAsync(WebSocketCloseStatus.NormalClosure);
 		}
-		catch (WebSocketException)
+		catch (Exception ex) when (ex is WebSocketException or JsonException)
 		{
 			await StopAsync(WebSocketCloseStatus.InternalServerError);
 		}
