@@ -12,6 +12,7 @@ internal sealed class GatewaySession : IDisposable
 {
 	private readonly Channel<Byte[]> _eventsQueue = Channel.CreateUnbounded<Byte[]>();
 	private readonly IPublisher _publisher;
+	private readonly JsonSerializerOptions _jsonOptions;
 	private Boolean _isDisposed;
 	private Boolean _isFirstConnection = true;
 	private Boolean _isRunning;
@@ -20,11 +21,13 @@ internal sealed class GatewaySession : IDisposable
 	private WebSocket _webSocket;
 
 	internal GatewaySession(UInt64 userId, Intents intents, WebSocket webSocket, IPublisher publisher)
+	internal GatewaySession(UInt64 userId, Intents intents, WebSocket webSocket, IPublisher publisher, JsonSerializerOptions jsonOptions)
 	{
 		UserId = userId;
 		Intents = intents;
 		_webSocket = webSocket;
 		_publisher = publisher;
+		_jsonOptions = jsonOptions;
 		Id = Guid.NewGuid().ToString("N");
 	}
 
@@ -134,7 +137,7 @@ internal sealed class GatewaySession : IDisposable
 					await payloadStream.WriteAsync(buffer[..received.Count], CancellationToken.None);
 				} while (!received.EndOfMessage);
 
-				var payload = await JsonSerializer.DeserializeAsync<GatewayPayload>(payloadStream);
+				var payload = await JsonSerializer.DeserializeAsync<GatewayPayload>(payloadStream, _jsonOptions);
 				if (payload is null)
 				{
 					await StopAsync(WebSocketCloseStatus.InvalidPayloadData);

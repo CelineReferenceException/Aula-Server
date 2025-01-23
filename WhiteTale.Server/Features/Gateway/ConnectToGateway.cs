@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Options;
 
 namespace WhiteTale.Server.Features.Gateway;
 
@@ -32,7 +33,8 @@ internal sealed class ConnectToGateway : IEndpoint
 		[FromServices] UserManager<User> userManager,
 		SignInManager<User> signInManager,
 		[FromServices] ApplicationDbContext dbContext,
-		[FromServices] IPublisher publisher)
+		[FromServices] IPublisher publisher,
+		[FromServices] IOptions<JsonOptions> jsonOptions)
 	{
 		if (!httpContext.WebSockets.IsWebSocketRequest)
 		{
@@ -65,7 +67,7 @@ internal sealed class ConnectToGateway : IEndpoint
 		else
 		{
 			socket = await httpContext.WebSockets.AcceptWebSocketAsync();
-			session = new GatewaySession(userId, intents, socket, publisher);
+			session = new GatewaySession(userId, intents, socket, publisher, jsonOptions.Value.JsonSerializerOptions);
 			_ = s_sessions.TryAdd(session.Id, session);
 		}
 
