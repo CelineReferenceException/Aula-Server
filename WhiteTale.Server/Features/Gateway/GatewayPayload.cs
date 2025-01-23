@@ -1,6 +1,8 @@
 ﻿namespace WhiteTale.Server.Features.Gateway;
 
-internal sealed class GatewayPayload<TData>
+internal sealed class GatewayPayload : GatewayPayload<String>;
+
+internal class GatewayPayload<TData>
 {
 	public required OperationType Operation { get; init; }
 
