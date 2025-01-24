@@ -34,8 +34,6 @@ internal sealed class ConnectToGateway : IEndpoint
 		[FromHeader(Name = "X-SessionId")] String? sessionId,
 		[FromHeader(Name = "X-Presence")] PresenceOptions? presence,
 		[FromServices] UserManager<User> userManager,
-		SignInManager<User> signInManager,
-		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] IPublisher publisher,
 		[FromServices] IOptions<JsonOptions> jsonOptions)
 	{
