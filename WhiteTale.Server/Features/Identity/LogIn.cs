@@ -14,8 +14,9 @@ internal sealed class LogIn : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapPost("api/identity/login", HandleAsync)
-			.RequireRateLimiting(CommonRateLimitPolicyNames.Global);
+		_ = route.MapPost("identity/login", HandleAsync)
+			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
+			.HasApiVersion(1);
 	}
 
 	private static async Task<Results<Ok<AccessTokenResponse>, ProblemHttpResult, EmptyHttpResult>> HandleAsync(

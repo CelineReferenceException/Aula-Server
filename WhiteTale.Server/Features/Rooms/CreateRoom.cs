@@ -10,10 +10,11 @@ internal sealed class CreateRoom : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapPost("api/rooms", HandleAsync)
+		_ = route.MapPost("rooms", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
-			.RequirePermission(Permissions.ManageRooms);
+			.RequirePermission(Permissions.ManageRooms)
+			.HasApiVersion(1);
 	}
 
 	private static async Task<Results<Ok<RoomData>, ProblemHttpResult>> HandleAsync(

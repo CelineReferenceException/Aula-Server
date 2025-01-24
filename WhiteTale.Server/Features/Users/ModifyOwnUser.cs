@@ -13,9 +13,10 @@ internal sealed class ModifyOwnUser : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder builder)
 	{
-		_ = builder.MapPatch("api/users/@me", HandleAsync)
+		_ = builder.MapPatch("users/@me", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken);
+			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.HasApiVersion(1);
 	}
 
 	private static async Task<Results<Ok<UserData>, ProblemHttpResult, InternalServerError>> HandleAsync(

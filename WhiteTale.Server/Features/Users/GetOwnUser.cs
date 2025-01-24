@@ -12,9 +12,10 @@ internal sealed class GetOwnUser : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapGet("api/users/@me", HandleAsync)
+		_ = route.MapGet("users/@me", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken);
+			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.HasApiVersion(1);
 	}
 
 	private static async Task<Results<Ok<UserData>, InternalServerError>> HandleAsync(

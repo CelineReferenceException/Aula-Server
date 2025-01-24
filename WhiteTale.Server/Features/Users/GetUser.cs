@@ -11,9 +11,10 @@ internal sealed class GetUser : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapGet("api/users/{userId}", HandleAsync)
+		_ = route.MapGet("users/{userId}", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken);
+			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.HasApiVersion(1);
 	}
 
 	private static async Task<Results<Ok<UserData>, NotFound>> HandleAsync(

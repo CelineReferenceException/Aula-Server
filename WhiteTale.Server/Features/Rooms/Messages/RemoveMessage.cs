@@ -12,9 +12,10 @@ internal sealed class RemoveMessage : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapDelete("api/rooms/{roomId}/messages/{messageId}", HandleAsync)
+		_ = route.MapDelete("rooms/{roomId}/messages/{messageId}", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken);
+			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.HasApiVersion(1);
 	}
 
 	private static async Task<Results<Ok<MessageData>, NotFound, ForbidHttpResult, ProblemHttpResult, InternalServerError>> HandleAsync(

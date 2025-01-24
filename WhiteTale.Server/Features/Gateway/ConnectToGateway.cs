@@ -22,9 +22,10 @@ internal sealed class ConnectToGateway : IEndpoint
 
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.Map("/api/gateway", HandleAsync)
+		_ = route.Map("gateway", HandleAsync)
 			.RequireRateLimiting(GatewayRateLimitPolicyNames.Default)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken);
+			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.HasApiVersion(1);
 	}
 
 	private static async Task<Results<EmptyHttpResult, BadRequest, InternalServerError>> HandleAsync(

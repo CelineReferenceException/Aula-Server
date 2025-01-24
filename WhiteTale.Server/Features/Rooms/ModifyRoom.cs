@@ -11,10 +11,11 @@ internal sealed class ModifyRoom : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapPatch("api/rooms/{roomId}", HandleAsync)
+		_ = route.MapPatch("rooms/{roomId}", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
-			.RequirePermission(Permissions.ManageRooms);
+			.RequirePermission(Permissions.ManageRooms)
+			.HasApiVersion(1);
 	}
 
 	private static async Task<Results<Ok<RoomData>, NotFound, ProblemHttpResult, InternalServerError>> HandleAsync(

@@ -11,10 +11,11 @@ internal sealed class RemoveAllConnections : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapDelete("api/rooms/{sourceRoomId}/connections", HandleAsync)
+		_ = route.MapDelete("rooms/{sourceRoomId}/connections", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
-			.RequirePermission(Permissions.ManageRooms);
+			.RequirePermission(Permissions.ManageRooms)
+			.HasApiVersion(1);
 	}
 
 	private static async Task<Results<Ok<IEnumerable<UInt64>>, ProblemHttpResult>> HandleAsync(

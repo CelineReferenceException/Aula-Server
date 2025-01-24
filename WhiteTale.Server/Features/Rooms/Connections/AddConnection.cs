@@ -11,10 +11,11 @@ internal sealed class AddConnection : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapPut("api/rooms/{roomId}/connections", HandleAsync)
+		_ = route.MapPut("rooms/{roomId}/connections", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
-			.RequirePermission(Permissions.ManageRooms);
+			.RequirePermission(Permissions.ManageRooms)
+			.HasApiVersion(1);
 	}
 
 	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(

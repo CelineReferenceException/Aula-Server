@@ -11,9 +11,10 @@ internal sealed class GetConnections : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapGet("api/rooms/{roomId}/connections", HandleAsync)
+		_ = route.MapGet("rooms/{roomId}/connections", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken);
+			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.HasApiVersion(1);
 	}
 
 	private static async Task<Results<Ok<List<UInt64>>, ProblemHttpResult>> HandleAsync(

@@ -11,9 +11,10 @@ internal sealed class GetRoom : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapGet("api/rooms/{roomId}", HandleAsync)
+		_ = route.MapGet("rooms/{roomId}", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken);
+			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.HasApiVersion(1);
 	}
 
 	private static async Task<Results<Ok<RoomData>, NotFound>> HandleAsync(

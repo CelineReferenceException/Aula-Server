@@ -12,10 +12,11 @@ internal sealed class SetOwnCurrentRoom : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapPut("api/users/@me/current-room/", HandleAsync)
+		_ = route.MapPut("users/@me/current-room/", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
-			.RequirePermission(Permissions.SetOwnCurrentRoom);
+			.RequirePermission(Permissions.SetOwnCurrentRoom)
+			.HasApiVersion(1);
 	}
 
 	private static async Task<Results<NoContent, ProblemHttpResult, InternalServerError>> HandleAsync(

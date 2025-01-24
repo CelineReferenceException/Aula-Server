@@ -13,10 +13,11 @@ internal sealed class SendMessage : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapPost("api/rooms/{roomId}/messages", HandleAsync)
+		_ = route.MapPost("rooms/{roomId}/messages", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
-			.RequirePermission(Permissions.SendMessages);
+			.RequirePermission(Permissions.SendMessages)
+			.HasApiVersion(1);
 	}
 
 	private static async Task<Results<Ok<MessageData>, ProblemHttpResult, InternalServerError>> HandleAsync(

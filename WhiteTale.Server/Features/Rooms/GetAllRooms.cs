@@ -11,9 +11,10 @@ internal sealed class GetAllRooms : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapGet("api/rooms", HandleAsync)
+		_ = route.MapGet("rooms", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken);
+			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.HasApiVersion(1);
 	}
 
 	private static async Task<Ok<List<RoomData>>> HandleAsync([FromServices] ApplicationDbContext dbContext)

@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Routing;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace WhiteTale.Server.Common.Endpoints;
@@ -15,6 +18,14 @@ internal static class EndpointExtensions
 
 		services.TryAddEnumerable(descriptors);
 
+		_ = services.AddApiVersioning(options =>
+		{
+			options.DefaultApiVersion = new ApiVersion(1);
+			options.ApiVersionReader = new UrlSegmentApiVersionReader();
+			options.AssumeDefaultVersionWhenUnspecified = true;
+			options.UnsupportedApiVersionStatusCode = StatusCodes.Status501NotImplemented;
+		});
+
 		return services;
 	}
 
@@ -22,11 +33,17 @@ internal static class EndpointExtensions
 	{
 		ArgumentNullException.ThrowIfNull(builder, nameof(builder));
 
+		var apiVersionSet = builder.NewApiVersionSet()
+			.HasApiVersion(new ApiVersion(1))
+			.Build();
+
+		var apiGroup = builder.MapGroup("api/v{apiVersion:apiVersion}").WithApiVersionSet(apiVersionSet);
+
 		var endpoints = builder.ServiceProvider.GetRequiredService<IEnumerable<IEndpoint>>();
 
 		foreach (var endpoint in endpoints)
 		{
-			endpoint.Build(builder);
+			endpoint.Build(apiGroup);
 		}
 
 		return builder;

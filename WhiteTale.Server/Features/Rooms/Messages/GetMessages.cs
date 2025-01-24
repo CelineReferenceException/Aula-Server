@@ -16,10 +16,11 @@ internal sealed class GetMessages : IEndpoint
 
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapGet("api/rooms/{roomid}/messages", HandleAsync)
+		_ = route.MapGet("rooms/{roomid}/messages", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
-			.RequirePermission(Permissions.ReadMessages);
+			.RequirePermission(Permissions.ReadMessages)
+			.HasApiVersion(1);
 	}
 
 	private static async Task<Results<Ok<List<MessageData>>, ProblemHttpResult, InternalServerError>> HandleAsync(
