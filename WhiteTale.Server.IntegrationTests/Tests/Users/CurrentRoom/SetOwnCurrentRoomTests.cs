@@ -82,7 +82,7 @@ public sealed class SetOwnCurrentRoomTests
 
 		var roomSeed = await application.SeedRoomAsync();
 
-		using var request = new HttpRequestMessage(HttpMethod.Put, "api/v1/users/@me/set-current-room");
+		using var request = new HttpRequestMessage(HttpMethod.Put, "api/v1/users/@me/current-room");
 		var requestBody = new SetCurrentRoomRequestBody
 		{
 			RoomId = roomSeed.Seed.Id,
