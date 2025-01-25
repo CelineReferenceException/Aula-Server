@@ -1,0 +1,58 @@
+﻿using MediatR;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
+using WhiteTale.Server.Features.Gateway.Events.Send.Messages;
+
+namespace WhiteTale.Server.Features.Rooms;
+
+internal sealed class StartTyping : IEndpoint
+{
+	public void Build(IEndpointRouteBuilder route)
+	{
+		_ = route.MapPost("rooms/{roomId}/typing", HandleAsync)
+			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
+			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.RequirePermission(Permissions.SendMessages)
+			.HasApiVersion(1);
+	}
+
+	private static async Task<Results<NoContent, ProblemHttpResult, InternalServerError>> HandleAsync(
+		[FromRoute] UInt64 roomId,
+		[FromServices] UserManager<User> userManager,
+		[FromServices] ApplicationDbContext dbContext,
+		[FromServices] IPublisher publisher,
+		HttpContext httpContext)
+	{
+		var userIdClaimValue = userManager.GetUserId(httpContext.User);
+		if (!UInt64.TryParse(userIdClaimValue, out var userId))
+		{
+			return TypedResults.InternalServerError();
+		}
+
+		var roomExists = await dbContext.Rooms
+			.AsNoTracking()
+			.AnyAsync(r => r.Id == roomId && !r.IsRemoved);
+		if (!roomExists)
+		{
+			return TypedResults.Problem(new ProblemDetails
+			{
+				Title = "Invalid room",
+				Detail = "The room does not exist.",
+				Status = StatusCodes.Status400BadRequest,
+			});
+		}
+
+		await publisher.Publish(new UserTypingEvent
+		{
+			UserId = userId,
+			RoomId = roomId,
+		});
+
+		return TypedResults.NoContent();
+	}
+}

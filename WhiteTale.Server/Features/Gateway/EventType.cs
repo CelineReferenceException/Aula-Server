@@ -55,6 +55,11 @@ internal enum EventType
 	/// </summary>
 	MessageRemoved,
 
+	/// <summary>
+	///     A user has started typing in a room.
+	/// </summary>
+	UserTyping,
+
 	#endregion
 
 	#region Receive
