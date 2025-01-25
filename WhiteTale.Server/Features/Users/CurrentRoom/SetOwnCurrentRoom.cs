@@ -48,15 +48,31 @@ internal sealed class SetOwnCurrentRoom : IEndpoint
 			return TypedResults.InternalServerError();
 		}
 
-		var roomExists = await dbContext.Rooms
+		var room = await dbContext.Rooms
 			.AsNoTracking()
-			.AnyAsync(r => r.Id == body.RoomId && !r.IsRemoved);
-		if (!roomExists)
+			.Where(r => r.Id == body.RoomId && !r.IsRemoved)
+			.Select(r => new
+			{
+				r.IsEntrance,
+			})
+			.FirstOrDefaultAsync();
+		if (room is null)
 		{
 			return TypedResults.Problem(new ProblemDetails
 			{
 				Title = "Invalid room",
 				Detail = "The room does not exist.",
+				Status = StatusCodes.Status400BadRequest,
+			});
+		}
+
+		if (user.CurrentRoomId is null &&
+		    !room.IsEntrance)
+		{
+			return TypedResults.Problem(new ProblemDetails
+			{
+				Title = "Invalid room",
+				Detail = "The user is in no room and the specified room is not an entrance.",
 				Status = StatusCodes.Status400BadRequest,
 			});
 		}
