@@ -22,7 +22,6 @@ internal static class EndpointExtensions
 		{
 			options.DefaultApiVersion = new ApiVersion(1);
 			options.ApiVersionReader = new UrlSegmentApiVersionReader();
-			options.AssumeDefaultVersionWhenUnspecified = true;
 			options.UnsupportedApiVersionStatusCode = StatusCodes.Status501NotImplemented;
 		});
 
