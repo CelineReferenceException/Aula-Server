@@ -16,7 +16,7 @@ public sealed class GetUserTest
 		var userInfo = await application.SeedUserAsync();
 		var credentials = await application.LoginUserAsync(userInfo.Seed.UserName, userInfo.Seed.Password);
 
-		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/users/{userInfo.Seed.Id}");
+		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/users/{userInfo.Seed.Id}");
 		request.SetAuthorization("Bearer", credentials.AccessToken);
 
 		// Act
@@ -45,7 +45,7 @@ public sealed class GetUserTest
 		var userInfo = await application.SeedUserAsync();
 
 		// Act
-		using var response = await httpClient.GetAsync($"api/users/{userInfo.Seed.Id}");
+		using var response = await httpClient.GetAsync($"api/v1/users/{userInfo.Seed.Id}");
 
 		// Arrange
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.Unauthorized);
@@ -61,7 +61,7 @@ public sealed class GetUserTest
 		var userInfo = await application.SeedUserAsync();
 		var credentials = await application.LoginUserAsync(userInfo.Seed.UserName, userInfo.Seed.Password);
 
-		using var request = new HttpRequestMessage(HttpMethod.Get, "api/users/0");
+		using var request = new HttpRequestMessage(HttpMethod.Get, "api/v1/users/0");
 		request.SetAuthorization("Bearer", credentials.AccessToken);
 
 		// Act

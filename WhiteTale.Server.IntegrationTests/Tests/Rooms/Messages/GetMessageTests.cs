@@ -31,7 +31,7 @@ public sealed class GetMessageTests
 			TargetId = roomSeed.Seed.Id,
 		});
 
-		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/rooms/{roomSeed.Seed.Id}/messages/{messageSeed.Seed.Id}");
+		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/rooms/{roomSeed.Seed.Id}/messages/{messageSeed.Seed.Id}");
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
 
 
@@ -74,7 +74,7 @@ public sealed class GetMessageTests
 			TargetId = roomSeed.Seed.Id,
 		});
 
-		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/rooms/{roomSeed.Seed.Id}/messages/{messageSeed.Seed.Id}");
+		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/rooms/{roomSeed.Seed.Id}/messages/{messageSeed.Seed.Id}");
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
 
 

@@ -15,7 +15,7 @@ public sealed class ForgotPasswordTest
 		var userSeed = await application.SeedUserAsync();
 
 		// Act
-		using var response = await httpClient.PostAsJsonAsync($"api/identity/forgotpassword?email={userSeed.Seed.Email}", String.Empty);
+		using var response = await httpClient.PostAsJsonAsync($"api/v1/identity/forgotpassword?email={userSeed.Seed.Email}", String.Empty);
 
 		// Assert
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.NoContent);
@@ -31,7 +31,7 @@ public sealed class ForgotPasswordTest
 		var email = WebUtility.UrlEncode("x@example.com");
 
 		// Act
-		using var response = await httpClient.PostAsJsonAsync($"api/identity/forgotpassword?email={email}", String.Empty);
+		using var response = await httpClient.PostAsJsonAsync($"api/v1/identity/forgotpassword?email={email}", String.Empty);
 
 		// Assert
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.NoContent);

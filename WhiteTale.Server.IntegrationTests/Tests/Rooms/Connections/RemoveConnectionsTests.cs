@@ -32,7 +32,7 @@ public sealed class RemoveConnectionsTests
 			TargetRoomId = secondRoomSeed.Seed.Id,
 		});
 		using var request = new HttpRequestMessage(HttpMethod.Delete,
-			$"api/rooms/{firstRoomSeed.Seed.Id}/connections/{roomConnectionSeed.Seed.TargetRoomId}");
+			$"api/v1/rooms/{firstRoomSeed.Seed.Id}/connections/{roomConnectionSeed.Seed.TargetRoomId}");
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
 
 		// Act

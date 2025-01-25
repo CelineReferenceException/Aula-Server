@@ -16,7 +16,7 @@ public sealed class ModifyOwnUserTest
 		var userSeed = await application.SeedUserAsync();
 		var credentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		using var request = new HttpRequestMessage(HttpMethod.Patch, "api/users/@me");
+		using var request = new HttpRequestMessage(HttpMethod.Patch, "api/v1/users/@me");
 		var requestBody = new ModifyOwnUserRequestBody
 		{
 			DisplayName = "NewTestUser",
@@ -54,7 +54,7 @@ public sealed class ModifyOwnUserTest
 		};
 
 		// Act
-		using var response = await httpClient.PatchAsJsonAsync("api/users/@me", requestBody);
+		using var response = await httpClient.PatchAsJsonAsync("api/v1/users/@me", requestBody);
 
 		// Arrange
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.Unauthorized);

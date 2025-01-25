@@ -25,7 +25,7 @@ public sealed class ConfirmEmailTest
 		var email = WebUtility.UrlEncode(userSeed.Seed.Email);
 
 		// Act
-		using var response = await httpClient.GetAsync($"api/identity/confirmEmail?email={email}");
+		using var response = await httpClient.GetAsync($"api/v1/identity/confirmEmail?email={email}");
 
 		// Assert
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.NoContent);
@@ -47,7 +47,7 @@ public sealed class ConfirmEmailTest
 		var email = WebUtility.UrlEncode("x@example.com");
 
 		// Act
-		using var response = await httpClient.GetAsync($"api/identity/confirmEmail?email={email}");
+		using var response = await httpClient.GetAsync($"api/v1/identity/confirmEmail?email={email}");
 
 		// Assert
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.NoContent);
@@ -71,7 +71,7 @@ public sealed class ConfirmEmailTest
 		var confirmationTokenBase64Encoded = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));
 
 		// Act
-		using var response = await httpClient.GetAsync($"api/identity/confirmEmail" +
+		using var response = await httpClient.GetAsync($"api/v1/identity/confirmEmail" +
 		                                               $"?{ConfirmEmail.EmailQueryParameter}={emailUrlEncoded}" +
 		                                               $"&{ConfirmEmail.TokenQueryParameter}={confirmationTokenBase64Encoded}");
 
@@ -100,7 +100,7 @@ public sealed class ConfirmEmailTest
 		var email = WebUtility.UrlEncode(userSeed.Seed.Email);
 
 		// Act
-		using var response = await httpClient.GetAsync($"api/identity/confirmEmail?email={email}&token=0");
+		using var response = await httpClient.GetAsync($"api/v1/identity/confirmEmail?email={email}&token=0");
 
 		// Assert
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.NoContent);

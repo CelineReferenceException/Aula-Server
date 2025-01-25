@@ -16,7 +16,7 @@ public sealed class GetOwnUserTest
 		var userSeed = await application.SeedUserAsync();
 		var credentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		using var request = new HttpRequestMessage(HttpMethod.Get, "api/users/@me");
+		using var request = new HttpRequestMessage(HttpMethod.Get, "api/v1/users/@me");
 		request.SetAuthorization("Bearer", credentials.AccessToken);
 
 		// Act
@@ -43,7 +43,7 @@ public sealed class GetOwnUserTest
 		using var httpClient = application.CreateClient();
 
 		// Act
-		using var response = await httpClient.GetAsync("api/users/@me");
+		using var response = await httpClient.GetAsync("api/v1/users/@me");
 
 		// Arrange
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.Unauthorized);

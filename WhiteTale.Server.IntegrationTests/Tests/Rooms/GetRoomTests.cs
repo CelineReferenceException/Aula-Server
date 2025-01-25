@@ -19,7 +19,7 @@ public sealed class GetRoomTests
 		var roomSeed = await application.SeedRoomAsync();
 		var room = roomSeed.Room;
 
-		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/rooms/{room.Id}");
+		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/rooms/{room.Id}");
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
 
 		// Act
@@ -45,7 +45,7 @@ public sealed class GetRoomTests
 		var userSeed = await application.SeedUserAsync();
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		using var request = new HttpRequestMessage(HttpMethod.Get, "api/rooms/0");
+		using var request = new HttpRequestMessage(HttpMethod.Get, "api/v1/rooms/0");
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
 
 		// Act

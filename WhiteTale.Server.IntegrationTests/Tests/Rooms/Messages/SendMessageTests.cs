@@ -27,7 +27,7 @@ public sealed class SendMessageTests
 			Id = userSeed.Seed.CurrentRoomId!.Value,
 		});
 
-		using var request = new HttpRequestMessage(HttpMethod.Post, $"api/rooms/{roomSeed.Seed.Id}/messages");
+		using var request = new HttpRequestMessage(HttpMethod.Post, $"api/v1/rooms/{roomSeed.Seed.Id}/messages");
 		var requestBody = new SendMessageRequestBody
 		{
 			Type = MessageType.Standard,
@@ -70,7 +70,7 @@ public sealed class SendMessageTests
 			Id = userSeed.Seed.CurrentRoomId!.Value,
 		});
 
-		using var request = new HttpRequestMessage(HttpMethod.Post, $"api/rooms/{roomSeed.Seed.Id}/messages");
+		using var request = new HttpRequestMessage(HttpMethod.Post, $"api/v1/rooms/{roomSeed.Seed.Id}/messages");
 		var requestBody = new SendMessageRequestBody
 		{
 			Type = MessageType.Standard,
@@ -104,7 +104,7 @@ public sealed class SendMessageTests
 			Id = userSeed.Seed.CurrentRoomId!.Value,
 		});
 
-		using var request = new HttpRequestMessage(HttpMethod.Post, $"api/rooms/{roomSeed.Seed.Id}/messages");
+		using var request = new HttpRequestMessage(HttpMethod.Post, $"api/v1/rooms/{roomSeed.Seed.Id}/messages");
 		var requestBody = new SendMessageRequestBody
 		{
 			Type = MessageType.Standard,
@@ -148,7 +148,7 @@ public sealed class SendMessageTests
 			Id = userSeed.Seed.CurrentRoomId!.Value,
 		});
 
-		using var request = new HttpRequestMessage(HttpMethod.Post, $"api/rooms/{roomSeed.Seed.Id}/messages");
+		using var request = new HttpRequestMessage(HttpMethod.Post, $"api/v1/rooms/{roomSeed.Seed.Id}/messages");
 		var requestBody = new SendMessageRequestBody
 		{
 			Type = (MessageType)Int32.MaxValue,
@@ -182,7 +182,7 @@ public sealed class SendMessageTests
 			Id = 2,
 		});
 
-		using var request = new HttpRequestMessage(HttpMethod.Post, $"api/rooms/{roomSeed.Seed.Id}/messages");
+		using var request = new HttpRequestMessage(HttpMethod.Post, $"api/v1/rooms/{roomSeed.Seed.Id}/messages");
 		var requestBody = new SendMessageRequestBody
 		{
 			Type = MessageType.Standard,

@@ -21,7 +21,7 @@ public sealed class RegisterTest
 		};
 
 		// Act
-		using var response = await httpClient.PostAsJsonAsync("api/identity/register", requestBody);
+		using var response = await httpClient.PostAsJsonAsync("api/v1/identity/register", requestBody);
 
 		// Assert
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.NoContent);
@@ -35,7 +35,7 @@ public sealed class RegisterTest
 		using var httpClient = application.CreateClient();
 
 		// Act
-		using var response = await httpClient.PostAsJsonAsync("api/identity/register", String.Empty);
+		using var response = await httpClient.PostAsJsonAsync("api/v1/identity/register", String.Empty);
 
 		// Assert
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.BadRequest);
@@ -60,10 +60,10 @@ public sealed class RegisterTest
 			Email = firstRequestBody.Email,
 		};
 
-		using var firstResponse = await httpClient.PostAsJsonAsync("api/identity/register", firstRequestBody);
+		using var firstResponse = await httpClient.PostAsJsonAsync("api/v1/identity/register", firstRequestBody);
 
 		// Act
-		using var secondResponse = await httpClient.PostAsJsonAsync("api/identity/register", secondRequestBody);
+		using var secondResponse = await httpClient.PostAsJsonAsync("api/v1/identity/register", secondRequestBody);
 
 		// Assert
 		_ = await firstResponse.EnsureStatusCodeAsync(HttpStatusCode.NoContent);
@@ -89,10 +89,10 @@ public sealed class RegisterTest
 			Email = "testa_ddress_2@example.com",
 		};
 
-		using var firstResponse = await httpClient.PostAsJsonAsync("api/identity/register", firstRequestBody);
+		using var firstResponse = await httpClient.PostAsJsonAsync("api/v1/identity/register", firstRequestBody);
 
 		// Act
-		using var secondResponse = await httpClient.PostAsJsonAsync("api/identity/register", secondRequestBody);
+		using var secondResponse = await httpClient.PostAsJsonAsync("api/v1/identity/register", secondRequestBody);
 
 		// Assert
 		_ = await firstResponse.EnsureStatusCodeAsync(HttpStatusCode.NoContent);

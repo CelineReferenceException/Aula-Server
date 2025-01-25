@@ -48,7 +48,7 @@ internal static class UserHelper
 			Password = password,
 		};
 
-		using var response = await httpClient.PostAsJsonAsync("api/identity/login", requestBody);
+		using var response = await httpClient.PostAsJsonAsync("api/v1/identity/login", requestBody);
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.OK);
 		return await response.Content.ReadFromJsonAsync<AccessTokenResponse>() ?? throw new UnreachableException();
 	}

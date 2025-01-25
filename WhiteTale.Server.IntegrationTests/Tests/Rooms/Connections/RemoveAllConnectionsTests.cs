@@ -29,7 +29,7 @@ public class RemoveAllConnectionsTests
 			TargetRoomId = 2,
 		});
 		using var request = new HttpRequestMessage(HttpMethod.Delete,
-			$"api/rooms/{roomSeed.Seed.Id}/connections");
+			$"api/v1/rooms/{roomSeed.Seed.Id}/connections");
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
 
 		// Act

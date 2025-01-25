@@ -24,7 +24,7 @@ public sealed class RemoveMessageTests
 			TargetId = roomSeed.Seed.Id,
 		});
 
-		using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/rooms/{roomSeed.Seed.Id}/messages/{messageSeed.Seed.Id}");
+		using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/v1/rooms/{roomSeed.Seed.Id}/messages/{messageSeed.Seed.Id}");
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
 
 		// Act
@@ -63,7 +63,7 @@ public sealed class RemoveMessageTests
 			TargetId = roomSeed.Seed.Id,
 		});
 
-		using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/rooms/{roomSeed.Seed.Id}/messages/{messageSeed.Seed.Id}");
+		using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/v1/rooms/{roomSeed.Seed.Id}/messages/{messageSeed.Seed.Id}");
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
 
 		// Act
@@ -95,7 +95,7 @@ public sealed class RemoveMessageTests
 			TargetId = roomSeed.Seed.Id,
 		});
 
-		using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/rooms/{roomSeed.Seed.Id}/messages/{messageSeed.Seed.Id}");
+		using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/v1/rooms/{roomSeed.Seed.Id}/messages/{messageSeed.Seed.Id}");
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
 
 		// Act

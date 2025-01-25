@@ -31,7 +31,7 @@ public class GetMessagesTests
 			TargetId = roomSeed.Seed.Id,
 		});
 
-		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/rooms/{roomSeed.Seed.Id}/messages");
+		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/rooms/{roomSeed.Seed.Id}/messages");
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
 
 		// Act
@@ -81,7 +81,7 @@ public class GetMessagesTests
 			TargetId = roomSeed.Seed.Id,
 		});
 
-		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/rooms/{roomSeed.Seed.Id}/messages" +
+		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/rooms/{roomSeed.Seed.Id}/messages" +
 		                                                           $"?{GetMessages.CountQueryParameter}=1" +
 		                                                           $"&{GetMessages.AfterQueryParameter}={firstMessageSeed.Seed.Id}");
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
@@ -133,7 +133,7 @@ public class GetMessagesTests
 			TargetId = roomSeed.Seed.Id,
 		});
 
-		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/rooms/{roomSeed.Seed.Id}/messages" +
+		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/rooms/{roomSeed.Seed.Id}/messages" +
 		                                                           $"?{GetMessages.CountQueryParameter}=1" +
 		                                                           $"&{GetMessages.BeforeQueryParameter}={secondMessageSeed.Seed.Id}");
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
@@ -178,7 +178,7 @@ public class GetMessagesTests
 			TargetId = roomSeed.Seed.Id,
 		});
 
-		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/rooms/{roomSeed.Seed.Id}/messages");
+		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/rooms/{roomSeed.Seed.Id}/messages");
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
 
 		// Act

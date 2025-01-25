@@ -20,7 +20,7 @@ public sealed class GetConnectionsTests
 		{
 			SourceRoomId = roomSeed.Seed.Id,
 		});
-		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/rooms/{roomSeed.Seed.Id}/connections");
+		using var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/rooms/{roomSeed.Seed.Id}/connections");
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
 
 		// Act

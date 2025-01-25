@@ -26,7 +26,7 @@ public sealed class LogInTest
 		};
 
 		// Act
-		using var response = await httpClient.PostAsJsonAsync("api/identity/login", requestBody);
+		using var response = await httpClient.PostAsJsonAsync("api/v1/identity/login", requestBody);
 
 		// Assert
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.OK);
@@ -52,7 +52,7 @@ public sealed class LogInTest
 		};
 
 		// Act
-		using var response = await httpClient.PostAsJsonAsync("api/identity/login", requestBody);
+		using var response = await httpClient.PostAsJsonAsync("api/v1/identity/login", requestBody);
 
 		// Assert
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.BadRequest);
@@ -74,7 +74,7 @@ public sealed class LogInTest
 		};
 
 		// Act
-		using var response = await httpClient.PostAsJsonAsync("api/identity/login", requestBody);
+		using var response = await httpClient.PostAsJsonAsync("api/v1/identity/login", requestBody);
 
 		// Assert
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.BadRequest);
@@ -99,7 +99,7 @@ public sealed class LogInTest
 		};
 
 		// Act
-		using var response = await httpClient.PostAsJsonAsync("api/identity/login", requestBody);
+		using var response = await httpClient.PostAsJsonAsync("api/v1/identity/login", requestBody);
 
 		// Assert
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.Forbidden);
@@ -130,7 +130,7 @@ public sealed class LogInTest
 		};
 
 		// Act
-		using var response = await httpClient.PostAsJsonAsync("api/identity/login", requestBody);
+		using var response = await httpClient.PostAsJsonAsync("api/v1/identity/login", requestBody);
 
 		// Assert
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.Forbidden);
@@ -144,7 +144,7 @@ public sealed class LogInTest
 		using var httpClient = application.CreateClient();
 
 		// Act
-		using var response = await httpClient.PostAsJsonAsync("api/identity/login", String.Empty);
+		using var response = await httpClient.PostAsJsonAsync("api/v1/identity/login", String.Empty);
 
 		// Assert
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.BadRequest);

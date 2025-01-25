@@ -28,7 +28,7 @@ public sealed class AddConnectionTests
 			Id = 2,
 		});
 
-		using var request = new HttpRequestMessage(HttpMethod.Put, $"api/rooms/{firstRoomSeed.Seed.Id}/connections");
+		using var request = new HttpRequestMessage(HttpMethod.Put, $"api/v1/rooms/{firstRoomSeed.Seed.Id}/connections");
 		var requestBody = new AddConnectionRequestBody
 		{
 			RoomId = secondRoomSeed.Seed.Id,
@@ -69,8 +69,8 @@ public sealed class AddConnectionTests
 		{
 			RoomId = secondRoomSeed.Seed.Id,
 		};
-		using var firstRequest = new HttpRequestMessage(HttpMethod.Put, $"api/rooms/{firstRoomSeed.Seed.Id}/connections");
-		using var secondRequest = new HttpRequestMessage(HttpMethod.Put, $"api/rooms/{firstRoomSeed.Seed.Id}/connections");
+		using var firstRequest = new HttpRequestMessage(HttpMethod.Put, $"api/v1/rooms/{firstRoomSeed.Seed.Id}/connections");
+		using var secondRequest = new HttpRequestMessage(HttpMethod.Put, $"api/v1/rooms/{firstRoomSeed.Seed.Id}/connections");
 		firstRequest.SetJsonContent(requestBody);
 		secondRequest.SetJsonContent(requestBody);
 		firstRequest.SetAuthorization("Bearer", userCredentials.AccessToken);

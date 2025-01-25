@@ -25,7 +25,7 @@ public sealed class GetAllRoomsTests
 			Id = 2,
 		});
 
-		using var request = new HttpRequestMessage(HttpMethod.Get, "api/rooms");
+		using var request = new HttpRequestMessage(HttpMethod.Get, "api/v1/rooms");
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
 
 		// Act

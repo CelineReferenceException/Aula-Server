@@ -20,7 +20,7 @@ public sealed class CreateRoomTests
 		});
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		using var request = new HttpRequestMessage(HttpMethod.Post, "api/rooms");
+		using var request = new HttpRequestMessage(HttpMethod.Post, "api/v1/rooms");
 		var requestBody = new CreateRoomRequestBody
 		{
 			Name = "Test Room",
@@ -55,7 +55,7 @@ public sealed class CreateRoomTests
 		});
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		using var request = new HttpRequestMessage(HttpMethod.Post, "api/rooms");
+		using var request = new HttpRequestMessage(HttpMethod.Post, "api/v1/rooms");
 		var requestBody = new CreateRoomRequestBody
 		{
 			Name = "0",

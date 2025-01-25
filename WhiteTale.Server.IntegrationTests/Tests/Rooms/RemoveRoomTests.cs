@@ -23,7 +23,7 @@ public sealed class RemoveRoomTests
 		var roomSeed = await application.SeedRoomAsync();
 		var room = roomSeed.Room;
 
-		using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/rooms/{room.Id}");
+		using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/v1/rooms/{room.Id}");
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
 
 		// Act
@@ -52,7 +52,7 @@ public sealed class RemoveRoomTests
 		});
 		var userCredentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		using var request = new HttpRequestMessage(HttpMethod.Delete, "api/rooms/0");
+		using var request = new HttpRequestMessage(HttpMethod.Delete, "api/v1/rooms/0");
 		request.SetAuthorization("Bearer", userCredentials.AccessToken);
 
 		// Act

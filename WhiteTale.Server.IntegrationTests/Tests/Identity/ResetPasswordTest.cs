@@ -24,7 +24,7 @@ public sealed class ResetPasswordTest
 		};
 
 		// Act
-		using var response = await httpClient.PostAsJsonAsync("api/identity/resetpassword", requestBody);
+		using var response = await httpClient.PostAsJsonAsync("api/v1/identity/resetpassword", requestBody);
 
 		// Arrange
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.NotFound);
@@ -38,7 +38,7 @@ public sealed class ResetPasswordTest
 		using var httpClient = application.CreateClient();
 
 		// Act
-		using var response = await httpClient.PostAsJsonAsync("api/identity/resetpassword", String.Empty);
+		using var response = await httpClient.PostAsJsonAsync("api/v1/identity/resetpassword", String.Empty);
 
 		// Arrange
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.BadRequest);
@@ -65,7 +65,7 @@ public sealed class ResetPasswordTest
 		};
 
 		// Act
-		using var response = await httpClient.PostAsJsonAsync("api/identity/resetpassword", requestBody);
+		using var response = await httpClient.PostAsJsonAsync("api/v1/identity/resetpassword", requestBody);
 
 		// Assert
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.NoContent);
@@ -92,7 +92,7 @@ public sealed class ResetPasswordTest
 		};
 
 		// Act
-		using var response = await httpClient.PostAsJsonAsync("api/identity/resetpassword", requestBody);
+		using var response = await httpClient.PostAsJsonAsync("api/v1/identity/resetpassword", requestBody);
 
 		// Assert
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.BadRequest);
@@ -115,7 +115,7 @@ public sealed class ResetPasswordTest
 		};
 
 		// Act
-		using var response = await httpClient.PostAsJsonAsync("api/identity/resetpassword", requestBody);
+		using var response = await httpClient.PostAsJsonAsync("api/v1/identity/resetpassword", requestBody);
 
 		// Assert
 		_ = await response.EnsureStatusCodeAsync(HttpStatusCode.BadRequest);

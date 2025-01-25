@@ -22,7 +22,7 @@ public sealed class ModifyRoomTests
 
 		var roomSeed = await application.SeedRoomAsync();
 
-		using var request = new HttpRequestMessage(HttpMethod.Patch, $"api/rooms/{roomSeed.Room.Id}");
+		using var request = new HttpRequestMessage(HttpMethod.Patch, $"api/v1/rooms/{roomSeed.Room.Id}");
 		var requestBody = new ModifyRoomRequestBody
 		{
 			Name = "New Test Room",
@@ -60,7 +60,7 @@ public sealed class ModifyRoomTests
 
 		var roomSeed = await application.SeedRoomAsync();
 
-		using var request = new HttpRequestMessage(HttpMethod.Patch, $"api/rooms/{roomSeed.Room.Id}");
+		using var request = new HttpRequestMessage(HttpMethod.Patch, $"api/v1/rooms/{roomSeed.Room.Id}");
 		var requestBody = new ModifyRoomRequestBody
 		{
 			Name = "0",

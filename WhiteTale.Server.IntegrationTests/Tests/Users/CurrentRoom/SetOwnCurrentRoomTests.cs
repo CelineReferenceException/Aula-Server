@@ -24,7 +24,7 @@ public sealed class SetOwnCurrentRoomTests
 			IsEntrance = true,
 		});
 
-		using var request = new HttpRequestMessage(HttpMethod.Put, "api/users/@me/current-room");
+		using var request = new HttpRequestMessage(HttpMethod.Put, "api/v1/users/@me/current-room");
 		var requestBody = new SetCurrentRoomRequestBody
 		{
 			RoomId = roomSeed.Seed.Id,
@@ -52,7 +52,7 @@ public sealed class SetOwnCurrentRoomTests
 		});
 		var credentials = await application.LoginUserAsync(userSeed.Seed.UserName, userSeed.Seed.Password);
 
-		using var request = new HttpRequestMessage(HttpMethod.Put, "api/users/@me/current-room");
+		using var request = new HttpRequestMessage(HttpMethod.Put, "api/v1/users/@me/current-room");
 		var requestBody = new SetCurrentRoomRequestBody
 		{
 			RoomId = 0,
@@ -82,7 +82,7 @@ public sealed class SetOwnCurrentRoomTests
 
 		var roomSeed = await application.SeedRoomAsync();
 
-		using var request = new HttpRequestMessage(HttpMethod.Put, "api/users/@me/set-current-room");
+		using var request = new HttpRequestMessage(HttpMethod.Put, "api/v1/users/@me/set-current-room");
 		var requestBody = new SetCurrentRoomRequestBody
 		{
 			RoomId = roomSeed.Seed.Id,
