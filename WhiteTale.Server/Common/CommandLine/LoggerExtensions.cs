@@ -11,7 +11,7 @@ internal static partial class LoggerExtensions
 	[LoggerMessage(LogLevel.Error, Message = "Missing argument: '{parameterName}'")]
 	internal static partial void MissingArgument(this ILogger logger, String parameterName);
 
-	[LoggerMessage(LogLevel.Information, Message = "{message}")]
+	[LoggerMessage(LogLevel.Information, Message = "Here's a list of all available commands: {message}")]
 	internal static partial void ShowHelp(this ILogger logger, String message);
 
 	[LoggerMessage(LogLevel.Error, Message = "Command failed: {message}")]
