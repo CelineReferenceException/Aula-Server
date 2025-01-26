@@ -6,6 +6,8 @@
 [Flags]
 internal enum Permissions
 {
+	None = 0,
+
 	/// <summary>
 	///     Grants the user privileges over the entire application.
 	/// </summary>
