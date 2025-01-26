@@ -80,7 +80,7 @@ internal sealed class HelpCommand : Command
 			foreach (var subCommand in command.SubCommands.Select(kvp => kvp.Value))
 			{
 				var name = $"{subCommand.Name}";
-				paramsInfo.Add(new ParameterInfo($"  {subCommand.Name}", subCommand.Description));
+				paramsInfo.Add(new ParameterInfo($"{subCommand.Name}", subCommand.Description));
 
 				if (subCommand.Name.Length > alignment)
 				{
