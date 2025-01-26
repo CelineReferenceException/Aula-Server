@@ -95,7 +95,7 @@ internal sealed class CommandLineService
 				return false;
 			}
 
-			if (!parameter.RequiresInput)
+			if (!parameter.HasInput)
 			{
 				arguments.Add(parameter.Name, String.Empty);
 			}

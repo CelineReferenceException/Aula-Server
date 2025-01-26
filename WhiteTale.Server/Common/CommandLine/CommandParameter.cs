@@ -10,7 +10,7 @@ internal sealed class CommandParameter
 
 	internal Boolean IsRequired { get; init; } = true;
 
-	internal Boolean RequiresInput { get; init; } = true;
+	internal Boolean HasInput { get; init; } = true;
 
 	internal Boolean CanOverflow { get; init; }
 }

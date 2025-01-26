@@ -12,7 +12,7 @@ internal sealed class SetPermissionsSubCommand : SubCommand
 		Name = "u",
 		Description = "The ID of the user to set the permissions for.",
 		IsRequired = true,
-		RequiresInput = true,
+		HasInput = true,
 		CanOverflow = false,
 	};
 
@@ -21,7 +21,7 @@ internal sealed class SetPermissionsSubCommand : SubCommand
 		Name = "p",
 		Description = "The permission flags to set.",
 		IsRequired = true,
-		RequiresInput = true,
+		HasInput = true,
 		CanOverflow = false,
 	};
 
