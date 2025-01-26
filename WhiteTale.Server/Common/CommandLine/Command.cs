@@ -5,24 +5,29 @@ internal abstract class Command : IDisposable
 	private readonly Dictionary<String, Command> _subCommands = [];
 	private readonly IServiceScope _serviceScope;
 
+	private protected Command(IServiceProvider serviceProvider)
+	{
+		_serviceScope = serviceProvider.CreateScope();
+	}
+
 	internal abstract String Name { get; }
 
 	internal abstract String Description { get; }
 
 	internal IReadOnlyDictionary<String, CommandParameter> Parameters { get; private set; } = new Dictionary<String, CommandParameter>();
 
-	private protected void SetParameters(params IEnumerable<CommandParameter> parameters)
-	{
-		ArgumentNullException.ThrowIfNull(parameters, nameof(parameters));
-		Parameters = ValidateCommandParameters(parameters).ToDictionary(p => p.Name);
-	}
+	internal IReadOnlyDictionary<String, Command> SubCommands => _subCommands;
 
 	internal virtual ValueTask Callback(IReadOnlyDictionary<String, String> args, CancellationToken cancellationToken)
 	{
 		return ValueTask.CompletedTask;
 	}
 
-	internal IReadOnlyDictionary<String, Command> SubCommands => _subCommands;
+	private protected void SetParameters(params IEnumerable<CommandParameter> parameters)
+	{
+		ArgumentNullException.ThrowIfNull(parameters, nameof(parameters));
+		Parameters = ValidateCommandParameters(parameters).ToDictionary(p => p.Name);
+	}
 
 	private protected void AddSubCommand(Type type)
 	{
@@ -36,11 +41,6 @@ internal abstract class Command : IDisposable
 	private protected void AddSubCommand<TCommand>() where TCommand : Command
 	{
 		AddSubCommand(typeof(TCommand));
-	}
-
-	private protected Command(IServiceProvider serviceProvider)
-	{
-		_serviceScope = serviceProvider.CreateScope();
 	}
 
 	private static IEnumerable<CommandParameter> ValidateCommandParameters(IEnumerable<CommandParameter> parameters)
