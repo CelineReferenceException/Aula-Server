@@ -48,6 +48,7 @@ internal static class DependencyInjection
 		_ = app.UseAuthorization();
 		_ = app.UseWebSockets();
 		_ = app.MapEndpoints();
+		_ = app.MapCommands();
 
 		return app;
 	}

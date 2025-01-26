@@ -1,39 +1,28 @@
-﻿using System.Collections.Immutable;
+﻿namespace WhiteTale.Server.Common.CommandLine;
 
-namespace WhiteTale.Server.Common.CommandLine;
-
-internal sealed class Command
+internal abstract class Command
 {
-	public Command() : this([], [])
-	{
-	}
+	internal abstract String Name { get; }
 
-	public Command(IEnumerable<CommandParameter> parameters) : this(parameters, [])
-	{
-	}
+	internal abstract String Description { get; }
 
-	public Command(IEnumerable<Command> subCommands) : this([], subCommands)
-	{
-	}
+	internal IReadOnlyDictionary<String, CommandParameter> Parameters { get; private set; } = new Dictionary<String, CommandParameter>();
 
-	public Command(IEnumerable<CommandParameter> parameters, IEnumerable<Command> subCommands)
+	private protected void SetParameters(params IEnumerable<CommandParameter> parameters)
 	{
 		ArgumentNullException.ThrowIfNull(parameters, nameof(parameters));
-		ArgumentNullException.ThrowIfNull(subCommands, nameof(subCommands));
-
-		Parameters = ValidateCommandParameters(parameters).ToImmutableDictionary(p => p.Name);
-		SubCommands = ValidateSubCommands(subCommands).ToImmutableDictionary(p => p.Name);
+		Parameters = ValidateCommandParameters(parameters).ToDictionary(p => p.Name);
 	}
 
-	public required String Name { get; init; }
+	internal abstract ValueTask Callback(IReadOnlyDictionary<String, String> args, CancellationToken cancellationToken);
 
-	public required String Description { get; init; }
+	internal IReadOnlyDictionary<String, Command> SubCommands { get; private set; } = new Dictionary<String, Command>();
 
-	public ImmutableDictionary<String, CommandParameter> Parameters { get; }
-
-	public required Func<IDictionary<String, String>, CancellationToken, ValueTask> Callback { get; init; }
-
-	public ImmutableDictionary<String, Command> SubCommands { get; }
+	private protected void SetSubCommands(params IEnumerable<Command> subCommands)
+	{
+		ArgumentNullException.ThrowIfNull(subCommands, nameof(subCommands));
+		SubCommands = ValidateSubCommands(subCommands).ToDictionary(s => s.Name);
+	}
 
 	private static IEnumerable<CommandParameter> ValidateCommandParameters(IEnumerable<CommandParameter> parameters)
 	{

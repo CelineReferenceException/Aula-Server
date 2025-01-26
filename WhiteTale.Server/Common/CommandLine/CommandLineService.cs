@@ -1,30 +1,15 @@
 ﻿using System.Collections.Concurrent;
-using System.Text;
 
 namespace WhiteTale.Server.Common.CommandLine;
 
 internal sealed class CommandLineService
 {
-	private const String ParameterPrefix = "-";
 	private readonly ConcurrentDictionary<String, Command> _commands = new();
 	private readonly ILogger _logger;
 
 	public CommandLineService(ILogger<CommandLineService> logger)
 	{
 		_logger = logger;
-		AddCommand(new Command([
-			new CommandParameter
-			{
-				Name = "c",
-				Description = "Show information about a specific command.",
-				CanOverflow = true,
-			},
-		])
-		{
-			Name = "help",
-			Description = "Displays the list of available commands.",
-			Callback = HelpCommandCallback,
-		});
 	}
 
 	internal IReadOnlyDictionary<String, Command> Commands => _commands;
@@ -88,13 +73,13 @@ internal sealed class CommandLineService
 				continue;
 			}
 
-			if (!segment.StartsWith(ParameterPrefix))
+			if (!segment.StartsWith(CommandParameter.Prefix))
 			{
 				return await ProcessCommandAsync(input.Slice(segmentStart, input.Length - segmentStart), command.SubCommands,
 					cancellationToken);
 			}
 
-			var parameterName = segment[ParameterPrefix.Length..].ToString();
+			var parameterName = segment[CommandParameter.Prefix.Length..].ToString();
 			CommandParameter? parameter = null;
 			foreach (var param in commands[commandName].Parameters.Select(kvp => kvp.Value))
 			{
@@ -136,96 +121,4 @@ internal sealed class CommandLineService
 		await command.Callback(arguments, cancellationToken);
 		return true;
 	}
-
-	private ValueTask HelpCommandCallback(IDictionary<String, String> args, CancellationToken ct)
-	{
-		ct.ThrowIfCancellationRequested();
-
-		var commands = _commands.Select(kvp => kvp.Value);
-
-		if (!args.TryGetValue("command", out var query) ||
-		    String.IsNullOrWhiteSpace(query))
-		{
-			_logger.ShowHelp(FormatCommands(commands));
-			return ValueTask.CompletedTask;
-		}
-
-		var querySegments = query.Split(' ');
-		var command = _commands[querySegments[0]];
-
-		foreach (var subCommandName in querySegments.Skip(1))
-		{
-			if (!command.SubCommands.TryGetValue(subCommandName, out var subCommand))
-			{
-				_logger.ShowHelp($"Unknown subcommand '{subCommandName}'.");
-				return ValueTask.CompletedTask;
-			}
-
-			command = subCommand;
-		}
-
-		_logger.ShowHelp(FormatCommands(command));
-		return ValueTask.CompletedTask;
-	}
-
-	private static String FormatCommands(params IEnumerable<Command> commands)
-	{
-		var message = new StringBuilder();
-		var info = new Dictionary<Command, List<ParameterInfo>>();
-		var alignment = 16;
-
-		foreach (var command in commands)
-		{
-			var paramsInfo = new List<ParameterInfo>();
-
-			foreach (var parameter in command.Parameters.Select(kvp => kvp.Value))
-			{
-				var name = $"{ParameterPrefix}{parameter.Name}";
-				paramsInfo.Add(new ParameterInfo(name, parameter.Description));
-
-				if (name.Length > alignment)
-				{
-					alignment = name.Length;
-				}
-			}
-
-			foreach (var subCommand in command.SubCommands.Select(kvp => kvp.Value))
-			{
-				var name = $"{subCommand.Name}";
-				paramsInfo.Add(new ParameterInfo($"  {subCommand.Name}", subCommand.Description));
-
-				if (subCommand.Name.Length > alignment)
-				{
-					alignment = name.Length;
-				}
-			}
-
-			if (command.Name.Length > alignment)
-			{
-				alignment = command.Name.Length;
-			}
-
-			info.Add(command, paramsInfo);
-		}
-
-		alignment++;
-
-		_ = message.AppendLine();
-		foreach (var (command, parameters) in info)
-		{
-			_ = message.Append(command.Name);
-			_ = message.AppendLine(command.Description.PadLeft(command.Description.Length + alignment - command.Name.Length));
-
-			foreach (var param in parameters)
-			{
-				const Int32 padding = 2;
-				_ = message.Append(param.Name.PadLeft(param.Name.Length + padding));
-				_ = message.AppendLine(param.Description.PadLeft(param.Description.Length + alignment - param.Name.Length - padding));
-			}
-		}
-
-		return message.ToString();
-	}
-
-	private readonly record struct ParameterInfo(String Name, String Description);
 }
