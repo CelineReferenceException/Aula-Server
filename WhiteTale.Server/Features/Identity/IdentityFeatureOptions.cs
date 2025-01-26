@@ -7,4 +7,6 @@ internal sealed class IdentityFeatureOptions
 	public Uri? ConfirmEmailRedirectUri { get; set; }
 
 	public Uri? ResetPasswordRedirectUri { get; set; }
+
+	public Permissions DefaultPermissions { get; set; }
 }

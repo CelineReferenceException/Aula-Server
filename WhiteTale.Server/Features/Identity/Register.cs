@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Options;
 
 namespace WhiteTale.Server.Features.Identity;
 
@@ -23,6 +24,7 @@ internal sealed class Register : IEndpoint
 		[FromServices] SnowflakeGenerator snowflakes,
 		[FromServices] UserManager<User> userManager,
 		[FromServices] ApplicationDbContext dbContext,
+		[FromServices] IOptions<IdentityFeatureOptions> featureOptions,
 		HttpRequest httpRequest,
 		[FromServices] ConfirmEmailEmailSender confirmEmailEmailSender,
 		[FromServices] ResetPasswordEmailSender resetPasswordEmailSender)
@@ -41,8 +43,8 @@ internal sealed class Register : IEndpoint
 			return TypedResults.NoContent();
 		}
 
-		// TODO: Get default permissions from configuration.
-		var newUser = User.Create(snowflakes.NewSnowflake(), body.Email, body.UserName, body.DisplayName, UserOwnerType.Standard, 0);
+		var newUser = User.Create(snowflakes.NewSnowflake(), body.Email, body.UserName, body.DisplayName, UserOwnerType.Standard,
+			featureOptions.Value.DefaultPermissions);
 
 		var identityCreation = await userManager.CreateAsync(newUser, body.Password);
 		if (!identityCreation.Succeeded)
