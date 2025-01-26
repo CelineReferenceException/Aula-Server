@@ -3,6 +3,7 @@ using MartinCostello.OpenApi;
 using Microsoft.AspNetCore.Builder;
 using Scalar.AspNetCore;
 using WhiteTale.Server.Features.Identity;
+using WhiteTale.Server.Features.Users;
 
 var startTimestamp = Stopwatch.GetTimestamp();
 
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddCommon();
 builder.Services.AddIdentityFeatures();
+builder.Services.AddUserFeatures();
 
 builder.Services.AddOpenApi();
 builder.Services.AddOpenApiExtensions(static options => options.XmlDocumentationAssemblies.Add(typeof(IAssemblyMarker).Assembly));

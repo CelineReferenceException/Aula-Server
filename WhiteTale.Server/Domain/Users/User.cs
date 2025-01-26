@@ -34,7 +34,7 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 
 	internal UserOwnerType OwnerType { get; private init; }
 
-	internal Presence Presence { get; private set; }
+	internal Presence Presence { get; set; }
 
 	internal UInt64? CurrentRoomId { get; private set; }
 
