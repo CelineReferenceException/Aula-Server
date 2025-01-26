@@ -1,4 +1,4 @@
-﻿namespace WhiteTale.Server.Features.Users.CurrentRoom;
+﻿namespace WhiteTale.Server.Features.Users;
 
 internal sealed class SetCurrentRoomRequestBody
 {

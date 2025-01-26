@@ -6,21 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 
-namespace WhiteTale.Server.Features.Users.CurrentRoom;
+namespace WhiteTale.Server.Features.Users;
 
-internal sealed class SetCurrentRoom : IEndpoint
+internal sealed class SetOwnCurrentRoom : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapPut("users/{userId}/current-room/", HandleAsync)
+		_ = route.MapPut("users/@me/current-room/", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
-			.RequirePermission(Permissions.SetCurrentRoom)
+			.RequirePermission(Permissions.SetOwnCurrentRoom)
 			.HasApiVersion(1);
 	}
 
 	private static async Task<Results<NoContent, ProblemHttpResult, InternalServerError>> HandleAsync(
-		[FromRoute] UInt64 userId,
 		[FromBody] SetCurrentRoomRequestBody body,
 		[FromServices] SetCurrentRoomRequestBodyValidator bodyValidator,
 		[FromServices] ApplicationDbContext dbContext,
@@ -34,18 +33,19 @@ internal sealed class SetCurrentRoom : IEndpoint
 			return TypedResults.Problem(problemDetails);
 		}
 
+		var userIdClaimValue = userManager.GetUserId(httpContext.User);
+		if (!UInt64.TryParse(userIdClaimValue, out var userId))
+		{
+			return TypedResults.InternalServerError();
+		}
+
 		var user = await dbContext.Users
 			.AsTracking()
-			.Where(u => u.Id == userId)
+			.Where(x => x.Id == userId)
 			.FirstOrDefaultAsync();
 		if (user is null)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid user",
-				Detail = "The specified user does not exist.",
-				Status = StatusCodes.Status400BadRequest,
-			});
+			return TypedResults.InternalServerError();
 		}
 
 		var room = await dbContext.Rooms

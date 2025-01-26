@@ -1,8 +1,8 @@
 ﻿using System.Net;
 using WhiteTale.Server.Domain.Users;
-using WhiteTale.Server.Features.Users.CurrentRoom;
+using WhiteTale.Server.Features.Users;
 
-namespace WhiteTale.Server.IntegrationTests.Tests.Users.CurrentRoom;
+namespace WhiteTale.Server.IntegrationTests.Tests.Users;
 
 public sealed class SetCurrentRoomTests
 {
