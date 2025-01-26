@@ -112,8 +112,8 @@ internal sealed class CommandLineService
 			do
 			{
 				argumentLength = inputSegments.Current.End.Value - argumentStart;
-			} while (inputSegments.MoveNext() &&
-			         parameter.CanOverflow);
+			} while (parameter.CanOverflow &&
+			         inputSegments.MoveNext());
 
 			arguments.Add(parameter.Name, input.Slice(argumentStart, argumentLength).ToString());
 		}
