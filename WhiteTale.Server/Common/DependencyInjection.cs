@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
+using WhiteTale.Server.Common.CommandLine;
 using WhiteTale.Server.Common.JsonSerialization;
 using WhiteTale.Server.Features.Gateway;
 
@@ -34,6 +35,7 @@ internal static class DependencyInjection
 
 		_ = builder.Logging.ClearProviders();
 		_ = builder.Logging.AddLogging();
+		_ = builder.Services.AddCommandLine();
 
 		return builder;
 	}
