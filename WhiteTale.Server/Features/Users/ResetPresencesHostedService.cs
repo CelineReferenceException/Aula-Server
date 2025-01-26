@@ -1,12 +1,12 @@
 ﻿namespace WhiteTale.Server.Features.Users;
 
-internal sealed class ResetPresencesHostedService : IHostedService
+internal sealed class ResetPresencesHostedService : IHostedService, IDisposable
 {
-	private readonly ApplicationDbContext _dbContext;
+	private readonly IServiceScope _serviceScope;
 
-	public ResetPresencesHostedService(ApplicationDbContext dbContext)
+	public ResetPresencesHostedService(IServiceProvider serviceProvider)
 	{
-		_dbContext = dbContext;
+		_serviceScope = serviceProvider.CreateScope();
 	}
 
 	public async Task StartAsync(CancellationToken cancellationToken)
@@ -21,12 +21,32 @@ internal sealed class ResetPresencesHostedService : IHostedService
 
 	private async Task ResetPresencesAsync(CancellationToken cancellationToken)
 	{
-		await foreach (var user in _dbContext.Users)
+		var dbContext = _serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+		await foreach (var user in dbContext.Users)
 		{
 			// We avoid using User.Modify to prevent triggering any events.
 			user.Presence = Presence.Offline;
 		}
 
-		_ = await _dbContext.SaveChangesAsync(cancellationToken);
+		_ = await dbContext.SaveChangesAsync(cancellationToken);
+	}
+
+	public void Dispose()
+	{
+		Dispose(true);
+		GC.SuppressFinalize(this);
+	}
+
+	private void Dispose(Boolean disposing)
+	{
+		if (disposing)
+		{
+			_serviceScope.Dispose();
+		}
+	}
+
+	~ResetPresencesHostedService()
+	{
+		Dispose(false);
 	}
 }
