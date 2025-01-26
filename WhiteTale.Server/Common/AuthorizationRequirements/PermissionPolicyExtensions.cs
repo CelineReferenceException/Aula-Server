@@ -15,7 +15,7 @@ internal static class PermissionPolicyExtensions
 	/// <param name="permissions">The required permissions. The requirement will succeed if the authenticated user have at least one of these.</param>
 	/// <typeparam name="TBuilder">The type of the <paramref name="builder" />.</typeparam>
 	/// <returns>The endpoint builder.</returns>
-	internal static TBuilder RequirePermission<TBuilder>(this TBuilder builder, params Permissions[] permissions)
+	internal static TBuilder RequirePermission<TBuilder>(this TBuilder builder, params IEnumerable<Permissions> permissions)
 		where TBuilder : IEndpointConventionBuilder
 	{
 		_ = builder
