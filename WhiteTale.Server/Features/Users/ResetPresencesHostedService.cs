@@ -1,4 +1,6 @@
-﻿namespace WhiteTale.Server.Features.Users;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace WhiteTale.Server.Features.Users;
 
 internal sealed class ResetPresencesHostedService : IHostedService, IDisposable
 {
@@ -22,13 +24,9 @@ internal sealed class ResetPresencesHostedService : IHostedService, IDisposable
 	private async Task ResetPresencesAsync(CancellationToken cancellationToken)
 	{
 		var dbContext = _serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-		await foreach (var user in dbContext.Users)
-		{
-			// We avoid using User.Modify to prevent triggering any events.
-			user.Presence = Presence.Offline;
-		}
-
-		_ = await dbContext.SaveChangesAsync(cancellationToken);
+		_ = await dbContext.Users
+			.ExecuteUpdateAsync(setPropertyCalls => setPropertyCalls
+				.SetProperty(property => property.Presence, value => Presence.Offline), cancellationToken);
 	}
 
 	public void Dispose()
