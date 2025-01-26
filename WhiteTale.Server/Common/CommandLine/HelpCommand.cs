@@ -27,7 +27,7 @@ internal sealed class HelpCommand : Command
 		_commandLineService = commandLineService;
 		_logger = logger;
 
-		SetParameters(_commandParameter);
+		AddParameter(_commandParameter);
 	}
 
 	internal override ValueTask Callback(IReadOnlyDictionary<String, String> args, CancellationToken ct)
