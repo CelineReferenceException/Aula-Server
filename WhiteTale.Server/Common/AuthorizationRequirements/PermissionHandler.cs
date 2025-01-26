@@ -27,8 +27,7 @@ internal sealed class PermissionHandler : AuthorizationHandler<PermissionRequire
 			return;
 		}
 
-		if (user.Permissions.HasFlag(Permissions.Administrator) ||
-		    requiredPermissions.Any(permission => user.Permissions.HasFlag(permission)))
+		if (requiredPermissions.Any(permission => user.Permissions.HasFlag(permission)))
 		{
 			context.Succeed(requirement);
 			return;

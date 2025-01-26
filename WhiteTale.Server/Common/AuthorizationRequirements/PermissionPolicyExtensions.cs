@@ -12,7 +12,10 @@ internal static class PermissionPolicyExtensions
 	///     Enforces the authenticated user to present one of specified permissions.
 	/// </summary>
 	/// <param name="builder">The endpoint builder.</param>
-	/// <param name="permissions">The required permissions. The requirement will succeed if the authenticated user have at least one of these.</param>
+	/// <param name="permissions">
+	///		The required permissions. The requirement will succeed if the authenticated user have
+	///		at least one of these, or <see cref="Permissions.Administrator"/>.
+	/// </param>
 	/// <typeparam name="TBuilder">The type of the <paramref name="builder" />.</typeparam>
 	/// <returns>The endpoint builder.</returns>
 	internal static TBuilder RequirePermission<TBuilder>(this TBuilder builder, params IEnumerable<Permissions> permissions)
@@ -20,7 +23,7 @@ internal static class PermissionPolicyExtensions
 	{
 		_ = builder
 			.RequireAuthorization(PolicyName)
-			.WithMetadata(new RequirePermissionAttribute(permissions));
+			.WithMetadata(new RequirePermissionAttribute([Permissions.Administrator, ..permissions,]));
 		return builder;
 	}
 
