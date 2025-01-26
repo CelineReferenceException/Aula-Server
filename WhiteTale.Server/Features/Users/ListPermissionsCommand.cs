@@ -18,7 +18,7 @@ internal sealed class ListPermissionsCommand : SubCommand
 
 	internal override ValueTask Callback(IReadOnlyDictionary<String, String> args, CancellationToken cancellationToken)
 	{
-		var permissionsMessage = new StringBuilder();
+		var permissionsMessage = new StringBuilder(Environment.NewLine);
 
 		foreach (var permission in Enum.GetValues<Permissions>())
 		{
