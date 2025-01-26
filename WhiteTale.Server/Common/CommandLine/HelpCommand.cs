@@ -19,7 +19,10 @@ internal sealed class HelpCommand : Command
 	internal override String Description => "Displays the list of available commands.";
 
 
-	public HelpCommand(CommandLineService commandLineService, ILogger<HelpCommand> logger)
+	public HelpCommand(
+		CommandLineService commandLineService,
+		ILogger<HelpCommand> logger,
+		IServiceProvider serviceProvider) : base(serviceProvider)
 	{
 		_commandLineService = commandLineService;
 		_logger = logger;

@@ -1,7 +1,10 @@
 ﻿namespace WhiteTale.Server.Common.CommandLine;
 
-internal abstract class Command
+internal abstract class Command : IDisposable
 {
+	private readonly Dictionary<String, Command> _subCommands = [];
+	private readonly IServiceScope _serviceScope;
+
 	internal abstract String Name { get; }
 
 	internal abstract String Description { get; }
@@ -14,14 +17,30 @@ internal abstract class Command
 		Parameters = ValidateCommandParameters(parameters).ToDictionary(p => p.Name);
 	}
 
-	internal abstract ValueTask Callback(IReadOnlyDictionary<String, String> args, CancellationToken cancellationToken);
-
-	internal IReadOnlyDictionary<String, Command> SubCommands { get; private set; } = new Dictionary<String, Command>();
-
-	private protected void SetSubCommands(params IEnumerable<Command> subCommands)
+	internal virtual ValueTask Callback(IReadOnlyDictionary<String, String> args, CancellationToken cancellationToken)
 	{
-		ArgumentNullException.ThrowIfNull(subCommands, nameof(subCommands));
-		SubCommands = ValidateSubCommands(subCommands).ToDictionary(s => s.Name);
+		return ValueTask.CompletedTask;
+	}
+
+	internal IReadOnlyDictionary<String, Command> SubCommands => _subCommands;
+
+	private protected void AddSubCommand(Type type)
+	{
+		var subCommand = (Command)_serviceScope.ServiceProvider.GetRequiredService(type);
+		if (!_subCommands.TryAdd(subCommand.Name, subCommand))
+		{
+			throw new InvalidOperationException($"A subcommand with the name '{type.Name}' has already been registered.");
+		}
+	}
+
+	private protected void AddSubCommand<TCommand>() where TCommand : Command
+	{
+		AddSubCommand(typeof(TCommand));
+	}
+
+	private protected Command(IServiceProvider serviceProvider)
+	{
+		_serviceScope = serviceProvider.CreateScope();
 	}
 
 	private static IEnumerable<CommandParameter> ValidateCommandParameters(IEnumerable<CommandParameter> parameters)
@@ -61,18 +80,22 @@ internal abstract class Command
 		}
 	}
 
-	private static IEnumerable<Command> ValidateSubCommands(IEnumerable<Command> subCommands)
+	public void Dispose()
 	{
-		var registeredNames = new HashSet<String>();
+		Dispose(true);
+		GC.SuppressFinalize(this);
+	}
 
-		foreach (var subCommand in subCommands)
+	private protected virtual void Dispose(Boolean disposing)
+	{
+		if (disposing)
 		{
-			if (!registeredNames.Add(subCommand.Name))
-			{
-				throw new InvalidOperationException($"Duplicate subcommand parameter name: '{subCommand.Name}'.");
-			}
-
-			yield return subCommand;
+			_serviceScope.Dispose();
 		}
+	}
+
+	~Command()
+	{
+		Dispose(false);
 	}
 }
