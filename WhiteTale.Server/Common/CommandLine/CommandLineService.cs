@@ -44,7 +44,7 @@ internal sealed class CommandLineService
 
 	private async ValueTask<Boolean> ProcessCommandAsync(
 		ReadOnlyMemory<Char> input,
-		IDictionary<String, Command> commands,
+		IReadOnlyDictionary<String, Command> commands,
 		CancellationToken cancellationToken)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
