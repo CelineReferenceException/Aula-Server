@@ -14,6 +14,6 @@ internal static partial class LoggerExtensions
 	[LoggerMessage(LogLevel.Information, Message = "{message}")]
 	internal static partial void ShowHelp(this ILogger logger, String message);
 
-	[LoggerMessage(LogLevel.Error, Message = "Command failed during execution: {message}")]
+	[LoggerMessage(LogLevel.Error, Message = "Command failed: {message}")]
 	internal static partial void CommandFailed(this ILogger logger, String message);
 }
