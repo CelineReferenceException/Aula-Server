@@ -7,6 +7,13 @@ internal sealed class HelpCommand : Command
 	private readonly CommandLineService _commandLineService;
 	private readonly ILogger<HelpCommand> _logger;
 
+	private readonly CommandParameter _commandParameter = new()
+	{
+		Name = "c",
+		Description = "Show information about a specific command.",
+		CanOverflow = true,
+	};
+
 	internal override String Name => "help";
 
 	internal override String Description => "Displays the list of available commands.";
@@ -17,12 +24,7 @@ internal sealed class HelpCommand : Command
 		_commandLineService = commandLineService;
 		_logger = logger;
 
-		SetParameters(new CommandParameter
-		{
-			Name = "c",
-			Description = "Show information about a specific command.",
-			CanOverflow = true,
-		});
+		SetParameters(_commandParameter);
 	}
 
 	internal override ValueTask Callback(IReadOnlyDictionary<String, String> args, CancellationToken ct)
@@ -31,7 +33,7 @@ internal sealed class HelpCommand : Command
 
 		var commands = _commandLineService.Commands.Select(kvp => kvp.Value);
 
-		if (!args.TryGetValue("command", out var query) ||
+		if (!args.TryGetValue(_commandParameter.Name, out var query) ||
 		    String.IsNullOrWhiteSpace(query))
 		{
 			_logger.ShowHelp(FormatCommands(commands));
