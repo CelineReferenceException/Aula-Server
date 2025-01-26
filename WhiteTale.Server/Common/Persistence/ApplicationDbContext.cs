@@ -7,12 +7,15 @@ namespace WhiteTale.Server.Common.Persistence;
 
 internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 {
+	private readonly IHostEnvironment _hostEnvironment;
 	private readonly IPublisher _publisher;
 
 	public ApplicationDbContext(
 		DbContextOptions<ApplicationDbContext> options,
+		IHostEnvironment hostEnvironment,
 		IPublisher publisher) : base(options)
 	{
+		_hostEnvironment = hostEnvironment;
 		_publisher = publisher;
 	}
 
@@ -25,8 +28,11 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 	[SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope")]
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
-		var loggerFactory = LoggerFactory.Create(builder => builder.AddLogging());
-		_ = optionsBuilder.UseLoggerFactory(loggerFactory);
+		if (_hostEnvironment.IsDevelopment())
+		{
+			var loggerFactory = LoggerFactory.Create(builder => builder.AddLogging());
+			_ = optionsBuilder.UseLoggerFactory(loggerFactory);
+		}
 
 		base.OnConfiguring(optionsBuilder);
 	}
