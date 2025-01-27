@@ -10,6 +10,8 @@ internal static class DependencyInjection
 	{
 		_ = services.Configure<JsonOptions>(options =>
 		{
+			options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
 			var converters = typeof(IAssemblyMarker).Assembly.DefinedTypes
 				.Where(x => x.BaseType is not null && !x.IsGenericType && x.IsAssignableTo(typeof(JsonConverter)));
 
