@@ -2,5 +2,5 @@
 
 internal sealed record SetPermissionsRequestBody
 {
-	public required Permissions Permissions { get; set; }
+	public required Permissions Permissions { get; init; }
 }
