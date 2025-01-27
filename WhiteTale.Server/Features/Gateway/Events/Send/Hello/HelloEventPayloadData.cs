@@ -1,5 +1,8 @@
 ﻿namespace WhiteTale.Server.Features.Gateway.Events.Send.Hello;
 
+/// <summary>
+///     Sent at the start of a gateway connection (not when reconnecting). Contains useful data for future use.
+/// </summary>
 internal sealed record HelloEventPayloadData
 {
 	/// <summary>

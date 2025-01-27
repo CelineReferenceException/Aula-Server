@@ -1,5 +1,8 @@
 ﻿namespace WhiteTale.Server.Features.Gateway.Events.Receive.Presences;
 
+/// <summary>
+///     A request from a client to update the presence of its user.
+/// </summary>
 internal sealed record UpdatePresenceEventData
 {
 	/// <summary>

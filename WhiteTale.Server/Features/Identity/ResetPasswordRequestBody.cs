@@ -1,12 +1,12 @@
 ﻿namespace WhiteTale.Server.Features.Identity;
 
 /// <summary>
-///     Represents the data required to reset a user's password.
+///     Holds the data required to reset a user's password.
 /// </summary>
 internal sealed class ResetPasswordRequestBody
 {
 	/// <summary>
-	///     The unique identifier of the user.
+	///     The ID of the user.
 	/// </summary>
 	public required UInt64 UserId { get; init; }
 

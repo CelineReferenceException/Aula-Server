@@ -1,7 +1,7 @@
 ﻿namespace WhiteTale.Server.Features.Identity;
 
 /// <summary>
-///     Represents the data required to authenticate a user.
+///     Holds the data required to authenticate a user.
 /// </summary>
 internal sealed class LogInRequestBody
 {

@@ -1,7 +1,7 @@
 ﻿namespace WhiteTale.Server.Features.Users;
 
 /// <summary>
-///     Represents a character within the application.
+///     Represents a user within the application.
 /// </summary>
 internal sealed record UserData
 {
@@ -21,7 +21,7 @@ internal sealed record UserData
 	public required String? Description { get; init; }
 
 	/// <summary>
-	///     The type of the user who owns the character.
+	///     The type of entity who owns the user.
 	/// </summary>
 	public required UserOwnerType OwnerType { get; init; }
 

@@ -1,5 +1,8 @@
 ﻿namespace WhiteTale.Server.Features.Users;
 
+/// <summary>
+///     Holds the data required to update the current user.
+/// </summary>
 internal sealed class ModifyOwnUserRequestBody
 {
 	private readonly String? _description;
@@ -7,7 +10,7 @@ internal sealed class ModifyOwnUserRequestBody
 	private readonly String? _displayName;
 
 	/// <summary>
-	///     The name of the character.
+	///     The name of the user.
 	/// </summary>
 	public String? DisplayName
 	{
@@ -16,7 +19,7 @@ internal sealed class ModifyOwnUserRequestBody
 	}
 
 	/// <summary>
-	///     The description of the character.
+	///     The description of the user.
 	/// </summary>
 	public String? Description
 	{

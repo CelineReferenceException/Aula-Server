@@ -1,5 +1,8 @@
 ﻿namespace WhiteTale.Server.Features.Gateway.Events.Send.Users;
 
+/// <summary>
+///     Occurs when a user updates its current room.
+/// </summary>
 internal sealed record UserCurrentRoomUpdatedEventData
 {
 	/// <summary>

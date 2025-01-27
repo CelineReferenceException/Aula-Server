@@ -1,7 +1,7 @@
 ﻿namespace WhiteTale.Server.Features.Identity;
 
 /// <summary>
-///     Represents the data required to register a new user.
+///     Holds the data required to register a new user.
 /// </summary>
 internal sealed class RegisterRequestBody
 {
