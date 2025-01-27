@@ -3,7 +3,7 @@
 /// <summary>
 ///     Holds the data required to authenticate a user.
 /// </summary>
-internal sealed class LogInRequestBody
+internal sealed record LogInRequestBody
 {
 	/// <summary>
 	///     The unique identifier of the user to authenticate.

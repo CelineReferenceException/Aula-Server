@@ -3,7 +3,7 @@
 /// <summary>
 ///     Holds the data required to update an already existing room.
 /// </summary>
-internal sealed class ModifyRoomRequestBody
+internal sealed record ModifyRoomRequestBody
 {
 	/// <summary>
 	///     The new name for the room.

@@ -3,7 +3,7 @@
 /// <summary>
 ///     Holds the data required to register a new user.
 /// </summary>
-internal sealed class RegisterRequestBody
+internal sealed record RegisterRequestBody
 {
 	private readonly String? _displayName;
 

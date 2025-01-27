@@ -3,7 +3,7 @@
 /// <summary>
 ///     Holds the data required to set the current room of a user.
 /// </summary>
-internal sealed class SetCurrentRoomRequestBody
+internal sealed record SetCurrentRoomRequestBody
 {
 	/// <summary>
 	///     The ID of the new current room.

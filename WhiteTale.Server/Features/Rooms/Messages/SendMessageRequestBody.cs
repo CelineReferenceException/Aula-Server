@@ -3,7 +3,7 @@
 /// <summary>
 ///     Holds the data required to send a message.
 /// </summary>
-internal sealed class SendMessageRequestBody
+internal sealed record SendMessageRequestBody
 {
 	/// <summary>
 	///     The type of the message.

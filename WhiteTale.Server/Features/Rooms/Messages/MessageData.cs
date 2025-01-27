@@ -3,7 +3,7 @@
 /// <summary>
 ///     Represents a message within a room.
 /// </summary>
-internal sealed class MessageData
+internal sealed record MessageData
 {
 	/// <summary>
 	///     The unique identifier of the message.

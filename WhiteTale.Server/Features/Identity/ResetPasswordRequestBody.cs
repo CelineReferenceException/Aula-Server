@@ -3,7 +3,7 @@
 /// <summary>
 ///     Holds the data required to reset a user's password.
 /// </summary>
-internal sealed class ResetPasswordRequestBody
+internal sealed record ResetPasswordRequestBody
 {
 	/// <summary>
 	///     The ID of the user.

@@ -3,7 +3,7 @@
 /// <summary>
 ///     Holds the data required to remove a connection from this room.
 /// </summary>
-internal sealed class RemoveConnectionRequestBody
+internal sealed record RemoveConnectionRequestBody
 {
 	/// <summary>
 	///     The ID of the target room to disconnect from this room.

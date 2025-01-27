@@ -3,7 +3,7 @@
 /// <summary>
 ///     Holds the data required to create a new room.
 /// </summary>
-internal sealed class CreateRoomRequestBody
+internal sealed record CreateRoomRequestBody
 {
 	/// <summary>
 	///     The name of the room.

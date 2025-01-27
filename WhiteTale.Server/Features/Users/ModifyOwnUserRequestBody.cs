@@ -3,7 +3,7 @@
 /// <summary>
 ///     Holds the data required to update the current user.
 /// </summary>
-internal sealed class ModifyOwnUserRequestBody
+internal sealed record ModifyOwnUserRequestBody
 {
 	private readonly String? _description;
 
