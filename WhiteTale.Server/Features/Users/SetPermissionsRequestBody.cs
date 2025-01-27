@@ -1,6 +1,6 @@
 ﻿namespace WhiteTale.Server.Features.Users;
 
-internal sealed class SetPermissionsRequestBody
+internal sealed record SetPermissionsRequestBody
 {
 	public required Permissions Permissions { get; set; }
 }
