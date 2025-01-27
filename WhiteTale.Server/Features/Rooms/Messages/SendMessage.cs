@@ -83,7 +83,7 @@ internal sealed class SendMessage : IEndpoint
 				.Aggregate((x, y) => x | y);
 		}
 
-		var message = Message.Create(messageId, body.Type, flags, AuthorType.User, user.Id, body.Target ?? MessageTarget.Room, body.Content,
+		var message = Message.Create(messageId, body.Type, flags, MessageAuthor.User, user.Id, body.Target ?? MessageTarget.Room, body.Content,
 			null, null, roomId);
 
 		_ = dbContext.Messages.Add(message);

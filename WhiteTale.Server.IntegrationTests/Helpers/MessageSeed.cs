@@ -11,7 +11,7 @@ internal sealed record MessageSeed
 		Flags = 0,
 		Target = MessageTarget.Room,
 		Content = "Hello world",
-		AuthorType = AuthorType.User,
+		AuthorType = MessageAuthor.User,
 		AuthorId = 1,
 		TargetId = 1,
 	};
@@ -26,7 +26,7 @@ internal sealed record MessageSeed
 
 	internal String? Content { get; init; }
 
-	internal required AuthorType AuthorType { get; init; }
+	internal required MessageAuthor AuthorType { get; init; }
 
 	internal required UInt64 AuthorId { get; init; }
 

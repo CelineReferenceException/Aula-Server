@@ -23,7 +23,7 @@ internal sealed record MessageData
 	/// <summary>
 	///     The type of author who sent the message.
 	/// </summary>
-	public required AuthorType AuthorType { get; init; }
+	public required MessageAuthor AuthorType { get; init; }
 
 	/// <summary>
 	///     The ID of the author who created the message.

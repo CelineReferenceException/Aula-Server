@@ -1,6 +1,6 @@
 ﻿namespace WhiteTale.Server.Domain.Messages;
 
-internal enum AuthorType
+internal enum MessageAuthor
 {
 	User,
 	System,
