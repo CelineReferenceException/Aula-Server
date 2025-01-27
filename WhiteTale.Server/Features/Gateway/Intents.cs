@@ -3,6 +3,7 @@
 /// <summary>
 ///     Gateway intents define which events will be dispatched during the session.
 /// </summary>
+[Flags]
 internal enum Intents
 {
 	/// <summary>
