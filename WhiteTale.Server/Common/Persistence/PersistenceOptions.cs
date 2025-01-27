@@ -6,5 +6,5 @@ internal sealed class PersistenceOptions
 
 	public String ConnectionString { get; set; } = "DataSource=./Persistence.db";
 
-	public DatabaseProvider Provider { get; set; } = DatabaseProvider.Sqlite;
+	public PersistenceProvider Provider { get; set; } = PersistenceProvider.Sqlite;
 }

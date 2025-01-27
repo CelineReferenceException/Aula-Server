@@ -2,8 +2,8 @@
 
 namespace WhiteTale.Server.Common.Persistence;
 
-[JsonConverter(typeof(JsonStringEnumConverter<DatabaseProvider>))]
-internal enum DatabaseProvider
+[JsonConverter(typeof(JsonStringEnumConverter<PersistenceProvider>))]
+internal enum PersistenceProvider
 {
 	InMemory,
 	Sqlite,
