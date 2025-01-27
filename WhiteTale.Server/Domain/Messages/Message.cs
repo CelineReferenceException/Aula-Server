@@ -17,13 +17,19 @@ internal sealed class Message : DefaultDomainEntity
 
 	internal MessageFlags Flags { get; private init; }
 
-	internal UInt64 AuthorId { get; private init; }
+	internal AuthorType AuthorType { get; private init; }
+
+	internal UInt64? AuthorId { get; private init; }
 
 	internal MessageTarget Target { get; private init; }
 
 	internal UInt64 TargetId { get; private init; }
 
 	internal String? Content { get; private init; }
+
+	internal MessageUserJoin? JoinData { get; private init; }
+
+	internal MessageUserLeave? LeaveData { get; private init; }
 
 	internal DateTime CreationTime { get; private init; }
 
@@ -33,9 +39,12 @@ internal sealed class Message : DefaultDomainEntity
 		UInt64 id,
 		MessageType type,
 		MessageFlags flags,
-		UInt64 authorId,
+		AuthorType authorType,
+		UInt64? authorId,
 		MessageTarget target,
 		String? content,
+		MessageUserJoin? joinData,
+		MessageUserLeave? leaveData,
 		UInt64 targetId)
 	{
 		var message = new Message
@@ -43,10 +52,13 @@ internal sealed class Message : DefaultDomainEntity
 			Id = id,
 			Type = type,
 			Flags = flags,
+			AuthorType = authorType,
 			AuthorId = authorId,
 			Target = target,
 			TargetId = targetId,
 			Content = content,
+			JoinData = joinData,
+			LeaveData = leaveData,
 			CreationTime = DateTime.UtcNow,
 		};
 

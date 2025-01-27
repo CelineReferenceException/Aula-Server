@@ -13,8 +13,8 @@ internal static class MessageHelper
 
 		messageSeed ??= MessageSeed.StandardTypeDefault;
 
-		var message = Message.Create(messageSeed.Id, messageSeed.Type, messageSeed.Flags, messageSeed.AuthorId, messageSeed.Target,
-			messageSeed.Content, messageSeed.TargetId);
+		var message = Message.Create(messageSeed.Id, messageSeed.Type, messageSeed.Flags, messageSeed.AuthorType, messageSeed.AuthorId,
+			messageSeed.Target, messageSeed.Content, null, null, messageSeed.TargetId);
 
 		_ = dbContext.Messages.Add(message);
 		_ = await dbContext.SaveChangesAsync();

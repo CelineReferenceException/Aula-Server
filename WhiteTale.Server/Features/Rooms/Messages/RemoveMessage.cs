@@ -41,6 +41,8 @@ internal sealed class RemoveMessage : IEndpoint
 		var message = await dbContext.Messages
 			.AsTracking()
 			.Where(m => m.Id == messageId && !m.IsRemoved)
+			.Include(m => m.JoinData)
+			.Include(m => m.LeaveData)
 			.FirstOrDefaultAsync();
 		if (message is null)
 		{
@@ -75,10 +77,24 @@ internal sealed class RemoveMessage : IEndpoint
 			Id = message.Id,
 			Type = message.Type,
 			Flags = message.Flags,
+			AuthorType = message.AuthorType,
 			AuthorId = message.AuthorId,
 			Target = message.Target,
 			TargetId = message.TargetId,
 			Content = message.Content,
+			JoinData = message.JoinData is not null
+				? new MessageUserJoinData
+				{
+					UserId = message.JoinData.UserId,
+				}
+				: null,
+			LeaveData = message.LeaveData is not null
+				? new MessageUserLeaveData
+				{
+					UserId = message.LeaveData.UserId,
+					RoomId = message.LeaveData.RoomId,
+				}
+				: null,
 			CreationTime = message.CreationTime,
 		});
 	}

@@ -25,7 +25,8 @@ internal sealed class UserCurrentRoomUpdatedEventHandler : INotificationHandler<
 			Data = new UserCurrentRoomUpdatedEventData
 			{
 				UserId = notification.UserId,
-				RoomId = notification.RoomId,
+				PreviousRoomId = notification.PreviousRoomId,
+				CurrentRoomId = notification.CurrentRoomId,
 			},
 		};
 		var payloadBytes = JsonSerializer.SerializeToUtf8Bytes(payload, _jsonSerializerOptions);

@@ -32,10 +32,24 @@ internal sealed class MessageRemovedEventHandler : INotificationHandler<MessageR
 				Id = message.Id,
 				Type = message.Type,
 				Flags = message.Flags,
+				AuthorType = message.AuthorType,
 				AuthorId = message.AuthorId,
 				Target = message.Target,
 				TargetId = message.TargetId,
 				Content = message.Content,
+				JoinData = message.JoinData is not null
+					? new MessageUserJoinData
+					{
+						UserId = message.JoinData.UserId,
+					}
+					: null,
+				LeaveData = message.LeaveData is not null
+					? new MessageUserLeaveData
+					{
+						UserId = message.LeaveData.UserId,
+						RoomId = message.LeaveData.RoomId,
+					}
+					: null,
 				CreationTime = message.CreationTime,
 			},
 		};

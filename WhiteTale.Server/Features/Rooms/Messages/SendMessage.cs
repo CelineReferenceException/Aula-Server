@@ -70,6 +70,8 @@ internal sealed class SendMessage : IEndpoint
 		var allowedFlags = body.Type switch
 		{
 			MessageType.Standard => Message.StandardTypeAllowedFlags,
+			MessageType.UserJoin => (MessageFlags)0,
+			MessageType.UserLeave => (MessageFlags)0,
 			_ => throw new UnreachableException(),
 		};
 		var flags = body.Flags ?? 0;
@@ -81,8 +83,8 @@ internal sealed class SendMessage : IEndpoint
 				.Aggregate((x, y) => x | y);
 		}
 
-		var message = Message.Create(messageId, body.Type, flags, user.Id, body.Target ?? MessageTarget.Room, body.Content,
-			roomId);
+		var message = Message.Create(messageId, body.Type, flags, AuthorType.User, user.Id, body.Target ?? MessageTarget.Room, body.Content,
+			null, null, roomId);
 
 		_ = dbContext.Messages.Add(message);
 		_ = await dbContext.SaveChangesAsync();
@@ -92,6 +94,7 @@ internal sealed class SendMessage : IEndpoint
 			Id = message.Id,
 			Type = message.Type,
 			Flags = message.Flags,
+			AuthorType = message.AuthorType,
 			AuthorId = message.AuthorId,
 			Target = message.Target,
 			TargetId = message.TargetId,

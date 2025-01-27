@@ -124,17 +124,33 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 			.HasConversion<Int64>();
 		_ = messageModel.HasKey(x => x.Id);
 
+		_ = messageModel.Property(x => x.Type)
+			.IsRequired();
+
 		_ = messageModel.Property(x => x.Flags)
 			.IsRequired();
 
-		_ = messageModel.Property(x => x.AuthorId)
+		_ = messageModel.Property(x => x.AuthorType)
 			.IsRequired();
+
+		_ = messageModel.Property(x => x.AuthorId)
+			.IsRequired(false);
 
 		_ = messageModel.Property(x => x.Target)
 			.IsRequired();
 
 		_ = messageModel.Property(x => x.TargetId)
 			.IsRequired();
+
+		_ = messageModel
+			.HasOne(x => x.JoinData)
+			.WithOne(x => x.Message)
+			.HasForeignKey<MessageUserJoin>();
+
+		_ = messageModel
+			.HasOne(x => x.LeaveData)
+			.WithOne(x => x.Message)
+			.HasForeignKey<MessageUserLeave>();
 
 		_ = messageModel.Property(x => x.Content)
 			.IsRequired(false)
@@ -144,6 +160,33 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 			.IsRequired();
 
 		_ = messageModel.Property(x => x.IsRemoved)
+			.IsRequired();
+
+		var messageUserJoinModel = modelBuilder.Entity<MessageUserJoin>();
+
+		_ = messageUserJoinModel.ToTable($"{nameof(Messages)}_{nameof(MessageUserJoin)}");
+
+		_ = messageUserJoinModel.Property(x => x.Id)
+			.IsRequired()
+			.ValueGeneratedNever();
+		_ = messageUserJoinModel.HasKey(x => x.Id);
+
+		_ = messageUserJoinModel.Property(x => x.UserId)
+			.IsRequired();
+
+		var messageUserLeaveModel = modelBuilder.Entity<MessageUserLeave>();
+
+		_ = messageUserLeaveModel.ToTable($"{nameof(Messages)}_{nameof(MessageUserLeave)}");
+
+		_ = messageUserLeaveModel.Property(x => x.Id)
+			.IsRequired()
+			.ValueGeneratedNever();
+		_ = messageUserLeaveModel.HasKey(x => x.Id);
+
+		_ = messageUserLeaveModel.Property(x => x.UserId)
+			.IsRequired();
+
+		_ = messageUserLeaveModel.Property(x => x.RoomId)
 			.IsRequired();
 
 		base.OnModelCreating(modelBuilder);

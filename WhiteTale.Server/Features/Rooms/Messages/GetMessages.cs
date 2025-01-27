@@ -94,18 +94,47 @@ internal sealed class GetMessages : IEndpoint
 				.AsNoTracking()
 				.Where(m => m.Id < beforeId && !m.IsRemoved)
 				.OrderByDescending(m => m.Id)
+				.Select(m => new
+				{
+					m.Id,
+					m.Type,
+					m.Flags,
+					m.AuthorType,
+					m.AuthorId,
+					m.Target,
+					m.TargetId,
+					m.Content,
+					m.JoinData,
+					m.LeaveData,
+					m.CreationTime,
+				})
+				.Take(count.Value)
+				.ToList()
 				.Select(m => new MessageData
 				{
 					Id = m.Id,
 					Type = m.Type,
 					Flags = m.Flags,
+					AuthorType = m.AuthorType,
 					AuthorId = m.AuthorId,
 					Target = m.Target,
 					TargetId = m.TargetId,
 					Content = m.Content,
+					JoinData = m.JoinData is not null
+						? new MessageUserJoinData
+						{
+							UserId = m.JoinData.UserId,
+						}
+						: null,
+					LeaveData = m.LeaveData is not null
+						? new MessageUserLeaveData
+						{
+							UserId = m.LeaveData.UserId,
+							RoomId = m.LeaveData.RoomId,
+						}
+						: null,
 					CreationTime = m.CreationTime,
-				})
-				.Take(count.Value);
+				});
 
 			messages.AddRange(messagesBefore);
 		}
@@ -129,18 +158,47 @@ internal sealed class GetMessages : IEndpoint
 				.AsNoTracking()
 				.Where(m => m.Id > afterId && !m.IsRemoved)
 				.OrderByDescending(m => m.Id)
+				.Select(m => new
+				{
+					m.Id,
+					m.Type,
+					m.Flags,
+					m.AuthorType,
+					m.AuthorId,
+					m.Target,
+					m.TargetId,
+					m.Content,
+					m.JoinData,
+					m.LeaveData,
+					m.CreationTime,
+				})
+				.Take(count.Value)
+				.ToList()
 				.Select(m => new MessageData
 				{
 					Id = m.Id,
 					Type = m.Type,
 					Flags = m.Flags,
+					AuthorType = m.AuthorType,
 					AuthorId = m.AuthorId,
 					Target = m.Target,
 					TargetId = m.TargetId,
 					Content = m.Content,
+					JoinData = m.JoinData is not null
+						? new MessageUserJoinData
+						{
+							UserId = m.JoinData.UserId,
+						}
+						: null,
+					LeaveData = m.LeaveData is not null
+						? new MessageUserLeaveData
+						{
+							UserId = m.LeaveData.UserId,
+							RoomId = m.LeaveData.RoomId,
+						}
+						: null,
 					CreationTime = m.CreationTime,
-				})
-				.Take(count.Value);
+				});
 
 			messages.AddRange(messagesAfter);
 		}
@@ -150,18 +208,47 @@ internal sealed class GetMessages : IEndpoint
 				.AsNoTracking()
 				.Where(m => !m.IsRemoved)
 				.OrderByDescending(m => m.Id)
+				.Select(m => new
+				{
+					m.Id,
+					m.Type,
+					m.Flags,
+					m.AuthorType,
+					m.AuthorId,
+					m.Target,
+					m.TargetId,
+					m.Content,
+					m.JoinData,
+					m.LeaveData,
+					m.CreationTime,
+				})
+				.Take(count.Value)
+				.ToList()
 				.Select(m => new MessageData
 				{
 					Id = m.Id,
 					Type = m.Type,
 					Flags = m.Flags,
+					AuthorType = m.AuthorType,
 					AuthorId = m.AuthorId,
 					Target = m.Target,
 					TargetId = m.TargetId,
 					Content = m.Content,
+					JoinData = m.JoinData is not null
+						? new MessageUserJoinData
+						{
+							UserId = m.JoinData.UserId,
+						}
+						: null,
+					LeaveData = m.LeaveData is not null
+						? new MessageUserLeaveData
+						{
+							UserId = m.LeaveData.UserId,
+							RoomId = m.LeaveData.RoomId,
+						}
+						: null,
 					CreationTime = m.CreationTime,
-				})
-				.Take(count.Value);
+				});
 
 			messages.AddRange(lastMessages);
 		}

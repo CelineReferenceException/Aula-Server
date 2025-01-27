@@ -23,7 +23,7 @@ internal static class DependencyInjection
 				PersistenceProvider.InMemory => builder.UseInMemoryDatabase(nameof(PersistenceProvider.InMemory)),
 				PersistenceProvider.Sqlite or _ => builder.UseSqlite(settings.ConnectionString),
 			};
-		});
+		}, ServiceLifetime.Transient);
 
 		return services;
 	}

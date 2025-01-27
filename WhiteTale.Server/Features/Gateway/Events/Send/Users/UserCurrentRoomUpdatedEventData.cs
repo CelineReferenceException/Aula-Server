@@ -11,7 +11,12 @@ internal sealed record UserCurrentRoomUpdatedEventData
 	public required UInt64 UserId { get; init; }
 
 	/// <summary>
+	///     The previous room where the user was in.
+	/// </summary>
+	public UInt64? PreviousRoomId { get; init; }
+
+	/// <summary>
 	///     The new room where the user resides.
 	/// </summary>
-	public UInt64? RoomId { get; init; }
+	public UInt64? CurrentRoomId { get; init; }
 }

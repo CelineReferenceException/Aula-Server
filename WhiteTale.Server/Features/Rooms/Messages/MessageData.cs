@@ -21,9 +21,14 @@ internal sealed record MessageData
 	public required MessageFlags Flags { get; init; }
 
 	/// <summary>
-	///     The ID of the user who created the message.
+	///     The type of author who sent the message.
 	/// </summary>
-	public required UInt64 AuthorId { get; init; }
+	public required AuthorType AuthorType { get; init; }
+
+	/// <summary>
+	///     The ID of the author who created the message.
+	/// </summary>
+	public UInt64? AuthorId { get; init; }
 
 	/// <summary>
 	///     Who or what the message targets.
@@ -39,6 +44,16 @@ internal sealed record MessageData
 	///     The text content of the message.
 	/// </summary>
 	public String? Content { get; init; }
+
+	/// <summary>
+	///     The room join data associated with the message. Only present for <see cref="MessageType.UserJoin" />
+	/// </summary>
+	public MessageUserJoinData? JoinData { get; init; }
+
+	/// <summary>
+	///     The room leave data associated with the message. Only present for <see cref="MessageType.UserLeave" />
+	/// </summary>
+	public MessageUserLeaveData? LeaveData { get; init; }
 
 	/// <summary>
 	///     The date and time when the message was created.

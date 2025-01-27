@@ -119,8 +119,10 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 		}
 
 		ConcurrencyStamp = Guid.NewGuid().ToString("N");
+
+		var previousCurrentRoomId = CurrentRoomId;
 		CurrentRoomId = currentRoomId;
 
-		_events.Add(new UserCurrentRoomUpdatedEvent(Id, CurrentRoomId));
+		_events.Add(new UserCurrentRoomUpdatedEvent(Id, previousCurrentRoomId, CurrentRoomId));
 	}
 }
