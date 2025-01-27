@@ -33,7 +33,7 @@ internal sealed record MessageData
 	/// <summary>
 	///     Who or what the message targets.
 	/// </summary>
-	public required MessageTarget Target { get; init; }
+	public required MessageTarget TargetType { get; init; }
 
 	/// <summary>
 	///     The ID of the message's main target.

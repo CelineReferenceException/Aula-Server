@@ -46,7 +46,7 @@ public sealed class SendMessageTests
 		_ = responseBody!.Type.Should().Be(requestBody.Type);
 		_ = responseBody.Content.Should().Be(requestBody.Content);
 		_ = responseBody.Flags.Should().Be(0);
-		_ = responseBody.Target.Should().Be(MessageTarget.Room);
+		_ = responseBody.TargetType.Should().Be(MessageTarget.Room);
 		_ = responseBody.TargetId.Should().Be(roomSeed.Seed.Id);
 		_ = responseBody.AuthorId.Should().Be(userSeed.Seed.Id);
 	}
@@ -124,7 +124,7 @@ public sealed class SendMessageTests
 		_ = responseBody!.Type.Should().Be(requestBody.Type);
 		_ = responseBody.Content.Should().Be(requestBody.Content);
 		_ = responseBody.Flags.Should().Be(Message.StandardTypeAllowedFlags);
-		_ = responseBody.Target.Should().Be(MessageTarget.Room);
+		_ = responseBody.TargetType.Should().Be(MessageTarget.Room);
 		_ = responseBody.TargetId.Should().Be(roomSeed.Seed.Id);
 		_ = responseBody.AuthorId.Should().Be(userSeed.Seed.Id);
 	}

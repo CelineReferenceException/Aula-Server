@@ -37,7 +37,7 @@ public sealed class RemoveMessageTests
 		_ = responseBody!.Type.Should().Be(messageSeed.Seed.Type);
 		_ = responseBody.Content.Should().Be(messageSeed.Seed.Content);
 		_ = responseBody.Flags.Should().Be(messageSeed.Seed.Flags);
-		_ = responseBody.Target.Should().Be(messageSeed.Seed.Target);
+		_ = responseBody.TargetType.Should().Be(messageSeed.Seed.Target);
 		_ = responseBody.TargetId.Should().Be(messageSeed.Seed.TargetId);
 		_ = responseBody.AuthorId.Should().Be(messageSeed.Seed.AuthorId);
 	}
@@ -108,7 +108,7 @@ public sealed class RemoveMessageTests
 		_ = responseBody!.Type.Should().Be(messageSeed.Seed.Type);
 		_ = responseBody.Content.Should().Be(messageSeed.Seed.Content);
 		_ = responseBody.Flags.Should().Be(messageSeed.Seed.Flags);
-		_ = responseBody.Target.Should().Be(messageSeed.Seed.Target);
+		_ = responseBody.TargetType.Should().Be(messageSeed.Seed.Target);
 		_ = responseBody.TargetId.Should().Be(messageSeed.Seed.TargetId);
 		_ = responseBody.AuthorId.Should().Be(messageSeed.Seed.AuthorId);
 	}

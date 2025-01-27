@@ -96,7 +96,7 @@ internal sealed class SendMessage : IEndpoint
 			Flags = message.Flags,
 			AuthorType = message.AuthorType,
 			AuthorId = message.AuthorId,
-			Target = message.Target,
+			TargetType = message.TargetType,
 			TargetId = message.TargetId,
 			Content = message.Content,
 			CreationTime = message.CreationTime,

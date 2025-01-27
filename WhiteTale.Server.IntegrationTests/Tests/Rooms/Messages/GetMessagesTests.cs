@@ -45,7 +45,7 @@ public class GetMessagesTests
 		_ = responseBody![0].Type.Should().Be(messageSeed.Seed.Type);
 		_ = responseBody[0].Content.Should().Be(messageSeed.Seed.Content);
 		_ = responseBody[0].Flags.Should().Be(messageSeed.Seed.Flags);
-		_ = responseBody[0].Target.Should().Be(messageSeed.Seed.Target);
+		_ = responseBody[0].TargetType.Should().Be(messageSeed.Seed.Target);
 		_ = responseBody[0].TargetId.Should().Be(messageSeed.Seed.TargetId);
 		_ = responseBody[0].AuthorId.Should().Be(messageSeed.Seed.AuthorId);
 	}
@@ -97,7 +97,7 @@ public class GetMessagesTests
 		_ = responseBody![0].Type.Should().Be(secondMessageSeed.Seed.Type);
 		_ = responseBody[0].Content.Should().Be(secondMessageSeed.Seed.Content);
 		_ = responseBody[0].Flags.Should().Be(secondMessageSeed.Seed.Flags);
-		_ = responseBody[0].Target.Should().Be(secondMessageSeed.Seed.Target);
+		_ = responseBody[0].TargetType.Should().Be(secondMessageSeed.Seed.Target);
 		_ = responseBody[0].TargetId.Should().Be(secondMessageSeed.Seed.TargetId);
 		_ = responseBody[0].AuthorId.Should().Be(secondMessageSeed.Seed.AuthorId);
 	}
@@ -149,7 +149,7 @@ public class GetMessagesTests
 		_ = responseBody![0].Type.Should().Be(firstMessageSeed.Seed.Type);
 		_ = responseBody[0].Content.Should().Be(firstMessageSeed.Seed.Content);
 		_ = responseBody[0].Flags.Should().Be(firstMessageSeed.Seed.Flags);
-		_ = responseBody[0].Target.Should().Be(firstMessageSeed.Seed.Target);
+		_ = responseBody[0].TargetType.Should().Be(firstMessageSeed.Seed.Target);
 		_ = responseBody[0].TargetId.Should().Be(firstMessageSeed.Seed.TargetId);
 		_ = responseBody[0].AuthorId.Should().Be(firstMessageSeed.Seed.AuthorId);
 	}
