@@ -21,10 +21,9 @@ internal static class PermissionsPolicyExtensions
 	internal static TBuilder RequirePermissions<TBuilder>(this TBuilder builder, params IEnumerable<Permissions> permissions)
 		where TBuilder : IEndpointConventionBuilder
 	{
-		_ = builder
+		return builder
 			.RequireAuthorization(PolicyName)
 			.WithMetadata(new RequirePermissionsAttribute([Permissions.Administrator, ..permissions,]));
-		return builder;
 	}
 
 	internal static AuthorizationBuilder AddPermissionsPolicy(this AuthorizationBuilder builder)
