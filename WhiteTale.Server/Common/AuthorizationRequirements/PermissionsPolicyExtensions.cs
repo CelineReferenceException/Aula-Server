@@ -6,7 +6,7 @@ namespace WhiteTale.Server.Common.AuthorizationRequirements;
 
 internal static class PermissionsPolicyExtensions
 {
-	private const String PolicyName = nameof(PermissionsPolicyExtensions);
+	private const String PolicyName = nameof(PermissionsRequirement);
 
 	/// <summary>
 	///     Enforces the authenticated user to present one of specified permissions.
