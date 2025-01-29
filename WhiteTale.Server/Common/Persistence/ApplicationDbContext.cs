@@ -19,6 +19,8 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 		_publisher = publisher;
 	}
 
+	internal DbSet<Ban> Bans => Set<Ban>();
+
 	internal DbSet<Room> Rooms => Set<Room>();
 
 	internal DbSet<RoomConnection> RoomConnections => Set<RoomConnection>();
