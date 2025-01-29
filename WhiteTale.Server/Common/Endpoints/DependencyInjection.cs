@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace WhiteTale.Server.Common.Endpoints;
 
-internal static class EndpointExtensions
+internal static class DependencyInjection
 {
 	internal static IServiceCollection AddEndpoints(this IServiceCollection services)
 	{
