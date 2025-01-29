@@ -2,7 +2,7 @@
 
 namespace WhiteTale.Server.Common.CommandLine;
 
-internal sealed class HelpCommand : Command
+internal sealed partial class HelpCommand : Command
 {
 	private readonly CommandLineService _commandLineService;
 	private readonly ILogger<HelpCommand> _logger;
@@ -39,7 +39,7 @@ internal sealed class HelpCommand : Command
 		if (!args.TryGetValue(_commandParameter.Name, out var query) ||
 		    String.IsNullOrWhiteSpace(query))
 		{
-			_logger.ShowHelp(FormatCommands(commands));
+			ShowHelp(_logger, FormatCommands(commands));
 			return ValueTask.CompletedTask;
 		}
 
@@ -50,14 +50,14 @@ internal sealed class HelpCommand : Command
 		{
 			if (!command.SubCommands.TryGetValue(subCommandName, out var subCommand))
 			{
-				_logger.ShowHelp($"Unknown subcommand '{subCommandName}'.");
+				ShowHelp(_logger, $"Unknown subcommand '{subCommandName}'.");
 				return ValueTask.CompletedTask;
 			}
 
 			command = subCommand;
 		}
 
-		_logger.ShowHelp(FormatCommands(command));
+		ShowHelp(_logger, FormatCommands(command));
 		return ValueTask.CompletedTask;
 	}
 
@@ -121,4 +121,7 @@ internal sealed class HelpCommand : Command
 	}
 
 	private readonly record struct ParameterInfo(String Name, String Description);
+
+	[LoggerMessage(LogLevel.Information, Message = "Here's a list of all available commands: {message}")]
+	private static partial void ShowHelp(ILogger logger, String message);
 }

@@ -2,7 +2,7 @@
 
 namespace WhiteTale.Server.Common.BackgroundTaskQueue;
 
-internal sealed class QueueHostedService<T> : BackgroundService
+internal sealed partial class QueueHostedService<T> : BackgroundService
 {
 	private readonly ILogger<QueueHostedService<T>> _logger;
 	private readonly IBackgroundTaskQueue<T> _taskQueue;
@@ -30,8 +30,11 @@ internal sealed class QueueHostedService<T> : BackgroundService
 			catch (Exception ex)
 			{
 				// Prevent stopping the service if the work failed.
-				_logger.BackgroundWorkItemFailed(ex);
+				LogBackgroundWorkItemFail(_logger, ex);
 			}
 		}
 	}
+
+	[LoggerMessage(LogLevel.Error, "Background task work item failed")]
+	private static partial void LogBackgroundWorkItemFail(ILogger logger, Exception ex);
 }
