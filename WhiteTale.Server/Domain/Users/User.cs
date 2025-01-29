@@ -14,6 +14,10 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 	internal const Int32 DescriptionMaximumLength = 1024;
 	private readonly List<DomainEvent> _events = [];
 
+	private User()
+	{
+	}
+
 	internal new UInt64 Id
 	{
 		get => base.Id;
