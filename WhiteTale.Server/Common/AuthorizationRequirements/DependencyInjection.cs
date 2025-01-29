@@ -5,7 +5,7 @@ internal static class DependencyInjection
 	internal static IServiceCollection AddAuthorizationRequirements(this IServiceCollection services)
 	{
 		_ = services.AddAuthorizationBuilder()
-			.AddPermissionPolicy();
+			.AddPermissionsPolicy();
 
 		return services;
 	}

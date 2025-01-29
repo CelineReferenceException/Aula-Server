@@ -15,7 +15,7 @@ internal sealed class SetOwnCurrentRoom : IEndpoint
 		_ = route.MapPut("users/@me/current-room/", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
-			.RequirePermission(Permissions.SetOwnCurrentRoom)
+			.RequirePermissions(Permissions.SetOwnCurrentRoom)
 			.HasApiVersion(1);
 	}
 

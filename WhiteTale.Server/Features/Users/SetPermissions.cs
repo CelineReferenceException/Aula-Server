@@ -14,7 +14,7 @@ internal sealed class SetPermissions : IEndpoint
 		_ = route.MapPut("users/{userId}/permissions", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
-			.RequirePermission();
+			.RequirePermissions();
 	}
 
 	private static async Task<Results<NoContent, ProblemHttpResult, InternalServerError>> HandleAsync(

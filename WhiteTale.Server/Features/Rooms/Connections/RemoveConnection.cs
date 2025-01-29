@@ -14,7 +14,7 @@ internal sealed class RemoveConnection : IEndpoint
 		_ = route.MapDelete("rooms/{sourceRoomId}/connections/{targetRoomId}", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
-			.RequirePermission(Permissions.ManageRooms)
+			.RequirePermissions(Permissions.ManageRooms)
 			.HasApiVersion(1);
 	}
 

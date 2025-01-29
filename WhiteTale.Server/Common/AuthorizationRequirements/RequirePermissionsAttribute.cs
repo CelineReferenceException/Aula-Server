@@ -1,9 +1,9 @@
 namespace WhiteTale.Server.Common.AuthorizationRequirements;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-internal sealed class RequirePermissionAttribute : Attribute
+internal sealed class RequirePermissionsAttribute : Attribute
 {
-	internal RequirePermissionAttribute(params Permissions[] requiredPermissions)
+	internal RequirePermissionsAttribute(params Permissions[] requiredPermissions)
 	{
 		RequiredPermissions = requiredPermissions;
 	}

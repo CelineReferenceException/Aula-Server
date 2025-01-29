@@ -16,7 +16,7 @@ internal sealed class SendMessage : IEndpoint
 		_ = route.MapPost("rooms/{roomId}/messages", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
-			.RequirePermission(Permissions.SendMessages)
+			.RequirePermissions(Permissions.SendMessages)
 			.HasApiVersion(1);
 	}
 

@@ -4,9 +4,9 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace WhiteTale.Server.Common.AuthorizationRequirements;
 
-internal static class PermissionPolicyExtensions
+internal static class PermissionsPolicyExtensions
 {
-	private const String PolicyName = nameof(RequirePermissionAttribute);
+	private const String PolicyName = nameof(PermissionsPolicyExtensions);
 
 	/// <summary>
 	///     Enforces the authenticated user to present one of specified permissions.
@@ -18,20 +18,20 @@ internal static class PermissionPolicyExtensions
 	/// </param>
 	/// <typeparam name="TBuilder">The type of the <paramref name="builder" />.</typeparam>
 	/// <returns>The endpoint builder.</returns>
-	internal static TBuilder RequirePermission<TBuilder>(this TBuilder builder, params IEnumerable<Permissions> permissions)
+	internal static TBuilder RequirePermissions<TBuilder>(this TBuilder builder, params IEnumerable<Permissions> permissions)
 		where TBuilder : IEndpointConventionBuilder
 	{
 		_ = builder
 			.RequireAuthorization(PolicyName)
-			.WithMetadata(new RequirePermissionAttribute([Permissions.Administrator, ..permissions,]));
+			.WithMetadata(new RequirePermissionsAttribute([Permissions.Administrator, ..permissions,]));
 		return builder;
 	}
 
-	internal static AuthorizationBuilder AddPermissionPolicy(this AuthorizationBuilder builder)
+	internal static AuthorizationBuilder AddPermissionsPolicy(this AuthorizationBuilder builder)
 	{
-		_ = builder.AddPolicy(PolicyName, policy => policy.AddRequirements(new PermissionRequirement()));
+		_ = builder.AddPolicy(PolicyName, policy => policy.AddRequirements(new PermissionsRequirement()));
 
-		builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IAuthorizationHandler, PermissionHandler>());
+		builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IAuthorizationHandler, PermissionsHandler>());
 
 		return builder;
 	}
