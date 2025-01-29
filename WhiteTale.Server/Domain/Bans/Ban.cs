@@ -2,9 +2,14 @@
 
 internal sealed class Ban : DefaultDomainEntity
 {
+	internal const Int32 ReasonMinimumLength = 1;
+	internal const Int32 ReasonMaximumLength = 512;
+
 	internal UInt64 Id { get; private init; }
 
 	internal BanType Type { get; private init; }
+
+	internal String? Reason { get; private init; }
 
 	internal UInt64? UserId { get; private init; }
 
@@ -14,12 +19,18 @@ internal sealed class Ban : DefaultDomainEntity
 	{
 	}
 
-	internal static Ban Create(UInt64 id, BanType type, UInt64? userId = null, String? ipAddress = null)
+	internal static Ban Create(
+		UInt64 id,
+		BanType type,
+		String? reason = null,
+		UInt64? userId = null,
+		String? ipAddress = null)
 	{
 		var ban = new Ban
 		{
 			Id = id,
 			Type = type,
+			Reason = reason,
 			UserId = userId,
 			IpAddress = ipAddress,
 		};
