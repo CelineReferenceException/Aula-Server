@@ -189,6 +189,22 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 		_ = messageUserLeaveModel.Property(x => x.RoomId)
 			.IsRequired();
 
+		var banModel = modelBuilder.Entity<Ban>();
+
+		_ = banModel.Property(x => x.Id)
+			.IsRequired()
+			.ValueGeneratedNever();
+		_ = banModel.HasKey(x => x.Id);
+
+		_ = banModel.Property(x => x.Type)
+			.IsRequired();
+
+		_ = banModel.Property(x => x.UserId)
+			.IsRequired(false);
+
+		_ = banModel.Property(x => x.IpAddress)
+			.IsRequired(false);
+
 		base.OnModelCreating(modelBuilder);
 	}
 
