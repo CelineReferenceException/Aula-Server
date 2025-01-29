@@ -42,4 +42,9 @@ internal enum Permissions
 	///     Allows to set the current room of any user.
 	/// </summary>
 	SetCurrentRoom = 1 << 6,
+
+	/// <summary>
+	///     Allows to ban users from the application.
+	/// </summary>
+	BanUsers = 1 << 7,
 }
