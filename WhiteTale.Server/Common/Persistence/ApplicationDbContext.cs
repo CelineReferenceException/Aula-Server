@@ -216,6 +216,20 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 		_ = banModel.Property(x => x.CreationTime)
 			.IsRequired();
 
+		_ = banModel
+			.HasIndex(x => new
+			{
+				x.TargetId,
+			})
+			.HasDatabaseName($"{nameof(Ban)}sIndex_{nameof(Ban.TargetId)}");
+
+		_ = banModel
+			.HasIndex(x => new
+			{
+				x.IpAddress,
+			})
+			.HasDatabaseName($"{nameof(Ban)}sIndex_{nameof(Ban.IpAddress)}");
+
 		base.OnModelCreating(modelBuilder);
 	}
 
