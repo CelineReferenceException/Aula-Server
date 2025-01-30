@@ -94,7 +94,7 @@ internal sealed class CommandLineService
 			}
 
 			var argumentStart = inputSegments.Current.Start.Value;
-			var argumentLength = 0;
+			Int32 argumentLength;
 			do
 			{
 				argumentLength = inputSegments.Current.End.Value - argumentStart;
