@@ -42,6 +42,7 @@ internal sealed class ModifyRoom : IEndpoint
 		}
 
 		room.Modify(body.Name, body.Description, body.IsEntrance);
+		room.UpdateConcurrencyStamp();
 
 		try
 		{

@@ -46,8 +46,7 @@ internal sealed class Room : DefaultDomainEntity
 	internal void Modify(
 		String? name = null,
 		String? description = null,
-		Boolean? isEntrance = null,
-		Boolean updateConcurrencyStamp = true)
+		Boolean? isEntrance = null)
 	{
 		var modified = false;
 
@@ -76,11 +75,12 @@ internal sealed class Room : DefaultDomainEntity
 			return;
 		}
 
-		if (updateConcurrencyStamp)
-		{
-			ConcurrencyStamp = Guid.NewGuid().ToString("N");
-		}
 		AddEvent(new RoomUpdatedEvent(this));
+	}
+
+	internal void UpdateConcurrencyStamp()
+	{
+		ConcurrencyStamp = Guid.NewGuid().ToString("N");
 	}
 
 	internal void Remove()

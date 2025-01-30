@@ -36,13 +36,7 @@ internal sealed class UpdatePresenceEventHandler :
 
 		user.Modify(presence: GetPresence(notification.Presence));
 
-		try
-		{
-			_ = await _dbContext.SaveChangesAsync(cancellationToken);
-		}
-		catch (DbUpdateConcurrencyException)
-		{
-		}
+		_ = await _dbContext.SaveChangesAsync(cancellationToken);
 	}
 
 	public async Task Handle(GatewayDisconnectedEvent notification, CancellationToken cancellationToken)
@@ -65,14 +59,7 @@ internal sealed class UpdatePresenceEventHandler :
 
 		user.Modify(presence: Presence.Offline);
 
-		try
-		{
-			_ = await _dbContext.SaveChangesAsync(cancellationToken);
-		}
-		catch (DbUpdateConcurrencyException)
-		{
-		}
-
+		_ = await _dbContext.SaveChangesAsync(cancellationToken);
 		_ = s_userGatewaysCount.TryRemove(session.UserId, out _);
 	}
 
@@ -104,13 +91,8 @@ internal sealed class UpdatePresenceEventHandler :
 
 		user.Modify(presence: GetPresence(data.Presence));
 
-		try
-		{
-			_ = await _dbContext.SaveChangesAsync(cancellationToken);
-		}
-		catch (DbUpdateConcurrencyException)
-		{
-		}
+		_ = await _dbContext.SaveChangesAsync(cancellationToken);
+
 	}
 
 	private static Presence GetPresence(PresenceOptions presenceOptions)

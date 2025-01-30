@@ -34,7 +34,6 @@ internal sealed class BannedUserRestrictor : INotificationHandler<BanCreatedEven
 			}
 
 			user.Modify(permissions: 0);
-			user.SetCurrentRoom(null);
 
 			_ = await _dbContext.SaveChangesAsync(ct);
 		}, notification.Ban, cancellationToken);

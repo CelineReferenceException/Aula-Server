@@ -51,6 +51,7 @@ internal sealed class ModifyOwnUser : IEndpoint
 		}
 
 		user.Modify(body.DisplayName, body.Description);
+		user.UpdateConcurrencyStamp();
 
 		try
 		{

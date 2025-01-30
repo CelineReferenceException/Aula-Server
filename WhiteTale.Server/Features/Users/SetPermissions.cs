@@ -45,6 +45,7 @@ internal sealed class SetPermissions : IEndpoint
 		}
 
 		user.Modify(permissions: body.Permissions);
+		user.UpdateConcurrencyStamp();
 
 		try
 		{
