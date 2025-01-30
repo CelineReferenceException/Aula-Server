@@ -1,7 +1,11 @@
-﻿namespace WhiteTale.Server.Domain.Bans;
+﻿using FluentValidation;
+
+namespace WhiteTale.Server.Domain.Bans;
 
 internal sealed class Ban : DefaultDomainEntity
 {
+	private static readonly CreateBanValidator s_createBanValidator = new();
+
 	internal const Int32 ReasonMinimumLength = 1;
 	internal const Int32 ReasonMaximumLength = 512;
 
@@ -41,6 +45,8 @@ internal sealed class Ban : DefaultDomainEntity
 			IpAddress = ipAddress,
 			CreationTime = DateTime.Now,
 		};
+
+		s_createBanValidator.ValidateAndThrow(ban);
 
 		ban.AddEvent(new BanCreatedEvent(ban));
 		return ban;
