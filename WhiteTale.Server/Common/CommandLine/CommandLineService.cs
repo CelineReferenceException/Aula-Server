@@ -74,16 +74,7 @@ internal sealed class CommandLineService
 			}
 
 			var parameterName = segment[CommandParameter.Prefix.Length..].ToString();
-			CommandParameter? parameter = null;
-			foreach (var param in commands[commandName].Parameters.Select(kvp => kvp.Value))
-			{
-				if (param.Name == parameterName)
-				{
-					parameter = param;
-				}
-			}
-
-			if (parameter is null)
+			if (!command.Parameters.TryGetValue(parameterName, out var parameter))
 			{
 				_logger.InvalidCommandParameter(parameterName);
 				return false;
