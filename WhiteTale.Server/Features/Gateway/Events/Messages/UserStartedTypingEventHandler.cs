@@ -6,26 +6,26 @@ using Microsoft.Extensions.Options;
 
 namespace WhiteTale.Server.Features.Gateway.Events.Messages;
 
-internal sealed class UserTypingEventHandler : INotificationHandler<UserTypingEvent>
+internal sealed class UserStartedTypingEventHandler : INotificationHandler<UserStartedTypingEvent>
 {
 	private readonly ApplicationDbContext _dbContext;
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-	public UserTypingEventHandler(IOptions<JsonOptions> jsonOptions, ApplicationDbContext dbContext)
+	public UserStartedTypingEventHandler(IOptions<JsonOptions> jsonOptions, ApplicationDbContext dbContext)
 	{
 		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
 		_dbContext = dbContext;
 	}
 
 
-	public async Task Handle(UserTypingEvent notification, CancellationToken cancellationToken)
+	public async Task Handle(UserStartedTypingEvent notification, CancellationToken cancellationToken)
 	{
 		var operations = new List<Task>();
 
 		var payload = new GatewayPayload<UserTypingEventData>
 		{
 			Operation = OperationType.Dispatch,
-			Event = EventType.UserTyping,
+			Event = EventType.StartedTyping,
 			Data = new UserTypingEventData
 			{
 				UserId = notification.UserId,
