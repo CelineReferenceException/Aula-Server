@@ -48,7 +48,7 @@ internal sealed class StartTyping : IEndpoint
 			});
 		}
 
-		await publisher.Publish(new UserTypingEvent
+		await publisher.Publish(new UserStartedTypingEvent
 		{
 			UserId = userId,
 			RoomId = roomId,
