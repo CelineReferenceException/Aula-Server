@@ -67,7 +67,7 @@ internal sealed class CommandLineService
 
 			var segment = input.Span.Slice(segmentStart, segmentLength);
 
-			if (!segment.StartsWith(CommandParameter.Prefix))
+			if (!segment.StartsWith(CommandParameter.Prefix)) // It is a subcommand
 			{
 				return await ProcessCommandAsync(input.Slice(segmentStart, input.Length - segmentStart), command.SubCommands,
 					cancellationToken);
