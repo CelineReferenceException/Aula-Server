@@ -22,9 +22,9 @@ internal sealed class CommandLineService
 		}
 	}
 
-	internal async ValueTask<Boolean> ProcessCommandAsync(ReadOnlyMemory<Char> input, CancellationToken ct = default)
+	internal async ValueTask<Boolean> ProcessCommandAsync(ReadOnlyMemory<Char> input, CancellationToken cancellationToken = default)
 	{
-		return await ProcessCommandAsync(input, _commands, ct);
+		return await ProcessCommandAsync(input, _commands, cancellationToken);
 	}
 
 	private async ValueTask<Boolean> ProcessCommandAsync(
