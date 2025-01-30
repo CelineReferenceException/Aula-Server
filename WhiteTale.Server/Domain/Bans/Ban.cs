@@ -17,6 +17,8 @@ internal sealed class Ban : DefaultDomainEntity
 
 	internal String? IpAddress { get; private init; }
 
+	internal DateTime CreationTime { get; private init; }
+
 	private Ban()
 	{
 	}
@@ -37,6 +39,7 @@ internal sealed class Ban : DefaultDomainEntity
 			Reason = reason,
 			UserId = userId,
 			IpAddress = ipAddress,
+			CreationTime = DateTime.Now,
 		};
 
 		ban.AddEvent(new BanCreatedEvent(ban));

@@ -213,6 +213,9 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 		_ = banModel.Property(x => x.IpAddress)
 			.IsRequired(false);
 
+		_ = banModel.Property(x => x.CreationTime)
+			.IsRequired();
+
 		base.OnModelCreating(modelBuilder);
 	}
 
