@@ -221,14 +221,14 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 			{
 				x.TargetId,
 			})
-			.HasDatabaseName($"{nameof(Ban)}sIndex_{nameof(Ban.TargetId)}");
+			.HasDatabaseName($"IX_{nameof(Ban)}_{nameof(Ban.TargetId)}");
 
 		_ = banModel
 			.HasIndex(x => new
 			{
 				x.IpAddress,
 			})
-			.HasDatabaseName($"{nameof(Ban)}sIndex_{nameof(Ban.IpAddress)}");
+			.HasDatabaseName($"IX_{nameof(Ban)}_{nameof(Ban.IpAddress)}");
 
 		base.OnModelCreating(modelBuilder);
 	}
