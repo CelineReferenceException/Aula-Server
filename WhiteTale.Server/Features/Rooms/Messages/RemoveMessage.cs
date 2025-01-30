@@ -15,6 +15,7 @@ internal sealed class RemoveMessage : IEndpoint
 		_ = route.MapDelete("rooms/{roomId}/messages/{messageId}", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.DenyBannedUsers()
 			.HasApiVersion(1);
 	}
 

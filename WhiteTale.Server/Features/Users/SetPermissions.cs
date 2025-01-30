@@ -14,6 +14,7 @@ internal sealed class SetPermissions : IEndpoint
 		_ = route.MapPut("users/{userId}/permissions", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.DenyBannedUsers()
 			.RequirePermissions();
 	}
 

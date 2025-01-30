@@ -17,6 +17,7 @@ internal sealed class SendMessage : IEndpoint
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
 			.RequirePermissions(Permissions.SendMessages)
+			.DenyBannedUsers()
 			.HasApiVersion(1);
 	}
 

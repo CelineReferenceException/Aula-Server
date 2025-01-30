@@ -18,6 +18,7 @@ internal sealed class StartTyping : IEndpoint
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
 			.RequirePermissions(Permissions.SendMessages)
+			.DenyBannedUsers()
 			.HasApiVersion(1);
 	}
 

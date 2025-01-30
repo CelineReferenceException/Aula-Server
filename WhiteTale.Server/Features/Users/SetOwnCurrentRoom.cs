@@ -16,6 +16,7 @@ internal sealed class SetOwnCurrentRoom : IEndpoint
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
 			.RequirePermissions(Permissions.SetOwnCurrentRoom)
+			.DenyBannedUsers()
 			.HasApiVersion(1);
 	}
 

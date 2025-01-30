@@ -20,6 +20,7 @@ internal sealed class GetMessages : IEndpoint
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
 			.RequirePermissions(Permissions.ReadMessages)
+			.DenyBannedUsers()
 			.HasApiVersion(1);
 	}
 

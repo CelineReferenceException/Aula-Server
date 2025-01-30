@@ -14,6 +14,7 @@ internal sealed class GetRoom : IEndpoint
 		_ = route.MapGet("rooms/{roomId}", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.DenyBannedUsers()
 			.HasApiVersion(1);
 	}
 

@@ -15,6 +15,7 @@ internal sealed class RemoveConnection : IEndpoint
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
 			.RequirePermissions(Permissions.ManageRooms)
+			.DenyBannedUsers()
 			.HasApiVersion(1);
 	}
 

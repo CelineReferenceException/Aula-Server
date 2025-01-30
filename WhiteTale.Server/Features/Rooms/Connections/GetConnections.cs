@@ -14,6 +14,7 @@ internal sealed class GetConnections : IEndpoint
 		_ = route.MapGet("rooms/{roomId}/connections", HandleAsync)
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.DenyBannedUsers()
 			.HasApiVersion(1);
 	}
 

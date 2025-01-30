@@ -25,6 +25,7 @@ internal sealed class ConnectToGateway : IEndpoint
 		_ = route.Map("gateway", HandleAsync)
 			.RequireRateLimiting(GatewayRateLimitPolicyNames.Default)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.DenyBannedUsers()
 			.HasApiVersion(1);
 	}
 

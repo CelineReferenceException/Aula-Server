@@ -15,6 +15,7 @@ internal sealed class AddConnection : IEndpoint
 			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
 			.RequirePermissions(Permissions.ManageRooms)
+			.DenyBannedUsers()
 			.HasApiVersion(1);
 	}
 
