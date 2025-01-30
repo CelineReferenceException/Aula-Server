@@ -5,7 +5,7 @@ namespace WhiteTale.Server.Common.CommandLine;
 internal sealed class CommandLineService
 {
 	private readonly ConcurrentDictionary<String, Command> _commands = new();
-	private readonly ILogger _logger;
+	private readonly ILogger<CommandLineService> _logger;
 
 	public CommandLineService(ILogger<CommandLineService> logger)
 	{
