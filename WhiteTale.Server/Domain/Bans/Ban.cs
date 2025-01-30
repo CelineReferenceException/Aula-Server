@@ -9,6 +9,8 @@ internal sealed class Ban : DefaultDomainEntity
 
 	internal BanType Type { get; private init; }
 
+	internal UInt64? ExecutorId { get; private init; }
+
 	internal String? Reason { get; private init; }
 
 	internal UInt64? UserId { get; private init; }
@@ -22,6 +24,7 @@ internal sealed class Ban : DefaultDomainEntity
 	internal static Ban Create(
 		UInt64 id,
 		BanType type,
+		UInt64? executorId = null,
 		String? reason = null,
 		UInt64? userId = null,
 		String? ipAddress = null)
@@ -30,6 +33,7 @@ internal sealed class Ban : DefaultDomainEntity
 		{
 			Id = id,
 			Type = type,
+			ExecutorId = executorId,
 			Reason = reason,
 			UserId = userId,
 			IpAddress = ipAddress,
