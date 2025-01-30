@@ -83,6 +83,7 @@ internal sealed class CommandLineService
 			if (!parameter.HasInput)
 			{
 				arguments.Add(parameter.Name, String.Empty);
+				continue;
 			}
 
 			var hasArguments = inputSegments.MoveNext();
