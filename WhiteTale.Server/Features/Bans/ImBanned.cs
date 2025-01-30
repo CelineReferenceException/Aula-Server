@@ -34,13 +34,13 @@ internal sealed class ImBanned : IEndpoint
 		if (ipAddress is not null)
 		{
 			isBanned = await dbContext.Bans
-				.AsTracking()
+				.AsNoTracking()
 				.AnyAsync(x => x.TargetId == userId || x.IpAddress == ipAddress);
 		}
 		else
 		{
 			isBanned = await dbContext.Bans
-				.AsTracking()
+				.AsNoTracking()
 				.AnyAsync(x => x.TargetId == userId);
 		}
 
