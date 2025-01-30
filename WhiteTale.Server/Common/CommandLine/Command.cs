@@ -4,8 +4,8 @@ internal abstract class Command : IDisposable
 {
 	private readonly Dictionary<String, CommandParameter> _parameters = [];
 	private readonly Dictionary<String, Command> _subCommands = [];
-	private readonly CommandParameter? _previousDefinedParameter;
 	private readonly IServiceScope _serviceScope;
+	private CommandParameter? _previousDefinedParameter;
 
 	private protected Command(IServiceProvider serviceProvider)
 	{
@@ -53,6 +53,8 @@ internal abstract class Command : IDisposable
 				$"The parameter '{_previousDefinedParameter.Name}' is marked for overflow, but is followed by another parameter.",
 				nameof(parameter));
 		}
+
+		_previousDefinedParameter = parameter;
 	}
 
 	private protected void AddParameters(params IEnumerable<CommandParameter> parameters)
