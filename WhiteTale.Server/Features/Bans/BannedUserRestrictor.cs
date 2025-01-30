@@ -22,12 +22,12 @@ internal sealed class BannedUserRestrictor : INotificationHandler<BanCreatedEven
 			return;
 		}
 
-		await _resiliencePipeline.ExecuteAsync(async (ban, pipelineCt) =>
+		await _resiliencePipeline.ExecuteAsync(async (ban, ct) =>
 		{
 			var user = await _dbContext.Users
 				.AsTracking()
 				.Where(u => u.Id == ban.TargetId)
-				.FirstOrDefaultAsync(pipelineCt);
+				.FirstOrDefaultAsync(ct);
 			if (user is null)
 			{
 				return;
@@ -36,7 +36,7 @@ internal sealed class BannedUserRestrictor : INotificationHandler<BanCreatedEven
 			user.Modify(permissions: 0);
 			user.SetCurrentRoom(null);
 
-			_ = await _dbContext.SaveChangesAsync(pipelineCt);
+			_ = await _dbContext.SaveChangesAsync(ct);
 		}, notification.Ban, cancellationToken);
 	}
 }
