@@ -86,8 +86,7 @@ internal sealed class CommandLineService
 				continue;
 			}
 
-			var hasArguments = inputSegments.MoveNext();
-			if (!hasArguments)
+			if (!inputSegments.MoveNext())
 			{
 				_logger.MissingArgument(parameterName);
 				return false;
