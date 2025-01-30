@@ -80,7 +80,7 @@ internal sealed class CommandLineService
 				return false;
 			}
 
-			if (!parameter.HasInput)
+			if (!parameter.RequiresArgument)
 			{
 				arguments.Add(parameter.Name, String.Empty);
 				continue;
