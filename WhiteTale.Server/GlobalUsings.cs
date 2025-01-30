@@ -14,6 +14,7 @@ global using WhiteTale.Server.Common.Mail;
 global using WhiteTale.Server.Common.Persistence;
 global using WhiteTale.Server.Common.RateLimiting;
 global using WhiteTale.Server.Domain;
+global using WhiteTale.Server.Domain.Bans;
 global using WhiteTale.Server.Domain.Rooms;
 global using WhiteTale.Server.Domain.Messages;
 global using WhiteTale.Server.Domain.Users;
