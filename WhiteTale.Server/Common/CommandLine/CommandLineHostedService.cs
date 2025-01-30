@@ -29,7 +29,7 @@ internal sealed class CommandLineHostedService : BackgroundService
 			{
 				// We catch the exception and do not rethrow it, as that would stop the process
 				// and prevent the commandline service from processing further inputs.
-				_logger.CommandFailed(ex.ToString());
+				_logger.CommandFailed(ex);
 			}
 		}
 	}
