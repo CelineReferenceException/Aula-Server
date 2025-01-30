@@ -16,8 +16,16 @@ internal sealed class CreateBanValidator : AbstractValidator<Ban>
 			.MinimumLength(Ban.ReasonMinimumLength)
 			.MaximumLength(Ban.ReasonMaximumLength);
 
-		_ = RuleFor(x => x.TargetId).NotEmpty().When(x => x.Type is BanType.Id);
+		_ = When(x => x.Type is BanType.Id, () =>
+		{
+			_ = RuleFor(x => x.TargetId).NotEmpty();
+			_ = RuleFor(x => x.IpAddress).Empty();
+		});
 
-		_ = RuleFor(x => x.IpAddress).NotEmpty().When(x => x.Type is BanType.IpAddress);
+		_ = When(x => x.Type is BanType.IpAddress, () =>
+		{
+			_ = RuleFor(x => x.TargetId).Empty();
+			_ = RuleFor(x => x.IpAddress).NotEmpty();
+		});
 	}
 }
