@@ -25,7 +25,7 @@ internal sealed class UserStartedTypingEventHandler : INotificationHandler<UserS
 		var payload = new GatewayPayload<UserTypingEventData>
 		{
 			Operation = OperationType.Dispatch,
-			Event = EventType.StartedTyping,
+			Event = EventType.UserStartedTyping,
 			Data = new UserTypingEventData
 			{
 				UserId = notification.UserId,

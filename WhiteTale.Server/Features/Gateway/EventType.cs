@@ -58,12 +58,12 @@ internal enum EventType
 	/// <summary>
 	///     A user has started typing in a room.
 	/// </summary>
-	StartedTyping,
+	UserStartedTyping,
 
 	/// <summary>
 	///     A user stopped typing in a room.
 	/// </summary>
-	StoppedTyping,
+	UserStoppedTyping,
 
 	#endregion
 
