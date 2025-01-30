@@ -42,7 +42,7 @@ internal sealed class CreateUserBan : IEndpoint
 		}
 
 		var currentBan = await dbContext.Bans
-			.AsNoTracking()
+			.AsTracking()
 			.Where(b => b.TargetId == targetId)
 			.FirstOrDefaultAsync();
 		if (currentBan is not null)
