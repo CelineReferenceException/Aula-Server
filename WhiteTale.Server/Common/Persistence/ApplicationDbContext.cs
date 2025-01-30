@@ -207,7 +207,7 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 		_ = banModel.Property(x => x.Reason)
 			.IsRequired(false);
 
-		_ = banModel.Property(x => x.UserId)
+		_ = banModel.Property(x => x.TargetId)
 			.IsRequired(false);
 
 		_ = banModel.Property(x => x.IpAddress)
