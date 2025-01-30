@@ -75,7 +75,12 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 		return character;
 	}
 
-	internal void Modify(String? displayName = null, String? description = null, Permissions? permissions = null, Presence? presence = null)
+	internal void Modify(
+		String? displayName = null,
+		String? description = null,
+		Permissions? permissions = null,
+		Presence? presence = null,
+		Boolean updateConcurrencyStamp = true)
 	{
 		var modified = false;
 
@@ -111,18 +116,25 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 			return;
 		}
 
-		ConcurrencyStamp = Guid.NewGuid().ToString("N");
+		if (updateConcurrencyStamp)
+		{
+			ConcurrencyStamp = Guid.NewGuid().ToString("N");
+		}
+
 		_events.Add(new UserUpdatedEvent(this));
 	}
 
-	internal void SetCurrentRoom(UInt64? currentRoomId)
+	internal void SetCurrentRoom(UInt64? currentRoomId, Boolean updateConcurrencyStamp = true)
 	{
 		if (CurrentRoomId == currentRoomId)
 		{
 			return;
 		}
 
-		ConcurrencyStamp = Guid.NewGuid().ToString("N");
+		if (updateConcurrencyStamp)
+		{
+			ConcurrencyStamp = Guid.NewGuid().ToString("N");
+		}
 
 		var previousCurrentRoomId = CurrentRoomId;
 		CurrentRoomId = currentRoomId;
