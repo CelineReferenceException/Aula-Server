@@ -79,6 +79,7 @@ internal sealed class SetOwnCurrentRoom : IEndpoint
 		}
 
 		user.SetCurrentRoom(body.RoomId);
+		user.UpdateConcurrencyStamp();
 
 		try
 		{
