@@ -2,12 +2,12 @@
 
 namespace WhiteTale.Server.Features.Rooms.Messages;
 
-internal sealed class UserCurrentRoomUpdatedEventHandler : INotificationHandler<UserCurrentRoomUpdatedEvent>
+internal sealed class UserCurrentRoomUpdatedMessageSender : INotificationHandler<UserCurrentRoomUpdatedEvent>
 {
 	private readonly ApplicationDbContext _dbContext;
 	private readonly SnowflakeGenerator _snowflakeGenerator;
 
-	public UserCurrentRoomUpdatedEventHandler(
+	public UserCurrentRoomUpdatedMessageSender(
 		ApplicationDbContext dbContext,
 		SnowflakeGenerator snowflakeGenerator)
 	{
