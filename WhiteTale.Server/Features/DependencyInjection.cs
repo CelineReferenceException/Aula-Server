@@ -1,4 +1,5 @@
-﻿using WhiteTale.Server.Features.Gateway;
+﻿using WhiteTale.Server.Features.Bans;
+using WhiteTale.Server.Features.Gateway;
 using WhiteTale.Server.Features.Identity;
 using WhiteTale.Server.Features.Rooms;
 using WhiteTale.Server.Features.Users;
@@ -13,6 +14,7 @@ internal static class DependencyInjection
 		_ = services.AddIdentityFeatures();
 		_ = services.AddUserFeatures();
 		_ = services.AddRoomFeatures();
+		_ = services.AddBanFeatures();
 
 		return services;
 	}
