@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace WhiteTale.Server.Features.Gateway.Events.Receive.Presences;
+namespace WhiteTale.Server.Features.Gateway.Events.Presences;
 
 internal sealed class UpdatePresenceEventHandler :
 	INotificationHandler<GatewayConnectedEvent>,

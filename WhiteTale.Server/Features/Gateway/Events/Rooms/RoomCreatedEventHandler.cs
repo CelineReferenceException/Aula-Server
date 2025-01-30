@@ -4,18 +4,18 @@ using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 using WhiteTale.Server.Features.Rooms;
 
-namespace WhiteTale.Server.Features.Gateway.Events.Send.Rooms;
+namespace WhiteTale.Server.Features.Gateway.Events.Rooms;
 
-internal sealed class RoomUpdatedEventHandler : INotificationHandler<RoomUpdatedEvent>
+internal sealed class RoomCreatedEventHandler : INotificationHandler<RoomCreatedEvent>
 {
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-	public RoomUpdatedEventHandler(IOptions<JsonOptions> jsonOptions)
+	public RoomCreatedEventHandler(IOptions<JsonOptions> jsonOptions)
 	{
 		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
 	}
 
-	public async Task Handle(RoomUpdatedEvent notification, CancellationToken cancellationToken)
+	public async Task Handle(RoomCreatedEvent notification, CancellationToken cancellationToken)
 	{
 		var operations = new List<Task>();
 
@@ -23,7 +23,7 @@ internal sealed class RoomUpdatedEventHandler : INotificationHandler<RoomUpdated
 		var payload = new GatewayPayload<RoomData>
 		{
 			Operation = OperationType.Dispatch,
-			Event = EventType.RoomUpdated,
+			Event = EventType.RoomCreated,
 			Data = new RoomData
 			{
 				Id = room.Id,

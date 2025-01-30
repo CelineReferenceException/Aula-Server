@@ -1,4 +1,4 @@
-﻿namespace WhiteTale.Server.Features.Gateway.Events.Send.Messages;
+﻿namespace WhiteTale.Server.Features.Gateway.Events.Messages;
 
 /// <summary>
 ///     Occurs when a user is typing a message.

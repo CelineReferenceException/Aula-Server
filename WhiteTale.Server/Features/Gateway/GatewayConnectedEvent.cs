@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using WhiteTale.Server.Features.Gateway.Events.Receive.Presences;
+using WhiteTale.Server.Features.Gateway.Events.Presences;
 
 namespace WhiteTale.Server.Features.Gateway;
 

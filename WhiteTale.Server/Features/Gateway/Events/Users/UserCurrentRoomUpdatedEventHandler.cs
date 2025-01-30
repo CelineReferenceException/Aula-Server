@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 
-namespace WhiteTale.Server.Features.Gateway.Events.Send.Users;
+namespace WhiteTale.Server.Features.Gateway.Events.Users;
 
 internal sealed class UserCurrentRoomUpdatedEventHandler : INotificationHandler<UserCurrentRoomUpdatedEvent>
 {

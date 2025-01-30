@@ -5,20 +5,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using WhiteTale.Server.Features.Rooms.Messages;
 
-namespace WhiteTale.Server.Features.Gateway.Events.Send.Messages;
+namespace WhiteTale.Server.Features.Gateway.Events.Messages;
 
-internal sealed class MessageRemovedEventHandler : INotificationHandler<MessageRemovedEvent>
+internal sealed class MessageCreatedEventHandler : INotificationHandler<MessageCreatedEvent>
 {
 	private readonly ApplicationDbContext _dbContext;
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-	public MessageRemovedEventHandler(IOptions<JsonOptions> jsonOptions, ApplicationDbContext dbContext)
+	public MessageCreatedEventHandler(IOptions<JsonOptions> jsonOptions, ApplicationDbContext dbContext)
 	{
 		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
 		_dbContext = dbContext;
 	}
 
-	public async Task Handle(MessageRemovedEvent notification, CancellationToken cancellationToken)
+	public async Task Handle(MessageCreatedEvent notification, CancellationToken cancellationToken)
 	{
 		var operations = new List<Task>();
 
@@ -26,7 +26,7 @@ internal sealed class MessageRemovedEventHandler : INotificationHandler<MessageR
 		var payload = new GatewayPayload<MessageData>
 		{
 			Operation = OperationType.Dispatch,
-			Event = EventType.MessageRemoved,
+			Event = EventType.MessageCreated,
 			Data = new MessageData
 			{
 				Id = message.Id,
@@ -56,7 +56,7 @@ internal sealed class MessageRemovedEventHandler : INotificationHandler<MessageR
 		var payloadBytes = JsonSerializer.SerializeToUtf8Bytes(payload, _jsonSerializerOptions);
 
 		var sessionUserIds = ConnectToGateway.Sessions.Values
-			.Select(connection => connection.UserId);
+			.Select(session => session.UserId);
 
 		var usersCurrentRoomId = await _dbContext.Users
 			.Where(u => sessionUserIds.Contains(u.Id))
@@ -67,21 +67,21 @@ internal sealed class MessageRemovedEventHandler : INotificationHandler<MessageR
 			})
 			.ToDictionaryAsync(u => u.Id, u => u.CurrentRoomId, cancellationToken);
 
-		foreach (var connection in ConnectToGateway.Sessions.Values)
+		foreach (var session in ConnectToGateway.Sessions.Values)
 		{
-			if (!connection.Intents.HasFlag(Intents.Messages))
+			if (!session.Intents.HasFlag(Intents.Messages))
 			{
 				continue;
 			}
 
-			var userCurrentRoomId = usersCurrentRoomId[connection.UserId];
+			var userCurrentRoomId = usersCurrentRoomId[session.UserId];
 			if (userCurrentRoomId is null ||
 			    userCurrentRoomId != message.TargetId)
 			{
 				continue;
 			}
 
-			var operation = connection.QueueEventAsync(payloadBytes, cancellationToken);
+			var operation = session.QueueEventAsync(payloadBytes, cancellationToken);
 			operations.Add(operation);
 		}
 

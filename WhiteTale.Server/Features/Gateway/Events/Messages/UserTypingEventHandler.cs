@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace WhiteTale.Server.Features.Gateway.Events.Send.Messages;
+namespace WhiteTale.Server.Features.Gateway.Events.Messages;
 
 internal sealed class UserTypingEventHandler : INotificationHandler<UserTypingEvent>
 {

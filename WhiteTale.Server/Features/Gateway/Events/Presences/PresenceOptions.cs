@@ -1,4 +1,4 @@
-﻿namespace WhiteTale.Server.Features.Gateway.Events.Receive.Presences;
+﻿namespace WhiteTale.Server.Features.Gateway.Events.Presences;
 
 /// <summary>
 ///     Define available presences statuses to select for a user.

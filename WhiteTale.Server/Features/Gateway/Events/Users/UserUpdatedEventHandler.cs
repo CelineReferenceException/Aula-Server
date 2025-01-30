@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 using WhiteTale.Server.Features.Users;
 
-namespace WhiteTale.Server.Features.Gateway.Events.Send.Users;
+namespace WhiteTale.Server.Features.Gateway.Events.Users;
 
 internal sealed class UserUpdatedEventHandler : INotificationHandler<UserUpdatedEvent>
 {

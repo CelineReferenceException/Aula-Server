@@ -3,9 +3,9 @@ using System.Net.WebSockets;
 using System.Text.Json;
 using System.Threading.Channels;
 using MediatR;
-using WhiteTale.Server.Features.Gateway.Events.Receive;
-using WhiteTale.Server.Features.Gateway.Events.Receive.Presences;
-using WhiteTale.Server.Features.Gateway.Events.Send.Hello;
+using WhiteTale.Server.Features.Gateway.Events;
+using WhiteTale.Server.Features.Gateway.Events.Hello;
+using WhiteTale.Server.Features.Gateway.Events.Presences;
 
 namespace WhiteTale.Server.Features.Gateway;
 

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
-using WhiteTale.Server.Features.Gateway.Events.Receive.Presences;
+using WhiteTale.Server.Features.Gateway.Events.Presences;
 
 namespace WhiteTale.Server.Features.Gateway;
 

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace WhiteTale.Server.Features.Gateway.Events.Receive;
+namespace WhiteTale.Server.Features.Gateway.Events;
 
 internal sealed record PayloadReceivedEvent : INotification
 {

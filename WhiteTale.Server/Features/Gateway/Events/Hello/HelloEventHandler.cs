@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 
-namespace WhiteTale.Server.Features.Gateway.Events.Send.Hello;
+namespace WhiteTale.Server.Features.Gateway.Events.Hello;
 
 internal sealed class HelloEventHandler : INotificationHandler<HelloEvent>
 {

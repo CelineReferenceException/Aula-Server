@@ -1,4 +1,4 @@
-﻿namespace WhiteTale.Server.Features.Gateway.Events.Send.Users;
+﻿namespace WhiteTale.Server.Features.Gateway.Events.Users;
 
 /// <summary>
 ///     Occurs when a user updates its current room.

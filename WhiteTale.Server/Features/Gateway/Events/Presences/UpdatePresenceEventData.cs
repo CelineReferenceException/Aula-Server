@@ -1,4 +1,4 @@
-﻿namespace WhiteTale.Server.Features.Gateway.Events.Receive.Presences;
+﻿namespace WhiteTale.Server.Features.Gateway.Events.Presences;
 
 /// <summary>
 ///     A request from a client to update the presence of its user.

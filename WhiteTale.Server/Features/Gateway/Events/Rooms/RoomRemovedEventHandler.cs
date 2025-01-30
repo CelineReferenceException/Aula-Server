@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 using WhiteTale.Server.Features.Rooms;
 
-namespace WhiteTale.Server.Features.Gateway.Events.Send.Rooms;
+namespace WhiteTale.Server.Features.Gateway.Events.Rooms;
 
 internal sealed class RoomRemovedEventHandler : INotificationHandler<RoomRemovedEvent>
 {
