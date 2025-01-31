@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
-using WhiteTale.Server.Features.Gateway.Events.Messages;
+using WhiteTale.Server.Features.Messages.Gateway;
 
 namespace WhiteTale.Server.Features.Rooms;
 

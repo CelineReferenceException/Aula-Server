@@ -1,5 +1,4 @@
-﻿using WhiteTale.Server.Features.Bans;
-using WhiteTale.Server.Features.Gateway;
+﻿using WhiteTale.Server.Common.Gateway;
 using WhiteTale.Server.Features.Identity;
 using WhiteTale.Server.Features.Rooms;
 using WhiteTale.Server.Features.Users;
