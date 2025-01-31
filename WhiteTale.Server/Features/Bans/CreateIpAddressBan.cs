@@ -55,8 +55,12 @@ internal sealed class CreateIpAddressBan : IEndpoint
 			.FirstOrDefaultAsync();
 		if (currentBan is not null)
 		{
-			currentBan.Remove();
-			_ = dbContext.Bans.Remove(currentBan);
+			return TypedResults.Problem(new ProblemDetails
+			{
+				Title = "Ban already exists",
+				Detail = "The specified IP address is already banned.",
+				Status = StatusCodes.Status409Conflict,
+			});
 		}
 
 		var ban = Ban.Create(snowflakeGenerator.NewSnowflake(), BanType.IpAddress, userId, body.Reason, ipAddress: ipAddress);

@@ -47,8 +47,12 @@ internal sealed class CreateUserBan : IEndpoint
 			.FirstOrDefaultAsync();
 		if (currentBan is not null)
 		{
-			currentBan.Remove();
-			_ = dbContext.Bans.Remove(currentBan);
+			return TypedResults.Problem(new ProblemDetails
+			{
+				Title = "Ban already exists",
+				Detail = "This user is already banned.",
+				Status = StatusCodes.Status409Conflict,
+			});
 		}
 
 		var ban = Ban.Create(snowflakeGenerator.NewSnowflake(), BanType.Id, userId, body.Reason, targetId);
