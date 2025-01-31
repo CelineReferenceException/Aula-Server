@@ -12,7 +12,7 @@ internal sealed class CreateUserBan : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapPost("bans/users/{targetId}", HandleAsync)
+		_ = route.MapPut("bans/users/{targetId}", HandleAsync)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
 			.RequirePermissions(Permissions.BanUsers)
 			.DenyBannedUsers()
