@@ -11,7 +11,6 @@ internal static class DependencyInjection
 	{
 		_ = services.AddIdentityFeatures();
 		_ = services.AddUserFeatures();
-		_ = services.AddRoomFeatures();
 
 		return services;
 	}
