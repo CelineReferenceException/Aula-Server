@@ -32,6 +32,7 @@ internal static class DependencyInjection
 		_ = builder.Services.AddPersistence(builder.Configuration);
 		_ = builder.Services.AddResilience();
 		_ = builder.Services.AddEndpoints();
+		_ = builder.Services.AddGateway();
 
 		_ = builder.Logging.ClearProviders();
 		_ = builder.Logging.AddLogging();

@@ -9,7 +9,6 @@ internal static class DependencyInjection
 {
 	internal static IServiceCollection AddFeatures(this IServiceCollection services)
 	{
-		_ = services.AddGateway();
 		_ = services.AddIdentityFeatures();
 		_ = services.AddUserFeatures();
 		_ = services.AddRoomFeatures();
