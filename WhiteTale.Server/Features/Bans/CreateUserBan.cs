@@ -55,6 +55,34 @@ internal sealed class CreateUserBan : IEndpoint
 			});
 		}
 
+		var targetUser = await dbContext.Users
+			.AsNoTracking()
+			.Where(u => u.Id == targetId)
+			.Select(u => new
+			{
+				u.Permissions,
+			})
+			.FirstOrDefaultAsync();
+		if (targetUser is null)
+		{
+			return TypedResults.Problem(new ProblemDetails
+			{
+				Title = "Invalid target",
+				Detail = "The specified user does not exist.",
+				Status = StatusCodes.Status400BadRequest,
+			});
+		}
+
+		if (targetUser.Permissions.HasFlag(Permissions.Administrator))
+		{
+			return TypedResults.Problem(new ProblemDetails
+			{
+				Title = "Invalid target",
+				Detail = "Cannot ban users that have administrator permissions.",
+				Status = StatusCodes.Status403Forbidden,
+			});
+		}
+
 		var ban = Ban.Create(snowflakeGenerator.NewSnowflake(), BanType.Id, userId, body.Reason, targetId);
 		_ = dbContext.Bans.Add(ban);
 
