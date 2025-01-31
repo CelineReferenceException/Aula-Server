@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using WhiteTale.Server.Domain.Messages;
 using WhiteTale.Server.Domain.Users;
 using WhiteTale.Server.Features.Messages;
+using WhiteTale.Server.Features.Messages.Endpoints;
 
 namespace WhiteTale.Server.IntegrationTests.Tests.Rooms.Messages;
 

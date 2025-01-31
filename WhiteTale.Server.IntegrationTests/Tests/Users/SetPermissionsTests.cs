@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using WhiteTale.Server.Domain.Users;
 using WhiteTale.Server.Features.Users;
+using WhiteTale.Server.Features.Users.Endpoints;
 
 namespace WhiteTale.Server.IntegrationTests.Tests.Users;
 
