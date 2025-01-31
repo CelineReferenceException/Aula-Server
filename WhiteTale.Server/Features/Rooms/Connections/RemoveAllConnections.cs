@@ -12,7 +12,7 @@ internal sealed class RemoveAllConnections : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapDelete("rooms/{sourceRoomId}/connections", HandleAsync)
-			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
+			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
 			.RequirePermissions(Permissions.ManageRooms)
 			.DenyBannedUsers()

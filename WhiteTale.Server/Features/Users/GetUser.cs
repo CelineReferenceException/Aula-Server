@@ -12,7 +12,7 @@ internal sealed class GetUser : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapGet("users/{userId}", HandleAsync)
-			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
+			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
 			.DenyBannedUsers()
 			.HasApiVersion(1);

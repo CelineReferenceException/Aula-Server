@@ -21,7 +21,7 @@ internal sealed class ConfirmEmail : IEndpoint
 	{
 		// Using GET allows browsers to make direct requests, such as when a user enters a URL in the address bar.
 		_ = route.MapGet(Route, HandleAsync)
-			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
+			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.HasApiVersion(1);
 	}
 

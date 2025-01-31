@@ -15,7 +15,7 @@ internal sealed class ResetPassword : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapPost(Route, HandleAsync)
-			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
+			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.HasApiVersion(1);
 	}
 

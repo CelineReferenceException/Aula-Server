@@ -14,7 +14,7 @@ internal sealed class Register : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapPost("identity/register", HandleAsync)
-			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
+			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.HasApiVersion(1);
 	}
 

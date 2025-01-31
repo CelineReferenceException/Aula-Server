@@ -12,7 +12,7 @@ internal sealed class RemoveIpAddressBan : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapDelete("bans/ip-address/{ipAddress}", HandleAsync)
-			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
+			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
 			.RequirePermissions(Permissions.BanUsers)
 			.DenyBannedUsers()

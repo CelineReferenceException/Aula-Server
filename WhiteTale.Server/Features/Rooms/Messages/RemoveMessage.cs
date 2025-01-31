@@ -13,7 +13,7 @@ internal sealed class RemoveMessage : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapDelete("rooms/{roomId}/messages/{messageId}", HandleAsync)
-			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
+			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
 			.DenyBannedUsers()
 			.HasApiVersion(1);

@@ -13,7 +13,7 @@ internal sealed class GetOwnUser : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapGet("users/@me", HandleAsync)
-			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
+			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
 			.DenyBannedUsers()
 			.HasApiVersion(1);

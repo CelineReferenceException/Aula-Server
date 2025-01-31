@@ -15,7 +15,7 @@ internal sealed class StartTyping : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapPost("rooms/{roomId}/start-typing", HandleAsync)
-			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
+			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
 			.RequirePermissions(Permissions.SendMessages)
 			.DenyBannedUsers()

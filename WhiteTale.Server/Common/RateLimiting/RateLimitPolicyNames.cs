@@ -1,8 +1,8 @@
 namespace WhiteTale.Server.Common.RateLimiting;
 
-internal static class CommonRateLimitPolicyNames
+internal static class RateLimitPolicyNames
 {
-	private const String Prefix = nameof(CommonRateLimitPolicyNames);
+	private const String Prefix = nameof(RateLimitPolicyNames);
 
 	internal const String Global = $"{Prefix}.{nameof(Global)}";
 

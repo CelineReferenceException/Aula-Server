@@ -10,12 +10,12 @@ internal static class DependencyInjection
 {
 	internal static IServiceCollection AddRateLimiters(this IServiceCollection services)
 	{
-		_ = services.AddOptions<RateLimitOptions>(CommonRateLimitPolicyNames.Global)
-			.BindConfiguration($"RateLimiters:{nameof(CommonRateLimitPolicyNames.Global)}")
+		_ = services.AddOptions<RateLimitOptions>(RateLimitPolicyNames.Global)
+			.BindConfiguration($"RateLimiters:{nameof(RateLimitPolicyNames.Global)}")
 			.ValidateDataAnnotations()
 			.ValidateOnStart();
 
-		_ = services.PostConfigure<RateLimitOptions>(CommonRateLimitPolicyNames.Global, options =>
+		_ = services.PostConfigure<RateLimitOptions>(RateLimitPolicyNames.Global, options =>
 		{
 			options.WindowMilliseconds ??= 1000;
 			options.PermitLimit ??= 30;
@@ -25,7 +25,7 @@ internal static class DependencyInjection
 		{
 			options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 
-			_ = options.AddPolicy(CommonRateLimitPolicyNames.Global, httpContext =>
+			_ = options.AddPolicy(RateLimitPolicyNames.Global, httpContext =>
 			{
 				var userManager = ServiceProviderServiceExtensions.GetRequiredService<UserManager<User>>(httpContext.RequestServices);
 
@@ -34,7 +34,7 @@ internal static class DependencyInjection
 
 				var rateLimit = httpContext.RequestServices
 					.GetRequiredService<IOptionsSnapshot<RateLimitOptions>>()
-					.Get(CommonRateLimitPolicyNames.Global);
+					.Get(RateLimitPolicyNames.Global);
 				var permitLimit = rateLimit.PermitLimit!.Value;
 				var window = TimeSpan.FromMilliseconds(rateLimit.WindowMilliseconds!.Value);
 
@@ -47,7 +47,7 @@ internal static class DependencyInjection
 					});
 			});
 
-			_ = options.AddPolicy(CommonRateLimitPolicyNames.NoConcurrency, httpContext =>
+			_ = options.AddPolicy(RateLimitPolicyNames.NoConcurrency, httpContext =>
 			{
 				var userManager = ServiceProviderServiceExtensions.GetRequiredService<UserManager<User>>(httpContext.RequestServices);
 				var request = httpContext.Request;

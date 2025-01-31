@@ -15,7 +15,7 @@ internal sealed class LogIn : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapPost("identity/login", HandleAsync)
-			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
+			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.HasApiVersion(1);
 	}
 

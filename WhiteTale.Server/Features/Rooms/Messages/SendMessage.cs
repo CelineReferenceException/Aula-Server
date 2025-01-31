@@ -14,7 +14,7 @@ internal sealed class SendMessage : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapPost("rooms/{roomId}/messages", HandleAsync)
-			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
+			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
 			.RequirePermissions(Permissions.SendMessages)
 			.DenyBannedUsers()

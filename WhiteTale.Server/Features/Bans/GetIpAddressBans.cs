@@ -12,7 +12,7 @@ internal sealed class GetIpAddressBans : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapGet("bans/ip-address", HandleAsync)
-			.RequireRateLimiting(CommonRateLimitPolicyNames.Global)
+			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
 			.RequirePermissions(Permissions.BanUsers)
 			.DenyBannedUsers()
