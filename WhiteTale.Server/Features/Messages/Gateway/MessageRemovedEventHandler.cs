@@ -73,14 +73,14 @@ internal sealed class MessageRemovedEventHandler : INotificationHandler<MessageR
 				u.Permissions,
 			}, cancellationToken);
 
-		foreach (var connection in _gatewayService.Sessions.Values)
+		foreach (var session in _gatewayService.Sessions.Values)
 		{
-			if (!connection.Intents.HasFlag(Intents.Messages))
+			if (!session.Intents.HasFlag(Intents.Messages))
 			{
 				continue;
 			}
 
-			var user = sessionUsers[connection.UserId];
+			var user = sessionUsers[session.UserId];
 			if ((user.CurrentRoomId is null ||
 			     user.CurrentRoomId != message.TargetId) &&
 			    !user.Permissions.HasFlag(Permissions.Administrator))
@@ -88,7 +88,7 @@ internal sealed class MessageRemovedEventHandler : INotificationHandler<MessageR
 				continue;
 			}
 
-			_ = connection.QueueEventAsync(payload, cancellationToken);
+			_ = session.QueueEventAsync(payload, cancellationToken);
 		}
 	}
 }

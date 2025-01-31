@@ -33,14 +33,14 @@ internal sealed class RoomRemovedEventHandler : INotificationHandler<RoomRemoved
 			},
 		}.GetJsonUtf8Bytes(_jsonSerializerOptions);
 
-		foreach (var connection in _gatewayService.Sessions.Values)
+		foreach (var session in _gatewayService.Sessions.Values)
 		{
-			if (!connection.Intents.HasFlag(Intents.Rooms))
+			if (!session.Intents.HasFlag(Intents.Rooms))
 			{
 				continue;
 			}
 
-			_ = connection.QueueEventAsync(payload, cancellationToken);
+			_ = session.QueueEventAsync(payload, cancellationToken);
 		}
 
 		return Task.CompletedTask;

@@ -30,14 +30,14 @@ internal sealed class RoomConnectionCreatedEventHandler : INotificationHandler<R
 			},
 		}.GetJsonUtf8Bytes(_jsonSerializerOptions);
 
-		foreach (var gatewayConnection in _gatewayService.Sessions.Values)
+		foreach (var session in _gatewayService.Sessions.Values)
 		{
-			if (!gatewayConnection.Intents.HasFlag(Intents.Rooms))
+			if (!session.Intents.HasFlag(Intents.Rooms))
 			{
 				continue;
 			}
 
-			_ = gatewayConnection.QueueEventAsync(payload, cancellationToken);
+			_ = session.QueueEventAsync(payload, cancellationToken);
 		}
 
 		return Task.CompletedTask;
