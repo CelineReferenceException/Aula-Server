@@ -9,6 +9,7 @@ global using WhiteTale.Server.Common.BackgroundTaskQueue;
 global using WhiteTale.Server.Common.CommandLine;
 global using WhiteTale.Server.Common.Endpoints;
 global using WhiteTale.Server.Common.Identity;
+global using WhiteTale.Server.Common.JsonSerialization;
 global using WhiteTale.Server.Common.Logging;
 global using WhiteTale.Server.Common.Mail;
 global using WhiteTale.Server.Common.Persistence;
