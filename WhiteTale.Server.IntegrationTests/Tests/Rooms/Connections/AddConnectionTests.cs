@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using WhiteTale.Server.Domain.Users;
-using WhiteTale.Server.Features.Rooms.Connections;
+using WhiteTale.Server.Features.RoomConnections;
 
 namespace WhiteTale.Server.IntegrationTests.Tests.Rooms.Connections;
 

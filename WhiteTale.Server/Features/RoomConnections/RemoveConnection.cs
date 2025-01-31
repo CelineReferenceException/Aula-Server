@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 
-namespace WhiteTale.Server.Features.Rooms.Connections;
+namespace WhiteTale.Server.Features.RoomConnections;
 
-internal sealed class RemoveAllConnections : IEndpoint
+internal sealed class RemoveConnection : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapDelete("rooms/{sourceRoomId}/connections", HandleAsync)
+		_ = route.MapDelete("rooms/{sourceRoomId}/connections/{targetRoomId}", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
 			.RequirePermissions(Permissions.ManageRooms)
@@ -19,8 +19,9 @@ internal sealed class RemoveAllConnections : IEndpoint
 			.HasApiVersion(1);
 	}
 
-	private static async Task<Results<Ok<IEnumerable<UInt64>>, ProblemHttpResult>> HandleAsync(
+	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(
 		[FromRoute] UInt64 sourceRoomId,
+		[FromRoute] UInt64 targetRoomId,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] SnowflakeGenerator snowflakeGenerator)
 	{
@@ -36,15 +37,30 @@ internal sealed class RemoveAllConnections : IEndpoint
 			});
 		}
 
-		var connections = await dbContext.RoomConnections
-			.AsTracking()
-			.Where(c => c.SourceRoomId == sourceRoomId)
-			.ToListAsync();
+		var targetRoomExists = dbContext.Rooms
+			.AsNoTracking()
+			.Any(r => r.Id == targetRoomId && !r.IsRemoved);
+		if (!targetRoomExists)
+		{
+			return TypedResults.Problem(new ProblemDetails
+			{
+				Title = "Invalid target room",
+				Detail = "The target room does not exist.",
+			});
+		}
 
-		connections.ForEach(c => c.Remove());
-		dbContext.RoomConnections.RemoveRange(connections);
+		var connection = await dbContext.RoomConnections
+			.Where(c => c.SourceRoomId == sourceRoomId && c.TargetRoomId == targetRoomId)
+			.FirstOrDefaultAsync();
+		if (connection is null)
+		{
+			return TypedResults.NoContent();
+		}
+
+		connection.Remove();
+		_ = dbContext.RoomConnections.Remove(connection);
 		_ = await dbContext.SaveChangesAsync();
 
-		return TypedResults.Ok(connections.Select(c => c.TargetRoomId));
+		return TypedResults.NoContent();
 	}
 }

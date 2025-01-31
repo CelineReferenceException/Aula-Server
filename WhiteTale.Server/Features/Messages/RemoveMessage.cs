@@ -6,29 +6,29 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 
-namespace WhiteTale.Server.Features.Rooms.Messages;
+namespace WhiteTale.Server.Features.Messages;
 
-internal sealed class GetMessage : IEndpoint
+internal sealed class RemoveMessage : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapGet("rooms/{roomId}/messages/{messageId}", HandleAsync)
+		_ = route.MapDelete("rooms/{roomId}/messages/{messageId}", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
-			.RequirePermissions(Permissions.ReadMessages)
+			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
 			.DenyBannedUsers()
 			.HasApiVersion(1);
 	}
 
-	private static async Task<Results<Ok<MessageData>, NotFound, ProblemHttpResult, InternalServerError>> HandleAsync(
+	private static async Task<Results<Ok<MessageData>, NotFound, ForbidHttpResult, ProblemHttpResult, InternalServerError>> HandleAsync(
 		[FromRoute] UInt64 roomId,
 		[FromRoute] UInt64 messageId,
 		[FromServices] ApplicationDbContext dbContext,
-		[FromServices] UserManager<User> userManager,
-		HttpContext httpContext)
+		HttpContext httpContext,
+		[FromServices] UserManager<User> userManager)
 	{
 		var roomExists = await dbContext.Rooms
 			.AsNoTracking()
-			.AnyAsync(room => room.Id == roomId && !room.IsRemoved);
+			.AnyAsync(r => r.Id == roomId && !r.IsRemoved);
 		if (!roomExists)
 		{
 			return TypedResults.Problem(new ProblemDetails
@@ -39,44 +39,31 @@ internal sealed class GetMessage : IEndpoint
 			});
 		}
 
+		var message = await dbContext.Messages
+			.AsTracking()
+			.Where(m => m.Id == messageId && !m.IsRemoved)
+			.Include(m => m.JoinData)
+			.Include(m => m.LeaveData)
+			.FirstOrDefaultAsync();
+		if (message is null)
+		{
+			return TypedResults.NotFound();
+		}
+
 		var user = await userManager.GetUserAsync(httpContext.User);
 		if (user is null)
 		{
 			return TypedResults.InternalServerError();
 		}
 
-		if (user.CurrentRoomId != roomId)
+		if (message.AuthorId != user.Id &&
+		    !user.Permissions.HasAnyFlag(Permissions.Administrator | Permissions.ManageMessages))
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid room",
-				Detail = "The user is not in the room",
-				Status = StatusCodes.Status403Forbidden,
-			});
+			return TypedResults.Forbid();
 		}
 
-		var message = await dbContext.Messages
-			.AsNoTracking()
-			.Where(m => m.Id == messageId && !m.IsRemoved)
-			.Select(m => new
-			{
-				m.Id,
-				m.Type,
-				m.Flags,
-				m.AuthorType,
-				m.AuthorId,
-				Target = m.TargetType,
-				m.TargetId,
-				m.Content,
-				m.JoinData,
-				m.LeaveData,
-				m.CreationTime,
-			})
-			.FirstOrDefaultAsync();
-		if (message is null)
-		{
-			return TypedResults.NotFound();
-		}
+		message.Remove();
+		_ = await dbContext.SaveChangesAsync();
 
 		return TypedResults.Ok(new MessageData
 		{
@@ -85,7 +72,7 @@ internal sealed class GetMessage : IEndpoint
 			Flags = message.Flags,
 			AuthorType = message.AuthorType,
 			AuthorId = message.AuthorId,
-			TargetType = message.Target,
+			TargetType = message.TargetType,
 			TargetId = message.TargetId,
 			Content = message.Content,
 			JoinData = message.JoinData is not null

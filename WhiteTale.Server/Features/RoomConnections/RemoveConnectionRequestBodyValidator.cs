@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace WhiteTale.Server.Features.Rooms.Connections;
+namespace WhiteTale.Server.Features.RoomConnections;
 
-internal sealed class AddConnectionRequestBodyValidator : AbstractValidator<AddConnectionRequestBody>
+internal sealed class RemoveConnectionRequestBodyValidator : AbstractValidator<RemoveConnectionRequestBody>
 {
-	public AddConnectionRequestBodyValidator()
+	public RemoveConnectionRequestBodyValidator()
 	{
 		_ = RuleFor(x => x.RoomId)
 			.NotEmpty()

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 
-namespace WhiteTale.Server.Features.Rooms.Connections;
+namespace WhiteTale.Server.Features.RoomConnections;
 
 internal sealed class AddConnection : IEndpoint
 {

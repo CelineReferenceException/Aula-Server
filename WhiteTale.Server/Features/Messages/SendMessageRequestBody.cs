@@ -1,4 +1,4 @@
-﻿namespace WhiteTale.Server.Features.Rooms.Messages;
+﻿namespace WhiteTale.Server.Features.Messages;
 
 /// <summary>
 ///     Holds the data required to send a message.

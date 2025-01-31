@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using WhiteTale.Server.Features.Rooms.Messages;
+using WhiteTale.Server.Features.Messages;
 
 namespace WhiteTale.Server.Features.Gateway.Events.Messages;
 

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace WhiteTale.Server.Features.Rooms.Messages;
+namespace WhiteTale.Server.Features.Messages;
 
 internal sealed class SendMessageRequestBodyValidator : AbstractValidator<SendMessageRequestBody>
 {

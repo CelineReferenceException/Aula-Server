@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace WhiteTale.Server.Features.Rooms.Messages;
+namespace WhiteTale.Server.Features.Messages;
 
 internal sealed class UserCurrentRoomUpdatedMessageSender : INotificationHandler<UserCurrentRoomUpdatedEvent>
 {

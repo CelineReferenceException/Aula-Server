@@ -1,4 +1,4 @@
-﻿namespace WhiteTale.Server.Features.Rooms.Messages;
+﻿namespace WhiteTale.Server.Features.Messages;
 
 /// <summary>
 ///     Represents a message within a room.

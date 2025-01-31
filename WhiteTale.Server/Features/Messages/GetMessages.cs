@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 
-namespace WhiteTale.Server.Features.Rooms.Messages;
+namespace WhiteTale.Server.Features.Messages;
 
 internal sealed class GetMessages : IEndpoint
 {

@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using WhiteTale.Server.Domain.Users;
-using WhiteTale.Server.Features.Rooms.Messages;
+using WhiteTale.Server.Features.Messages;
 
 namespace WhiteTale.Server.IntegrationTests.Tests.Rooms.Messages;
 
