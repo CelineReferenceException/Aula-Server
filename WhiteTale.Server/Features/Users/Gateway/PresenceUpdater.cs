@@ -10,7 +10,7 @@ using WhiteTale.Server.Common.Gateway;
 
 namespace WhiteTale.Server.Features.Users.Gateway;
 
-internal sealed class PresencesUpdateHandler :
+internal sealed class PresenceUpdater :
 	INotificationHandler<GatewayConnectedEvent>,
 	INotificationHandler<PayloadReceivedEvent>,
 	INotificationHandler<GatewayDisconnectedEvent>
@@ -20,7 +20,7 @@ internal sealed class PresencesUpdateHandler :
 	private readonly ApplicationDbContext _dbContext;
 	private readonly ResiliencePipelines _resiliencePipelines;
 
-	public PresencesUpdateHandler(
+	public PresenceUpdater(
 		IOptions<JsonOptions> jsonOptions,
 		ApplicationDbContext dbContext,
 		ResiliencePipelines resiliencePipelines)
