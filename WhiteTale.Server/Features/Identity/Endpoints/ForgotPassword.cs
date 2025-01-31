@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
-namespace WhiteTale.Server.Features.Identity;
+namespace WhiteTale.Server.Features.Identity.Endpoints;
 
 internal sealed class ForgotPassword : IEndpoint
 {

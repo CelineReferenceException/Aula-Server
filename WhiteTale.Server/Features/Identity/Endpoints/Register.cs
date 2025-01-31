@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
 
-namespace WhiteTale.Server.Features.Identity;
+namespace WhiteTale.Server.Features.Identity.Endpoints;
 
 internal sealed class Register : IEndpoint
 {

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using WhiteTale.Server.Domain.Users;
 using WhiteTale.Server.Features.Identity;
+using WhiteTale.Server.Features.Identity.Endpoints;
 
 namespace WhiteTale.Server.IntegrationTests.Tests.Identity;
 

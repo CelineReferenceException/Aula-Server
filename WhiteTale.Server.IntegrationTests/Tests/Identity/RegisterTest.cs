@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using WhiteTale.Server.Features.Identity;
+using WhiteTale.Server.Features.Identity.Endpoints;
 
 namespace WhiteTale.Server.IntegrationTests.Tests.Identity;
 

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 
-namespace WhiteTale.Server.Features.Identity;
+namespace WhiteTale.Server.Features.Identity.Endpoints;
 
 internal sealed class ConfirmEmailEmailSender
 {

@@ -1,4 +1,4 @@
-﻿namespace WhiteTale.Server.Features.Identity;
+﻿namespace WhiteTale.Server.Features.Identity.Endpoints;
 
 /// <summary>
 ///     Holds the data required to authenticate a user.

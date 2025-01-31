@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace WhiteTale.Server.Features.Identity;
+namespace WhiteTale.Server.Features.Identity.Endpoints;
 
 internal sealed class ResetPasswordRequestBodyValidator : AbstractValidator<ResetPasswordRequestBody>
 {
