@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WhiteTale.Server.Features.Bans.Endpoints;
 
-internal sealed class RemoveUserBan : IEndpoint
+internal sealed class UnbanUser : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
