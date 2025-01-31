@@ -1,4 +1,4 @@
-﻿namespace WhiteTale.Server.Features.Gateway.Events.Hello;
+﻿namespace WhiteTale.Server.Common.Gateway;
 
 /// <summary>
 ///     Sent at the start of a gateway connection (not when reconnecting). Contains useful data for future use.

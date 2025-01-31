@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using WhiteTale.Server.Common.Gateway;
 
-namespace WhiteTale.Server.Features.Gateway.Events.Hello;
+namespace WhiteTale.Server.Common.Gateway;
 
 internal sealed record HelloEvent : INotification
 {
