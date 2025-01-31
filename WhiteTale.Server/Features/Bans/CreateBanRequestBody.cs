@@ -2,5 +2,5 @@
 
 internal sealed class CreateBanRequestBody
 {
-	internal String? Reason { get; init; }
+	public String? Reason { get; init; }
 }
