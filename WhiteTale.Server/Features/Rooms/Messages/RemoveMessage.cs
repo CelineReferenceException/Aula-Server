@@ -63,15 +63,7 @@ internal sealed class RemoveMessage : IEndpoint
 		}
 
 		message.Remove();
-
-		try
-		{
-			_ = await dbContext.SaveChangesAsync();
-		}
-		catch (DbUpdateConcurrencyException)
-		{
-			return TypedResults.InternalServerError();
-		}
+		_ = await dbContext.SaveChangesAsync();
 
 		return TypedResults.Ok(new MessageData
 		{
