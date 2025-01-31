@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using WhiteTale.Server.Features.Users.Gateway;
 
-namespace WhiteTale.Server.Common.Gateway;
+namespace WhiteTale.Server.Features.Gateway;
 
 internal sealed class ConnectToGateway : IEndpoint
 {
@@ -66,4 +66,3 @@ internal sealed class ConnectToGateway : IEndpoint
 
 		return TypedResults.Empty;
 	}
-}
