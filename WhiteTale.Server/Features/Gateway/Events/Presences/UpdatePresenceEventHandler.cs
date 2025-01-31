@@ -35,6 +35,7 @@ internal sealed class UpdatePresenceEventHandler :
 			.FirstOrDefaultAsync(cancellationToken) ?? throw new UnreachableException("User expected to exist");
 
 		user.Modify(presence: GetPresence(notification.Presence));
+		user.UpdateConcurrencyStamp();
 
 		_ = await _dbContext.SaveChangesAsync(cancellationToken);
 	}
@@ -58,6 +59,7 @@ internal sealed class UpdatePresenceEventHandler :
 			.FirstOrDefaultAsync(cancellationToken) ?? throw new UnreachableException("User expected to exist");
 
 		user.Modify(presence: Presence.Offline);
+		user.UpdateConcurrencyStamp();
 
 		_ = await _dbContext.SaveChangesAsync(cancellationToken);
 		_ = s_userGatewaysCount.TryRemove(session.UserId, out _);
@@ -90,6 +92,7 @@ internal sealed class UpdatePresenceEventHandler :
 			.FirstOrDefaultAsync(cancellationToken) ?? throw new UnreachableException("User expected to exist");
 
 		user.Modify(presence: GetPresence(data.Presence));
+		user.UpdateConcurrencyStamp();
 
 		_ = await _dbContext.SaveChangesAsync(cancellationToken);
 

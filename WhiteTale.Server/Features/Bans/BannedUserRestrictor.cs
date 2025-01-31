@@ -30,6 +30,7 @@ internal sealed class BannedUserRestrictor : INotificationHandler<BanCreatedEven
 		}
 
 		user.Modify(permissions: 0);
+		user.UpdateConcurrencyStamp();
 
 		_ = await _dbContext.SaveChangesAsync(cancellationToken);
 	}

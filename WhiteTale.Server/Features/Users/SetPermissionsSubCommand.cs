@@ -68,6 +68,7 @@ internal sealed class SetPermissionsSubCommand : SubCommand
 		}
 
 		user.Modify(permissions: permissions);
+		user.UpdateConcurrencyStamp();
 
 		try
 		{
