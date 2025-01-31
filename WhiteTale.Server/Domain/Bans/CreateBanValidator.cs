@@ -9,7 +9,6 @@ internal sealed class CreateBanValidator : AbstractValidator<Ban>
 		_ = RuleFor(x => x.Id).NotEmpty();
 
 		_ = RuleFor(x => x.Type)
-			.NotEmpty()
 			.IsInEnum();
 
 		_ = RuleFor(x => x.Reason)
