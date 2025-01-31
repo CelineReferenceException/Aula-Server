@@ -56,14 +56,19 @@ internal sealed class MessageCreatedEventHandler : INotificationHandler<MessageC
 		var sessionUserIds = _gatewayService.Sessions.Values
 			.Select(session => session.UserId);
 
-		var usersCurrentRoomId = await _dbContext.Users
+		var sessionUsers = await _dbContext.Users
 			.Where(u => sessionUserIds.Contains(u.Id))
 			.Select(u => new
 			{
 				u.Id,
 				u.CurrentRoomId,
+				u.Permissions,
 			})
-			.ToDictionaryAsync(u => u.Id, u => u.CurrentRoomId, cancellationToken);
+			.ToDictionaryAsync(u => u.Id, u => new
+			{
+				u.CurrentRoomId,
+				u.Permissions,
+			}, cancellationToken);
 
 		foreach (var session in _gatewayService.Sessions.Values)
 		{
@@ -72,9 +77,10 @@ internal sealed class MessageCreatedEventHandler : INotificationHandler<MessageC
 				continue;
 			}
 
-			var userCurrentRoomId = usersCurrentRoomId[session.UserId];
-			if (userCurrentRoomId is null ||
-			    userCurrentRoomId != message.TargetId)
+			var user = sessionUsers[session.UserId];
+			if ((user.CurrentRoomId is null ||
+			     user.CurrentRoomId != message.TargetId) &&
+			    !user.Permissions.HasFlag(Permissions.Administrator))
 			{
 				continue;
 			}
