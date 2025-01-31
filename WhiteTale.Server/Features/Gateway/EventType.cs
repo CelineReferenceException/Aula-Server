@@ -65,6 +65,16 @@ internal enum EventType
 	/// </summary>
 	UserStoppedTyping,
 
+	/// <summary>
+	///     A user has been banned.
+	/// </summary>
+	BanCreated,
+
+	/// <summary>
+	///     A user has been unbanned.
+	/// </summary>
+	BanRemoved,
+
 	#endregion
 
 	#region Receive
