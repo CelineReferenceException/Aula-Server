@@ -14,7 +14,7 @@ internal sealed class UpdatePresenceEventHandler :
 	INotificationHandler<PayloadReceivedEvent>,
 	INotificationHandler<GatewayDisconnectedEvent>
 {
-	private static readonly ConcurrentDictionary<UInt64, UInt32> s_userGatewaysCount = new();
+	private static readonly ConcurrentDictionary<UInt64, UserPresenceState> s_presenceStates = new();
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
 	private readonly ApplicationDbContext _dbContext;
 
@@ -27,8 +27,11 @@ internal sealed class UpdatePresenceEventHandler :
 	public async Task Handle(GatewayConnectedEvent notification, CancellationToken cancellationToken)
 	{
 		var session = notification.Session;
+		var presenceState = s_presenceStates.GetOrAdd(session.UserId, _ => new UserPresenceState());
 
-		_ = s_userGatewaysCount.AddOrUpdate(session.UserId, _ => 1, (_, count) => ++count);
+		await presenceState.UpdateSemaphore.WaitAsync(cancellationToken);
+
+		presenceState.GatewayCount++;
 
 		var user = await _dbContext.Users
 			.Where(u => u.Id == session.UserId)
@@ -38,20 +41,22 @@ internal sealed class UpdatePresenceEventHandler :
 		user.UpdateConcurrencyStamp();
 
 		_ = await _dbContext.SaveChangesAsync(cancellationToken);
+		_ = presenceState.UpdateSemaphore.Release();
 	}
 
 	public async Task Handle(GatewayDisconnectedEvent notification, CancellationToken cancellationToken)
 	{
 		var session = notification.Session;
-		if (!s_userGatewaysCount.TryGetValue(session.UserId, out var count))
+		if (!s_presenceStates.TryGetValue(session.UserId, out var presenceState))
 		{
-			throw new UnreachableException("Expected gateway count to be traced.");
+			throw new UnreachableException("Expected gateway state to be traced.");
 		}
 
-		if (count > 1)
+		await presenceState.UpdateSemaphore.WaitAsync(cancellationToken);
+
+		if (presenceState.GatewayCount > 1)
 		{
-			_ = s_userGatewaysCount.TryUpdate(session.UserId, count - 1, count);
-			return;
+			presenceState.GatewayCount--;
 		}
 
 		var user = await _dbContext.Users
@@ -62,7 +67,8 @@ internal sealed class UpdatePresenceEventHandler :
 		user.UpdateConcurrencyStamp();
 
 		_ = await _dbContext.SaveChangesAsync(cancellationToken);
-		_ = s_userGatewaysCount.TryRemove(session.UserId, out _);
+		_ = s_presenceStates.TryRemove(session.UserId, out _);
+		_ = presenceState.UpdateSemaphore.Release();
 	}
 
 	public async Task Handle(PayloadReceivedEvent notification, CancellationToken cancellationToken)
@@ -87,6 +93,13 @@ internal sealed class UpdatePresenceEventHandler :
 			return;
 		}
 
+		if (!s_presenceStates.TryGetValue(session.UserId, out var presenceState))
+		{
+			throw new UnreachableException("Expected gateway state to be traced.");
+		}
+
+		await presenceState.UpdateSemaphore.WaitAsync(cancellationToken);
+
 		var user = await _dbContext.Users
 			.Where(u => u.Id == session.UserId)
 			.FirstOrDefaultAsync(cancellationToken) ?? throw new UnreachableException("User expected to exist");
@@ -95,7 +108,7 @@ internal sealed class UpdatePresenceEventHandler :
 		user.UpdateConcurrencyStamp();
 
 		_ = await _dbContext.SaveChangesAsync(cancellationToken);
-
+		_ = presenceState.UpdateSemaphore.Release();
 	}
 
 	private static Presence GetPresence(PresenceOptions presenceOptions)
@@ -106,5 +119,12 @@ internal sealed class UpdatePresenceEventHandler :
 			PresenceOptions.Online => Presence.Online,
 			_ => throw new InvalidOperationException($"Unhandled {nameof(PresenceOptions)} case: {presenceOptions})"),
 		};
+	}
+
+	private sealed class UserPresenceState
+	{
+		internal Int32 GatewayCount { get; set; }
+
+		internal SemaphoreSlim UpdateSemaphore { get; } = new(1, 1);
 	}
 }
