@@ -10,7 +10,5 @@ internal sealed record BanData
 
 	public UInt64? TargetId { get; init; }
 
-	public String? IpAddress { get; init; }
-
 	public required DateTime CreationTime { get; init; }
 }

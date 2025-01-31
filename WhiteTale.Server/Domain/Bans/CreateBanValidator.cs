@@ -18,13 +18,6 @@ internal sealed class CreateBanValidator : AbstractValidator<Ban>
 		_ = When(x => x.Type is BanType.Id, () =>
 		{
 			_ = RuleFor(x => x.TargetId).NotEmpty();
-			_ = RuleFor(x => x.IpAddress).Empty();
-		});
-
-		_ = When(x => x.Type is BanType.IpAddress, () =>
-		{
-			_ = RuleFor(x => x.TargetId).Empty();
-			_ = RuleFor(x => x.IpAddress).NotEmpty();
 		});
 	}
 }

@@ -3,5 +3,4 @@
 internal enum BanType
 {
 	Id = 0,
-	IpAddress = 1,
 }

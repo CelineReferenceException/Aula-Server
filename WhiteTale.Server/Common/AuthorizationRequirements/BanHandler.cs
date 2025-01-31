@@ -22,21 +22,9 @@ internal sealed class BanHandler : AuthorizationHandler<BanRequirement>
 		}
 
 		var dbContext = httpContext.RequestServices.GetRequiredService<ApplicationDbContext>();
-		var isBanned = false;
-
-		var ipAddress = httpContext.Connection.RemoteIpAddress?.ToString();
-		if (ipAddress is not null)
-		{
-			isBanned = await dbContext.Bans
-				.AsNoTracking()
-				.AnyAsync(b => b.TargetId == user.Id || b.IpAddress == ipAddress);
-		}
-		else
-		{
-			isBanned = await dbContext.Bans
-				.AsNoTracking()
-				.AnyAsync(b => b.TargetId == user.Id);
-		}
+		var isBanned = await dbContext.Bans
+			.AsNoTracking()
+			.AnyAsync(b => b.TargetId == user.Id);
 
 		if (!isBanned)
 		{

@@ -30,7 +30,6 @@ internal sealed class BanRemovedEventHandler : INotificationHandler<BanRemovedEv
 				ExecutorId = ban.ExecutorId,
 				Reason = ban.Reason,
 				TargetId = ban.TargetId,
-				IpAddress = ban.IpAddress,
 				CreationTime = ban.CreationTime,
 			},
 		}.GetJsonUtf8Bytes(_jsonSerializerOptions);

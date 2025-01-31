@@ -29,20 +29,9 @@ internal sealed class ImBanned : IEndpoint
 			return TypedResults.InternalServerError();
 		}
 
-		var ipAddress = httpContext.Connection.RemoteIpAddress?.ToString();
-		var isBanned = false;
-		if (ipAddress is not null)
-		{
-			isBanned = await dbContext.Bans
-				.AsNoTracking()
-				.AnyAsync(x => x.TargetId == userId || x.IpAddress == ipAddress);
-		}
-		else
-		{
-			isBanned = await dbContext.Bans
-				.AsNoTracking()
-				.AnyAsync(x => x.TargetId == userId);
-		}
+		var isBanned = await dbContext.Bans
+			.AsNoTracking()
+			.AnyAsync(x => x.TargetId == userId);
 
 		return TypedResults.Ok(new ImBannedData
 		{

@@ -29,7 +29,6 @@ internal sealed class GetUserBans : IEndpoint
 				ExecutorId = b.ExecutorId,
 				Reason = b.Reason,
 				TargetId = b.TargetId,
-				IpAddress = b.IpAddress,
 				CreationTime = b.CreationTime,
 			})
 			.ToListAsync();

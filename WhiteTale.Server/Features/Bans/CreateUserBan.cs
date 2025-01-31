@@ -73,7 +73,6 @@ internal sealed class CreateUserBan : IEndpoint
 			ExecutorId = ban.ExecutorId,
 			Reason = ban.Reason,
 			TargetId = ban.TargetId,
-			IpAddress = ban.IpAddress,
 			CreationTime = ban.CreationTime,
 		});
 	}

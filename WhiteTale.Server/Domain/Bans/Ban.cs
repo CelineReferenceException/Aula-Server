@@ -19,8 +19,6 @@ internal sealed class Ban : DefaultDomainEntity
 
 	internal UInt64? TargetId { get; private init; }
 
-	internal String? IpAddress { get; private init; }
-
 	internal DateTime CreationTime { get; private init; }
 
 	private Ban()
@@ -32,8 +30,7 @@ internal sealed class Ban : DefaultDomainEntity
 		BanType type,
 		UInt64? executorId = null,
 		String? reason = null,
-		UInt64? targetId = null,
-		String? ipAddress = null)
+		UInt64? targetId = null)
 	{
 		var ban = new Ban
 		{
@@ -42,7 +39,6 @@ internal sealed class Ban : DefaultDomainEntity
 			ExecutorId = executorId,
 			Reason = reason,
 			TargetId = targetId,
-			IpAddress = ipAddress,
 			CreationTime = DateTime.Now,
 		};
 
