@@ -23,7 +23,6 @@ internal sealed class Register : IEndpoint
 		[FromServices] IValidator<RegisterRequestBody> bodyValidator,
 		[FromServices] SnowflakeGenerator snowflakes,
 		[FromServices] UserManager<User> userManager,
-		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] IOptions<IdentityFeatureOptions> featureOptions,
 		HttpRequest httpRequest,
 		[FromServices] ConfirmEmailEmailSender confirmEmailEmailSender,
@@ -52,8 +51,6 @@ internal sealed class Register : IEndpoint
 			var problemDetails = identityCreation.Errors.ToProblemDetails();
 			return TypedResults.Problem(problemDetails);
 		}
-
-		_ = await dbContext.SaveChangesAsync();
 
 		await confirmEmailEmailSender.SendEmailAsync(newUser, httpRequest);
 		return TypedResults.NoContent();
