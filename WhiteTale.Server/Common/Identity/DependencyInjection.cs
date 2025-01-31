@@ -54,8 +54,8 @@ internal static class DependencyInjection
 		_ = services.AddOptions<BearerTokenOptions>(IdentityConstants.BearerScheme)
 			.Configure(static options =>
 			{
-				options.BearerTokenExpiration = TimeSpan.FromDays(1);
-				options.RefreshTokenExpiration = TimeSpan.FromDays(14);
+				options.BearerTokenExpiration = TimeSpan.FromHours(1);
+				options.RefreshTokenExpiration = TimeSpan.FromDays(7);
 			});
 
 		return services;
