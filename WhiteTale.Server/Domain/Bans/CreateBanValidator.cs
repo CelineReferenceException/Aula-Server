@@ -4,7 +4,7 @@ namespace WhiteTale.Server.Domain.Bans;
 
 internal sealed class CreateBanValidator : AbstractValidator<Ban>
 {
-	internal CreateBanValidator()
+	public CreateBanValidator()
 	{
 		_ = RuleFor(x => x.Id).NotEmpty();
 
