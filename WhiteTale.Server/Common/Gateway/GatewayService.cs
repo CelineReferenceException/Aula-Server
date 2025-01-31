@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace WhiteTale.Server.Common.Gateway;
 
-internal sealed class GatewayService
+internal sealed class GatewayService : IDisposable
 {
 	private readonly ConcurrentDictionary<String, GatewaySession> _sessions = [];
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
@@ -42,5 +42,24 @@ internal sealed class GatewayService
 		{
 			_ = _sessions.TryRemove(session.Id, out _);
 		}
+	}
+
+	public void Dispose()
+	{
+		Dispose(true);
+		GC.SuppressFinalize(this);
+	}
+
+	private void Dispose(Boolean disposing)
+	{
+		if (disposing)
+		{
+			_serviceScope.Dispose();
+		}
+	}
+
+	~GatewayService()
+	{
+		Dispose(false);
 	}
 }
