@@ -235,6 +235,8 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 
 	public override async Task<Int32> SaveChangesAsync(CancellationToken cancellationToken = default)
 	{
+		var entriesWritten = await base.SaveChangesAsync(cancellationToken);
+
 		var domainEvents = ChangeTracker
 			.Entries<IDomainEntity>()
 			.SelectMany(x => x.Entity.Events);
@@ -244,6 +246,6 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 			await _publisher.Publish(domainEvent, cancellationToken);
 		}
 
-		return await base.SaveChangesAsync(cancellationToken);
+		return entriesWritten;
 	}
 }
