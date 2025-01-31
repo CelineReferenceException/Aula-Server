@@ -3,7 +3,7 @@
 /// <summary>
 ///     Holds the data required to add a connection to this room.
 /// </summary>
-internal sealed record AddConnectionRequestBody
+internal sealed record AddRoomConnectionRequestBody
 {
 	/// <summary>
 	///     The ID of the target room to connect this room with.

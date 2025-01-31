@@ -4,7 +4,7 @@ using WhiteTale.Server.Domain.Users;
 
 namespace WhiteTale.Server.IntegrationTests.Tests.Rooms.Connections;
 
-public class RemoveAllConnectionsTests
+public class RemoveAllRoomConnectionsTests
 {
 	[Fact]
 	public async Task RemoveAllConnections_ValidOperation_ReturnsOkWithConnections()

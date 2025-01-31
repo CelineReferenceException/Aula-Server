@@ -5,7 +5,7 @@ using WhiteTale.Server.Features.RoomConnections.Endpoints;
 
 namespace WhiteTale.Server.IntegrationTests.Tests.Rooms.Connections;
 
-public sealed class AddConnectionTests
+public sealed class AddRoomConnectionTests
 {
 	[Fact]
 	public async Task AddConnection_ValidOperation_ReturnsNoContent()
@@ -30,7 +30,7 @@ public sealed class AddConnectionTests
 		});
 
 		using var request = new HttpRequestMessage(HttpMethod.Put, $"api/v1/rooms/{firstRoomSeed.Seed.Id}/connections");
-		var requestBody = new AddConnectionRequestBody
+		var requestBody = new AddRoomConnectionRequestBody
 		{
 			RoomId = secondRoomSeed.Seed.Id,
 		};
@@ -66,7 +66,7 @@ public sealed class AddConnectionTests
 			Id = 2,
 		});
 
-		var requestBody = new AddConnectionRequestBody
+		var requestBody = new AddRoomConnectionRequestBody
 		{
 			RoomId = secondRoomSeed.Seed.Id,
 		};

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WhiteTale.Server.Features.RoomConnections.Endpoints;
 
-internal sealed class AddConnection : IEndpoint
+internal sealed class AddRoomConnection : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
@@ -21,8 +21,8 @@ internal sealed class AddConnection : IEndpoint
 
 	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(
 		[FromRoute] UInt64 roomId,
-		[FromBody] AddConnectionRequestBody body,
-		[FromServices] AddConnectionRequestBodyValidator bodyValidator,
+		[FromBody] AddRoomConnectionRequestBody body,
+		[FromServices] AddRoomConnectionRequestBodyValidator bodyValidator,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] SnowflakeGenerator snowflakeGenerator)
 	{

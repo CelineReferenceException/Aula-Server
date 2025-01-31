@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 
 namespace WhiteTale.Server.IntegrationTests.Tests.Rooms.Connections;
 
-public sealed class GetConnectionsTests
+public sealed class GetRoomConnectionsTests
 {
 	[Fact]
 	public async Task GetConnections_ValidOperation_ReturnsOkWithConnections()
