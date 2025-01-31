@@ -6,6 +6,8 @@
 configuration.json
 *.db
 *.sqlite
+*.db-shm
+*.db-wal
 
 .idea
 
