@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using WhiteTale.Server.Common.Gateway;
 
 namespace WhiteTale.Server.Features.Messages.Gateway;
 
@@ -22,8 +21,6 @@ internal sealed class MessageCreatedEventHandler : INotificationHandler<MessageC
 
 	public async Task Handle(MessageCreatedEvent notification, CancellationToken cancellationToken)
 	{
-		var operations = new List<Task>();
-
 		var message = notification.Message;
 		var payload = new GatewayPayload<MessageData>
 		{
@@ -83,10 +80,7 @@ internal sealed class MessageCreatedEventHandler : INotificationHandler<MessageC
 				continue;
 			}
 
-			var operation = session.QueueEventAsync(payloadBytes, cancellationToken);
-			operations.Add(operation);
+			_ = session.QueueEventAsync(payloadBytes, cancellationToken);
 		}
-
-		await Task.WhenAll(operations);
 	}
 }

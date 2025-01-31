@@ -18,8 +18,6 @@ internal sealed class RoomConnectionRemovedEventHandler : INotificationHandler<R
 
 	public async Task Handle(RoomConnectionRemovedEvent notification, CancellationToken cancellationToken)
 	{
-		var operations = new List<Task>();
-
 		var roomConnection = notification.Connection;
 		var payload = new GatewayPayload<RoomConnectionData>
 		{
@@ -40,10 +38,7 @@ internal sealed class RoomConnectionRemovedEventHandler : INotificationHandler<R
 				continue;
 			}
 
-			var operation = gatewayConnection.QueueEventAsync(payloadBytes, cancellationToken);
-			operations.Add(operation);
+			_ = gatewayConnection.QueueEventAsync(payloadBytes, cancellationToken);
 		}
-
-		await Task.WhenAll(operations);
 	}
 }

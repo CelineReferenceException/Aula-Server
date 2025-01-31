@@ -14,7 +14,7 @@ internal sealed class HelloEventHandler : INotificationHandler<HelloEvent>
 		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
 	}
 
-	public async Task Handle(HelloEvent notification, CancellationToken cancellationToken)
+	public Task Handle(HelloEvent notification, CancellationToken cancellationToken)
 	{
 		var session = notification.Session;
 
@@ -28,6 +28,7 @@ internal sealed class HelloEventHandler : INotificationHandler<HelloEvent>
 		};
 		var payloadBytes = JsonSerializer.SerializeToUtf8Bytes(payload, _jsonSerializerOptions);
 
-		await session.QueueEventAsync(payloadBytes, cancellationToken);
+		_ = session.QueueEventAsync(payloadBytes, cancellationToken);
+		return Task.CompletedTask;
 	}
 }

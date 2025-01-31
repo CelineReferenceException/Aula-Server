@@ -3,7 +3,6 @@ using System.Text.Json;
 using MediatR;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
-using WhiteTale.Server.Common.Gateway;
 
 namespace WhiteTale.Server.Features.Users.Gateway;
 
@@ -20,8 +19,6 @@ internal sealed class UserUpdatedEventHandler : INotificationHandler<UserUpdated
 
 	public async Task Handle(UserUpdatedEvent notification, CancellationToken cancellationToken)
 	{
-		var operations = new List<Task>();
-
 		var user = notification.User;
 		var payload = new GatewayPayload<UserData>
 		{
@@ -48,10 +45,7 @@ internal sealed class UserUpdatedEventHandler : INotificationHandler<UserUpdated
 				continue;
 			}
 
-			var operation = connection.QueueEventAsync(payloadBytes, cancellationToken);
-			operations.Add(operation);
+			_ = connection.QueueEventAsync(payloadBytes, cancellationToken);
 		}
-
-		await Task.WhenAll(operations);
 	}
 }

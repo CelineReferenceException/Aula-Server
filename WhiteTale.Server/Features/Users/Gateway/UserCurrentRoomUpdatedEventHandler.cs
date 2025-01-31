@@ -19,8 +19,6 @@ internal sealed class UserCurrentRoomUpdatedEventHandler : INotificationHandler<
 
 	public async Task Handle(UserCurrentRoomUpdatedEvent notification, CancellationToken cancellationToken)
 	{
-		var operations = new List<Task>();
-
 		var payload = new GatewayPayload<UserCurrentRoomUpdatedEventData>
 		{
 			Operation = OperationType.Dispatch,
@@ -41,10 +39,7 @@ internal sealed class UserCurrentRoomUpdatedEventHandler : INotificationHandler<
 				continue;
 			}
 
-			var operation = connection.QueueEventAsync(payloadBytes, cancellationToken);
-			operations.Add(operation);
+			_ = connection.QueueEventAsync(payloadBytes, cancellationToken);
 		}
-
-		await Task.WhenAll(operations);
 	}
 }

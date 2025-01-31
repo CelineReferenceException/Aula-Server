@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using WhiteTale.Server.Common.Gateway;
 
 namespace WhiteTale.Server.Features.Messages.Gateway;
 
@@ -23,8 +22,6 @@ internal sealed class UserStoppedTypingEventHandler : INotificationHandler<UserS
 
 	public async Task Handle(UserStoppedTypingEvent notification, CancellationToken cancellationToken)
 	{
-		var operations = new List<Task>();
-
 		var payload = new GatewayPayload<UserTypingEventData>
 		{
 			Operation = OperationType.Dispatch,
@@ -63,10 +60,7 @@ internal sealed class UserStoppedTypingEventHandler : INotificationHandler<UserS
 				continue;
 			}
 
-			var operation = session.QueueEventAsync(payloadBytes, cancellationToken);
-			operations.Add(operation);
+			_ = session.QueueEventAsync(payloadBytes, cancellationToken);
 		}
-
-		await Task.WhenAll(operations);
 	}
 }

@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
-using WhiteTale.Server.Common.Gateway;
 
 namespace WhiteTale.Server.Features.Rooms.Gateway;
 
@@ -19,8 +18,6 @@ internal sealed class RoomUpdatedEventHandler : INotificationHandler<RoomUpdated
 
 	public async Task Handle(RoomUpdatedEvent notification, CancellationToken cancellationToken)
 	{
-		var operations = new List<Task>();
-
 		var room = notification.Room;
 		var payload = new GatewayPayload<RoomData>
 		{
@@ -44,10 +41,7 @@ internal sealed class RoomUpdatedEventHandler : INotificationHandler<RoomUpdated
 				continue;
 			}
 
-			var operation = connection.QueueEventAsync(payloadBytes, cancellationToken);
-			operations.Add(operation);
+			_ = connection.QueueEventAsync(payloadBytes, cancellationToken);
 		}
-
-		await Task.WhenAll(operations);
 	}
 }
