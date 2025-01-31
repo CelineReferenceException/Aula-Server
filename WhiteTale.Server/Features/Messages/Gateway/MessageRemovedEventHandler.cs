@@ -54,8 +54,7 @@ internal sealed class MessageRemovedEventHandler : INotificationHandler<MessageR
 					: null,
 				CreationTime = message.CreationTime,
 			},
-		};
-		var payloadBytes = JsonSerializer.SerializeToUtf8Bytes(payload, _jsonSerializerOptions);
+		}.GetJsonUtf8Bytes(_jsonSerializerOptions);
 
 		var sessionUserIds = _gatewayService.Sessions.Values
 			.Select(connection => connection.UserId);
@@ -83,7 +82,7 @@ internal sealed class MessageRemovedEventHandler : INotificationHandler<MessageR
 				continue;
 			}
 
-			_ = connection.QueueEventAsync(payloadBytes, cancellationToken);
+			_ = connection.QueueEventAsync(payload, cancellationToken);
 		}
 	}
 }

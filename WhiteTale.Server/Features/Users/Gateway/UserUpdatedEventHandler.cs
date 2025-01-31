@@ -1,5 +1,4 @@
-﻿using System.Text;
-using System.Text.Json;
+﻿using System.Text.Json;
 using MediatR;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
@@ -17,7 +16,7 @@ internal sealed class UserUpdatedEventHandler : INotificationHandler<UserUpdated
 		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
 	}
 
-	public async Task Handle(UserUpdatedEvent notification, CancellationToken cancellationToken)
+	public Task Handle(UserUpdatedEvent notification, CancellationToken cancellationToken)
 	{
 		var user = notification.User;
 		var payload = new GatewayPayload<UserData>
@@ -34,9 +33,7 @@ internal sealed class UserUpdatedEventHandler : INotificationHandler<UserUpdated
 				Permissions = user.Permissions,
 				CurrentRoomId = user.CurrentRoomId,
 			},
-		};
-		var jsonString = JsonSerializer.Serialize(payload, _jsonSerializerOptions);
-		var payloadBytes = Encoding.UTF8.GetBytes(jsonString);
+		}.GetJsonUtf8Bytes(_jsonSerializerOptions);
 
 		foreach (var connection in _gatewayService.Sessions.Values)
 		{
@@ -45,7 +42,9 @@ internal sealed class UserUpdatedEventHandler : INotificationHandler<UserUpdated
 				continue;
 			}
 
-			_ = connection.QueueEventAsync(payloadBytes, cancellationToken);
+			_ = connection.QueueEventAsync(payload, cancellationToken);
 		}
+
+		return Task.CompletedTask;
 	}
 }

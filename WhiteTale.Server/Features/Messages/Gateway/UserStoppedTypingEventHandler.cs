@@ -31,7 +31,7 @@ internal sealed class UserStoppedTypingEventHandler : INotificationHandler<UserS
 				UserId = notification.UserId,
 				RoomId = notification.RoomId,
 			},
-		};
+		}.GetJsonUtf8Bytes(_jsonSerializerOptions);
 		var payloadBytes = JsonSerializer.SerializeToUtf8Bytes(payload, _jsonSerializerOptions);
 
 		var sessionUserIds = _gatewayService.Sessions.Values
@@ -60,7 +60,7 @@ internal sealed class UserStoppedTypingEventHandler : INotificationHandler<UserS
 				continue;
 			}
 
-			_ = session.QueueEventAsync(payloadBytes, cancellationToken);
+			_ = session.QueueEventAsync(payload, cancellationToken);
 		}
 	}
 }

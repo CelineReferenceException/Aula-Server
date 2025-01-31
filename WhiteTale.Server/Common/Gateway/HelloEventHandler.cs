@@ -25,10 +25,9 @@ internal sealed class HelloEventHandler : INotificationHandler<HelloEvent>
 			{
 				SessionId = session.Id,
 			},
-		};
-		var payloadBytes = JsonSerializer.SerializeToUtf8Bytes(payload, _jsonSerializerOptions);
+		}.GetJsonUtf8Bytes(_jsonSerializerOptions);
 
-		_ = session.QueueEventAsync(payloadBytes, cancellationToken);
+		_ = session.QueueEventAsync(payload, cancellationToken);
 		return Task.CompletedTask;
 	}
 }

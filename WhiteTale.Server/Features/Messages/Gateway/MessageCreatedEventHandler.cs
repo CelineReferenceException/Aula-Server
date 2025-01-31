@@ -51,8 +51,7 @@ internal sealed class MessageCreatedEventHandler : INotificationHandler<MessageC
 					: null,
 				CreationTime = message.CreationTime,
 			},
-		};
-		var payloadBytes = JsonSerializer.SerializeToUtf8Bytes(payload, _jsonSerializerOptions);
+		}.GetJsonUtf8Bytes(_jsonSerializerOptions);
 
 		var sessionUserIds = _gatewayService.Sessions.Values
 			.Select(session => session.UserId);
@@ -80,7 +79,7 @@ internal sealed class MessageCreatedEventHandler : INotificationHandler<MessageC
 				continue;
 			}
 
-			_ = session.QueueEventAsync(payloadBytes, cancellationToken);
+			_ = session.QueueEventAsync(payload, cancellationToken);
 		}
 	}
 }

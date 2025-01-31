@@ -16,7 +16,7 @@ internal sealed class RoomConnectionCreatedEventHandler : INotificationHandler<R
 		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
 	}
 
-	public async Task Handle(RoomConnectionCreatedEvent notification, CancellationToken cancellationToken)
+	public Task Handle(RoomConnectionCreatedEvent notification, CancellationToken cancellationToken)
 	{
 		var roomConnection = notification.Connection;
 		var payload = new GatewayPayload<RoomConnectionData>
@@ -28,8 +28,7 @@ internal sealed class RoomConnectionCreatedEventHandler : INotificationHandler<R
 				SourceRoomId = roomConnection.SourceRoomId,
 				TargetRoomId = roomConnection.TargetRoomId,
 			},
-		};
-		var payloadBytes = JsonSerializer.SerializeToUtf8Bytes(payload, _jsonSerializerOptions);
+		}.GetJsonUtf8Bytes(_jsonSerializerOptions);
 
 		foreach (var gatewayConnection in _gatewayService.Sessions.Values)
 		{
@@ -38,7 +37,9 @@ internal sealed class RoomConnectionCreatedEventHandler : INotificationHandler<R
 				continue;
 			}
 
-			_ = gatewayConnection.QueueEventAsync(payloadBytes, cancellationToken);
+			_ = gatewayConnection.QueueEventAsync(payload, cancellationToken);
 		}
+
+		return Task.CompletedTask;
 	}
 }
