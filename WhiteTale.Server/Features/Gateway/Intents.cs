@@ -68,4 +68,20 @@ internal enum Intents
 	///     </list>
 	/// </summary>
 	Messages = 1 << 2,
+
+	/// <summary>
+	///     <list type="bullet">
+	///         <item>
+	///             <term>
+	///                 <see cref="EventType.BanCreated" />
+	///             </term>
+	///         </item>
+	///         <item>
+	///             <term>
+	///                 <see cref="EventType.BanRemoved" />
+	///             </term>
+	///         </item>
+	///     </list>
+	/// </summary>
+	Moderation = 1 << 3,
 }
