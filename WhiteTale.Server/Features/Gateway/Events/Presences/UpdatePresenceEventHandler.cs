@@ -17,11 +17,16 @@ internal sealed class UpdatePresenceEventHandler :
 	private static readonly ConcurrentDictionary<UInt64, UserPresenceState> s_presenceStates = new();
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
 	private readonly ApplicationDbContext _dbContext;
+	private readonly ResiliencePipelines _resiliencePipelines;
 
-	public UpdatePresenceEventHandler(IOptions<JsonOptions> jsonOptions, ApplicationDbContext dbContext)
+	public UpdatePresenceEventHandler(
+		IOptions<JsonOptions> jsonOptions,
+		ApplicationDbContext dbContext,
+		ResiliencePipelines resiliencePipelines)
 	{
 		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
 		_dbContext = dbContext;
+		_resiliencePipelines = resiliencePipelines;
 	}
 
 	public async Task Handle(GatewayConnectedEvent notification, CancellationToken cancellationToken)
@@ -33,15 +38,18 @@ internal sealed class UpdatePresenceEventHandler :
 
 		presenceState.GatewayCount++;
 
-		var user = await _dbContext.Users
-			.Where(u => u.Id == session.UserId)
-			.FirstOrDefaultAsync(cancellationToken) ?? throw new UnreachableException("User expected to exist");
+		await _resiliencePipelines.RetryOnDbConcurrencyProblem.ExecuteAsync(async ct =>
+		{
+			var user = await _dbContext.Users
+				.Where(u => u.Id == session.UserId)
+				.FirstOrDefaultAsync(ct) ?? throw new UnreachableException("User expected to exist");
 
-		user.Modify(presence: GetPresence(notification.Presence));
-		user.UpdateConcurrencyStamp();
+			user.Modify(presence: GetPresence(notification.Presence));
+			user.UpdateConcurrencyStamp();
 
-		_ = await _dbContext.SaveChangesAsync(cancellationToken);
-		_ = presenceState.UpdateSemaphore.Release();
+			_ = await _dbContext.SaveChangesAsync(ct);
+			_ = presenceState.UpdateSemaphore.Release();
+		}, cancellationToken);
 	}
 
 	public async Task Handle(GatewayDisconnectedEvent notification, CancellationToken cancellationToken)
@@ -63,15 +71,18 @@ internal sealed class UpdatePresenceEventHandler :
 			_ = s_presenceStates.TryRemove(session.UserId, out _);
 		}
 
-		var user = await _dbContext.Users
-			.Where(u => u.Id == notification.Session.UserId)
-			.FirstOrDefaultAsync(cancellationToken) ?? throw new UnreachableException("User expected to exist");
+		await _resiliencePipelines.RetryOnDbConcurrencyProblem.ExecuteAsync(async ct =>
+		{
+			var user = await _dbContext.Users
+				.Where(u => u.Id == notification.Session.UserId)
+				.FirstOrDefaultAsync(ct) ?? throw new UnreachableException("User expected to exist");
 
-		user.Modify(presence: Presence.Offline);
-		user.UpdateConcurrencyStamp();
+			user.Modify(presence: Presence.Offline);
+			user.UpdateConcurrencyStamp();
 
-		_ = await _dbContext.SaveChangesAsync(cancellationToken);
-		_ = presenceState.UpdateSemaphore.Release();
+			_ = await _dbContext.SaveChangesAsync(ct);
+			_ = presenceState.UpdateSemaphore.Release();
+		}, cancellationToken);
 	}
 
 	public async Task Handle(PayloadReceivedEvent notification, CancellationToken cancellationToken)
@@ -103,15 +114,18 @@ internal sealed class UpdatePresenceEventHandler :
 
 		await presenceState.UpdateSemaphore.WaitAsync(cancellationToken);
 
-		var user = await _dbContext.Users
-			.Where(u => u.Id == session.UserId)
-			.FirstOrDefaultAsync(cancellationToken) ?? throw new UnreachableException("User expected to exist");
+		await _resiliencePipelines.RetryOnDbConcurrencyProblem.ExecuteAsync(async ct =>
+		{
+			var user = await _dbContext.Users
+				.Where(u => u.Id == session.UserId)
+				.FirstOrDefaultAsync(ct) ?? throw new UnreachableException("User expected to exist");
 
-		user.Modify(presence: GetPresence(data.Presence));
-		user.UpdateConcurrencyStamp();
+			user.Modify(presence: GetPresence(data.Presence));
+			user.UpdateConcurrencyStamp();
 
-		_ = await _dbContext.SaveChangesAsync(cancellationToken);
-		_ = presenceState.UpdateSemaphore.Release();
+			_ = await _dbContext.SaveChangesAsync(ct);
+			_ = presenceState.UpdateSemaphore.Release();
+		}, cancellationToken);
 	}
 
 	private static Presence GetPresence(PresenceOptions presenceOptions)
