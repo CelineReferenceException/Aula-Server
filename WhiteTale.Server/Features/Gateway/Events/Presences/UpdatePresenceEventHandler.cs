@@ -58,6 +58,10 @@ internal sealed class UpdatePresenceEventHandler :
 		{
 			presenceState.GatewayCount--;
 		}
+		else
+		{
+			_ = s_presenceStates.TryRemove(session.UserId, out _);
+		}
 
 		var user = await _dbContext.Users
 			.Where(u => u.Id == notification.Session.UserId)
@@ -67,7 +71,6 @@ internal sealed class UpdatePresenceEventHandler :
 		user.UpdateConcurrencyStamp();
 
 		_ = await _dbContext.SaveChangesAsync(cancellationToken);
-		_ = s_presenceStates.TryRemove(session.UserId, out _);
 		_ = presenceState.UpdateSemaphore.Release();
 	}
 
