@@ -66,3 +66,4 @@ internal sealed class ConnectToGateway : IEndpoint
 
 		return TypedResults.Empty;
 	}
+}
