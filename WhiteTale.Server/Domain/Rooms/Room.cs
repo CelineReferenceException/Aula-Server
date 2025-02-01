@@ -1,4 +1,6 @@
-﻿#pragma warning disable CS8618
+﻿using FluentValidation;
+
+#pragma warning disable CS8618
 namespace WhiteTale.Server.Domain.Rooms;
 
 internal sealed class Room : DefaultDomainEntity
@@ -7,6 +9,7 @@ internal sealed class Room : DefaultDomainEntity
 	internal const Int32 NameMaximumLength = 32;
 	internal const Int32 DescriptionMinimumLength = 1;
 	internal const Int32 DescriptionMaximumLength = 2048;
+	private static readonly RoomValidator s_validator = new();
 
 	private Room()
 	{
@@ -37,6 +40,8 @@ internal sealed class Room : DefaultDomainEntity
 			ConcurrencyStamp = Guid.NewGuid().ToString("N"),
 			CreationTime = DateTime.UtcNow,
 		};
+
+		s_validator.ValidateAndThrow(room);
 
 		room.AddEvent(new RoomCreatedEvent(room));
 
@@ -74,6 +79,8 @@ internal sealed class Room : DefaultDomainEntity
 		{
 			return;
 		}
+
+		s_validator.ValidateAndThrow(this);
 
 		AddEvent(new RoomUpdatedEvent(this));
 	}
