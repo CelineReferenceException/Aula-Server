@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 
 #pragma warning disable CS8618
@@ -12,6 +13,7 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 	internal const Int32 UserNameMaximumLength = 32;
 	internal const Int32 DescriptionMinimumLength = 1;
 	internal const Int32 DescriptionMaximumLength = 1024;
+	private static readonly UserValidator s_validator = new();
 	private readonly List<DomainEvent> _events = [];
 
 	private User()
@@ -72,6 +74,8 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 			ConcurrencyStamp = Guid.NewGuid().ToString("N"),
 		};
 
+		s_validator.Validate(character);
+
 		return character;
 	}
 
@@ -115,6 +119,8 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 			return;
 		}
 
+		s_validator.ValidateAndThrow(this);
+
 		_events.Add(new UserUpdatedEvent(this));
 	}
 
@@ -127,6 +133,8 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 
 		var previousCurrentRoomId = CurrentRoomId;
 		CurrentRoomId = currentRoomId;
+
+		s_validator.ValidateAndThrow(this);
 
 		_events.Add(new UserCurrentRoomUpdatedEvent(Id, previousCurrentRoomId, CurrentRoomId));
 	}
