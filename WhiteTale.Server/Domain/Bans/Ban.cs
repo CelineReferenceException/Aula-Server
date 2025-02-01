@@ -4,7 +4,7 @@ namespace WhiteTale.Server.Domain.Bans;
 
 internal sealed class Ban : DefaultDomainEntity
 {
-	private static readonly BanValidator s_banValidator = new();
+	private static readonly BanValidator s_validator = new();
 
 	internal const Int32 ReasonMinimumLength = 1;
 	internal const Int32 ReasonMaximumLength = 512;
@@ -42,7 +42,7 @@ internal sealed class Ban : DefaultDomainEntity
 			CreationTime = DateTime.Now,
 		};
 
-		s_banValidator.ValidateAndThrow(ban);
+		s_validator.ValidateAndThrow(ban);
 
 		ban.AddEvent(new BanCreatedEvent(ban));
 		return ban;
