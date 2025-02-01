@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
@@ -24,7 +23,7 @@ internal sealed class ModifyOwnUser : IEndpoint
 		[FromBody] ModifyOwnUserRequestBody body,
 		HttpContext httpContext,
 		[FromServices] UserManager<User> userManager,
-		[FromServices] IValidator<ModifyOwnUserRequestBody> bodyValidator,
+		[FromServices] ModifyOwnUserRequestBodyValidator bodyValidator,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] ILogger<ModifyOwnUser> logger)
 	{

@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
@@ -21,7 +20,7 @@ internal sealed class ResetPassword : IEndpoint
 
 	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(
 		[FromBody] ResetPasswordRequestBody body,
-		[FromServices] IValidator<ResetPasswordRequestBody> bodyValidator,
+		[FromServices] ResetPasswordRequestBodyValidator bodyValidator,
 		[FromServices] UserManager<User> userManager)
 	{
 		var bodyValidation = await bodyValidator.ValidateAsync(body);

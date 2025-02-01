@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
@@ -20,7 +19,7 @@ internal sealed class Register : IEndpoint
 
 	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(
 		[FromBody] RegisterRequestBody body,
-		[FromServices] IValidator<RegisterRequestBody> bodyValidator,
+		[FromServices] RegisterRequestBodyValidator bodyValidator,
 		[FromServices] SnowflakeGenerator snowflakes,
 		[FromServices] UserManager<User> userManager,
 		[FromServices] IOptions<IdentityFeatureOptions> featureOptions,

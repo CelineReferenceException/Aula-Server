@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -21,7 +20,7 @@ internal sealed class LogIn : IEndpoint
 
 	private static async Task<Results<Ok<AccessTokenResponse>, ProblemHttpResult, EmptyHttpResult>> HandleAsync(
 		[FromBody] LogInRequestBody body,
-		[FromServices] IValidator<LogInRequestBody> bodyValidator,
+		[FromServices] LogInRequestBodyValidator bodyValidator,
 		[FromServices] UserManager<User> userManager,
 		[FromServices] SignInManager<User> signInManager)
 	{
