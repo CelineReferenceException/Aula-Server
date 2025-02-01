@@ -1,10 +1,15 @@
-﻿#pragma warning disable CS8618
+﻿using FluentValidation;
+
+#pragma warning disable CS8618
 namespace WhiteTale.Server.Domain.Messages;
 
 internal sealed class Message : DefaultDomainEntity
 {
+	private static readonly MessageValidator s_validator = new();
+
 	internal const MessageFlags StandardTypeAllowedFlags = MessageFlags.HideAuthor;
 
+	internal const Int32 ContentMinimumLength = 1;
 	internal const Int32 ContentMaximumLength = 2048;
 
 	private Message()
@@ -61,6 +66,8 @@ internal sealed class Message : DefaultDomainEntity
 			LeaveData = leaveData,
 			CreationTime = DateTime.UtcNow,
 		};
+
+		s_validator.ValidateAndThrow(message);
 
 		message.AddEvent(new MessageCreatedEvent(message));
 
