@@ -205,7 +205,8 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 			.IsRequired(false);
 
 		_ = banModel.Property(x => x.Reason)
-			.IsRequired(false);
+			.IsRequired(false)
+			.HasMaxLength(Ban.ReasonMaximumLength);
 
 		_ = banModel.Property(x => x.TargetId)
 			.IsRequired(false);
