@@ -62,7 +62,7 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 		UserOwnerType ownerType,
 		Permissions permissions)
 	{
-		var character = new User
+		var user = new User
 		{
 			Id = id,
 			Email = email,
@@ -74,9 +74,9 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 			ConcurrencyStamp = Guid.NewGuid().ToString("N"),
 		};
 
-		s_validator.Validate(character);
+		s_validator.Validate(user);
 
-		return character;
+		return user;
 	}
 
 	internal void Modify(
