@@ -41,12 +41,7 @@ internal sealed class SetCurrentRoom : IEndpoint
 			.FirstOrDefaultAsync();
 		if (user is null)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid user",
-				Detail = "The specified user does not exist.",
-				Status = StatusCodes.Status400BadRequest,
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.UserDoesNotExist);
 		}
 
 		var room = await dbContext.Rooms
@@ -59,23 +54,13 @@ internal sealed class SetCurrentRoom : IEndpoint
 			.FirstOrDefaultAsync();
 		if (room is null)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid room",
-				Detail = "The room does not exist.",
-				Status = StatusCodes.Status400BadRequest,
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.RoomDoesNotExist);
 		}
 
 		if (user.CurrentRoomId is null &&
 		    !room.IsEntrance)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid room",
-				Detail = "The user is in no room and the specified room is not an entrance.",
-				Status = StatusCodes.Status400BadRequest,
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.RoomIsNotEntrance);
 		}
 
 		user.SetCurrentRoom(body.RoomId);

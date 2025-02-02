@@ -36,12 +36,7 @@ internal sealed class SetPermissions : IEndpoint
 			.FirstOrDefaultAsync();
 		if (user is null)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid user",
-				Detail = "The specified user does not exist.",
-				Status = StatusCodes.Status400BadRequest,
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.UserDoesNotExist);
 		}
 
 		user.Modify(permissions: body.Permissions);
