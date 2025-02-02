@@ -8,7 +8,7 @@ internal static class ProblemDetailsDefaults
 	internal static ProblemDetails RoomDoesNotExist { get; } = new()
 	{
 		Title = "Invalid room",
-		Detail = "The room does not exist",
+		Detail = "The specified room does not exist",
 		Status = StatusCodes.Status400BadRequest,
 	};
 
@@ -29,14 +29,14 @@ internal static class ProblemDetailsDefaults
 	internal static ProblemDetails InvalidBeforeMessage { get; } = new()
 	{
 		Title = $"Invalid '{GetMessages.BeforeQueryParameter}' query parameter.",
-		Detail = "A message with the that ID was not found.",
+		Detail = "A message with the specified ID was not found.",
 		Status = StatusCodes.Status400BadRequest,
 	};
 
 	internal static ProblemDetails InvalidAfterMessage { get; } = new()
 	{
 		Title = $"Invalid '{GetMessages.AfterQueryParameter}' query parameter.",
-		Detail = "A message with the that ID was not found.",
+		Detail = "A message with the specified ID was not found.",
 		Status = StatusCodes.Status400BadRequest,
 	};
 }
