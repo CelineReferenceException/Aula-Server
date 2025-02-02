@@ -29,11 +29,7 @@ internal sealed class RemoveAllRoomConnections : IEndpoint
 			.AnyAsync(r => r.Id == sourceRoomId && !r.IsRemoved);
 		if (!sourceRoomExists)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid room",
-				Detail = "The room does not exist.",
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.RoomDoesNotExist);
 		}
 
 		var connections = await dbContext.RoomConnections

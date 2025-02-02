@@ -27,11 +27,7 @@ internal sealed class GetRoomConnections : IEndpoint
 			.AnyAsync(r => r.Id == roomId && !r.IsRemoved);
 		if (!roomExists)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid room",
-				Detail = "The room does not exist.",
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.RoomDoesNotExist);
 		}
 
 		var connections = await dbContext.RoomConnections

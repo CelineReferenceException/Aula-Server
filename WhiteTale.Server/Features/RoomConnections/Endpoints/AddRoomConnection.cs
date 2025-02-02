@@ -35,12 +35,7 @@ internal sealed class AddRoomConnection : IEndpoint
 
 		if (roomId == body.RoomId)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid target room",
-				Detail = "The target room cannot be the same as the source room.",
-				Status = StatusCodes.Status400BadRequest,
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.TargetRoomCannotBeSourceRoom);
 		}
 
 		var sourceRoomExists = await dbContext.Rooms
@@ -48,12 +43,7 @@ internal sealed class AddRoomConnection : IEndpoint
 			.AnyAsync(r => r.Id == roomId && !r.IsRemoved);
 		if (!sourceRoomExists)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid room",
-				Detail = "The room does not exist.",
-				Status = StatusCodes.Status400BadRequest,
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.RoomDoesNotExist);
 		}
 
 		var targetRoomExists = dbContext.Rooms
@@ -61,12 +51,7 @@ internal sealed class AddRoomConnection : IEndpoint
 			.Any(r => r.Id == body.RoomId && !r.IsRemoved);
 		if (!targetRoomExists)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid target room",
-				Detail = "The target room does not exist.",
-				Status = StatusCodes.Status400BadRequest,
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.TargetRoomDoesNotExist);
 		}
 
 		var roomConnection = RoomConnection.Create(snowflakeGenerator.NewSnowflake(), roomId, body.RoomId);

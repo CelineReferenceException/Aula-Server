@@ -30,11 +30,7 @@ internal sealed class RemoveRoomConnection : IEndpoint
 			.AnyAsync(r => r.Id == sourceRoomId && !r.IsRemoved);
 		if (!sourceRoomExists)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid room",
-				Detail = "The room does not exist.",
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.RoomDoesNotExist);
 		}
 
 		var targetRoomExists = dbContext.Rooms
@@ -42,11 +38,7 @@ internal sealed class RemoveRoomConnection : IEndpoint
 			.Any(r => r.Id == targetRoomId && !r.IsRemoved);
 		if (!targetRoomExists)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid target room",
-				Detail = "The target room does not exist.",
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.TargetRoomDoesNotExist);
 		}
 
 		var connection = await dbContext.RoomConnections
