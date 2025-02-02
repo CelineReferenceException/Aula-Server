@@ -47,12 +47,7 @@ internal sealed class BanUser : IEndpoint
 			.FirstOrDefaultAsync();
 		if (currentBan is not null)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Ban already exists",
-				Detail = "This user is already banned.",
-				Status = StatusCodes.Status409Conflict,
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.UserAlreadyBanned);
 		}
 
 		var targetUser = await dbContext.Users
@@ -65,22 +60,12 @@ internal sealed class BanUser : IEndpoint
 			.FirstOrDefaultAsync();
 		if (targetUser is null)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid target",
-				Detail = "The specified user does not exist.",
-				Status = StatusCodes.Status400BadRequest,
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.TargetDoesNotExist);
 		}
 
 		if (targetUser.Permissions.HasFlag(Permissions.Administrator))
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid target",
-				Detail = "Cannot ban users that have administrator permissions.",
-				Status = StatusCodes.Status403Forbidden,
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.TargetIsAdministrator);
 		}
 
 		var ban = Ban.Create(snowflakeGenerator.NewSnowflake(), BanType.Id, userId, body.Reason, targetId);
