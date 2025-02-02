@@ -65,7 +65,7 @@ internal sealed class GetMessage : IEndpoint
 				m.Flags,
 				m.AuthorType,
 				m.AuthorId,
-				Target = m.TargetType,
+				m.TargetType,
 				m.TargetId,
 				m.Content,
 				m.JoinData,
@@ -85,7 +85,7 @@ internal sealed class GetMessage : IEndpoint
 			Flags = message.Flags,
 			AuthorType = message.AuthorType,
 			AuthorId = message.AuthorId,
-			TargetType = message.Target,
+			TargetType = message.TargetType,
 			TargetId = message.TargetId,
 			Content = message.Content,
 			JoinData = message.JoinData is not null
