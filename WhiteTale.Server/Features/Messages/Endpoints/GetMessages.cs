@@ -13,6 +13,9 @@ internal sealed class GetMessages : IEndpoint
 	internal const String BeforeQueryParameter = "before";
 	internal const String AfterQueryParameter = "after";
 	internal const String CountQueryParameter = "count";
+	internal const Int32 MinimumMessageCount = 2;
+	internal const Int32 MaximumMessageCount = 100;
+	internal const Int32 DefaultMessageCount = 10;
 
 	public void Build(IEndpointRouteBuilder route)
 	{
@@ -38,12 +41,7 @@ internal sealed class GetMessages : IEndpoint
 			.AnyAsync(room => room.Id == roomId && !room.IsRemoved);
 		if (!roomExists)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid room ID",
-				Detail = "The room does not exist",
-				Status = StatusCodes.Status400BadRequest,
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.RoomDoesNotExist);
 		}
 
 		var user = await userManager.GetUserAsync(httpContext.User);
@@ -54,23 +52,13 @@ internal sealed class GetMessages : IEndpoint
 
 		if (user.CurrentRoomId != roomId)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid room",
-				Detail = "The user is not in the room",
-				Status = StatusCodes.Status403Forbidden,
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.UserIsNotInTheRoom);
 		}
 
-		count ??= 10;
-		if (count is > 100 or < 1)
+		count ??= DefaultMessageCount;
+		if (count is > MaximumMessageCount or < MinimumMessageCount)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid message count.",
-				Detail = "The message count must be between 1 and 100.",
-				Status = StatusCodes.Status400BadRequest,
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.InvalidMessageCount);
 		}
 
 		var messages = new List<MessageData>();
@@ -83,12 +71,7 @@ internal sealed class GetMessages : IEndpoint
 
 			if (!targetExists)
 			{
-				return TypedResults.Problem(new ProblemDetails
-				{
-					Title = $"Invalid '{BeforeQueryParameter}' message id.",
-					Detail = $"The '{BeforeQueryParameter}' message was not found.",
-					Status = StatusCodes.Status400BadRequest,
-				});
+				return TypedResults.Problem(ProblemDetailsDefaults.InvalidBeforeMessage);
 			}
 
 			var messagesBefore = dbContext.Messages
@@ -147,12 +130,7 @@ internal sealed class GetMessages : IEndpoint
 
 			if (!targetExists)
 			{
-				return TypedResults.Problem(new ProblemDetails
-				{
-					Title = $"Invalid '{AfterQueryParameter}' message id.",
-					Detail = $"The '{AfterQueryParameter}' message was not found.",
-					Status = StatusCodes.Status400BadRequest,
-				});
+				return TypedResults.Problem(ProblemDetailsDefaults.InvalidAfterMessage);
 			}
 
 			var messagesAfter = dbContext.Messages

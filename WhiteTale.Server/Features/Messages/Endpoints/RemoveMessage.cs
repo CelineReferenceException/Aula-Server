@@ -31,12 +31,7 @@ internal sealed class RemoveMessage : IEndpoint
 			.AnyAsync(r => r.Id == roomId && !r.IsRemoved);
 		if (!roomExists)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid room ID",
-				Detail = "The room does not exist",
-				Status = StatusCodes.Status400BadRequest,
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.RoomDoesNotExist);
 		}
 
 		var message = await dbContext.Messages

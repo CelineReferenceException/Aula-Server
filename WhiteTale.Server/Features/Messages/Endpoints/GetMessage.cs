@@ -31,12 +31,7 @@ internal sealed class GetMessage : IEndpoint
 			.AnyAsync(room => room.Id == roomId && !room.IsRemoved);
 		if (!roomExists)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid room ID",
-				Detail = "The room does not exist",
-				Status = StatusCodes.Status400BadRequest,
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.RoomDoesNotExist);
 		}
 
 		var user = await userManager.GetUserAsync(httpContext.User);
@@ -47,12 +42,7 @@ internal sealed class GetMessage : IEndpoint
 
 		if (user.CurrentRoomId != roomId)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Invalid room",
-				Detail = "The user is not in the room",
-				Status = StatusCodes.Status403Forbidden,
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.UserIsNotInTheRoom);
 		}
 
 		var message = await dbContext.Messages
