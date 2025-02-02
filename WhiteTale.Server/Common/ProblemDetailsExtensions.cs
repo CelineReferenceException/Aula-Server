@@ -15,7 +15,7 @@ internal static class ProblemDetailsExtensions
 		return new HttpValidationProblemDetails
 		{
 			Status = StatusCodes.Status400BadRequest,
-			Title = "ValidationError",
+			Title = "Validation problem",
 			Detail = "One or more validation errors occurred.",
 			Errors = problemErrors,
 		};
@@ -30,7 +30,7 @@ internal static class ProblemDetailsExtensions
 		return new HttpValidationProblemDetails
 		{
 			Status = StatusCodes.Status400BadRequest,
-			Title = "IdentityError",
+			Title = "Identity problem",
 			Detail = "One or more identity errors occurred.",
 			Errors = problemErrors,
 		};
