@@ -47,8 +47,8 @@ await application.StartAsync();
 var elapsedTime = Stopwatch.GetElapsedTime(startTimestamp);
 var logger = application.Services.GetRequiredService<ILogger<Program>>();
 
-logger.Inform($"Now listening on: {String.Join(" - ", application.Urls)}");
-logger.Inform($"{nameof(WhiteTale)} is Ready — It only took {(Int32)elapsedTime.TotalMilliseconds} milliseconds!");
-logger.Inform("You can press Ctrl+C to shut down.");
+logger.StartupMessage($"Now listening on: {String.Join(" - ", application.Urls)}");
+logger.StartupMessage($"{nameof(WhiteTale)} is Ready — It only took {(Int32)elapsedTime.TotalMilliseconds} milliseconds!");
+logger.StartupMessage("You can press Ctrl+C to shut down.");
 
 await application.WaitForShutdownAsync();
