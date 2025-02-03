@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
-namespace WhiteTale.Server.Common;
+namespace WhiteTale.Server.Common.Endpoints;
 
 internal static class ProblemDetailsExtensions
 {

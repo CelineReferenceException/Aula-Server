@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using WhiteTale.Server.Features.Users.Gateway;
 
-namespace WhiteTale.Server.Features.Gateway;
+namespace WhiteTale.Server.Features.Gateway.Endpoints;
 
 internal sealed class ConnectToGateway : IEndpoint
 {
