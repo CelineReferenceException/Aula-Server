@@ -19,7 +19,7 @@ internal sealed class RemoveMessage : IEndpoint
 			.HasApiVersion(1);
 	}
 
-	private static async Task<Results<Ok<MessageData>, NotFound, ForbidHttpResult, ProblemHttpResult, InternalServerError>> HandleAsync(
+	private static async Task<Results<NoContent, ForbidHttpResult, ProblemHttpResult, InternalServerError>> HandleAsync(
 		[FromRoute] UInt64 roomId,
 		[FromRoute] UInt64 messageId,
 		[FromServices] ApplicationDbContext dbContext,
@@ -37,12 +37,10 @@ internal sealed class RemoveMessage : IEndpoint
 		var message = await dbContext.Messages
 			.AsTracking()
 			.Where(m => m.Id == messageId && !m.IsRemoved)
-			.Include(m => m.JoinData)
-			.Include(m => m.LeaveData)
 			.FirstOrDefaultAsync();
 		if (message is null)
 		{
-			return TypedResults.NotFound();
+			return TypedResults.NoContent();
 		}
 
 		var user = await userManager.GetUserAsync(httpContext.User);
@@ -60,30 +58,6 @@ internal sealed class RemoveMessage : IEndpoint
 		message.Remove();
 		_ = await dbContext.SaveChangesAsync();
 
-		return TypedResults.Ok(new MessageData
-		{
-			Id = message.Id,
-			Type = message.Type,
-			Flags = message.Flags,
-			AuthorType = message.AuthorType,
-			AuthorId = message.AuthorId,
-			TargetType = message.TargetType,
-			TargetId = message.TargetId,
-			Content = message.Content,
-			JoinData = message.JoinData is not null
-				? new MessageUserJoinData
-				{
-					UserId = message.JoinData.UserId,
-				}
-				: null,
-			LeaveData = message.LeaveData is not null
-				? new MessageUserLeaveData
-				{
-					UserId = message.LeaveData.UserId,
-					RoomId = message.LeaveData.RoomId,
-				}
-				: null,
-			CreationTime = message.CreationTime,
-		});
+		return TypedResults.NoContent();
 	}
 }
