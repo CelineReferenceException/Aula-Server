@@ -2,5 +2,5 @@
 
 internal sealed class ImBannedData
 {
-	public Boolean IsBanned { get; init; }
+	public Boolean Banned { get; init; }
 }

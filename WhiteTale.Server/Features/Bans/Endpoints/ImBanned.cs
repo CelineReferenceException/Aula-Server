@@ -29,13 +29,13 @@ internal sealed class ImBanned : IEndpoint
 			return TypedResults.InternalServerError();
 		}
 
-		var isBanned = await dbContext.Bans
+		var banned = await dbContext.Bans
 			.AsNoTracking()
 			.AnyAsync(x => x.TargetId == userId);
 
 		return TypedResults.Ok(new ImBannedData
 		{
-			IsBanned = isBanned,
+			Banned = banned,
 		});
 	}
 }
