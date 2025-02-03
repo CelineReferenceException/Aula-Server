@@ -19,7 +19,7 @@ internal sealed class RemoveRoom : IEndpoint
 			.HasApiVersion(1);
 	}
 
-	private static async Task<Results<Ok<RoomData>, NotFound, InternalServerError>> HandleAsync(
+	private static async Task<Results<NoContent, InternalServerError>> HandleAsync(
 		[FromRoute] UInt64 roomId,
 		[FromServices] ApplicationDbContext dbContext)
 	{
@@ -29,7 +29,7 @@ internal sealed class RemoveRoom : IEndpoint
 			.FirstOrDefaultAsync();
 		if (room is null)
 		{
-			return TypedResults.NotFound();
+			return TypedResults.NoContent();
 		}
 
 		room.Remove();
@@ -58,13 +58,6 @@ internal sealed class RemoveRoom : IEndpoint
 			return TypedResults.InternalServerError();
 		}
 
-		return TypedResults.Ok(new RoomData
-		{
-			Id = room.Id,
-			Name = room.Name,
-			Description = room.Description,
-			IsEntrance = room.IsEntrance,
-			CreationTime = room.CreationTime,
-		});
+		return TypedResults.NoContent();
 	}
 }
