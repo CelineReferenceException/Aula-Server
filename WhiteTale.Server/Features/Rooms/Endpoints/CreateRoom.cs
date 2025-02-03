@@ -18,11 +18,12 @@ internal sealed class CreateRoom : IEndpoint
 			.HasApiVersion(1);
 	}
 
-	private static async Task<Results<Ok<RoomData>, ProblemHttpResult>> HandleAsync(
+	private static async Task<Results<Created<RoomData>, ProblemHttpResult>> HandleAsync(
 		[FromBody] CreateRoomRequestBody body,
 		[FromServices] CreateRoomRequestBodyValidator bodyValidator,
 		[FromServices] ApplicationDbContext dbContext,
-		[FromServices] SnowflakeGenerator snowflakeGenerator)
+		[FromServices] SnowflakeGenerator snowflakeGenerator,
+		HttpContext httpContext)
 	{
 		var validation = await bodyValidator.ValidateAsync(body);
 		if (!validation.IsValid)
@@ -36,7 +37,7 @@ internal sealed class CreateRoom : IEndpoint
 		_ = dbContext.Rooms.Add(room);
 		_ = await dbContext.SaveChangesAsync();
 
-		return TypedResults.Ok(new RoomData
+		return TypedResults.Created($"{httpContext.Request.GetUrl()}/{room.Id}", new RoomData
 		{
 			Id = room.Id,
 			Name = room.Name,
