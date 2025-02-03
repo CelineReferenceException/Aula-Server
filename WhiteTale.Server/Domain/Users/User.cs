@@ -74,7 +74,7 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 			ConcurrencyStamp = Guid.NewGuid().ToString("N"),
 		};
 
-		s_validator.Validate(user);
+		s_validator.ValidateAndThrow(user);
 
 		return user;
 	}
