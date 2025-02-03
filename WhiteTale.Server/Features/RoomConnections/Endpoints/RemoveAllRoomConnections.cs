@@ -19,7 +19,7 @@ internal sealed class RemoveAllRoomConnections : IEndpoint
 			.HasApiVersion(1);
 	}
 
-	private static async Task<Results<Ok<IEnumerable<UInt64>>, ProblemHttpResult>> HandleAsync(
+	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(
 		[FromRoute] UInt64 sourceRoomId,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] SnowflakeGenerator snowflakeGenerator)
@@ -41,6 +41,6 @@ internal sealed class RemoveAllRoomConnections : IEndpoint
 		dbContext.RoomConnections.RemoveRange(connections);
 		_ = await dbContext.SaveChangesAsync();
 
-		return TypedResults.Ok(connections.Select(c => c.TargetRoomId));
+		return TypedResults.NoContent();
 	}
 }
