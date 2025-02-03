@@ -67,7 +67,7 @@ internal sealed class GetMessages : IEndpoint
 		{
 			var targetExists = await dbContext.Messages
 				.AsNoTracking()
-				.AnyAsync(m => m.Id == beforeId && !m.IsRemoved && m.TargetId == roomId);
+				.AnyAsync(m => m.Id == beforeId && !m.IsRemoved && (m.TargetId == roomId || m.TargetType == MessageTarget.AllRooms));
 
 			if (!targetExists)
 			{
@@ -76,7 +76,7 @@ internal sealed class GetMessages : IEndpoint
 
 			var messagesBefore = dbContext.Messages
 				.AsNoTracking()
-				.Where(m => m.Id < beforeId && !m.IsRemoved && m.TargetId == roomId)
+				.Where(m => m.Id < beforeId && !m.IsRemoved && (m.TargetId == roomId || m.TargetType == MessageTarget.AllRooms))
 				.OrderByDescending(m => m.Id)
 				.Select(m => new
 				{
@@ -126,7 +126,7 @@ internal sealed class GetMessages : IEndpoint
 		{
 			var targetExists = await dbContext.Messages
 				.AsNoTracking()
-				.AnyAsync(m => m.Id == afterId && !m.IsRemoved && m.TargetId == roomId);
+				.AnyAsync(m => m.Id == afterId && !m.IsRemoved && (m.TargetId == roomId || m.TargetType == MessageTarget.AllRooms));
 
 			if (!targetExists)
 			{
@@ -135,7 +135,7 @@ internal sealed class GetMessages : IEndpoint
 
 			var messagesAfter = dbContext.Messages
 				.AsNoTracking()
-				.Where(m => m.Id > afterId && !m.IsRemoved && m.TargetId == roomId)
+				.Where(m => m.Id > afterId && !m.IsRemoved && (m.TargetId == roomId || m.TargetType == MessageTarget.AllRooms))
 				.OrderByDescending(m => m.Id)
 				.Select(m => new
 				{
@@ -185,7 +185,7 @@ internal sealed class GetMessages : IEndpoint
 		{
 			var lastMessages = dbContext.Messages
 				.AsNoTracking()
-				.Where(m => !m.IsRemoved && m.TargetId == roomId)
+				.Where(m => !m.IsRemoved && (m.TargetId == roomId || m.TargetType == MessageTarget.AllRooms))
 				.OrderByDescending(m => m.Id)
 				.Select(m => new
 				{
