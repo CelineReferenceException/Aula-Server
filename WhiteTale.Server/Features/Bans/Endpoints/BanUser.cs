@@ -19,7 +19,7 @@ internal sealed class BanUser : IEndpoint
 			.HasApiVersion(1);
 	}
 
-	private static async Task<Results<Ok<BanData>, ProblemHttpResult, InternalServerError>> HandleAsync(
+	private static async Task<Results<Created<BanData>, ProblemHttpResult, InternalServerError>> HandleAsync(
 		[FromRoute] UInt64 targetId,
 		[FromBody] CreateBanRequestBody body,
 		[FromServices] CreateBanRequestBodyValidator bodyValidator,
@@ -80,7 +80,7 @@ internal sealed class BanUser : IEndpoint
 			return TypedResults.InternalServerError();
 		}
 
-		return TypedResults.Ok(new BanData
+		return TypedResults.Created(httpContext.Request.GetUrl(), new BanData
 		{
 			Type = ban.Type,
 			ExecutorId = ban.ExecutorId,
