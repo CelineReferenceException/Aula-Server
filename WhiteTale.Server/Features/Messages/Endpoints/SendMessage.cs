@@ -21,7 +21,7 @@ internal sealed class SendMessage : IEndpoint
 			.HasApiVersion(1);
 	}
 
-	private static async Task<Results<Ok<MessageData>, ProblemHttpResult, InternalServerError>> HandleAsync(
+	private static async Task<Results<Created<MessageData>, ProblemHttpResult, InternalServerError>> HandleAsync(
 		[FromRoute] UInt64 roomId,
 		[FromBody] SendMessageRequestBody body,
 		[FromServices] SendMessageRequestBodyValidator bodyValidator,
@@ -80,7 +80,7 @@ internal sealed class SendMessage : IEndpoint
 		_ = dbContext.Messages.Add(message);
 		_ = await dbContext.SaveChangesAsync();
 
-		return TypedResults.Ok(new MessageData
+		return TypedResults.Created($"{httpContext.Request.GetUrl()}/{messageId}", new MessageData
 		{
 			Id = message.Id,
 			Type = message.Type,
