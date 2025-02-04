@@ -71,7 +71,7 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 			Permissions = permissions,
 			OwnerType = ownerType,
 			CreationTime = DateTime.UtcNow,
-			ConcurrencyStamp = Guid.NewGuid().ToString("N"),
+			ConcurrencyStamp = GenerateStamp(),
 		};
 
 		s_validator.ValidateAndThrow(user);
@@ -141,6 +141,11 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 
 	internal void UpdateConcurrencyStamp()
 	{
-		ConcurrencyStamp = Guid.NewGuid().ToString("N");
+		ConcurrencyStamp = GenerateStamp();
+	}
+
+	private static String GenerateStamp()
+	{
+		return Guid.NewGuid().ToString("N");
 	}
 }
