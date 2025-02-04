@@ -140,6 +140,11 @@ internal sealed class User : DefaultDomainEntity
 		ConcurrencyStamp = GenerateConcurrencyStamp();
 	}
 
+	internal void ConfirmEmail()
+	{
+		EmailConfirmed = true;
+	}
+
 	internal void UpdateSecurityStamp()
 	{
 		SecurityStamp = GenerateSecurityStamp();
