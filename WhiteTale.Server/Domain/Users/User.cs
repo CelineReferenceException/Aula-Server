@@ -27,6 +27,8 @@ internal sealed class User : DefaultDomainEntity
 
 	internal String Password { get; private set; }
 
+	internal String SecurityStamp { get; private set; }
+
 	internal Int32 AccessFailedCount { get; private set; }
 
 	internal String DisplayName { get; private set; }
@@ -65,6 +67,7 @@ internal sealed class User : DefaultDomainEntity
 			OwnerType = ownerType,
 			CreationTime = DateTime.UtcNow,
 			ConcurrencyStamp = GenerateStamp(),
+			SecurityStamp = GenerateSecurityStamp(),
 		};
 
 		s_validator.ValidateAndThrow(user);
@@ -137,7 +140,18 @@ internal sealed class User : DefaultDomainEntity
 		ConcurrencyStamp = GenerateStamp();
 	}
 
+	internal void UpdateSecurityStamp()
+	{
+		SecurityStamp = GenerateSecurityStamp();
+		AddEvent(new UserSecurityStampUpdatedEvent(this));
+	}
+
 	private static String GenerateStamp()
+	{
+		return Guid.CreateVersion7().ToString("N");
+	}
+
+	private static String GenerateSecurityStamp()
 	{
 		return Guid.CreateVersion7().ToString("N");
 	}
