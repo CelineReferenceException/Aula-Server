@@ -11,6 +11,7 @@ internal sealed class User : DefaultDomainEntity
 	internal const Int32 UserNameMaximumLength = 32;
 	internal const Int32 DescriptionMinimumLength = 1;
 	internal const Int32 DescriptionMaximumLength = 1024;
+	internal const Int32 PasswordMaximumLength = 128;
 	private const Int32 MaximumFailedAccessAttemptsBeforeLockout = 10;
 	private static readonly UserValidator s_validator = new();
 

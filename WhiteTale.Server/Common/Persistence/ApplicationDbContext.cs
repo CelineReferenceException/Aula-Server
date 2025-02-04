@@ -50,6 +50,29 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 			.ValueGeneratedNever();
 		_ = userModel.HasKey(x => x.Id);
 
+		_ = userModel.Property(x => x.UserName)
+			.IsRequired()
+			.HasMaxLength(User.UserNameMaximumLength);
+
+		_ = userModel.Property(x => x.Email)
+			.IsRequired();
+
+		_ = userModel.Property(x => x.EmailConfirmed)
+			.IsRequired();
+
+		_ = userModel.Property(x => x.Password)
+			.IsRequired()
+			.HasMaxLength(User.PasswordMaximumLength);
+
+		_ = userModel.Property(x => x.SecurityStamp)
+			.IsRequired();
+
+		_ = userModel.Property(x => x.AccessFailedCount)
+			.IsRequired();
+
+		_ = userModel.Property(x => x.LockoutEndTime)
+			.IsRequired(false);
+
 		_ = userModel.Property(x => x.Permissions)
 			.IsRequired();
 
