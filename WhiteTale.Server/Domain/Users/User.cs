@@ -146,6 +146,6 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 
 	private static String GenerateStamp()
 	{
-		return Guid.NewGuid().ToString("N");
+		return Guid.CreateVersion7().ToString("N");
 	}
 }
