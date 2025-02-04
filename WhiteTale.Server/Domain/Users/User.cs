@@ -1,11 +1,9 @@
-﻿using System.Diagnostics;
-using FluentValidation;
-using Microsoft.AspNetCore.Identity;
+﻿using FluentValidation;
 
 #pragma warning disable CS8618
 namespace WhiteTale.Server.Domain.Users;
 
-internal sealed class User : IdentityUser<UInt64>, IDomainEntity
+internal sealed class User : DefaultDomainEntity
 {
 	internal const Int32 DisplayNameMinimumLength = 3;
 	internal const Int32 DisplayNameMaximumLength = 32;
@@ -14,23 +12,22 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 	internal const Int32 DescriptionMinimumLength = 1;
 	internal const Int32 DescriptionMaximumLength = 1024;
 	private static readonly UserValidator s_validator = new();
-	private readonly List<DomainEvent> _events = [];
 
 	private User()
 	{
 	}
 
-	internal new UInt64 Id
-	{
-		get => base.Id;
-		private init => base.Id = value;
-	}
+	internal UInt64 Id { get; private init; }
 
-	internal new String UserName
-	{
-		get => base.UserName ?? throw new UnreachableException();
-		private set => base.UserName = value;
-	}
+	internal String UserName { get; private init; }
+
+	internal String Email { get; private init; }
+
+	internal Boolean EmailConfirmed { get; private set; }
+
+	internal String Password { get; private set; }
+
+	internal Int32 AccessFailedCount { get; private set; }
 
 	internal String DisplayName { get; private set; }
 
@@ -46,18 +43,13 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 
 	internal DateTime CreationTime { get; private init; }
 
-	private new String ConcurrencyStamp
-	{
-		get => base.ConcurrencyStamp ?? throw new UnreachableException();
-		set => base.ConcurrencyStamp = value;
-	}
-
-	IReadOnlyList<DomainEvent> IDomainEntity.Events => _events;
+	internal String ConcurrencyStamp { get; private set; }
 
 	internal static User Create(
 		UInt64 id,
-		String email,
 		String userName,
+		String email,
+		String password,
 		String? displayName,
 		UserOwnerType ownerType,
 		Permissions permissions)
@@ -65,8 +57,9 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 		var user = new User
 		{
 			Id = id,
-			Email = email,
 			UserName = userName,
+			Email = email,
+			Password = password,
 			DisplayName = displayName ?? userName,
 			Permissions = permissions,
 			OwnerType = ownerType,
@@ -121,7 +114,7 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 
 		s_validator.ValidateAndThrow(this);
 
-		_events.Add(new UserUpdatedEvent(this));
+		AddEvent(new UserUpdatedEvent(this));
 	}
 
 	internal void SetCurrentRoom(UInt64? currentRoomId)
@@ -136,7 +129,7 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 
 		s_validator.ValidateAndThrow(this);
 
-		_events.Add(new UserCurrentRoomUpdatedEvent(Id, previousCurrentRoomId, CurrentRoomId));
+		AddEvent(new UserCurrentRoomUpdatedEvent(Id, previousCurrentRoomId, CurrentRoomId));
 	}
 
 	internal void UpdateConcurrencyStamp()
