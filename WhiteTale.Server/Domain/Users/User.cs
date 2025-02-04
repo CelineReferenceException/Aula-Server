@@ -66,7 +66,7 @@ internal sealed class User : DefaultDomainEntity
 			Permissions = permissions,
 			OwnerType = ownerType,
 			CreationTime = DateTime.UtcNow,
-			ConcurrencyStamp = GenerateStamp(),
+			ConcurrencyStamp = GenerateConcurrencyStamp(),
 			SecurityStamp = GenerateSecurityStamp(),
 		};
 
@@ -137,7 +137,7 @@ internal sealed class User : DefaultDomainEntity
 
 	internal void UpdateConcurrencyStamp()
 	{
-		ConcurrencyStamp = GenerateStamp();
+		ConcurrencyStamp = GenerateConcurrencyStamp();
 	}
 
 	internal void UpdateSecurityStamp()
@@ -146,7 +146,7 @@ internal sealed class User : DefaultDomainEntity
 		AddEvent(new UserSecurityStampUpdatedEvent(this));
 	}
 
-	private static String GenerateStamp()
+	private static String GenerateConcurrencyStamp()
 	{
 		return Guid.CreateVersion7().ToString("N");
 	}
