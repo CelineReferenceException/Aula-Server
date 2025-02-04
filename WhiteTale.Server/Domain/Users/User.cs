@@ -11,6 +11,7 @@ internal sealed class User : DefaultDomainEntity
 	internal const Int32 UserNameMaximumLength = 32;
 	internal const Int32 DescriptionMinimumLength = 1;
 	internal const Int32 DescriptionMaximumLength = 1024;
+	private const Int32 MaximumFailedAccessAttemptsBeforeLockout = 10;
 	private static readonly UserValidator s_validator = new();
 
 	private User()
@@ -30,6 +31,8 @@ internal sealed class User : DefaultDomainEntity
 	internal String SecurityStamp { get; private set; }
 
 	internal Int32 AccessFailedCount { get; private set; }
+
+	internal DateTime? LockoutEndTime { get; private set; }
 
 	internal String DisplayName { get; private set; }
 
@@ -138,6 +141,18 @@ internal sealed class User : DefaultDomainEntity
 	internal void UpdateConcurrencyStamp()
 	{
 		ConcurrencyStamp = GenerateConcurrencyStamp();
+	}
+
+	internal void IncrementAccessFailedCountOrLockout()
+	{
+		if (AccessFailedCount >= MaximumFailedAccessAttemptsBeforeLockout)
+		{
+			LockoutEndTime = DateTime.UtcNow.AddHours(1);
+			return;
+		}
+
+		AccessFailedCount++;
+		LockoutEndTime = null;
 	}
 
 	internal void ConfirmEmail()
