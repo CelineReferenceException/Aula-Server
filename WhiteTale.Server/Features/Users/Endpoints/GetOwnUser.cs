@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
@@ -20,7 +19,7 @@ internal sealed class GetOwnUser : IEndpoint
 
 	private static async Task<Results<Ok<UserData>, InternalServerError>> HandleAsync(
 		HttpContext httpContext,
-		[FromServices] UserManager<User> userManager)
+		[FromServices] UserManager userManager)
 	{
 		var user = await userManager.GetUserAsync(httpContext.User);
 		if (user is null)

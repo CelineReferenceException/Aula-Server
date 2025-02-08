@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using WhiteTale.Server.Features.Users.Gateway;
@@ -24,7 +23,7 @@ internal sealed class ConnectToGateway : IEndpoint
 		[FromHeader(Name = "X-Intents")] Intents intents,
 		[FromHeader(Name = "X-SessionId")] String? sessionId,
 		[FromHeader(Name = "X-Presence")] PresenceOptions? presence,
-		[FromServices] UserManager<User> userManager,
+		[FromServices] UserManager userManager,
 		[FromServices] GatewayService gatewayService)
 	{
 		if (!httpContext.WebSockets.IsWebSocketRequest)
@@ -32,8 +31,8 @@ internal sealed class ConnectToGateway : IEndpoint
 			return TypedResults.BadRequest();
 		}
 
-		var userIdClaimValue = userManager.GetUserId(httpContext.User);
-		if (!UInt64.TryParse(userIdClaimValue, out var userId))
+		var userId = userManager.GetUserId(httpContext.User);
+		if (userId is null)
 		{
 			return TypedResults.InternalServerError();
 		}
@@ -58,7 +57,7 @@ internal sealed class ConnectToGateway : IEndpoint
 		else
 		{
 			var socket = await httpContext.WebSockets.AcceptWebSocketAsync();
-			session = gatewayService.CreateSession(userId, intents);
+			session = gatewayService.CreateSession((UInt64)userId, intents);
 			session.SetWebSocket(socket);
 		}
 

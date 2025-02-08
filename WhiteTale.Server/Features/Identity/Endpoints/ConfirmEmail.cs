@@ -3,7 +3,6 @@ using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.WebUtilities;
@@ -28,7 +27,7 @@ internal sealed class ConfirmEmail : IEndpoint
 	private static async Task<Results<NoContent, RedirectHttpResult>> HandleAsync(
 		[FromQuery(Name = EmailQueryParameter)] String email,
 		[FromQuery(Name = TokenQueryParameter)] String? token,
-		[FromServices] UserManager<User> userManager,
+		[FromServices] UserManager userManager,
 		HttpRequest httpRequest,
 		[FromServices] ConfirmEmailEmailSender confirmEmailEmailSender,
 		[FromServices] IOptions<IdentityFeatureOptions> featureOptions)
@@ -43,7 +42,7 @@ internal sealed class ConfirmEmail : IEndpoint
 			return RedirectOrSendNoContent(redirectUri);
 		}
 
-		if (await userManager.IsEmailConfirmedAsync(user))
+		if (user.EmailConfirmed)
 		{
 			return RedirectOrSendNoContent(redirectUri);
 		}

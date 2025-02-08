@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
@@ -21,7 +20,7 @@ internal sealed class ForgotPassword : IEndpoint
 
 	private static async Task<NoContent> HandleAsync(
 		[FromQuery(Name = EmailQueryParameter)] String email,
-		[FromServices] UserManager<User> userManager,
+		[FromServices] UserManager userManager,
 		[FromServices] ResetPasswordEmailSender resetPasswordEmailSender)
 	{
 		email = WebUtility.UrlDecode(email);

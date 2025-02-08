@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
@@ -11,10 +10,10 @@ internal sealed class ResetPasswordEmailSender
 {
 	private readonly IEmailSender _emailSender;
 	private readonly Uri? _redirectUri;
-	private readonly UserManager<User> _userManager;
+	private readonly UserManager _userManager;
 
 	public ResetPasswordEmailSender(
-		[FromServices] UserManager<User> userManager,
+		[FromServices] UserManager userManager,
 		[FromServices] IEmailSender emailSender,
 		[FromServices] IOptions<IdentityFeatureOptions> featureOptions)
 	{
@@ -30,7 +29,7 @@ internal sealed class ResetPasswordEmailSender
 			return;
 		}
 
-		var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+		var resetToken = _userManager.GeneratePasswordResetToken(user);
 		resetToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(resetToken));
 		var content =
 			$"""

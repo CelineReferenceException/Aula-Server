@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
@@ -21,7 +20,7 @@ internal sealed class ResetPassword : IEndpoint
 	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(
 		[FromBody] ResetPasswordRequestBody body,
 		[FromServices] ResetPasswordRequestBodyValidator bodyValidator,
-		[FromServices] UserManager<User> userManager)
+		[FromServices] UserManager userManager)
 	{
 		var bodyValidation = await bodyValidator.ValidateAsync(body);
 		if (!bodyValidation.IsValid)
@@ -30,7 +29,7 @@ internal sealed class ResetPassword : IEndpoint
 			return TypedResults.Problem(problemDetails);
 		}
 
-		var user = await userManager.FindByIdAsync(body.UserId.ToString());
+		var user = await userManager.FindByIdAsync(body.UserId);
 		if (user is null)
 		{
 			return TypedResults.Problem(new ProblemDetails
@@ -41,11 +40,15 @@ internal sealed class ResetPassword : IEndpoint
 			});
 		}
 
-		var passwordReset = await userManager.ResetPasswordAsync(user, body.ResetToken, body.NewPassword);
+		var passwordReset = await userManager.ResetPasswordAsync(user, body.NewPassword, body.ResetToken);
 		if (!passwordReset.Succeeded)
 		{
-			var problemDetails = passwordReset.Errors.ToProblemDetails();
-			return TypedResults.Problem(problemDetails);
+			return TypedResults.Problem(new ProblemDetails
+			{
+				Title = "Password problem",
+				Detail = passwordReset.ToString(),
+				Status = StatusCodes.Status400BadRequest,
+			});
 		}
 
 		return TypedResults.NoContent();

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace WhiteTale.Server.Common.AuthorizationRequirements;
@@ -14,7 +13,7 @@ internal sealed class BanHandler : AuthorizationHandler<BanRequirement>
 			return;
 		}
 
-		var userManager = httpContext.RequestServices.GetRequiredService<UserManager<User>>();
+		var userManager = httpContext.RequestServices.GetRequiredService<UserManager>();
 		var user = await userManager.GetUserAsync(httpContext.User);
 		if (user is null)
 		{

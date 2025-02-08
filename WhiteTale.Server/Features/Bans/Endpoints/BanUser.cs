@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +23,7 @@ internal sealed class BanUser : IEndpoint
 		[FromBody] CreateBanRequestBody body,
 		[FromServices] CreateBanRequestBodyValidator bodyValidator,
 		HttpContext httpContext,
-		[FromServices] UserManager<User> userManager,
+		[FromServices] UserManager userManager,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] SnowflakeGenerator snowflakeGenerator)
 	{
@@ -35,8 +34,8 @@ internal sealed class BanUser : IEndpoint
 			return TypedResults.Problem(problemDetails);
 		}
 
-		var userIdClaimValue = userManager.GetUserId(httpContext.User);
-		if (!UInt64.TryParse(userIdClaimValue, out var userId))
+		var userId = userManager.GetUserId(httpContext.User);
+		if (userId is null)
 		{
 			return TypedResults.InternalServerError();
 		}

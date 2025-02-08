@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +25,7 @@ internal sealed class SendMessage : IEndpoint
 		[FromBody] SendMessageRequestBody body,
 		[FromServices] SendMessageRequestBodyValidator bodyValidator,
 		HttpContext httpContext,
-		[FromServices] UserManager<User> userManager,
+		[FromServices] UserManager userManager,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] SnowflakeGenerator snowflakeGenerator)
 	{

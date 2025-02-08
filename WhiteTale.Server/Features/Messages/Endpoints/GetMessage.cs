@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +22,7 @@ internal sealed class GetMessage : IEndpoint
 		[FromRoute] UInt64 roomId,
 		[FromRoute] UInt64 messageId,
 		[FromServices] ApplicationDbContext dbContext,
-		[FromServices] UserManager<User> userManager,
+		[FromServices] UserManager userManager,
 		HttpContext httpContext)
 	{
 		var roomExists = await dbContext.Rooms

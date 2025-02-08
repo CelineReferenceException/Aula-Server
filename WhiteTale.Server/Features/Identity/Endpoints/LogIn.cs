@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.BearerToken;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
@@ -18,11 +15,11 @@ internal sealed class LogIn : IEndpoint
 			.HasApiVersion(1);
 	}
 
-	private static async Task<Results<Ok<AccessTokenResponse>, ProblemHttpResult, EmptyHttpResult>> HandleAsync(
+	private static async Task<Results<Ok<AccessTokenData>, ProblemHttpResult, EmptyHttpResult>> HandleAsync(
 		[FromBody] LogInRequestBody body,
 		[FromServices] LogInRequestBodyValidator bodyValidator,
-		[FromServices] UserManager<User> userManager,
-		[FromServices] SignInManager<User> signInManager)
+		[FromServices] UserManager userManager,
+		[FromServices] TokenProvider tokenProvider)
 	{
 		var bodyValidation = await bodyValidator.ValidateAsync(body);
 		if (!bodyValidation.IsValid)
@@ -31,7 +28,7 @@ internal sealed class LogIn : IEndpoint
 			return TypedResults.Problem(problemDetails);
 		}
 
-		var user = await userManager.FindByNameAsync(body.UserName);
+		var user = await userManager.FindByUserNameAsync(body.UserName);
 		if (user is null)
 		{
 			return TypedResults.Problem(new ProblemDetails
@@ -41,11 +38,10 @@ internal sealed class LogIn : IEndpoint
 			});
 		}
 
-		var isPasswordCorrect = await userManager.CheckPasswordAsync(user, body.Password);
-
+		var isPasswordCorrect = userManager.CheckPassword(user, body.Password);
 		if (!isPasswordCorrect)
 		{
-			_ = await userManager.AccessFailedAsync(user);
+			await userManager.AccessFailedAsync(user);
 			return TypedResults.Problem(new ProblemDetails
 			{
 				Title = "A login problem has occurred",
@@ -54,7 +50,7 @@ internal sealed class LogIn : IEndpoint
 			});
 		}
 
-		if (await userManager.IsLockedOutAsync(user))
+		if (user.LockoutEndTime > DateTime.UtcNow)
 		{
 			return TypedResults.Problem(new ProblemDetails
 			{
@@ -64,8 +60,7 @@ internal sealed class LogIn : IEndpoint
 			});
 		}
 
-		if (userManager.Options.SignIn.RequireConfirmedEmail &&
-		    !await userManager.IsEmailConfirmedAsync(user))
+		if (!user.EmailConfirmed)
 		{
 			return TypedResults.Problem(new ProblemDetails
 			{
@@ -75,10 +70,9 @@ internal sealed class LogIn : IEndpoint
 			});
 		}
 
-		signInManager.AuthenticationScheme = IdentityConstants.BearerScheme;
-		await signInManager.SignInAsync(user, new AuthenticationProperties());
-
-		// The signInManager already produced a response in the form of a bearer token.
-		return TypedResults.Empty;
+		return TypedResults.Ok(new AccessTokenData
+		{
+			Token = tokenProvider.CreateToken(user),
+		});
 	}
 }

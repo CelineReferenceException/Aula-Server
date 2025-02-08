@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 
 namespace WhiteTale.Server.Common.AuthorizationRequirements;
 
@@ -20,7 +19,7 @@ internal sealed class PermissionsHandler : AuthorizationHandler<PermissionsRequi
 			return;
 		}
 
-		var userManager = httpContext.RequestServices.GetRequiredService<UserManager<User>>();
+		var userManager = httpContext.RequestServices.GetRequiredService<UserManager>();
 		var user = await userManager.GetUserAsync(httpContext.User);
 		if (user is null)
 		{
