@@ -60,7 +60,8 @@ internal sealed class LogIn : IEndpoint
 			});
 		}
 
-		if (!user.EmailConfirmed)
+		if (userManager.Options.SignIn.RequireConfirmedEmail &&
+		    !user.EmailConfirmed)
 		{
 			return TypedResults.Problem(new ProblemDetails
 			{
