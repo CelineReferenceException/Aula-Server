@@ -62,7 +62,7 @@ internal sealed class User : DefaultDomainEntity
 		{
 			Id = id,
 			UserName = userName,
-			Email = email,
+			Email = email.ToUpper(),
 			DisplayName = displayName ?? userName,
 			Permissions = permissions,
 			OwnerType = ownerType,
