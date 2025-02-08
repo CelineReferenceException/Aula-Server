@@ -13,7 +13,7 @@ internal sealed class AddRoomConnection : IEndpoint
 	{
 		_ = route.MapPut("rooms/{roomId}/connections", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.ManageRooms)
 			.DenyBannedUsers()
 			.HasApiVersion(1);

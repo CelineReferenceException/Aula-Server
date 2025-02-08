@@ -12,7 +12,7 @@ internal sealed class CreateRoom : IEndpoint
 	{
 		_ = route.MapPost("rooms", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.ManageRooms)
 			.DenyBannedUsers()
 			.HasApiVersion(1);

@@ -15,7 +15,7 @@ internal sealed class StopTyping : IEndpoint
 	{
 		_ = route.MapDelete("rooms/{roomId}/stop-typing", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.SendMessages)
 			.DenyBannedUsers()
 			.HasApiVersion(1);

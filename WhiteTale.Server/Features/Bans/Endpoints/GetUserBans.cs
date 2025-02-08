@@ -13,7 +13,7 @@ internal sealed class GetUserBans : IEndpoint
 	{
 		_ = route.MapGet("bans/users", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.BanUsers)
 			.DenyBannedUsers()
 			.HasApiVersion(1);

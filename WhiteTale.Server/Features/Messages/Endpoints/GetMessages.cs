@@ -20,7 +20,7 @@ internal sealed class GetMessages : IEndpoint
 	{
 		_ = route.MapGet("rooms/{roomid}/messages", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.ReadMessages)
 			.DenyBannedUsers()
 			.HasApiVersion(1);

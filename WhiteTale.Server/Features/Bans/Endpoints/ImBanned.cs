@@ -13,7 +13,7 @@ internal sealed class ImBanned : IEndpoint
 	{
 		_ = route.MapGet("bans/@me", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.RequireAuthenticatedUser()
 			.HasApiVersion(1);
 	}
 

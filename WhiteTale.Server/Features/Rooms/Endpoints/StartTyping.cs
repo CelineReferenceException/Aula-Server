@@ -15,7 +15,7 @@ internal sealed class StartTyping : IEndpoint
 	{
 		_ = route.MapPost("rooms/{roomId}/start-typing", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.SendMessages)
 			.DenyBannedUsers()
 			.HasApiVersion(1);

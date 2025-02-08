@@ -12,7 +12,7 @@ internal sealed class BanUser : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapPut("bans/users/{targetId}", HandleAsync)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.BanUsers)
 			.DenyBannedUsers()
 			.HasApiVersion(1);

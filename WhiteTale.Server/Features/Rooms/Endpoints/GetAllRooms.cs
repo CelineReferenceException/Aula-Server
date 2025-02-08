@@ -13,7 +13,7 @@ internal sealed class GetAllRooms : IEndpoint
 	{
 		_ = route.MapGet("rooms", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.RequireAuthenticatedUser()
 			.DenyBannedUsers()
 			.HasApiVersion(1);
 	}

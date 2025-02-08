@@ -13,7 +13,7 @@ internal sealed class ModifyRoom : IEndpoint
 	{
 		_ = route.MapPatch("rooms/{roomId}", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.ManageRooms)
 			.DenyBannedUsers()
 			.HasApiVersion(1);

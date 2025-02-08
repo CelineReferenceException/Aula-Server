@@ -13,7 +13,7 @@ internal sealed class RemoveRoom : IEndpoint
 	{
 		_ = route.MapDelete("rooms/{roomId}", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.ManageRooms)
 			.DenyBannedUsers()
 			.HasApiVersion(1);
