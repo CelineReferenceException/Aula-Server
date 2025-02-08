@@ -10,7 +10,7 @@ internal sealed class LogIn : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapPost("identity/login", HandleAsync)
+		_ = route.MapPost("identity/log-in", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.HasApiVersion(1);
 	}
