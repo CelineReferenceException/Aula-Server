@@ -3,7 +3,7 @@
 /// <summary>
 ///     User lockout related configurations.
 /// </summary>
-internal sealed class UserLockoutOptions
+internal sealed class IdentityLockoutOptions
 {
 	/// <summary>
 	///     The number of minutes to lockout users.

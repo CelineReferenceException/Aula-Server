@@ -6,8 +6,8 @@ internal static class DependencyInjection
 {
 	internal static IServiceCollection AddIdentity(this IServiceCollection services)
 	{
-		_ = services.AddOptions<UserOptions>()
-			.BindConfiguration(UserOptions.SectionName)
+		_ = services.AddOptions<IdentityOptions>()
+			.BindConfiguration(IdentityOptions.SectionName)
 			.ValidateDataAnnotations()
 			.ValidateOnStart();
 

@@ -3,7 +3,7 @@
 /// <summary>
 ///     Sign in related configurations.
 /// </summary>
-internal sealed class UserSignInOptions
+internal sealed class IdentitySignInOptions
 {
 	/// <summary>
 	///     Whether the user required a confirmed email to log into the application.

@@ -3,7 +3,7 @@
 /// <summary>
 ///     User passwords related configurations.
 /// </summary>
-internal sealed class UserPasswordOptions
+internal sealed class IdentityPasswordOptions
 {
 	/// <summary>
 	///     Whether the password requires a UPPERCASE character.

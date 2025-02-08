@@ -22,13 +22,13 @@ internal sealed class UserManager
 	private readonly PasswordHasher<User> _passwordHasher;
 	private readonly List<User> _users = [];
 
-	internal UserOptions Options { get; }
+	internal IdentityOptions Options { get; }
 
 
 	public UserManager(
 		ApplicationDbContext dbContext,
 		PasswordHasher<User> passwordHasher,
-		IOptions<UserOptions> identityOptions)
+		IOptions<IdentityOptions> identityOptions)
 	{
 		_dbContext = dbContext;
 		_passwordHasher = passwordHasher;
