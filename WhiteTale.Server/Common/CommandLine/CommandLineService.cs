@@ -73,28 +73,28 @@ internal sealed class CommandLineService
 					cancellationToken);
 			}
 
-			var parameterName = segment[CommandParameter.Prefix.Length..].ToString();
-			if (!command.Parameters.TryGetValue(parameterName, out var parameter))
+			var optionName = segment[CommandParameter.Prefix.Length..].ToString();
+			if (!command.Options.TryGetValue(optionName, out var option))
 			{
-				_logger.InvalidCommandParameter(parameterName);
+				_logger.InvalidCommandParameter(optionName);
 				return false;
 			}
 
-			if (!parameter.RequiresArgument)
+			if (!option.RequiresArgument)
 			{
-				arguments.Add(parameter.Name, String.Empty);
+				arguments.Add(option.Name, String.Empty);
 				continue;
 			}
 
 			if (!inputSegments.MoveNext())
 			{
-				_logger.MissingArgument(parameterName);
+				_logger.MissingArgument(optionName);
 				return false;
 			}
 
 			var argumentStart = inputSegments.Current.Start.Value;
 			var argumentLength = inputSegments.Current.End.Value - argumentStart;
-			if (parameter.CanOverflow)
+			if (option.CanOverflow)
 			{
 				while (inputSegments.MoveNext())
 				{
@@ -102,7 +102,7 @@ internal sealed class CommandLineService
 				}
 			}
 
-			arguments.Add(parameter.Name, input.Slice(argumentStart, argumentLength).ToString());
+			arguments.Add(option.Name, input.Slice(argumentStart, argumentLength).ToString());
 		}
 
 		await command.Callback(arguments, cancellationToken);

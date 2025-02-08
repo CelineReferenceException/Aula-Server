@@ -2,7 +2,7 @@
 
 internal abstract class Command : IDisposable
 {
-	private readonly Dictionary<String, CommandParameter> _parameters = [];
+	private readonly Dictionary<String, CommandParameter> _options = [];
 	private readonly IServiceScope _serviceScope;
 	private readonly Dictionary<String, Command> _subCommands = [];
 	private CommandParameter? _previousDefinedParameter;
@@ -16,7 +16,7 @@ internal abstract class Command : IDisposable
 
 	internal abstract String Description { get; }
 
-	internal IReadOnlyDictionary<String, CommandParameter> Parameters => _parameters;
+	internal IReadOnlyDictionary<String, CommandParameter> Options => _options;
 
 	internal IReadOnlyDictionary<String, Command> SubCommands => _subCommands;
 
@@ -31,13 +31,13 @@ internal abstract class Command : IDisposable
 		return ValueTask.CompletedTask;
 	}
 
-	private protected void AddParameter(CommandParameter parameter)
+	private protected void AddOptions(CommandParameter parameter)
 	{
 		ArgumentNullException.ThrowIfNull(parameter, nameof(parameter));
 
-		if (!_parameters.TryAdd(parameter.Name, parameter))
+		if (!_options.TryAdd(parameter.Name, parameter))
 		{
-			throw new ArgumentException($"Duplicate command parameter name: '{parameter.Name}'.", nameof(parameter));
+			throw new ArgumentException($"Duplicate command option name: '{parameter.Name}'.", nameof(parameter));
 		}
 
 		if (_previousDefinedParameter is null)
@@ -49,25 +49,25 @@ internal abstract class Command : IDisposable
 		    !_previousDefinedParameter.IsRequired)
 		{
 			throw new ArgumentException(
-				$"An optional parameter cannot follow a required one. '{_previousDefinedParameter.Name}' is optional but '{parameter.Name}' is required.",
+				$"An optional option parameter cannot follow a required one. '{_previousDefinedParameter.Name}' is optional but '{parameter.Name}' is required.",
 				nameof(parameter));
 		}
 
 		if (_previousDefinedParameter.CanOverflow)
 		{
 			throw new ArgumentException(
-				$"The parameter '{_previousDefinedParameter.Name}' is marked for overflow, but is followed by another parameter.",
+				$"The option '{_previousDefinedParameter.Name}' is marked for overflow, but is followed by another option.",
 				nameof(parameter));
 		}
 
 		_previousDefinedParameter = parameter;
 	}
 
-	private protected void AddParameters(params IEnumerable<CommandParameter> parameters)
+	private protected void AddOptions(params IEnumerable<CommandParameter> parameters)
 	{
 		foreach (var parameter in parameters)
 		{
-			AddParameter(parameter);
+			AddOptions(parameter);
 		}
 	}
 
