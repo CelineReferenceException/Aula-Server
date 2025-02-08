@@ -19,6 +19,7 @@ internal static class DependencyInjection
 			.ValidateOnStart();
 
 		_ = builder.Services.AddIdentity();
+		_ = builder.Services.AddApplicationAuthentication();
 		_ = builder.Services.AddAuthorizationRequirements();
 
 		_ = builder.Services.AddCors();
