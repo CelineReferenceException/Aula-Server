@@ -20,8 +20,9 @@ internal sealed class Register : IEndpoint
 	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(
 		[FromBody] RegisterRequestBody body,
 		[FromServices] RegisterRequestBodyValidator bodyValidator,
-		[FromServices] SnowflakeGenerator snowflakes,
-		[FromServices] UserManager<User> userManager,
+		[FromServices] SnowflakeProvider snowflakeProvider,
+		[FromServices] UserManager userManager,
+		[FromServices] PasswordHasher<User> passwordHasher,
 		[FromServices] IOptions<IdentityFeatureOptions> featureOptions,
 		HttpRequest httpRequest,
 		[FromServices] ConfirmEmailEmailSender confirmEmailEmailSender,
@@ -41,14 +42,19 @@ internal sealed class Register : IEndpoint
 			return TypedResults.NoContent();
 		}
 
-		var newUser = User.Create(snowflakes.NewSnowflake(), body.Email, body.UserName, body.DisplayName, UserOwnerType.Standard,
+		var newUser = User.Create(snowflakeProvider.NewSnowflake(), body.UserName, body.Email, body.DisplayName, UserOwnerType.Standard,
 			featureOptions.Value.DefaultPermissions);
+		newUser.PasswordHash = passwordHasher.HashPassword(newUser, body.Password);
 
-		var identityCreation = await userManager.CreateAsync(newUser, body.Password);
-		if (!identityCreation.Succeeded)
+		var registerResult = await userManager.RegisterAsync(newUser);
+		if (!registerResult.Succeeded)
 		{
-			var problemDetails = identityCreation.Errors.ToProblemDetails();
-			return TypedResults.Problem(problemDetails);
+			return TypedResults.Problem(new ProblemDetails
+			{
+				Title = "Registration problem",
+				Detail = registerResult.ToString(),
+				Status = StatusCodes.Status400BadRequest,
+			});
 		}
 
 		await confirmEmailEmailSender.SendEmailAsync(newUser, httpRequest);

@@ -13,7 +13,7 @@ internal sealed class RemoveRoomConnection : IEndpoint
 	{
 		_ = route.MapDelete("rooms/{sourceRoomId}/connections/{targetRoomId}", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.ManageRooms)
 			.DenyBannedUsers()
 			.HasApiVersion(1);
@@ -23,7 +23,7 @@ internal sealed class RemoveRoomConnection : IEndpoint
 		[FromRoute] UInt64 sourceRoomId,
 		[FromRoute] UInt64 targetRoomId,
 		[FromServices] ApplicationDbContext dbContext,
-		[FromServices] SnowflakeGenerator snowflakeGenerator)
+		[FromServices] SnowflakeProvider snowflakeProvider)
 	{
 		var sourceRoomExists = await dbContext.Rooms
 			.AsNoTracking()

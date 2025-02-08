@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
@@ -9,11 +8,10 @@ namespace WhiteTale.Server.Features.Identity.Endpoints;
 
 internal sealed class ResetPassword : IEndpoint
 {
-	internal const String Route = "api/identity/resetpassword";
 
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapPost(Route, HandleAsync)
+		_ = route.MapPost("identity/reset-password", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.HasApiVersion(1);
 	}
@@ -21,7 +19,7 @@ internal sealed class ResetPassword : IEndpoint
 	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(
 		[FromBody] ResetPasswordRequestBody body,
 		[FromServices] ResetPasswordRequestBodyValidator bodyValidator,
-		[FromServices] UserManager<User> userManager)
+		[FromServices] UserManager userManager)
 	{
 		var bodyValidation = await bodyValidator.ValidateAsync(body);
 		if (!bodyValidation.IsValid)
@@ -30,22 +28,21 @@ internal sealed class ResetPassword : IEndpoint
 			return TypedResults.Problem(problemDetails);
 		}
 
-		var user = await userManager.FindByIdAsync(body.UserId.ToString());
+		var user = await userManager.FindByIdAsync(body.UserId);
 		if (user is null)
+		{
+			return TypedResults.Problem(ProblemDetailsDefaults.UnknownUser);
+		}
+
+		var passwordReset = await userManager.ResetPasswordAsync(user, body.NewPassword, body.ResetToken);
+		if (!passwordReset.Succeeded)
 		{
 			return TypedResults.Problem(new ProblemDetails
 			{
-				Title = "User not found",
-				Detail = "There is no user with the given ID.",
-				Status = StatusCodes.Status404NotFound,
+				Title = "Password problem",
+				Detail = passwordReset.ToString(),
+				Status = StatusCodes.Status400BadRequest,
 			});
-		}
-
-		var passwordReset = await userManager.ResetPasswordAsync(user, body.ResetToken, body.NewPassword);
-		if (!passwordReset.Succeeded)
-		{
-			var problemDetails = passwordReset.Errors.ToProblemDetails();
-			return TypedResults.Problem(problemDetails);
 		}
 
 		return TypedResults.NoContent();

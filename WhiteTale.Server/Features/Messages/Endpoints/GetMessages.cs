@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +20,7 @@ internal sealed class GetMessages : IEndpoint
 	{
 		_ = route.MapGet("rooms/{roomid}/messages", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.ReadMessages)
 			.DenyBannedUsers()
 			.HasApiVersion(1);
@@ -33,7 +32,7 @@ internal sealed class GetMessages : IEndpoint
 		[FromQuery(Name = AfterQueryParameter)] UInt64? afterId,
 		[FromQuery(Name = CountQueryParameter)] Int32? count,
 		[FromServices] ApplicationDbContext dbContext,
-		[FromServices] UserManager<User> userManager,
+		[FromServices] UserManager userManager,
 		HttpContext httpContext)
 	{
 		var roomExists = await dbContext.Rooms

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +13,7 @@ internal sealed class SetCurrentRoom : IEndpoint
 	{
 		_ = route.MapPut("users/{userId}/current-room/", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.SetCurrentRoom)
 			.DenyBannedUsers()
 			.HasApiVersion(1);
@@ -25,7 +24,7 @@ internal sealed class SetCurrentRoom : IEndpoint
 		[FromBody] SetCurrentRoomRequestBody body,
 		[FromServices] SetCurrentRoomRequestBodyValidator bodyValidator,
 		[FromServices] ApplicationDbContext dbContext,
-		[FromServices] UserManager<User> userManager,
+		[FromServices] UserManager userManager,
 		HttpContext httpContext)
 	{
 		var validation = await bodyValidator.ValidateAsync(body);

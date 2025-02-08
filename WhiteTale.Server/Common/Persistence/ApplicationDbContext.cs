@@ -1,11 +1,10 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using MediatR;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace WhiteTale.Server.Common.Persistence;
 
-internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
+internal sealed class ApplicationDbContext : DbContext
 {
 	private readonly IHostEnvironment _hostEnvironment;
 	private readonly IPublisher _publisher;
@@ -18,6 +17,8 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 		_hostEnvironment = hostEnvironment;
 		_publisher = publisher;
 	}
+
+	internal DbSet<User> Users => Set<User>();
 
 	internal DbSet<Ban> Bans => Set<Ban>();
 
@@ -49,6 +50,29 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 			.IsRequired()
 			.ValueGeneratedNever();
 		_ = userModel.HasKey(x => x.Id);
+
+		_ = userModel.Property(x => x.UserName)
+			.IsRequired()
+			.HasMaxLength(User.UserNameMaximumLength);
+
+		_ = userModel.Property(x => x.Email)
+			.IsRequired();
+
+		_ = userModel.Property(x => x.EmailConfirmed)
+			.IsRequired();
+
+		_ = userModel.Property(x => x.PasswordHash)
+			.IsRequired()
+			.HasMaxLength(User.PasswordMaximumLength);
+
+		_ = userModel.Property(x => x.SecurityStamp)
+			.IsRequired();
+
+		_ = userModel.Property(x => x.AccessFailedCount)
+			.IsRequired();
+
+		_ = userModel.Property(x => x.LockoutEndTime)
+			.IsRequired(false);
 
 		_ = userModel.Property(x => x.Permissions)
 			.IsRequired();
@@ -227,7 +251,44 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 	public override async Task<Int32> SaveChangesAsync(CancellationToken cancellationToken = default)
 	{
 		var entriesWritten = await base.SaveChangesAsync(cancellationToken);
+		await PublishDomainEventsAsync(cancellationToken);
+		return entriesWritten;
+	}
 
+	internal async Task<Int32> SaveChangesWithConcurrencyCheckBypassAsync(CancellationToken cancellationToken = default)
+	{
+		var saved = false;
+		var entriesWritten = 0;
+
+		while (!saved)
+		{
+			try
+			{
+				entriesWritten = await base.SaveChangesAsync(cancellationToken);
+				saved = true;
+			}
+			catch (DbUpdateConcurrencyException ex)
+			{
+				foreach (var entry in ex.Entries)
+				{
+					var databaseValues = await entry.GetDatabaseValuesAsync(cancellationToken);
+					if (databaseValues is null)
+					{
+						throw;
+					}
+
+					// Refresh original values to bypass next concurrency check
+					entry.OriginalValues.SetValues(databaseValues);
+				}
+			}
+		}
+
+		await PublishDomainEventsAsync(cancellationToken);
+		return entriesWritten;
+	}
+
+	private async ValueTask PublishDomainEventsAsync(CancellationToken cancellationToken = default)
+	{
 		var domainEvents = ChangeTracker
 			.Entries<IDomainEntity>()
 			.SelectMany(x => x.Entity.Events);
@@ -236,7 +297,5 @@ internal sealed class ApplicationDbContext : IdentityUserContext<User, UInt64>
 		{
 			await _publisher.Publish(domainEvent, cancellationToken);
 		}
-
-		return entriesWritten;
 	}
 }

@@ -30,7 +30,7 @@ internal sealed class BannedUserRestrictor : INotificationHandler<BanCreatedEven
 			.Where(s => s.UserId == ban.TargetId);
 		foreach (var session in targetSessions)
 		{
-			await session.StopAsync(WebSocketCloseStatus.NormalClosure);
+			await session.StopAsync(WebSocketCloseStatus.Empty);
 		}
 
 		await _resiliencePipelines.RetryOnDbConcurrencyProblem.ExecuteAsync(async ct =>

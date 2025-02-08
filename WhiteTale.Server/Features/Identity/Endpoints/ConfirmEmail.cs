@@ -3,7 +3,6 @@ using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.WebUtilities;
@@ -15,12 +14,11 @@ internal sealed class ConfirmEmail : IEndpoint
 {
 	internal const String EmailQueryParameter = "email";
 	internal const String TokenQueryParameter = "token";
-	internal const String Route = "api/identity/confirmEmail";
 
 	public void Build(IEndpointRouteBuilder route)
 	{
 		// Using GET allows browsers to make direct requests, such as when a user enters a URL in the address bar.
-		_ = route.MapGet(Route, HandleAsync)
+		_ = route.MapGet("identity/confirm-email", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.HasApiVersion(1);
 	}
@@ -28,12 +26,12 @@ internal sealed class ConfirmEmail : IEndpoint
 	private static async Task<Results<NoContent, RedirectHttpResult>> HandleAsync(
 		[FromQuery(Name = EmailQueryParameter)] String email,
 		[FromQuery(Name = TokenQueryParameter)] String? token,
-		[FromServices] UserManager<User> userManager,
+		[FromServices] UserManager userManager,
 		HttpRequest httpRequest,
 		[FromServices] ConfirmEmailEmailSender confirmEmailEmailSender,
 		[FromServices] IOptions<IdentityFeatureOptions> featureOptions)
 	{
-		email = WebUtility.UrlDecode(email);
+		email = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(email));
 		var redirectUri = featureOptions.Value.ConfirmEmailRedirectUri?.ToString();
 
 		var user = await userManager.FindByEmailAsync(email);
@@ -43,7 +41,7 @@ internal sealed class ConfirmEmail : IEndpoint
 			return RedirectOrSendNoContent(redirectUri);
 		}
 
-		if (await userManager.IsEmailConfirmedAsync(user))
+		if (user.EmailConfirmed)
 		{
 			return RedirectOrSendNoContent(redirectUri);
 		}

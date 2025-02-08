@@ -1,7 +1,6 @@
 ﻿using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebSockets;
 using Microsoft.Extensions.Options;
 
@@ -37,10 +36,10 @@ internal static class DependencyInjection
 
 			_ = options.AddPolicy(GatewayRateLimitPolicyNames.Default, httpContext =>
 			{
-				var userManager = ServiceProviderServiceExtensions.GetRequiredService<UserManager<User>>(httpContext.RequestServices);
+				var userManager = ServiceProviderServiceExtensions.GetRequiredService<UserManager>(httpContext.RequestServices);
 
 				var userId = userManager.GetUserId(httpContext.User);
-				var partitionKey = userId ?? httpContext.Connection.RemoteIpAddress?.ToString() ?? String.Empty;
+				var partitionKey = userId.ToString() ?? httpContext.Connection.RemoteIpAddress?.ToString() ?? String.Empty;
 
 				var rateLimitOptions = httpContext.RequestServices
 					.GetRequiredService<IOptionsSnapshot<RateLimitOptions>>()

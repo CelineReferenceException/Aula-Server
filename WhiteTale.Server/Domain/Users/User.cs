@@ -1,11 +1,9 @@
-﻿using System.Diagnostics;
-using FluentValidation;
-using Microsoft.AspNetCore.Identity;
+﻿using FluentValidation;
 
 #pragma warning disable CS8618
 namespace WhiteTale.Server.Domain.Users;
 
-internal sealed class User : IdentityUser<UInt64>, IDomainEntity
+internal sealed class User : DefaultDomainEntity
 {
 	internal const Int32 DisplayNameMinimumLength = 3;
 	internal const Int32 DisplayNameMaximumLength = 32;
@@ -13,24 +11,28 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 	internal const Int32 UserNameMaximumLength = 32;
 	internal const Int32 DescriptionMinimumLength = 1;
 	internal const Int32 DescriptionMaximumLength = 1024;
+	internal const Int32 PasswordMaximumLength = 128;
 	private static readonly UserValidator s_validator = new();
-	private readonly List<DomainEvent> _events = [];
 
 	private User()
 	{
 	}
 
-	internal new UInt64 Id
-	{
-		get => base.Id;
-		private init => base.Id = value;
-	}
+	internal UInt64 Id { get; private init; }
 
-	internal new String UserName
-	{
-		get => base.UserName ?? throw new UnreachableException();
-		private set => base.UserName = value;
-	}
+	internal String UserName { get; private init; }
+
+	internal String Email { get; private init; }
+
+	internal Boolean EmailConfirmed { get; private set; }
+
+	internal String? PasswordHash { get; set; }
+
+	internal String SecurityStamp { get; private set; }
+
+	internal Int32 AccessFailedCount { get; private set; }
+
+	internal DateTime? LockoutEndTime { get; private set; }
 
 	internal String DisplayName { get; private set; }
 
@@ -46,18 +48,12 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 
 	internal DateTime CreationTime { get; private init; }
 
-	private new String ConcurrencyStamp
-	{
-		get => base.ConcurrencyStamp ?? throw new UnreachableException();
-		set => base.ConcurrencyStamp = value;
-	}
-
-	IReadOnlyList<DomainEvent> IDomainEntity.Events => _events;
+	internal String ConcurrencyStamp { get; private set; }
 
 	internal static User Create(
 		UInt64 id,
-		String email,
 		String userName,
+		String email,
 		String? displayName,
 		UserOwnerType ownerType,
 		Permissions permissions)
@@ -65,16 +61,17 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 		var user = new User
 		{
 			Id = id,
-			Email = email,
 			UserName = userName,
+			Email = email.ToUpper(),
 			DisplayName = displayName ?? userName,
 			Permissions = permissions,
 			OwnerType = ownerType,
 			CreationTime = DateTime.UtcNow,
-			ConcurrencyStamp = Guid.NewGuid().ToString("N"),
+			ConcurrencyStamp = GenerateConcurrencyStamp(),
+			SecurityStamp = GenerateSecurityStamp(),
 		};
 
-		s_validator.Validate(user);
+		s_validator.ValidateAndThrow(user);
 
 		return user;
 	}
@@ -121,7 +118,7 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 
 		s_validator.ValidateAndThrow(this);
 
-		_events.Add(new UserUpdatedEvent(this));
+		AddEvent(new UserUpdatedEvent(this));
 	}
 
 	internal void SetCurrentRoom(UInt64? currentRoomId)
@@ -136,11 +133,57 @@ internal sealed class User : IdentityUser<UInt64>, IDomainEntity
 
 		s_validator.ValidateAndThrow(this);
 
-		_events.Add(new UserCurrentRoomUpdatedEvent(Id, previousCurrentRoomId, CurrentRoomId));
+		AddEvent(new UserCurrentRoomUpdatedEvent(Id, previousCurrentRoomId, CurrentRoomId));
 	}
 
 	internal void UpdateConcurrencyStamp()
 	{
-		ConcurrencyStamp = Guid.NewGuid().ToString("N");
+		ConcurrencyStamp = GenerateConcurrencyStamp();
+	}
+
+	internal void IncrementAccessFailedCount()
+	{
+		AccessFailedCount++;
+	}
+
+	internal void ResetAccessFailedCount()
+	{
+		AccessFailedCount = 0;
+	}
+
+	internal void Lockout(TimeSpan time)
+	{
+		LockoutEndTime = DateTime.UtcNow.Add(time);
+	}
+
+	internal void RemoveLockout()
+	{
+		LockoutEndTime = null;
+	}
+
+	internal void ConfirmEmail()
+	{
+		EmailConfirmed = true;
+	}
+
+	internal void ChangePassword(String newPasswordHash)
+	{
+		PasswordHash = newPasswordHash;
+	}
+
+	internal void UpdateSecurityStamp()
+	{
+		SecurityStamp = GenerateSecurityStamp();
+		AddEvent(new UserSecurityStampUpdatedEvent(this));
+	}
+
+	private static String GenerateConcurrencyStamp()
+	{
+		return Guid.CreateVersion7().ToString("N");
+	}
+
+	private static String GenerateSecurityStamp()
+	{
+		return Guid.CreateVersion7().ToString("N");
 	}
 }

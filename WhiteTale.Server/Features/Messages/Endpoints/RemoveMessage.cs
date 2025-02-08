@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +13,7 @@ internal sealed class RemoveMessage : IEndpoint
 	{
 		_ = route.MapDelete("rooms/{roomId}/messages/{messageId}", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.RequireAuthenticatedUser()
 			.DenyBannedUsers()
 			.HasApiVersion(1);
 	}
@@ -24,7 +23,7 @@ internal sealed class RemoveMessage : IEndpoint
 		[FromRoute] UInt64 messageId,
 		[FromServices] ApplicationDbContext dbContext,
 		HttpContext httpContext,
-		[FromServices] UserManager<User> userManager)
+		[FromServices] UserManager userManager)
 	{
 		var roomExists = await dbContext.Rooms
 			.AsNoTracking()

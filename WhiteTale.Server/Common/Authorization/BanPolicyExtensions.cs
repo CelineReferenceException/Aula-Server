@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace WhiteTale.Server.Common.AuthorizationRequirements;
+namespace WhiteTale.Server.Common.Authorization;
 
 internal static class BanPolicyExtensions
 {

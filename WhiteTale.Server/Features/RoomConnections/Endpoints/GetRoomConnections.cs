@@ -13,7 +13,7 @@ internal sealed class GetRoomConnections : IEndpoint
 	{
 		_ = route.MapGet("rooms/{roomId}/connections", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.RequireAuthenticatedUser()
 			.DenyBannedUsers()
 			.HasApiVersion(1);
 	}

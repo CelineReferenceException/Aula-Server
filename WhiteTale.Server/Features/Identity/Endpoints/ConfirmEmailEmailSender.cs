@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
@@ -12,10 +11,10 @@ internal sealed class ConfirmEmailEmailSender
 {
 	private readonly String _applicationName;
 	private readonly IEmailSender _emailSender;
-	private readonly UserManager<User> _userManager;
+	private readonly UserManager _userManager;
 
 	public ConfirmEmailEmailSender(
-		[FromServices] UserManager<User> userManager,
+		[FromServices] UserManager userManager,
 		[FromServices] IEmailSender emailSender,
 		[FromServices] IOptions<ApplicationOptions> applicationOptions)
 	{
@@ -26,11 +25,12 @@ internal sealed class ConfirmEmailEmailSender
 
 	internal async Task SendEmailAsync(User user, HttpRequest httpRequest)
 	{
-		var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+		var email = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(user.Email));
+		var confirmationToken = _userManager.GenerateEmailConfirmationToken(user);
 		confirmationToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));
 		var confirmationUrl =
-			$"{httpRequest.Scheme}://{httpRequest.Host}{httpRequest.PathBase}/{ConfirmEmail.Route}?" +
-			$"{ConfirmEmail.EmailQueryParameter}={user.Email}&" +
+			$"{httpRequest.GetUrl()}?" +
+			$"{ConfirmEmail.EmailQueryParameter}={email}&" +
 			$"{ConfirmEmail.TokenQueryParameter}={confirmationToken}";
 
 		var content =

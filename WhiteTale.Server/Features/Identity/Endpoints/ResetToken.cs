@@ -6,20 +6,20 @@ using Microsoft.AspNetCore.Routing;
 
 namespace WhiteTale.Server.Features.Identity.Endpoints;
 
-internal sealed class LogIn : IEndpoint
+internal sealed class ResetToken : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapPost("identity/login", HandleAsync)
+		_ = route.MapPost("identity/reset-token", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.HasApiVersion(1);
 	}
 
-	private static async Task<Results<Ok<AccessTokenData>, ProblemHttpResult, EmptyHttpResult>> HandleAsync(
+	private static async Task<Results<NoContent, ProblemHttpResult, EmptyHttpResult>> HandleAsync(
 		[FromBody] LogInRequestBody body,
 		[FromServices] LogInRequestBodyValidator bodyValidator,
 		[FromServices] UserManager userManager,
-		[FromServices] TokenProvider tokenProvider)
+		[FromServices] ApplicationDbContext dbContext)
 	{
 		var bodyValidation = await bodyValidator.ValidateAsync(body);
 		if (!bodyValidation.IsValid)
@@ -41,20 +41,10 @@ internal sealed class LogIn : IEndpoint
 			return TypedResults.Problem(ProblemDetailsDefaults.IncorrectPassword);
 		}
 
-		if (user.LockoutEndTime > DateTime.UtcNow)
-		{
-			return TypedResults.Problem(ProblemDetailsDefaults.UserIsLockedOut);
-		}
+		_ = dbContext.Attach(user);
+		user.UpdateSecurityStamp();
+		_ = dbContext.SaveChangesWithConcurrencyCheckBypassAsync();
 
-		if (userManager.Options.SignIn.RequireConfirmedEmail &&
-		    !user.EmailConfirmed)
-		{
-			return TypedResults.Problem(ProblemDetailsDefaults.EmailNotConfirmed);
-		}
-
-		return TypedResults.Ok(new AccessTokenData
-		{
-			Token = tokenProvider.CreateToken(user),
-		});
+		return TypedResults.NoContent();
 	}
 }

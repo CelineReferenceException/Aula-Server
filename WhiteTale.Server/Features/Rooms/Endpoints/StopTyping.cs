@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +15,7 @@ internal sealed class StopTyping : IEndpoint
 	{
 		_ = route.MapDelete("rooms/{roomId}/stop-typing", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
-			.RequireAuthorization(IdentityAuthorizationPolicyNames.BearerToken)
+			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.SendMessages)
 			.DenyBannedUsers()
 			.HasApiVersion(1);
@@ -24,13 +23,13 @@ internal sealed class StopTyping : IEndpoint
 
 	private static async Task<Results<NoContent, ProblemHttpResult, InternalServerError>> HandleAsync(
 		[FromRoute] UInt64 roomId,
-		[FromServices] UserManager<User> userManager,
+		[FromServices] UserManager userManager,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] IPublisher publisher,
 		HttpContext httpContext)
 	{
-		var userIdClaimValue = userManager.GetUserId(httpContext.User);
-		if (!UInt64.TryParse(userIdClaimValue, out var userId))
+		var userId = userManager.GetUserId(httpContext.User);
+		if (userId is null)
 		{
 			return TypedResults.InternalServerError();
 		}
@@ -50,7 +49,7 @@ internal sealed class StopTyping : IEndpoint
 
 		await publisher.Publish(new UserStoppedTypingEvent
 		{
-			UserId = userId,
+			UserId = (UInt64)userId,
 			RoomId = roomId,
 		});
 

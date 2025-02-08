@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace WhiteTale.Server.Common.AuthorizationRequirements;
+namespace WhiteTale.Server.Common.Authorization;
 
 internal static class PermissionsPolicyExtensions
 {
@@ -13,8 +13,8 @@ internal static class PermissionsPolicyExtensions
 	/// </summary>
 	/// <param name="builder">The endpoint builder.</param>
 	/// <param name="permissions">
-	///		The required permissions. The requirement will succeed if the authenticated user have
-	///		at least one of these, or <see cref="Permissions.Administrator"/>.
+	///     The required permissions. The requirement will succeed if the authenticated user have
+	///     at least one of these, or <see cref="Permissions.Administrator" />.
 	/// </param>
 	/// <typeparam name="TBuilder">The type of the <paramref name="builder" />.</typeparam>
 	/// <returns>The endpoint builder.</returns>

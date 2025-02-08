@@ -18,8 +18,9 @@ internal static class DependencyInjection
 			.ValidateDataAnnotations()
 			.ValidateOnStart();
 
-		_ = builder.Services.AddIdentity(builder.Configuration);
-		_ = builder.Services.AddAuthorizationRequirements();
+		_ = builder.Services.AddIdentity();
+		_ = builder.Services.AddApplicationAuthentication();
+		_ = builder.Services.AddApplicationAuthorization();
 
 		_ = builder.Services.AddCors();
 		_ = builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>(ServiceLifetime.Singleton, includeInternalTypes: true);
@@ -28,7 +29,7 @@ internal static class DependencyInjection
 
 		_ = builder.Services.AddRateLimiters();
 		_ = builder.Services.AddMailSender();
-		_ = builder.Services.AddSingleton<SnowflakeGenerator>();
+		_ = builder.Services.AddSingleton<SnowflakeProvider>();
 		_ = builder.Services.AddPersistence(builder.Configuration);
 		_ = builder.Services.AddResilience();
 		_ = builder.Services.AddEndpoints();

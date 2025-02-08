@@ -5,21 +5,21 @@ namespace WhiteTale.Server.Features.Messages;
 internal sealed class UserCurrentRoomUpdatedMessageSender : INotificationHandler<UserCurrentRoomUpdatedEvent>
 {
 	private readonly ApplicationDbContext _dbContext;
-	private readonly SnowflakeGenerator _snowflakeGenerator;
+	private readonly SnowflakeProvider _snowflakeProvider;
 
 	public UserCurrentRoomUpdatedMessageSender(
 		ApplicationDbContext dbContext,
-		SnowflakeGenerator snowflakeGenerator)
+		SnowflakeProvider snowflakeProvider)
 	{
 		_dbContext = dbContext;
-		_snowflakeGenerator = snowflakeGenerator;
+		_snowflakeProvider = snowflakeProvider;
 	}
 
 	public async Task Handle(UserCurrentRoomUpdatedEvent notification, CancellationToken cancellationToken)
 	{
 		if (notification.PreviousRoomId is not null)
 		{
-			var leaveMessageId = _snowflakeGenerator.NewSnowflake();
+			var leaveMessageId = _snowflakeProvider.NewSnowflake();
 			var leaveMessage = Message.Create(leaveMessageId, MessageType.UserLeave, 0, MessageAuthor.System, null,
 				MessageTarget.Room, null, null, new MessageUserLeave
 				{
@@ -34,7 +34,7 @@ internal sealed class UserCurrentRoomUpdatedMessageSender : INotificationHandler
 
 		if (notification.CurrentRoomId is not null)
 		{
-			var joinMessageId = _snowflakeGenerator.NewSnowflake();
+			var joinMessageId = _snowflakeProvider.NewSnowflake();
 			var joinMessage = Message.Create(joinMessageId, MessageType.UserJoin, 0, MessageAuthor.System, null,
 				MessageTarget.Room, null, new MessageUserJoin
 				{

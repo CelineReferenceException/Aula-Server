@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
@@ -14,14 +13,14 @@ internal sealed class ForgotPassword : IEndpoint
 
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapPost("identity/forgotpassword", HandleAsync)
+		_ = route.MapPost("identity/forgot-password", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.HasApiVersion(1);
 	}
 
 	private static async Task<NoContent> HandleAsync(
 		[FromQuery(Name = EmailQueryParameter)] String email,
-		[FromServices] UserManager<User> userManager,
+		[FromServices] UserManager userManager,
 		[FromServices] ResetPasswordEmailSender resetPasswordEmailSender)
 	{
 		email = WebUtility.UrlDecode(email);

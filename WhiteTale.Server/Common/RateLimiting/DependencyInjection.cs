@@ -1,7 +1,6 @@
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
 namespace WhiteTale.Server.Common.RateLimiting;
@@ -27,10 +26,10 @@ internal static class DependencyInjection
 
 			_ = options.AddPolicy(RateLimitPolicyNames.Global, httpContext =>
 			{
-				var userManager = ServiceProviderServiceExtensions.GetRequiredService<UserManager<User>>(httpContext.RequestServices);
+				var userManager = ServiceProviderServiceExtensions.GetRequiredService<UserManager>(httpContext.RequestServices);
 
 				var userId = userManager.GetUserId(httpContext.User);
-				var partitionKey = userId ?? httpContext.Connection.RemoteIpAddress?.ToString() ?? String.Empty;
+				var partitionKey = userId.ToString() ?? httpContext.Connection.RemoteIpAddress?.ToString() ?? String.Empty;
 
 				var rateLimit = httpContext.RequestServices
 					.GetRequiredService<IOptionsSnapshot<RateLimitOptions>>()
@@ -49,11 +48,11 @@ internal static class DependencyInjection
 
 			_ = options.AddPolicy(RateLimitPolicyNames.NoConcurrency, httpContext =>
 			{
-				var userManager = ServiceProviderServiceExtensions.GetRequiredService<UserManager<User>>(httpContext.RequestServices);
+				var userManager = ServiceProviderServiceExtensions.GetRequiredService<UserManager>(httpContext.RequestServices);
 				var request = httpContext.Request;
 
 				var userId = userManager.GetUserId(httpContext.User);
-				var partitionKey = userId ?? httpContext.Connection.RemoteIpAddress?.ToString() ?? String.Empty;
+				var partitionKey = userId.ToString() ?? httpContext.Connection.RemoteIpAddress?.ToString() ?? String.Empty;
 				partitionKey += $"{request.Method}{request.Scheme}{request.Host}{request.PathBase}{request.Path}";
 
 				return RateLimitPartition.GetConcurrencyLimiter(partitionKey,

@@ -14,9 +14,4 @@ internal sealed class IdentityLockoutOptions
 	///     The maximum failed access attempts before locking out a user.
 	/// </summary>
 	public Int32 MaximumFailedAccessAttempts { get; set; } = 10;
-
-	/// <summary>
-	///     If new users can be locked out.
-	/// </summary>
-	public Boolean AllowedForNewUsers { get; set; } = true;
 }
