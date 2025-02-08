@@ -25,11 +25,12 @@ internal sealed class ConfirmEmailEmailSender
 
 	internal async Task SendEmailAsync(User user, HttpRequest httpRequest)
 	{
+		var email = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(user.Email));
 		var confirmationToken = _userManager.GenerateEmailConfirmationToken(user);
 		confirmationToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));
 		var confirmationUrl =
 			$"{httpRequest.Scheme}://{httpRequest.Host}{httpRequest.PathBase}/{ConfirmEmail.Route}?" +
-			$"{ConfirmEmail.EmailQueryParameter}={user.Email}&" +
+			$"{ConfirmEmail.EmailQueryParameter}={email}&" +
 			$"{ConfirmEmail.TokenQueryParameter}={confirmationToken}";
 
 		var content =
