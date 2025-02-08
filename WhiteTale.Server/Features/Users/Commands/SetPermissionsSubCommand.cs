@@ -7,7 +7,7 @@ internal sealed class SetPermissionsSubCommand : SubCommand
 	private readonly ApplicationDbContext _dbContext;
 	private readonly ILogger<SetPermissionsSubCommand> _logger;
 
-	private readonly CommandParameter _permissionsParameter = new()
+	private readonly CommandParameter _permissionsOption = new()
 	{
 		Name = "p",
 		Description = "The permission flags to set.",
@@ -16,7 +16,7 @@ internal sealed class SetPermissionsSubCommand : SubCommand
 		CanOverflow = false,
 	};
 
-	private readonly CommandParameter _userIdParameter = new()
+	private readonly CommandParameter _userIdOption = new()
 	{
 		Name = "u",
 		Description = "The ID of the user to set the permissions for.",
@@ -32,7 +32,7 @@ internal sealed class SetPermissionsSubCommand : SubCommand
 	{
 		_dbContext = dbContext;
 		_logger = logger;
-		AddParameters(_userIdParameter, _permissionsParameter);
+		AddOptions(_userIdOption, _permissionsOption);
 	}
 
 	internal override String Name => "set";
@@ -41,7 +41,7 @@ internal sealed class SetPermissionsSubCommand : SubCommand
 
 	internal override async ValueTask Callback(IReadOnlyDictionary<String, String> args, CancellationToken cancellationToken)
 	{
-		var userIdArgument = args[_userIdParameter.Name];
+		var userIdArgument = args[_userIdOption.Name];
 
 		if (!UInt64.TryParse(userIdArgument, out var userId))
 		{
@@ -59,7 +59,7 @@ internal sealed class SetPermissionsSubCommand : SubCommand
 			return;
 		}
 
-		var permissionsArgument = args[_permissionsParameter.Name];
+		var permissionsArgument = args[_permissionsOption.Name];
 
 		if (!Enum.TryParse(permissionsArgument, true, out Permissions permissions))
 		{

@@ -6,7 +6,7 @@ internal sealed partial class HelpCommand : Command
 {
 	private readonly CommandLineService _commandLineService;
 
-	private readonly CommandParameter _commandParameter = new()
+	private readonly CommandParameter _commandOption = new()
 	{
 		Name = "c",
 		Description = "Show information about a specific command.",
@@ -24,7 +24,7 @@ internal sealed partial class HelpCommand : Command
 		_commandLineService = commandLineService;
 		_logger = logger;
 
-		AddParameter(_commandParameter);
+		AddOptions(_commandOption);
 	}
 
 	internal override String Name => "help";
@@ -39,7 +39,7 @@ internal sealed partial class HelpCommand : Command
 			.Select(kvp => kvp.Value)
 			.ToList();
 
-		if (!args.TryGetValue(_commandParameter.Name, out var query) ||
+		if (!args.TryGetValue(_commandOption.Name, out var query) ||
 		    String.IsNullOrWhiteSpace(query))
 		{
 			ShowHelp(_logger, FormatCommands(commands));
@@ -71,7 +71,7 @@ internal sealed partial class HelpCommand : Command
 
 		var parameters = new CommandParameters();
 
-		foreach (var parameter in command.Parameters.Select(kvp => kvp.Value))
+		foreach (var parameter in command.Options.Select(kvp => kvp.Value))
 		{
 			var name = $"{CommandParameter.Prefix}{parameter.Name}";
 			parameters.Options.Add(new ParameterInfo(name, parameter.Description));
