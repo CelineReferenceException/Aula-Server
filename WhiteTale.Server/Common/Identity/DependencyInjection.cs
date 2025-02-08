@@ -50,6 +50,10 @@ internal static class DependencyInjection
 			.AddEntityFrameworkStores<ApplicationDbContext>()
 			.AddSignInManager()
 			.AddDefaultTokenProviders();
+		_ = services.AddOptions<UserOptions>()
+			.BindConfiguration(UserOptions.SectionName)
+			.ValidateDataAnnotations()
+			.ValidateOnStart();
 
 		_ = services.AddOptions<BearerTokenOptions>(IdentityConstants.BearerScheme)
 			.Configure(static options =>
