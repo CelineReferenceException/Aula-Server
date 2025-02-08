@@ -205,7 +205,8 @@ internal sealed class UserManager
 	internal async ValueTask<ResetPasswordResult> ResetPasswordAsync(User user, String newPassword, String token)
 	{
 		if (!s_pendingPasswordResets.TryGetValue(user.Id, out var passwordReset) ||
-		    passwordReset.Token != token)
+		    passwordReset.Token != token ||
+		    DateTime.UtcNow - passwordReset.CreationTime > s_pendingPasswordResetsLifeTime)
 		{
 			return ResetPasswordResult.InvalidToken;
 		}
