@@ -27,7 +27,7 @@ internal sealed class SendMessage : IEndpoint
 		HttpContext httpContext,
 		[FromServices] UserManager userManager,
 		[FromServices] ApplicationDbContext dbContext,
-		[FromServices] SnowflakeGenerator snowflakeGenerator)
+		[FromServices] SnowflakeProvider snowflakeProvider)
 	{
 		var validation = await bodyValidator.ValidateAsync(body);
 		if (!validation.IsValid)
@@ -55,7 +55,7 @@ internal sealed class SendMessage : IEndpoint
 			return TypedResults.Problem(ProblemDetailsDefaults.UserIsNotInTheRoom);
 		}
 
-		var messageId = snowflakeGenerator.NewSnowflake();
+		var messageId = snowflakeProvider.NewSnowflake();
 
 		var allowedFlags = body.Type switch
 		{

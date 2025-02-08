@@ -25,7 +25,7 @@ internal sealed class BanUser : IEndpoint
 		HttpContext httpContext,
 		[FromServices] UserManager userManager,
 		[FromServices] ApplicationDbContext dbContext,
-		[FromServices] SnowflakeGenerator snowflakeGenerator)
+		[FromServices] SnowflakeProvider snowflakeProvider)
 	{
 		var validation = await bodyValidator.ValidateAsync(body);
 		if (!validation.IsValid)
@@ -67,7 +67,7 @@ internal sealed class BanUser : IEndpoint
 			return TypedResults.Problem(ProblemDetailsDefaults.TargetIsAdministrator);
 		}
 
-		var ban = Ban.Create(snowflakeGenerator.NewSnowflake(), BanType.Id, userId, body.Reason, targetId);
+		var ban = Ban.Create(snowflakeProvider.NewSnowflake(), BanType.Id, userId, body.Reason, targetId);
 		_ = dbContext.Bans.Add(ban);
 
 		try

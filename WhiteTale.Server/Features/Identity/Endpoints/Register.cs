@@ -20,7 +20,7 @@ internal sealed class Register : IEndpoint
 	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(
 		[FromBody] RegisterRequestBody body,
 		[FromServices] RegisterRequestBodyValidator bodyValidator,
-		[FromServices] SnowflakeGenerator snowflakes,
+		[FromServices] SnowflakeProvider snowflakeProvider,
 		[FromServices] UserManager userManager,
 		[FromServices] PasswordHasher<User> passwordHasher,
 		[FromServices] IOptions<IdentityFeatureOptions> featureOptions,
@@ -42,7 +42,7 @@ internal sealed class Register : IEndpoint
 			return TypedResults.NoContent();
 		}
 
-		var newUser = User.Create(snowflakes.NewSnowflake(), body.UserName, body.Email, body.DisplayName, UserOwnerType.Standard,
+		var newUser = User.Create(snowflakeProvider.NewSnowflake(), body.UserName, body.Email, body.DisplayName, UserOwnerType.Standard,
 			featureOptions.Value.DefaultPermissions);
 		newUser.PasswordHash = passwordHasher.HashPassword(newUser, body.Password);
 

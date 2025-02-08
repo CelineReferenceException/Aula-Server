@@ -22,7 +22,7 @@ internal sealed class RemoveAllRoomConnections : IEndpoint
 	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(
 		[FromRoute] UInt64 sourceRoomId,
 		[FromServices] ApplicationDbContext dbContext,
-		[FromServices] SnowflakeGenerator snowflakeGenerator)
+		[FromServices] SnowflakeProvider snowflakeProvider)
 	{
 		var sourceRoomExists = await dbContext.Rooms
 			.AsNoTracking()
