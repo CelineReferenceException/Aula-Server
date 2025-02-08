@@ -162,7 +162,8 @@ internal sealed class UserManager
 	internal async ValueTask<Boolean> ConfirmEmailAsync(User user, String token)
 	{
 		if (!s_pendingEmailConfirmations.TryGetValue(user.Id, out var emailConfirmation) ||
-		    emailConfirmation.Token != token)
+		    emailConfirmation.Token != token ||
+		    DateTime.UtcNow - emailConfirmation.CreationTime > s_pendingEmailConfirmationsLifeTime)
 		{
 			return false;
 		}
