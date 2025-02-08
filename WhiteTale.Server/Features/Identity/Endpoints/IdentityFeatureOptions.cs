@@ -8,7 +8,7 @@ internal sealed class IdentityFeatureOptions
 	internal const String SectionName = "Identity";
 
 	/// <summary>
-	///     The Uri to redirect to after users confirm their emails.
+	///     The Uri to redirect to after users confirm their emails, should be a trusted origin.
 	/// </summary>
 	public Uri? ConfirmEmailRedirectUri { get; set; }
 
