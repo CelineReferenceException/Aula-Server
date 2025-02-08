@@ -13,6 +13,7 @@ internal static class DependencyInjection
 
 		_ = services.AddScoped<UserManager>();
 		_ = services.AddHostedService<PendingEmailConfirmationsCleanerHostedService>();
+		_ = services.AddHostedService<PendingPasswordResetsCleanerHostedService>();
 		_ = services.AddSingleton<PasswordHasher<User>>();
 		_ = services.AddSingleton<TokenProvider>();
 

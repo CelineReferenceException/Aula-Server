@@ -306,4 +306,18 @@ internal sealed class UserManager
 			}
 		}
 	}
+
+	internal static void CleanPendingPasswordResets()
+	{
+		var now = DateTime.UtcNow;
+		var maximumLifeTime = TimeSpan.FromMinutes(15);
+
+		foreach (var pendingPasswordReset in s_pendingPasswordResets)
+		{
+			if (pendingPasswordReset.Value.CreationTime - now > maximumLifeTime)
+			{
+				_ = s_pendingEmailConfirmations.TryRemove(pendingPasswordReset.Key, out _);
+			}
+		}
+	}
 }
