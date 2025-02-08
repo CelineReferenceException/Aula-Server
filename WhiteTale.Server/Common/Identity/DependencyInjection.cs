@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace WhiteTale.Server.Common.Identity;
 
@@ -61,6 +62,8 @@ internal static class DependencyInjection
 				options.BearerTokenExpiration = TimeSpan.FromHours(1);
 				options.RefreshTokenExpiration = TimeSpan.FromDays(7);
 			});
+		_ = services.AddScoped<UserManager>();
+		_ = services.AddSingleton<PasswordHasher<User>>();
 		_ = services.AddSingleton<TokenProvider>();
 
 		return services;
