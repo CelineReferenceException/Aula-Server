@@ -300,7 +300,7 @@ internal sealed class UserManager
 
 		foreach (var pendingEmailConfirmation in s_pendingEmailConfirmations)
 		{
-			if (pendingEmailConfirmation.Value.CreationTime - now > maximumLifeTime)
+			if (now - pendingEmailConfirmation.Value.CreationTime > maximumLifeTime)
 			{
 				_ = s_pendingEmailConfirmations.TryRemove(pendingEmailConfirmation.Key, out _);
 			}
@@ -314,7 +314,7 @@ internal sealed class UserManager
 
 		foreach (var pendingPasswordReset in s_pendingPasswordResets)
 		{
-			if (pendingPasswordReset.Value.CreationTime - now > maximumLifeTime)
+			if (now - pendingPasswordReset.Value.CreationTime > maximumLifeTime)
 			{
 				_ = s_pendingEmailConfirmations.TryRemove(pendingPasswordReset.Key, out _);
 			}
