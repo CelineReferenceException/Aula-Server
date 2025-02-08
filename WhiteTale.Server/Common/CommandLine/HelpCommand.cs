@@ -35,7 +35,9 @@ internal sealed partial class HelpCommand : Command
 	{
 		ct.ThrowIfCancellationRequested();
 
-		var commands = _commandLineService.Commands.Select(kvp => kvp.Value);
+		var commands = _commandLineService.Commands
+			.Select(kvp => kvp.Value)
+			.ToList();
 
 		if (!args.TryGetValue(_commandParameter.Name, out var query) ||
 		    String.IsNullOrWhiteSpace(query))
@@ -62,60 +64,89 @@ internal sealed partial class HelpCommand : Command
 		return ValueTask.CompletedTask;
 	}
 
-	private static String FormatCommands(params IEnumerable<Command> commands)
+	private static String FormatCommands(Command command)
 	{
 		var message = new StringBuilder();
-		var info = new Dictionary<Command, List<ParameterInfo>>();
 		var alignment = 16;
 
-		foreach (var command in commands)
+		var parameters = new CommandParameters();
+
+		foreach (var parameter in command.Parameters.Select(kvp => kvp.Value))
 		{
-			var paramsInfo = new List<ParameterInfo>();
+			var name = $"{CommandParameter.Prefix}{parameter.Name}";
+			parameters.Options.Add(new ParameterInfo(name, parameter.Description));
 
-			foreach (var parameter in command.Parameters.Select(kvp => kvp.Value))
+			if (name.Length > alignment)
 			{
-				var name = $"{CommandParameter.Prefix}{parameter.Name}";
-				paramsInfo.Add(new ParameterInfo(name, parameter.Description));
-
-				if (name.Length > alignment)
-				{
-					alignment = name.Length;
-				}
+				alignment = name.Length;
 			}
+		}
 
-			foreach (var subCommand in command.SubCommands.Select(kvp => kvp.Value))
+		foreach (var subCommand in command.SubCommands.Select(kvp => kvp.Value))
+		{
+			var name = $"{subCommand.Name}";
+			parameters.SubCommands.Add(new ParameterInfo($"{subCommand.Name}", subCommand.Description));
+
+			if (subCommand.Name.Length > alignment)
 			{
-				var name = $"{subCommand.Name}";
-				paramsInfo.Add(new ParameterInfo($"{subCommand.Name}", subCommand.Description));
-
-				if (subCommand.Name.Length > alignment)
-				{
-					alignment = name.Length;
-				}
+				alignment = name.Length;
 			}
+		}
 
-			if (command.Name.Length > alignment)
-			{
-				alignment = command.Name.Length;
-			}
-
-			info.Add(command, paramsInfo);
+		if (command.Name.Length > alignment)
+		{
+			alignment = command.Name.Length;
 		}
 
 		alignment++;
 
-		_ = message.AppendLine();
-		foreach (var (command, parameters) in info)
-		{
-			_ = message.Append(command.Name);
-			_ = message.AppendLine(command.Description.PadLeft(command.Description.Length + alignment - command.Name.Length));
+		const Int32 padding = 2;
 
-			foreach (var param in parameters)
-			{
-				const Int32 padding = 2;
-				_ = message.Append(param.Name.PadLeft(param.Name.Length + padding));
-				_ = message.AppendLine(param.Description.PadLeft(param.Description.Length + alignment - param.Name.Length - padding));
-			}
+		_ = message.AppendLine();
+		_ = message.Append(command.Name);
+		_ = message.AppendLine(command.Description.PadLeft(command.Description.Length + alignment - command.Name.Length));
+
+		if (parameters.Options.Count > 0)
+		{
+			_ = message.AppendLine("Options: ");
+		}
+
+		foreach (var param in parameters.Options)
+		{
+			_ = message.Append(param.Name.PadLeft(param.Name.Length + padding));
+			_ = message.AppendLine(param.Description.PadLeft(param.Description.Length + alignment - param.Name.Length - padding));
+		}
+
+		if (parameters.SubCommands.Count > 0)
+		{
+			_ = message.AppendLine();
+			_ = message.AppendLine("Sub-commands: ");
+		}
+
+		foreach (var param in parameters.SubCommands)
+		{
+			_ = message.Append(param.Name.PadLeft(param.Name.Length + padding));
+			_ = message.AppendLine(param.Description.PadLeft(param.Description.Length + alignment - param.Name.Length - padding));
+		}
+
+		return message.ToString();
+	}
+
+	private static String FormatCommands(params ICollection<Command> commands)
+	{
+		var message = new StringBuilder();
+		var alignment = commands
+			.Select(command => command.Name.Length)
+			.Prepend(16)
+			.Max();
+
+		alignment++;
+
+		_ = message.AppendLine();
+		foreach (var command in commands)
+		{
+			_ = message.Append($"{command.Name}");
+			_ = message.AppendLine(command.Description.PadLeft(command.Description.Length + alignment - command.Name.Length));
 		}
 
 		return message.ToString();
@@ -123,6 +154,12 @@ internal sealed partial class HelpCommand : Command
 
 	[LoggerMessage(LogLevel.Information, Message = "Here's a list of all available commands: {message}")]
 	private static partial void ShowHelp(ILogger logger, String message);
+
+	private sealed record CommandParameters
+	{
+		internal List<ParameterInfo> Options { get; } = [];
+		internal List<ParameterInfo> SubCommands { get; } = [];
+	}
 
 	private readonly record struct ParameterInfo(String Name, String Description);
 }
