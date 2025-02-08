@@ -6,7 +6,6 @@ global using System.Threading.Tasks;
 global using WhiteTale.Server.Common;
 global using WhiteTale.Server.Common.Authentication;
 global using WhiteTale.Server.Common.Authorization;
-global using WhiteTale.Server.Common.AuthorizationRequirements;
 global using WhiteTale.Server.Common.BackgroundTaskQueue;
 global using WhiteTale.Server.Common.CommandLine;
 global using WhiteTale.Server.Common.Endpoints;

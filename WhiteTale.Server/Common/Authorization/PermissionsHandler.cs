@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 
-namespace WhiteTale.Server.Common.AuthorizationRequirements;
+namespace WhiteTale.Server.Common.Authorization;
 
 internal sealed class PermissionsHandler : AuthorizationHandler<PermissionsRequirement>
 {

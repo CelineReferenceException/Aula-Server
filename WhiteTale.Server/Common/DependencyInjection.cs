@@ -20,7 +20,6 @@ internal static class DependencyInjection
 
 		_ = builder.Services.AddIdentity();
 		_ = builder.Services.AddApplicationAuthentication();
-		_ = builder.Services.AddAuthorizationRequirements();
 
 		_ = builder.Services.AddCors();
 		_ = builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>(ServiceLifetime.Singleton, includeInternalTypes: true);

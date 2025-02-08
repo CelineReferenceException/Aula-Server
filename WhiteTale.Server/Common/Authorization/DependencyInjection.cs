@@ -5,7 +5,9 @@ internal static class DependencyInjection
 	internal static IServiceCollection AddApplicationAuthorization(this IServiceCollection services)
 	{
 		_ = services.AddAuthorizationBuilder()
-			.AddAuthenticatedUserPolicy();
+			.AddAuthenticatedUserPolicy()
+			.AddBanPolicy()
+			.AddPermissionsPolicy();
 
 		return services;
 	}

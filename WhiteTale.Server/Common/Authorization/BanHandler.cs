@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
-namespace WhiteTale.Server.Common.AuthorizationRequirements;
+namespace WhiteTale.Server.Common.Authorization;
 
 internal sealed class BanHandler : AuthorizationHandler<BanRequirement>
 {
