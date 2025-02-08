@@ -61,6 +61,6 @@ internal sealed class UserAuthenticationHandler : AuthenticationHandler<Authenti
 		var claims = new[] { new Claim(ClaimTypes.NameIdentifier, user.Id.ToString(), ClaimValueTypes.UInteger64), };
 		var claimsIdentity = new ClaimsIdentity(claims);
 		var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-		return AuthenticateResult.Success(new AuthenticationTicket(claimsPrincipal, AuthenticationSchemeNames.User));
+		return AuthenticateResult.Success(new AuthenticationTicket(claimsPrincipal, AuthenticationSchemeNames.BearerToken));
 	}
 }
