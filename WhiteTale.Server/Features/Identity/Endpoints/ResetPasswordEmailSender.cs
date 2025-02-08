@@ -24,11 +24,6 @@ internal sealed class ResetPasswordEmailSender
 
 	internal async Task SendEmailAsync(User user)
 	{
-		if (user.Email is null)
-		{
-			return;
-		}
-
 		var resetToken = _userManager.GeneratePasswordResetToken(user);
 		resetToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(resetToken));
 		var content =
