@@ -32,7 +32,7 @@ internal sealed class ConfirmEmail : IEndpoint
 		[FromServices] ConfirmEmailEmailSender confirmEmailEmailSender,
 		[FromServices] IOptions<IdentityFeatureOptions> featureOptions)
 	{
-		email = WebUtility.UrlDecode(email);
+		email = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(email));
 		var redirectUri = featureOptions.Value.ConfirmEmailRedirectUri?.ToString();
 
 		var user = await userManager.FindByEmailAsync(email);
