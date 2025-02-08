@@ -18,7 +18,7 @@ internal static class DependencyInjection
 			.ValidateDataAnnotations()
 			.ValidateOnStart();
 
-		_ = builder.Services.AddIdentity(builder.Configuration);
+		_ = builder.Services.AddIdentity();
 		_ = builder.Services.AddAuthorizationRequirements();
 
 		_ = builder.Services.AddCors();
