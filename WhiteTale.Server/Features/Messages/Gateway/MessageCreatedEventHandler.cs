@@ -9,8 +9,8 @@ namespace WhiteTale.Server.Features.Messages.Gateway;
 internal sealed class MessageCreatedEventHandler : INotificationHandler<MessageCreatedEvent>
 {
 	private readonly ApplicationDbContext _dbContext;
-	private readonly JsonSerializerOptions _jsonSerializerOptions;
 	private readonly GatewayService _gatewayService;
+	private readonly JsonSerializerOptions _jsonSerializerOptions;
 
 	public MessageCreatedEventHandler(IOptions<JsonOptions> jsonOptions, ApplicationDbContext dbContext, GatewayService gatewayService)
 	{

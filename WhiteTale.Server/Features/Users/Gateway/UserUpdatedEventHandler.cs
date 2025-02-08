@@ -7,8 +7,8 @@ namespace WhiteTale.Server.Features.Users.Gateway;
 
 internal sealed class UserUpdatedEventHandler : INotificationHandler<UserUpdatedEvent>
 {
-	private readonly JsonSerializerOptions _jsonSerializerOptions;
 	private readonly GatewayService _gatewayService;
+	private readonly JsonSerializerOptions _jsonSerializerOptions;
 
 	public UserUpdatedEventHandler(IOptions<JsonOptions> jsonOptions, GatewayService gatewayService)
 	{

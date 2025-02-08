@@ -5,12 +5,11 @@ namespace WhiteTale.Server.Domain.Messages;
 
 internal sealed class Message : DefaultDomainEntity
 {
-	private static readonly MessageValidator s_validator = new();
-
 	internal const MessageFlags StandardTypeAllowedFlags = MessageFlags.HideAuthor;
 
 	internal const Int32 ContentMinimumLength = 1;
 	internal const Int32 ContentMaximumLength = 2048;
+	private static readonly MessageValidator s_validator = new();
 
 	private Message()
 	{

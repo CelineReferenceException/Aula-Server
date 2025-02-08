@@ -6,7 +6,6 @@ using MediatR;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using WhiteTale.Server.Common.Gateway;
 
 namespace WhiteTale.Server.Features.Users.Gateway;
 
@@ -16,8 +15,8 @@ internal sealed class PresenceUpdater :
 	INotificationHandler<GatewayDisconnectedEvent>
 {
 	private static readonly ConcurrentDictionary<UInt64, UserPresenceState> s_presenceStates = new();
-	private readonly JsonSerializerOptions _jsonSerializerOptions;
 	private readonly ApplicationDbContext _dbContext;
+	private readonly JsonSerializerOptions _jsonSerializerOptions;
 	private readonly ResiliencePipelines _resiliencePipelines;
 
 	public PresenceUpdater(

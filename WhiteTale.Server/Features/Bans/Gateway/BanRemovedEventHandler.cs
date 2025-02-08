@@ -9,9 +9,9 @@ namespace WhiteTale.Server.Features.Bans.Gateway;
 
 internal sealed class BanRemovedEventHandler : INotificationHandler<BanRemovedEvent>
 {
-	private readonly JsonSerializerOptions _jsonSerializerOptions;
-	private readonly GatewayService _gatewayService;
 	private readonly ApplicationDbContext _dbContext;
+	private readonly GatewayService _gatewayService;
+	private readonly JsonSerializerOptions _jsonSerializerOptions;
 
 	public BanRemovedEventHandler(IOptions<JsonOptions> jsonOptions, GatewayService gatewayService, ApplicationDbContext dbContext)
 	{

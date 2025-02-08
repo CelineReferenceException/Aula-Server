@@ -9,9 +9,9 @@ namespace WhiteTale.Server.Features.Bans.Gateway;
 
 internal sealed class BanCreatedEventHandler : INotificationHandler<BanCreatedEvent>
 {
-	private readonly JsonSerializerOptions _jsonSerializerOptions;
-	private readonly GatewayService _gatewayService;
 	private readonly ApplicationDbContext _dbContext;
+	private readonly GatewayService _gatewayService;
+	private readonly JsonSerializerOptions _jsonSerializerOptions;
 
 	public BanCreatedEventHandler(IOptions<JsonOptions> jsonOptions, GatewayService gatewayService, ApplicationDbContext dbContext)
 	{
@@ -55,6 +55,5 @@ internal sealed class BanCreatedEventHandler : INotificationHandler<BanCreatedEv
 
 			_ = session.QueueEventAsync(payload, cancellationToken);
 		}
-
 	}
 }

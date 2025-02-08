@@ -4,18 +4,13 @@ internal sealed class ResetPasswordResult
 {
 	private readonly String _name;
 
-	internal Boolean Succeeded { get; private set; }
-
 	private ResetPasswordResult(String name, Boolean succeeded)
 	{
 		_name = name;
 		Succeeded = succeeded;
 	}
 
-	public override String ToString()
-	{
-		return _name;
-	}
+	internal Boolean Succeeded { get; private set; }
 
 	internal static ResetPasswordResult Success { get; } = new(nameof(Success), true);
 
@@ -34,4 +29,9 @@ internal sealed class ResetPasswordResult
 	internal static ResetPasswordResult MissingNonAlphanumericCharacter { get; } = new(nameof(MissingNonAlphanumericCharacter), false);
 
 	internal static ResetPasswordResult NotEnoughUniqueCharacters { get; } = new(nameof(NotEnoughUniqueCharacters), false);
+
+	public override String ToString()
+	{
+		return _name;
+	}
 }

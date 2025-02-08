@@ -7,19 +7,19 @@ internal sealed class SetPermissionsSubCommand : SubCommand
 	private readonly ApplicationDbContext _dbContext;
 	private readonly ILogger<SetPermissionsSubCommand> _logger;
 
-	private readonly CommandParameter _userIdParameter = new()
+	private readonly CommandParameter _permissionsParameter = new()
 	{
-		Name = "u",
-		Description = "The ID of the user to set the permissions for.",
+		Name = "p",
+		Description = "The permission flags to set.",
 		IsRequired = true,
 		RequiresArgument = true,
 		CanOverflow = false,
 	};
 
-	private readonly CommandParameter _permissionsParameter = new()
+	private readonly CommandParameter _userIdParameter = new()
 	{
-		Name = "p",
-		Description = "The permission flags to set.",
+		Name = "u",
+		Description = "The ID of the user to set the permissions for.",
 		IsRequired = true,
 		RequiresArgument = true,
 		CanOverflow = false,

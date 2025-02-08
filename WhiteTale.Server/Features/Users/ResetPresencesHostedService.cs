@@ -11,6 +11,12 @@ internal sealed class ResetPresencesHostedService : IHostedService, IDisposable
 		_serviceScope = serviceProvider.CreateScope();
 	}
 
+	public void Dispose()
+	{
+		Dispose(true);
+		GC.SuppressFinalize(this);
+	}
+
 	public async Task StartAsync(CancellationToken cancellationToken)
 	{
 		await ResetPresencesAsync(cancellationToken);
@@ -27,12 +33,6 @@ internal sealed class ResetPresencesHostedService : IHostedService, IDisposable
 		_ = await dbContext.Users
 			.ExecuteUpdateAsync(setPropertyCalls => setPropertyCalls
 				.SetProperty(property => property.Presence, value => Presence.Offline), cancellationToken);
-	}
-
-	public void Dispose()
-	{
-		Dispose(true);
-		GC.SuppressFinalize(this);
 	}
 
 	private void Dispose(Boolean disposing)

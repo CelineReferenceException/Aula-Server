@@ -3,8 +3,8 @@
 internal abstract class Command : IDisposable
 {
 	private readonly Dictionary<String, CommandParameter> _parameters = [];
-	private readonly Dictionary<String, Command> _subCommands = [];
 	private readonly IServiceScope _serviceScope;
+	private readonly Dictionary<String, Command> _subCommands = [];
 	private CommandParameter? _previousDefinedParameter;
 
 	private protected Command(IServiceProvider serviceProvider)
@@ -19,6 +19,12 @@ internal abstract class Command : IDisposable
 	internal IReadOnlyDictionary<String, CommandParameter> Parameters => _parameters;
 
 	internal IReadOnlyDictionary<String, Command> SubCommands => _subCommands;
+
+	public void Dispose()
+	{
+		Dispose(true);
+		GC.SuppressFinalize(this);
+	}
 
 	internal virtual ValueTask Callback(IReadOnlyDictionary<String, String> args, CancellationToken cancellationToken)
 	{
@@ -77,12 +83,6 @@ internal abstract class Command : IDisposable
 	private protected void AddSubCommand<TCommand>() where TCommand : Command
 	{
 		AddSubCommand(typeof(TCommand));
-	}
-
-	public void Dispose()
-	{
-		Dispose(true);
-		GC.SuppressFinalize(this);
 	}
 
 	private protected virtual void Dispose(Boolean disposing)

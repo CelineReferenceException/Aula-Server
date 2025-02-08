@@ -7,8 +7,8 @@ namespace WhiteTale.Server.Features.RoomConnections.Gateway;
 
 internal sealed class RoomConnectionRemovedEventHandler : INotificationHandler<RoomConnectionRemovedEvent>
 {
-	private readonly JsonSerializerOptions _jsonSerializerOptions;
 	private readonly GatewayService _gatewayService;
+	private readonly JsonSerializerOptions _jsonSerializerOptions;
 
 	public RoomConnectionRemovedEventHandler(IOptions<JsonOptions> jsonOptions, GatewayService gatewayService)
 	{

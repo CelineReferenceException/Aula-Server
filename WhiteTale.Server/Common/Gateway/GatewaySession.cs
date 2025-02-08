@@ -159,6 +159,7 @@ internal sealed class GatewaySession : IDisposable
 						await StopAsync(WebSocketCloseStatus.MessageTooBig);
 						return;
 					}
+
 					received = await _webSocket.ReceiveAsync(buffer, CancellationToken.None);
 					await payloadStream.WriteAsync(buffer[..received.Count], CancellationToken.None);
 				} while (!received.EndOfMessage);

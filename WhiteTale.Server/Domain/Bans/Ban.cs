@@ -4,10 +4,13 @@ namespace WhiteTale.Server.Domain.Bans;
 
 internal sealed class Ban : DefaultDomainEntity
 {
-	private static readonly BanValidator s_validator = new();
-
 	internal const Int32 ReasonMinimumLength = 1;
 	internal const Int32 ReasonMaximumLength = 512;
+	private static readonly BanValidator s_validator = new();
+
+	private Ban()
+	{
+	}
 
 	internal UInt64 Id { get; private init; }
 
@@ -20,10 +23,6 @@ internal sealed class Ban : DefaultDomainEntity
 	internal UInt64? TargetId { get; private init; }
 
 	internal DateTime CreationTime { get; private init; }
-
-	private Ban()
-	{
-	}
 
 	internal static Ban Create(
 		UInt64 id,

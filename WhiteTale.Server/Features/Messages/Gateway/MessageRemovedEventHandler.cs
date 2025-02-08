@@ -12,8 +12,8 @@ namespace WhiteTale.Server.Features.Messages.Gateway;
 internal sealed class MessageRemovedEventHandler : INotificationHandler<MessageRemovedEvent>
 {
 	private readonly ApplicationDbContext _dbContext;
-	private readonly JsonSerializerOptions _jsonSerializerOptions;
 	private readonly GatewayService _gatewayService;
+	private readonly JsonSerializerOptions _jsonSerializerOptions;
 
 	public MessageRemovedEventHandler(IOptions<JsonOptions> jsonOptions, ApplicationDbContext dbContext, GatewayService gatewayService)
 	{

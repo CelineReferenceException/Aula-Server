@@ -5,7 +5,6 @@ namespace WhiteTale.Server.Common.CommandLine;
 internal sealed partial class HelpCommand : Command
 {
 	private readonly CommandLineService _commandLineService;
-	private readonly ILogger<HelpCommand> _logger;
 
 	private readonly CommandParameter _commandParameter = new()
 	{
@@ -14,9 +13,7 @@ internal sealed partial class HelpCommand : Command
 		CanOverflow = true,
 	};
 
-	internal override String Name => "help";
-
-	internal override String Description => "Displays the list of available commands.";
+	private readonly ILogger<HelpCommand> _logger;
 
 
 	public HelpCommand(
@@ -29,6 +26,10 @@ internal sealed partial class HelpCommand : Command
 
 		AddParameter(_commandParameter);
 	}
+
+	internal override String Name => "help";
+
+	internal override String Description => "Displays the list of available commands.";
 
 	internal override ValueTask Callback(IReadOnlyDictionary<String, String> args, CancellationToken ct)
 	{
@@ -120,8 +121,8 @@ internal sealed partial class HelpCommand : Command
 		return message.ToString();
 	}
 
-	private readonly record struct ParameterInfo(String Name, String Description);
-
 	[LoggerMessage(LogLevel.Information, Message = "Here's a list of all available commands: {message}")]
 	private static partial void ShowHelp(ILogger logger, String message);
+
+	private readonly record struct ParameterInfo(String Name, String Description);
 }

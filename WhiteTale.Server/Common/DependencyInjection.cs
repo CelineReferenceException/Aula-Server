@@ -1,9 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
-using WhiteTale.Server.Common.CommandLine;
-using WhiteTale.Server.Common.JsonSerialization;
-using WhiteTale.Server.Features.Gateway;
 
 namespace WhiteTale.Server.Common;
 

@@ -22,8 +22,6 @@ internal sealed class UserManager
 	private readonly PasswordHasher<User> _passwordHasher;
 	private readonly List<User> _users = [];
 
-	internal IdentityOptions Options { get; }
-
 
 	public UserManager(
 		ApplicationDbContext dbContext,
@@ -34,6 +32,8 @@ internal sealed class UserManager
 		_passwordHasher = passwordHasher;
 		Options = identityOptions.Value;
 	}
+
+	internal IdentityOptions Options { get; }
 
 	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Should be used through dependency injection")]
 	internal UInt64? GetUserId(ClaimsPrincipal user)
@@ -283,20 +283,6 @@ internal sealed class UserManager
 		_ = await _dbContext.SaveChangesWithConcurrencyCheckBypassAsync();
 	}
 
-	private sealed class PendingEmailConfirmation
-	{
-		internal required String Token { get; init; }
-
-		internal required DateTime CreationTime { get; init; }
-	}
-
-	private sealed class PendingPasswordReset
-	{
-		internal required String Token { get; init; }
-
-		internal required DateTime CreationTime { get; init; }
-	}
-
 	internal static void CleanPendingEmailConfirmations()
 	{
 		var now = DateTime.UtcNow;
@@ -321,5 +307,19 @@ internal sealed class UserManager
 				_ = s_pendingEmailConfirmations.TryRemove(pendingPasswordReset.Key, out _);
 			}
 		}
+	}
+
+	private sealed class PendingEmailConfirmation
+	{
+		internal required String Token { get; init; }
+
+		internal required DateTime CreationTime { get; init; }
+	}
+
+	private sealed class PendingPasswordReset
+	{
+		internal required String Token { get; init; }
+
+		internal required DateTime CreationTime { get; init; }
 	}
 }

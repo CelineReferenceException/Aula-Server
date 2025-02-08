@@ -7,8 +7,8 @@ namespace WhiteTale.Server.Features.Bans;
 internal sealed class BannedUserRestrictor : INotificationHandler<BanCreatedEvent>
 {
 	private readonly ApplicationDbContext _dbContext;
-	private readonly ResiliencePipelines _resiliencePipelines;
 	private readonly GatewayService _gatewayService;
+	private readonly ResiliencePipelines _resiliencePipelines;
 
 	public BannedUserRestrictor(ApplicationDbContext dbContext, ResiliencePipelines resiliencePipelines, GatewayService gatewayService)
 	{

@@ -4,7 +4,6 @@ using Encoding = System.Text.Encoding;
 
 namespace WhiteTale.Server.Common.Identity;
 
-
 internal sealed class TokenProvider
 {
 	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Used through dependency injection")]
