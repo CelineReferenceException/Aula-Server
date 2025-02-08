@@ -8,11 +8,10 @@ namespace WhiteTale.Server.Features.Identity.Endpoints;
 
 internal sealed class ResetPassword : IEndpoint
 {
-	internal const String Route = "api/identity/resetpassword";
 
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapPost(Route, HandleAsync)
+		_ = route.MapPost("identity/resetpassword", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.HasApiVersion(1);
 	}
