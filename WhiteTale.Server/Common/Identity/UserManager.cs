@@ -17,6 +17,7 @@ internal sealed class UserManager
 	private static readonly ConcurrentDictionary<UInt64, PendingEmailConfirmation> s_pendingEmailConfirmations = new();
 	private static readonly ConcurrentDictionary<UInt64, PendingPasswordReset> s_pendingPasswordResets = new();
 	private static readonly TimeSpan s_pendingEmailConfirmationsLifeTime = TimeSpan.FromMinutes(15);
+	private static readonly TimeSpan s_pendingPasswordResetsLifeTime = TimeSpan.FromMinutes(15);
 	private readonly ApplicationDbContext _dbContext;
 	private readonly PasswordHasher<User> _passwordHasher;
 	private readonly List<User> _users = [];
@@ -311,11 +312,10 @@ internal sealed class UserManager
 	internal static void CleanPendingPasswordResets()
 	{
 		var now = DateTime.UtcNow;
-		var maximumLifeTime = TimeSpan.FromMinutes(15);
 
 		foreach (var pendingPasswordReset in s_pendingPasswordResets)
 		{
-			if (now - pendingPasswordReset.Value.CreationTime > maximumLifeTime)
+			if (now - pendingPasswordReset.Value.CreationTime > s_pendingPasswordResetsLifeTime)
 			{
 				_ = s_pendingEmailConfirmations.TryRemove(pendingPasswordReset.Key, out _);
 			}
