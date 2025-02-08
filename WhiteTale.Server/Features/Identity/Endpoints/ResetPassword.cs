@@ -11,7 +11,7 @@ internal sealed class ResetPassword : IEndpoint
 
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapPost("identity/resetpassword", HandleAsync)
+		_ = route.MapPost("identity/reset-password", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.HasApiVersion(1);
 	}
