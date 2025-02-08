@@ -29,7 +29,7 @@ internal sealed class ConfirmEmailEmailSender
 		var confirmationToken = _userManager.GenerateEmailConfirmationToken(user);
 		confirmationToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));
 		var confirmationUrl =
-			$"{httpRequest.Scheme}://{httpRequest.Host}{httpRequest.PathBase}/{ConfirmEmail.Route}?" +
+			$"{httpRequest.GetUrl()}?" +
 			$"{ConfirmEmail.EmailQueryParameter}={email}&" +
 			$"{ConfirmEmail.TokenQueryParameter}={confirmationToken}";
 

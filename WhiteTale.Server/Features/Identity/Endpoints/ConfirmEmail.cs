@@ -14,12 +14,11 @@ internal sealed class ConfirmEmail : IEndpoint
 {
 	internal const String EmailQueryParameter = "email";
 	internal const String TokenQueryParameter = "token";
-	internal const String Route = "api/identity/confirmEmail";
 
 	public void Build(IEndpointRouteBuilder route)
 	{
 		// Using GET allows browsers to make direct requests, such as when a user enters a URL in the address bar.
-		_ = route.MapGet(Route, HandleAsync)
+		_ = route.MapGet("identity/confirmEmail", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.HasApiVersion(1);
 	}
