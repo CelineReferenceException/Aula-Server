@@ -57,6 +57,7 @@ internal static class DependencyInjection
 				options.BearerTokenExpiration = TimeSpan.FromHours(1);
 				options.RefreshTokenExpiration = TimeSpan.FromDays(7);
 			});
+		_ = services.AddSingleton<TokenProvider>();
 
 		return services;
 	}
