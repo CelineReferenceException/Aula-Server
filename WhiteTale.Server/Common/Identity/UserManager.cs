@@ -292,4 +292,18 @@ internal sealed class UserManager
 
 		internal required DateTime CreationTime { get; init; }
 	}
+
+	internal static void CleanPendingEmailConfirmations()
+	{
+		var now = DateTime.UtcNow;
+		var maximumLifeTime = TimeSpan.FromMinutes(15);
+
+		foreach (var pendingEmailConfirmation in s_pendingEmailConfirmations)
+		{
+			if (pendingEmailConfirmation.Value.CreationTime - now > maximumLifeTime)
+			{
+				_ = s_pendingEmailConfirmations.TryRemove(pendingEmailConfirmation.Key, out _);
+			}
+		}
+	}
 }
