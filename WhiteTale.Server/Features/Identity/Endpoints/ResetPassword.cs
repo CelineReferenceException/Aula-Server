@@ -31,12 +31,7 @@ internal sealed class ResetPassword : IEndpoint
 		var user = await userManager.FindByIdAsync(body.UserId);
 		if (user is null)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "User not found",
-				Detail = "There is no user with the given ID.",
-				Status = StatusCodes.Status404NotFound,
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.UnknownUser);
 		}
 
 		var passwordReset = await userManager.ResetPasswordAsync(user, body.NewPassword, body.ResetToken);

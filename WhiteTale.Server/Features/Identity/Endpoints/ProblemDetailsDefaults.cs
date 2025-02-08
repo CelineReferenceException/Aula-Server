@@ -1,0 +1,35 @@
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace WhiteTale.Server.Features.Identity.Endpoints;
+
+internal static class ProblemDetailsDefaults
+{
+	internal static ProblemDetails UnknownUser { get; } = new()
+	{
+		Title = "Unknown user",
+		Detail = "The specified user does not exist.",
+		Status = StatusCodes.Status400BadRequest,
+	};
+
+	internal static ProblemDetails IncorrectPassword { get; } = new()
+	{
+		Title = "Login problem",
+		Detail = "The password provided is incorrect.",
+		Status = StatusCodes.Status403Forbidden,
+	};
+
+	internal static ProblemDetails UserIsLockedOut { get; } = new()
+	{
+		Title = "Login problem",
+		Detail = "The account is temporarily locked out due to multiple unsuccessful login attempts.",
+		Status = StatusCodes.Status403Forbidden,
+	};
+
+	internal static ProblemDetails EmailNotConfirmed { get; } = new()
+	{
+		Title = "Login problem",
+		Detail = "The email must be confirmed to login.",
+		Status = StatusCodes.Status403Forbidden,
+	};
+}

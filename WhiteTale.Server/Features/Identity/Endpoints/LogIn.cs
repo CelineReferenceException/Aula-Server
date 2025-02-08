@@ -31,44 +31,25 @@ internal sealed class LogIn : IEndpoint
 		var user = await userManager.FindByUserNameAsync(body.UserName);
 		if (user is null)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Unknown user",
-				Status = StatusCodes.Status400BadRequest,
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.UnknownUser);
 		}
 
 		var isPasswordCorrect = userManager.CheckPassword(user, body.Password);
 		if (!isPasswordCorrect)
 		{
 			await userManager.AccessFailedAsync(user);
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "A login problem has occurred",
-				Detail = "The password provided is incorrect.",
-				Status = StatusCodes.Status400BadRequest,
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.IncorrectPassword);
 		}
 
 		if (user.LockoutEndTime > DateTime.UtcNow)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "A login problem has occurred",
-				Detail = "The account is temporarily locked out due to multiple unsuccessful login attempts.",
-				Status = StatusCodes.Status403Forbidden,
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.UserIsLockedOut);
 		}
 
 		if (userManager.Options.SignIn.RequireConfirmedEmail &&
 		    !user.EmailConfirmed)
 		{
-			return TypedResults.Problem(new ProblemDetails
-			{
-				Title = "Email is not confirmed",
-				Detail = "Email confirmation is required to login.",
-				Status = StatusCodes.Status403Forbidden,
-			});
+			return TypedResults.Problem(ProblemDetailsDefaults.EmailNotConfirmed);
 		}
 
 		return TypedResults.Ok(new AccessTokenData
