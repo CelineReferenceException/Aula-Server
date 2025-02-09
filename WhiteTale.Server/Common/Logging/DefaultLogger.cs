@@ -11,7 +11,7 @@ internal sealed class DefaultLogger : ILogger
 
 	public IDisposable? BeginScope<TState>(TState state) where TState : notnull
 	{
-		return default!;
+		return null;
 	}
 
 	public Boolean IsEnabled(LogLevel logLevel)
