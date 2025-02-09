@@ -32,7 +32,7 @@ internal sealed class GetUser : IEndpoint
 					DisplayName = u.DisplayName,
 					Description = u.Description,
 					CurrentRoomId = u.CurrentRoomId,
-					OwnerType = u.OwnerType,
+					Type = u.Type,
 					Presence = u.Presence,
 					Permissions = u.Permissions,
 				})

@@ -29,7 +29,7 @@ internal sealed class LogIn : IEndpoint
 		}
 
 		var user = await userManager.FindByUserNameAsync(body.UserName);
-		if (user?.OwnerType is not UserOwnerType.Standard)
+		if (user?.Type is not UserType.Standard)
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.UnknownUser);
 		}

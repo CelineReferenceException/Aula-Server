@@ -23,7 +23,7 @@ internal sealed record UserData
 	/// <summary>
 	///     The type of entity who owns the user.
 	/// </summary>
-	public required UserOwnerType OwnerType { get; init; }
+	public required UserType Type { get; init; }
 
 	/// <summary>
 	///     The presence of the user.

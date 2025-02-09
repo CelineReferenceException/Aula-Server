@@ -40,7 +40,7 @@ internal sealed class User : DefaultDomainEntity
 
 	internal Permissions Permissions { get; private set; }
 
-	internal UserOwnerType OwnerType { get; private init; }
+	internal UserType Type { get; private init; }
 
 	internal Presence Presence { get; set; }
 
@@ -55,7 +55,7 @@ internal sealed class User : DefaultDomainEntity
 		String userName,
 		String? email,
 		String? displayName,
-		UserOwnerType ownerType,
+		UserType type,
 		Permissions permissions)
 	{
 		var user = new User
@@ -65,7 +65,7 @@ internal sealed class User : DefaultDomainEntity
 			Email = email?.ToUpper(),
 			DisplayName = displayName ?? userName,
 			Permissions = permissions,
-			OwnerType = ownerType,
+			Type = type,
 			CreationTime = DateTime.UtcNow,
 			ConcurrencyStamp = GenerateConcurrencyStamp(),
 			SecurityStamp = GenerateSecurityStamp(),

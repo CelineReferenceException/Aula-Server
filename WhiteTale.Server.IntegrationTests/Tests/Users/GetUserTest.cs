@@ -30,7 +30,7 @@ public sealed class GetUserTest
 		_ = responseBody.DisplayName.Should().Be(userInfo.User.DisplayName);
 		_ = responseBody.Description.Should().BeNull(userInfo.User.Description);
 		_ = responseBody.Presence.Should().Be(userInfo.User.Presence);
-		_ = responseBody.OwnerType.Should().Be(userInfo.User.OwnerType);
+		_ = responseBody.Type.Should().Be(userInfo.User.Type);
 		_ = responseBody.Permissions.Should().Be(userInfo.User.Permissions);
 		_ = responseBody.CurrentRoomId.Should().Be(userInfo.User.CurrentRoomId);
 	}

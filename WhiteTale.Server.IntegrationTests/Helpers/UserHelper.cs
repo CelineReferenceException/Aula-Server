@@ -19,7 +19,7 @@ internal static class UserHelper
 
 		userSeed ??= UserSeed.Default;
 
-		var user = User.Create(userSeed.Id, userSeed.Email, userSeed.UserName, userSeed.DisplayName, UserOwnerType.Standard,
+		var user = User.Create(userSeed.Id, userSeed.Email, userSeed.UserName, userSeed.DisplayName, UserType.Standard,
 			userSeed.Permissions);
 		user.EmailConfirmed = userSeed.EmailConfirmed;
 		user.SetCurrentRoom(userSeed.CurrentRoomId);
