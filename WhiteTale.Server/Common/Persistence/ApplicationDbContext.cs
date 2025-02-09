@@ -82,6 +82,7 @@ internal sealed class ApplicationDbContext : DbContext
 			.HasMaxLength(User.DisplayNameMaximumLength);
 
 		_ = userModel.Property(x => x.Description)
+			.IsRequired(false)
 			.HasMaxLength(User.DescriptionMaximumLength);
 
 		_ = userModel.Property(x => x.Type)
