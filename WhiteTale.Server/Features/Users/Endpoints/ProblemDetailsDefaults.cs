@@ -25,4 +25,18 @@ internal static class ProblemDetailsDefaults
 		Detail = "The specified room is not an entrance.",
 		Status = StatusCodes.Status400BadRequest,
 	};
+
+	internal static ProblemDetails InvalidUserCount { get; } = new()
+	{
+		Title = "Invalid user count.",
+		Detail = $"The message count must be between {GetAllUsers.MinimumUserCount} and {GetAllUsers.MaximumUserCount}.",
+		Status = StatusCodes.Status400BadRequest,
+	};
+
+	internal static ProblemDetails InvalidAfterUser { get; } = new()
+	{
+		Title = $"Invalid '{GetAllUsers.AfterQueryParameter}' query parameter.",
+		Detail = "A message with the specified ID was not found.",
+		Status = StatusCodes.Status400BadRequest,
+	};
 }
