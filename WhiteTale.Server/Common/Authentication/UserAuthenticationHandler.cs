@@ -46,7 +46,7 @@ internal sealed class UserAuthenticationHandler : AuthenticationHandler<Authenti
 			return AuthenticateResult.NoResult();
 		}
 
-		if (!_tokenProvider.TryReadFromToken(headerValue, out var userId, out var securityStamp))
+		if (!_tokenProvider.TryReadFromToken(tokenSegment, out var userId, out var securityStamp))
 		{
 			return AuthenticateResult.NoResult();
 		}
