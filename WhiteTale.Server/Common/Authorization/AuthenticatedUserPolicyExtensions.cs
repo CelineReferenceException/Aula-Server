@@ -5,7 +5,7 @@ namespace WhiteTale.Server.Common.Authorization;
 
 internal static class AuthenticatedUserPolicyExtensions
 {
-	private const String PolicyName = AuthenticationSchemeNames.BearerToken;
+	private const String PolicyName = "AuthenticatedUserPolicy";
 
 	internal static TBuilder RequireAuthenticatedUser<TBuilder>(this TBuilder builder)
 		where TBuilder : IEndpointConventionBuilder
