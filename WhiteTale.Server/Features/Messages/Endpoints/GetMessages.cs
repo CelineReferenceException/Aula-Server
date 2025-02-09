@@ -26,7 +26,7 @@ internal sealed class GetMessages : IEndpoint
 			.HasApiVersion(1);
 	}
 
-	private static async Task<Results<Ok<List<MessageData>>, ProblemHttpResult, InternalServerError>> HandleAsync(
+	private static async Task<Results<Ok<IEnumerable<MessageData>>, ProblemHttpResult, InternalServerError>> HandleAsync(
 		[FromRoute] UInt64 roomId,
 		[FromQuery(Name = BeforeQueryParameter)] UInt64? beforeId,
 		[FromQuery(Name = AfterQueryParameter)] UInt64? afterId,
@@ -61,7 +61,25 @@ internal sealed class GetMessages : IEndpoint
 			return TypedResults.Problem(ProblemDetailsDefaults.InvalidMessageCount);
 		}
 
-		var messages = new List<MessageData>();
+		var messagesQuery = dbContext.Messages
+			.AsNoTracking()
+			.Where(m => !m.IsRemoved && (m.TargetId == roomId || m.TargetType == MessageTarget.AllRooms))
+			.OrderByDescending(m => m.Id)
+			.Select(m => new
+			{
+				m.Id,
+				m.Type,
+				m.Flags,
+				m.AuthorType,
+				m.AuthorId,
+				m.TargetType,
+				m.TargetId,
+				m.Content,
+				m.JoinData,
+				m.LeaveData,
+				m.CreationTime,
+			})
+			.Take(count.Value);
 
 		if (beforeId is not null)
 		{
@@ -74,53 +92,7 @@ internal sealed class GetMessages : IEndpoint
 				return TypedResults.Problem(ProblemDetailsDefaults.InvalidBeforeMessage);
 			}
 
-			var messagesBefore = dbContext.Messages
-				.AsNoTracking()
-				.Where(m => m.Id < beforeId && !m.IsRemoved && (m.TargetId == roomId || m.TargetType == MessageTarget.AllRooms))
-				.OrderByDescending(m => m.Id)
-				.Select(m => new
-				{
-					m.Id,
-					m.Type,
-					m.Flags,
-					m.AuthorType,
-					m.AuthorId,
-					Target = m.TargetType,
-					m.TargetId,
-					m.Content,
-					m.JoinData,
-					m.LeaveData,
-					m.CreationTime,
-				})
-				.Take(count.Value)
-				.ToList()
-				.Select(m => new MessageData
-				{
-					Id = m.Id,
-					Type = m.Type,
-					Flags = m.Flags,
-					AuthorType = m.AuthorType,
-					AuthorId = m.AuthorId,
-					TargetType = m.Target,
-					TargetId = m.TargetId,
-					Content = m.Content,
-					JoinData = m.JoinData is not null
-						? new MessageUserJoinData
-						{
-							UserId = m.JoinData.UserId,
-						}
-						: null,
-					LeaveData = m.LeaveData is not null
-						? new MessageUserLeaveData
-						{
-							UserId = m.LeaveData.UserId,
-							RoomId = m.LeaveData.RoomId,
-						}
-						: null,
-					CreationTime = m.CreationTime,
-				});
-
-			messages.AddRange(messagesBefore);
+			messagesQuery = messagesQuery.Where(m => m.Id < beforeId);
 		}
 		else if (afterId is not null)
 		{
@@ -133,104 +105,34 @@ internal sealed class GetMessages : IEndpoint
 				return TypedResults.Problem(ProblemDetailsDefaults.InvalidAfterMessage);
 			}
 
-			var messagesAfter = dbContext.Messages
-				.AsNoTracking()
-				.Where(m => m.Id > afterId && !m.IsRemoved && (m.TargetId == roomId || m.TargetType == MessageTarget.AllRooms))
-				.OrderByDescending(m => m.Id)
-				.Select(m => new
-				{
-					m.Id,
-					m.Type,
-					m.Flags,
-					m.AuthorType,
-					m.AuthorId,
-					Target = m.TargetType,
-					m.TargetId,
-					m.Content,
-					m.JoinData,
-					m.LeaveData,
-					m.CreationTime,
-				})
-				.Take(count.Value)
-				.ToList()
-				.Select(m => new MessageData
-				{
-					Id = m.Id,
-					Type = m.Type,
-					Flags = m.Flags,
-					AuthorType = m.AuthorType,
-					AuthorId = m.AuthorId,
-					TargetType = m.Target,
-					TargetId = m.TargetId,
-					Content = m.Content,
-					JoinData = m.JoinData is not null
-						? new MessageUserJoinData
-						{
-							UserId = m.JoinData.UserId,
-						}
-						: null,
-					LeaveData = m.LeaveData is not null
-						? new MessageUserLeaveData
-						{
-							UserId = m.LeaveData.UserId,
-							RoomId = m.LeaveData.RoomId,
-						}
-						: null,
-					CreationTime = m.CreationTime,
-				});
-
-			messages.AddRange(messagesAfter);
+			messagesQuery = messagesQuery.Where(m => m.Id > afterId);
 		}
-		else
+
+		var messages = (await messagesQuery.ToListAsync()).Select(m => new MessageData
 		{
-			var lastMessages = dbContext.Messages
-				.AsNoTracking()
-				.Where(m => !m.IsRemoved && (m.TargetId == roomId || m.TargetType == MessageTarget.AllRooms))
-				.OrderByDescending(m => m.Id)
-				.Select(m => new
+			Id = m.Id,
+			Type = m.Type,
+			Flags = m.Flags,
+			AuthorType = m.AuthorType,
+			AuthorId = m.AuthorId,
+			TargetType = m.TargetType,
+			TargetId = m.TargetId,
+			Content = m.Content,
+			JoinData = m.JoinData is not null
+				? new MessageUserJoinData
 				{
-					m.Id,
-					m.Type,
-					m.Flags,
-					m.AuthorType,
-					m.AuthorId,
-					Target = m.TargetType,
-					m.TargetId,
-					m.Content,
-					m.JoinData,
-					m.LeaveData,
-					m.CreationTime,
-				})
-				.Take(count.Value)
-				.ToList()
-				.Select(m => new MessageData
+					UserId = m.JoinData.UserId,
+				}
+				: null,
+			LeaveData = m.LeaveData is not null
+				? new MessageUserLeaveData
 				{
-					Id = m.Id,
-					Type = m.Type,
-					Flags = m.Flags,
-					AuthorType = m.AuthorType,
-					AuthorId = m.AuthorId,
-					TargetType = m.Target,
-					TargetId = m.TargetId,
-					Content = m.Content,
-					JoinData = m.JoinData is not null
-						? new MessageUserJoinData
-						{
-							UserId = m.JoinData.UserId,
-						}
-						: null,
-					LeaveData = m.LeaveData is not null
-						? new MessageUserLeaveData
-						{
-							UserId = m.LeaveData.UserId,
-							RoomId = m.LeaveData.RoomId,
-						}
-						: null,
-					CreationTime = m.CreationTime,
-				});
-
-			messages.AddRange(lastMessages);
-		}
+					UserId = m.LeaveData.UserId,
+					RoomId = m.LeaveData.RoomId,
+				}
+				: null,
+			CreationTime = m.CreationTime,
+		});
 
 		return TypedResults.Ok(messages);
 	}
