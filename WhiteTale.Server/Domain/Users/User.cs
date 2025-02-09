@@ -28,7 +28,7 @@ internal sealed class User : DefaultDomainEntity
 
 	internal String? PasswordHash { get; set; }
 
-	internal String SecurityStamp { get; private set; }
+	internal String? SecurityStamp { get; private set; }
 
 	internal Int32 AccessFailedCount { get; private set; }
 
