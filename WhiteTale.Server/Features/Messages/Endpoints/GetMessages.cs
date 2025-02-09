@@ -83,29 +83,39 @@ internal sealed class GetMessages : IEndpoint
 
 		if (beforeId is not null)
 		{
-			var targetExists = await dbContext.Messages
+			var target = await dbContext.Messages
 				.AsNoTracking()
-				.AnyAsync(m => m.Id == beforeId && !m.IsRemoved && (m.TargetId == roomId || m.TargetType == MessageTarget.AllRooms));
+				.Where(m => m.Id == beforeId && !m.IsRemoved && (m.TargetId == roomId || m.TargetType == MessageTarget.AllRooms))
+				.Select(m => new
+				{
+					m.CreationTime,
+				})
+				.FirstOrDefaultAsync();
 
-			if (!targetExists)
+			if (target is null)
 			{
 				return TypedResults.Problem(ProblemDetailsDefaults.InvalidBeforeMessage);
 			}
 
-			messagesQuery = messagesQuery.Where(m => m.Id < beforeId);
+			messagesQuery = messagesQuery.Where(m => m.CreationTime < target.CreationTime);
 		}
 		else if (afterId is not null)
 		{
-			var targetExists = await dbContext.Messages
+			var target = await dbContext.Messages
 				.AsNoTracking()
-				.AnyAsync(m => m.Id == afterId && !m.IsRemoved && (m.TargetId == roomId || m.TargetType == MessageTarget.AllRooms));
+				.Where(m => m.Id == afterId && !m.IsRemoved && (m.TargetId == roomId || m.TargetType == MessageTarget.AllRooms))
+				.Select(m => new
+				{
+					m.CreationTime,
+				})
+				.FirstOrDefaultAsync();
 
-			if (!targetExists)
+			if (target is null)
 			{
 				return TypedResults.Problem(ProblemDetailsDefaults.InvalidAfterMessage);
 			}
 
-			messagesQuery = messagesQuery.Where(m => m.Id > afterId);
+			messagesQuery = messagesQuery.Where(m => m.CreationTime > target.CreationTime);
 		}
 
 		var messages = (await messagesQuery.ToListAsync()).Select(m => new MessageData
