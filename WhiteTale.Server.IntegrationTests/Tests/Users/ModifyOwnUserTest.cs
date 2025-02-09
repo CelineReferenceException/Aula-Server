@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
+using WhiteTale.Server.Features;
 using WhiteTale.Server.Features.Users;
 using WhiteTale.Server.Features.Users.Endpoints;
 

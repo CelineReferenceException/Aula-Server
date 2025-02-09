@@ -1,4 +1,4 @@
-﻿namespace WhiteTale.Server.Features.Users;
+﻿namespace WhiteTale.Server.Features;
 
 /// <summary>
 ///     Represents a user within the application.
