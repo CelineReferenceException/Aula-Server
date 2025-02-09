@@ -53,7 +53,7 @@ internal sealed class User : DefaultDomainEntity
 	internal static User Create(
 		UInt64 id,
 		String userName,
-		String email,
+		String? email,
 		String? displayName,
 		UserOwnerType ownerType,
 		Permissions permissions)
@@ -62,7 +62,7 @@ internal sealed class User : DefaultDomainEntity
 		{
 			Id = id,
 			UserName = userName,
-			Email = email.ToUpper(),
+			Email = email?.ToUpper(),
 			DisplayName = displayName ?? userName,
 			Permissions = permissions,
 			OwnerType = ownerType,
