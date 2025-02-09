@@ -181,6 +181,7 @@ internal sealed class User : DefaultDomainEntity
 	internal void Remove()
 	{
 		IsRemoved = true;
+		AddEvent(new UserRemovedEvent(this));
 	}
 
 	private static String GenerateConcurrencyStamp()
