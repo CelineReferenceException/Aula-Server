@@ -29,7 +29,7 @@ internal sealed class ResetToken : IEndpoint
 		}
 
 		var user = await userManager.FindByUserNameAsync(body.UserName);
-		if (user is null)
+		if (user?.Type is not UserType.Standard)
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.UserDoesNotExist);
 		}

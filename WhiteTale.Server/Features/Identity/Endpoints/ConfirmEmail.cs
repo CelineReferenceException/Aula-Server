@@ -34,7 +34,7 @@ internal sealed class ConfirmEmail : IEndpoint
 		var redirectUri = featureOptions.Value.ConfirmEmailRedirectUri?.ToString();
 
 		var user = await userManager.FindByEmailAsync(email);
-		if (user is null)
+		if (user?.Type is not UserType.Standard)
 		{
 			// We could return NotFound, but it feels like unnecessary information.
 			return RedirectOrSendNoContent(redirectUri);
