@@ -22,7 +22,7 @@ internal static class DependencyInjection
 		{
 			options.DefaultApiVersion = new ApiVersion(1);
 			options.ApiVersionReader = new UrlSegmentApiVersionReader();
-			options.UnsupportedApiVersionStatusCode = StatusCodes.Status501NotImplemented;
+			options.UnsupportedApiVersionStatusCode = StatusCodes.Status404NotFound;
 		});
 
 		return services;
