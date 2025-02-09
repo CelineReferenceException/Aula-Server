@@ -1,0 +1,8 @@
+﻿namespace WhiteTale.Server.Features.Bots.Endpoints;
+
+internal sealed class CreateBotResponse
+{
+	public required UserData User { get; set; }
+
+	public required String Token { get; init; }
+}
