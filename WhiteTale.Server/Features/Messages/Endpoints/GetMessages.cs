@@ -14,7 +14,7 @@ internal sealed class GetMessages : IEndpoint
 	internal const String CountQueryParameter = "count";
 	internal const Int32 MinimumMessageCount = 2;
 	internal const Int32 MaximumMessageCount = 100;
-	internal const Int32 DefaultMessageCount = 10;
+	private const Int32 DefaultMessageCount = 10;
 
 	public void Build(IEndpointRouteBuilder route)
 	{
