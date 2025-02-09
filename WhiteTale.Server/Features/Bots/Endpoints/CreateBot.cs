@@ -20,7 +20,7 @@ internal sealed class CreateBot : IEndpoint
 	}
 
 	private static async Task<Results<Ok<CreateBotResponse>, ProblemHttpResult, InternalServerError>> HandleAsync(
-		[FromRoute] CreateBotRequestBody body,
+		[FromBody] CreateBotRequestBody body,
 		[FromServices] CreateBotRequestBodyValidator bodyValidator,
 		[FromServices] UserManager userManager,
 		[FromServices] SnowflakeGenerator snowflakeGenerator,
