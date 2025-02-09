@@ -37,7 +37,7 @@ internal sealed class UserAuthenticationHandler : AuthenticationHandler<Authenti
 		}
 
 		var tokenSegmentStart = headerValueSegments.Current.Start.Value;
-		var tokenSegmentLength = tokenSegmentStart - headerValueSegments.Current.End.Value;
+		var tokenSegmentLength = headerValueSegments.Current.End.Value - tokenSegmentStart;
 		var tokenSegment = headerValue.Slice(tokenSegmentStart, tokenSegmentLength);
 
 

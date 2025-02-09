@@ -75,7 +75,7 @@ internal sealed class TokenProvider
 		}
 
 		var userIdSegmentStart = tokenSegments.Current.Start.Value;
-		var userIdSegmentLength = userIdSegmentStart - tokenSegments.Current.End.Value;
+		var userIdSegmentLength = tokenSegments.Current.End.Value - userIdSegmentStart;
 		var userIdBase64 = token.Slice(userIdSegmentStart, userIdSegmentLength);
 
 		if (!tokenSegments.MoveNext())
@@ -86,7 +86,7 @@ internal sealed class TokenProvider
 		}
 
 		var securityStampSegmentStart = tokenSegments.Current.Start.Value;
-		var securityStampSegmentLength = securityStampSegmentStart - tokenSegments.Current.End.Value;
+		var securityStampSegmentLength = tokenSegments.Current.End.Value - securityStampSegmentStart;
 		var securityStampBase64 = token.Slice(securityStampSegmentStart, securityStampSegmentLength);
 
 		if (!Base64.IsValid(userIdBase64) ||
