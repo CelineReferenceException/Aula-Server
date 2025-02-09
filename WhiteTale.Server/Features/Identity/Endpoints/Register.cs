@@ -51,7 +51,7 @@ internal sealed class Register : IEndpoint
 		{
 			return TypedResults.Problem(new ProblemDetails
 			{
-				Title = "Registration problem",
+				Title = "Register problem",
 				Detail = registerResult.ToString(),
 				Status = StatusCodes.Status400BadRequest,
 			});
