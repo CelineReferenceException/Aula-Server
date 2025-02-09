@@ -56,7 +56,7 @@ internal sealed class ApplicationDbContext : DbContext
 			.HasMaxLength(User.UserNameMaximumLength);
 
 		_ = userModel.Property(x => x.Email)
-			.IsRequired();
+			.IsRequired(false);
 
 		_ = userModel.Property(x => x.EmailConfirmed)
 			.IsRequired();

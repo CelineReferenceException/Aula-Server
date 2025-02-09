@@ -22,7 +22,7 @@ internal sealed class User : DefaultDomainEntity
 
 	internal String UserName { get; private init; }
 
-	internal String Email { get; private init; }
+	internal String? Email { get; private init; }
 
 	internal Boolean EmailConfirmed { get; private set; }
 
