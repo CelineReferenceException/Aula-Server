@@ -31,7 +31,7 @@ internal sealed class ResetToken : IEndpoint
 		var user = await userManager.FindByUserNameAsync(body.UserName);
 		if (user is null)
 		{
-			return TypedResults.Problem(ProblemDetailsDefaults.UnknownUser);
+			return TypedResults.Problem(ProblemDetailsDefaults.UserDoesNotExist);
 		}
 
 		var isPasswordCorrect = userManager.CheckPassword(user, body.Password);
