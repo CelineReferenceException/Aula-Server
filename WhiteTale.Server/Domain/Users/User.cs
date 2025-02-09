@@ -48,6 +48,7 @@ internal sealed class User : DefaultDomainEntity
 
 	internal DateTime CreationTime { get; private init; }
 
+	internal Boolean IsRemoved { get; private set; }
 	internal String ConcurrencyStamp { get; private set; }
 
 	internal static User Create(
@@ -175,6 +176,11 @@ internal sealed class User : DefaultDomainEntity
 	{
 		SecurityStamp = GenerateSecurityStamp();
 		AddEvent(new UserSecurityStampUpdatedEvent(this));
+	}
+
+	internal void Remove()
+	{
+		IsRemoved = true;
 	}
 
 	private static String GenerateConcurrencyStamp()

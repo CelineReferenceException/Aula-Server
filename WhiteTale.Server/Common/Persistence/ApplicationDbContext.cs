@@ -96,6 +96,9 @@ internal sealed class ApplicationDbContext : DbContext
 		_ = userModel.Property(x => x.CurrentRoomId)
 			.IsRequired(false);
 
+		_ = userModel.Property(x => x.IsRemoved)
+			.IsRequired();
+
 		_ = userModel.Property(x => x.ConcurrencyStamp)
 			.IsRequired()
 			.IsConcurrencyToken()
