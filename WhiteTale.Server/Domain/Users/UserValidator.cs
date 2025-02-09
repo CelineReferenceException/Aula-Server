@@ -20,7 +20,12 @@ internal sealed class UserValidator : AbstractValidator<User>
 			.MaximumLength(User.DescriptionMaximumLength);
 
 		_ = RuleFor(x => x.Permissions).IsInEnum();
-		_ = RuleFor(x => x.OwnerType).IsInEnum();
+		_ = RuleFor(x => x.Type).IsInEnum();
 		_ = RuleFor(x => x.Presence).IsInEnum();
+
+		_ = When(x => x.Type is UserType.Standard, () =>
+		{
+			_ = RuleFor(x => x.Email).EmailAddress();
+		});
 	}
 }

@@ -22,7 +22,7 @@ internal sealed class CreateRoom : IEndpoint
 		[FromBody] CreateRoomRequestBody body,
 		[FromServices] CreateRoomRequestBodyValidator bodyValidator,
 		[FromServices] ApplicationDbContext dbContext,
-		[FromServices] SnowflakeProvider snowflakeProvider,
+		[FromServices] SnowflakeGenerator snowflakeGenerator,
 		HttpContext httpContext)
 	{
 		var validation = await bodyValidator.ValidateAsync(body);
@@ -32,7 +32,7 @@ internal sealed class CreateRoom : IEndpoint
 			return TypedResults.Problem(problemDetails);
 		}
 
-		var room = Room.Create(snowflakeProvider.NewSnowflake(), body.Name, body.Description, body.IsEntrance ?? false);
+		var room = Room.Create(snowflakeGenerator.NewSnowflake(), body.Name, body.Description, body.IsEntrance ?? false);
 
 		_ = dbContext.Rooms.Add(room);
 		_ = await dbContext.SaveChangesAsync();

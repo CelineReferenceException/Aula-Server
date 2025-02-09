@@ -7,6 +7,7 @@ internal static class DependencyInjection
 		_ = services.AddAuthorizationBuilder()
 			.AddAuthenticatedUserPolicy()
 			.AddBanPolicy()
+			.AddUserTypePolicy()
 			.AddPermissionsPolicy();
 
 		return services;

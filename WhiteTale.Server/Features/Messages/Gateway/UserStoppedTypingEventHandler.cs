@@ -32,7 +32,6 @@ internal sealed class UserStoppedTypingEventHandler : INotificationHandler<UserS
 				RoomId = notification.RoomId,
 			},
 		}.GetJsonUtf8Bytes(_jsonSerializerOptions);
-		var payloadBytes = JsonSerializer.SerializeToUtf8Bytes(payload, _jsonSerializerOptions);
 
 		var sessionUserIds = _gatewayService.Sessions.Values
 			.Select(session => session.UserId);

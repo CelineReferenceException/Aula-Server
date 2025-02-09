@@ -2,7 +2,7 @@
 
 namespace WhiteTale.Server.Common;
 
-internal sealed class SnowflakeProvider
+internal sealed class SnowflakeGenerator
 {
 	private static readonly DateTime s_epoch = new(2024, 12, 1, 12, 0, 0, DateTimeKind.Utc);
 	private readonly Lock _newSnowflakeLock = new();
@@ -10,7 +10,7 @@ internal sealed class SnowflakeProvider
 	private UInt32 _increment;
 	private DateTime _lastOperationTime;
 
-	public SnowflakeProvider(IOptions<ApplicationOptions> applicationOptions)
+	public SnowflakeGenerator(IOptions<ApplicationOptions> applicationOptions)
 	{
 		var workerId = applicationOptions.Value.WorkerId.Value;
 		ArgumentOutOfRangeException.ThrowIfLessThan<UInt32>(workerId, 0);

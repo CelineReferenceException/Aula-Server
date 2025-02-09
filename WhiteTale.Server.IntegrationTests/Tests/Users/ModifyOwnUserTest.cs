@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
+using WhiteTale.Server.Features;
 using WhiteTale.Server.Features.Users;
 using WhiteTale.Server.Features.Users.Endpoints;
 
@@ -37,7 +38,7 @@ public sealed class ModifyOwnUserTest
 		_ = responseBody.DisplayName.Should().Be(requestBody.DisplayName);
 		_ = responseBody.Description.Should().Be(requestBody.Description);
 		_ = responseBody.Presence.Should().Be(userSeed.User.Presence);
-		_ = responseBody.OwnerType.Should().Be(userSeed.User.OwnerType);
+		_ = responseBody.Type.Should().Be(userSeed.User.Type);
 		_ = responseBody.CurrentRoomId.Should().Be(userSeed.User.CurrentRoomId);
 	}
 

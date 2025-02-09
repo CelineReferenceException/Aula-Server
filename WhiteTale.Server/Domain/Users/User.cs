@@ -22,13 +22,13 @@ internal sealed class User : DefaultDomainEntity
 
 	internal String UserName { get; private init; }
 
-	internal String Email { get; private init; }
+	internal String? Email { get; private init; }
 
 	internal Boolean EmailConfirmed { get; private set; }
 
 	internal String? PasswordHash { get; set; }
 
-	internal String SecurityStamp { get; private set; }
+	internal String? SecurityStamp { get; private set; }
 
 	internal Int32 AccessFailedCount { get; private set; }
 
@@ -40,7 +40,7 @@ internal sealed class User : DefaultDomainEntity
 
 	internal Permissions Permissions { get; private set; }
 
-	internal UserOwnerType OwnerType { get; private init; }
+	internal UserType Type { get; private init; }
 
 	internal Presence Presence { get; set; }
 
@@ -48,24 +48,25 @@ internal sealed class User : DefaultDomainEntity
 
 	internal DateTime CreationTime { get; private init; }
 
+	internal Boolean IsRemoved { get; private set; }
 	internal String ConcurrencyStamp { get; private set; }
 
 	internal static User Create(
 		UInt64 id,
 		String userName,
-		String email,
+		String? email,
 		String? displayName,
-		UserOwnerType ownerType,
+		UserType type,
 		Permissions permissions)
 	{
 		var user = new User
 		{
 			Id = id,
 			UserName = userName,
-			Email = email.ToUpper(),
+			Email = email?.ToUpper(),
 			DisplayName = displayName ?? userName,
 			Permissions = permissions,
-			OwnerType = ownerType,
+			Type = type,
 			CreationTime = DateTime.UtcNow,
 			ConcurrencyStamp = GenerateConcurrencyStamp(),
 			SecurityStamp = GenerateSecurityStamp(),
@@ -175,6 +176,14 @@ internal sealed class User : DefaultDomainEntity
 	{
 		SecurityStamp = GenerateSecurityStamp();
 		AddEvent(new UserSecurityStampUpdatedEvent(this));
+	}
+
+	internal void Remove()
+	{
+		IsRemoved = true;
+		SecurityStamp = null;
+		AddEvent(new UserSecurityStampUpdatedEvent(this));
+		AddEvent(new UserRemovedEvent(this));
 	}
 
 	private static String GenerateConcurrencyStamp()

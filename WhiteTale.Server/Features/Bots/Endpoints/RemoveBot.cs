@@ -5,42 +5,35 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 
-namespace WhiteTale.Server.Features.Users.Endpoints;
+namespace WhiteTale.Server.Features.Bots.Endpoints;
 
-internal sealed class SetPermissions : IEndpoint
+internal sealed class RemoveBot : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapPut("users/{userId}/permissions", HandleAsync)
+		_ = route.MapDelete("bots/{userId}", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthenticatedUser()
+			.RequireUserType(UserType.Standard)
+			.RequirePermissions()
 			.DenyBannedUsers()
-			.RequirePermissions();
+			.HasApiVersion(1);
 	}
 
 	private static async Task<Results<NoContent, ProblemHttpResult, InternalServerError>> HandleAsync(
 		[FromRoute] UInt64 userId,
-		[FromBody] SetPermissionsRequestBody body,
-		[FromServices] SetPermissionsRequestBodyValidator bodyValidator,
 		[FromServices] ApplicationDbContext dbContext)
 	{
-		var validation = await bodyValidator.ValidateAsync(body);
-		if (!validation.IsValid)
-		{
-			var problemDetails = validation.Errors.ToProblemDetails();
-			return TypedResults.Problem(problemDetails);
-		}
-
 		var user = await dbContext.Users
-			.Where(u => u.Id == userId && !u.IsRemoved)
+			.AsTracking()
+			.Where(u => u.Id == userId && u.Type == UserType.Bot && !u.IsRemoved)
 			.FirstOrDefaultAsync();
 		if (user is null)
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.UserDoesNotExist);
 		}
 
-		user.Modify(permissions: body.Permissions);
-		user.UpdateConcurrencyStamp();
+		user.Remove();
 
 		try
 		{

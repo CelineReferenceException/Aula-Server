@@ -24,7 +24,7 @@ internal sealed class AddRoomConnection : IEndpoint
 		[FromBody] AddRoomConnectionRequestBody body,
 		[FromServices] AddRoomConnectionRequestBodyValidator bodyValidator,
 		[FromServices] ApplicationDbContext dbContext,
-		[FromServices] SnowflakeProvider snowflakeProvider)
+		[FromServices] SnowflakeGenerator snowflakeGenerator)
 	{
 		var validation = await bodyValidator.ValidateAsync(body);
 		if (!validation.IsValid)
@@ -54,7 +54,7 @@ internal sealed class AddRoomConnection : IEndpoint
 			return TypedResults.Problem(ProblemDetailsDefaults.TargetRoomDoesNotExist);
 		}
 
-		var roomConnection = RoomConnection.Create(snowflakeProvider.NewSnowflake(), roomId, body.RoomId);
+		var roomConnection = RoomConnection.Create(snowflakeGenerator.NewSnowflake(), roomId, body.RoomId);
 
 		_ = await dbContext.AddAsync(roomConnection);
 		_ = await dbContext.SaveChangesAsync();

@@ -25,6 +25,11 @@ internal sealed class ConfirmEmailEmailSender
 
 	internal async Task SendEmailAsync(User user, HttpRequest httpRequest)
 	{
+		if (user.Email is null)
+		{
+			throw new ArgumentException("The user email address cannot be null.", nameof(user));
+		}
+
 		var email = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(user.Email));
 		var confirmationToken = _userManager.GenerateEmailConfirmationToken(user);
 		confirmationToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));

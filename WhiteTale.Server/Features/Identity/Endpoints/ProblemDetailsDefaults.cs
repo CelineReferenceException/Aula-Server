@@ -5,9 +5,9 @@ namespace WhiteTale.Server.Features.Identity.Endpoints;
 
 internal static class ProblemDetailsDefaults
 {
-	internal static ProblemDetails UnknownUser { get; } = new()
+	internal static ProblemDetails UserDoesNotExist { get; } = new()
 	{
-		Title = "Unknown user",
+		Title = "Invalid user",
 		Detail = "The specified user does not exist.",
 		Status = StatusCodes.Status400BadRequest,
 	};

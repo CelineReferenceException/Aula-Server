@@ -3,7 +3,7 @@
 /// <summary>
 ///     Defines the owner types that a character can have.
 /// </summary>
-internal enum UserOwnerType
+internal enum UserType
 {
 	/// <summary>
 	///     The character is owned by a standard user.

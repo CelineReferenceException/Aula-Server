@@ -56,17 +56,17 @@ internal sealed class ApplicationDbContext : DbContext
 			.HasMaxLength(User.UserNameMaximumLength);
 
 		_ = userModel.Property(x => x.Email)
-			.IsRequired();
+			.IsRequired(false);
 
 		_ = userModel.Property(x => x.EmailConfirmed)
 			.IsRequired();
 
 		_ = userModel.Property(x => x.PasswordHash)
-			.IsRequired()
+			.IsRequired(false)
 			.HasMaxLength(User.PasswordMaximumLength);
 
 		_ = userModel.Property(x => x.SecurityStamp)
-			.IsRequired();
+			.IsRequired(false);
 
 		_ = userModel.Property(x => x.AccessFailedCount)
 			.IsRequired();
@@ -82,9 +82,10 @@ internal sealed class ApplicationDbContext : DbContext
 			.HasMaxLength(User.DisplayNameMaximumLength);
 
 		_ = userModel.Property(x => x.Description)
+			.IsRequired(false)
 			.HasMaxLength(User.DescriptionMaximumLength);
 
-		_ = userModel.Property(x => x.OwnerType)
+		_ = userModel.Property(x => x.Type)
 			.IsRequired();
 
 		_ = userModel.Property(x => x.Presence)
@@ -95,6 +96,9 @@ internal sealed class ApplicationDbContext : DbContext
 
 		_ = userModel.Property(x => x.CurrentRoomId)
 			.IsRequired(false);
+
+		_ = userModel.Property(x => x.IsRemoved)
+			.IsRequired();
 
 		_ = userModel.Property(x => x.ConcurrencyStamp)
 			.IsRequired()

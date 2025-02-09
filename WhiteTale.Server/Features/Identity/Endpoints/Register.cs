@@ -20,7 +20,7 @@ internal sealed class Register : IEndpoint
 	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(
 		[FromBody] RegisterRequestBody body,
 		[FromServices] RegisterRequestBodyValidator bodyValidator,
-		[FromServices] SnowflakeProvider snowflakeProvider,
+		[FromServices] SnowflakeGenerator snowflakeGenerator,
 		[FromServices] UserManager userManager,
 		[FromServices] PasswordHasher<User> passwordHasher,
 		[FromServices] IOptions<IdentityFeatureOptions> featureOptions,
@@ -42,7 +42,7 @@ internal sealed class Register : IEndpoint
 			return TypedResults.NoContent();
 		}
 
-		var newUser = User.Create(snowflakeProvider.NewSnowflake(), body.UserName, body.Email, body.DisplayName, UserOwnerType.Standard,
+		var newUser = User.Create(snowflakeGenerator.NewSnowflake(), body.UserName, body.Email, body.DisplayName, UserType.Standard,
 			featureOptions.Value.DefaultPermissions);
 		newUser.PasswordHash = passwordHasher.HashPassword(newUser, body.Password);
 
@@ -51,7 +51,7 @@ internal sealed class Register : IEndpoint
 		{
 			return TypedResults.Problem(new ProblemDetails
 			{
-				Title = "Registration problem",
+				Title = "Register problem",
 				Detail = registerResult.ToString(),
 				Status = StatusCodes.Status400BadRequest,
 			});
