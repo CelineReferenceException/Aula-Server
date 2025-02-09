@@ -24,7 +24,7 @@ internal sealed class GetUser : IEndpoint
 	{
 		var user = await dbContext.Users
 			.AsNoTracking()
-			.Where(u => u.Id == userId)
+			.Where(u => u.Id == userId && !u.IsRemoved)
 			.Select(u =>
 				new UserData
 				{

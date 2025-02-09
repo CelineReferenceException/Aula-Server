@@ -36,7 +36,7 @@ internal sealed class SetCurrentRoom : IEndpoint
 
 		var user = await dbContext.Users
 			.AsTracking()
-			.Where(u => u.Id == userId)
+			.Where(u => u.Id == userId && !u.IsRemoved)
 			.FirstOrDefaultAsync();
 		if (user is null)
 		{

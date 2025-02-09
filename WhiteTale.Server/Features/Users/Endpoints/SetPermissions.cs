@@ -32,7 +32,7 @@ internal sealed class SetPermissions : IEndpoint
 		}
 
 		var user = await dbContext.Users
-			.Where(u => u.Id == userId)
+			.Where(u => u.Id == userId && !u.IsRemoved)
 			.FirstOrDefaultAsync();
 		if (user is null)
 		{
