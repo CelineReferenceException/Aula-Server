@@ -49,7 +49,8 @@ internal sealed class GetMessages : IEndpoint
 			return TypedResults.InternalServerError();
 		}
 
-		if (user.CurrentRoomId != roomId)
+		if (user.CurrentRoomId != roomId &&
+		    !user.Permissions.HasFlag(Permissions.Administrator))
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.UserIsNotInTheRoom);
 		}
