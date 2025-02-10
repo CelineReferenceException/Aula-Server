@@ -8,13 +8,13 @@ internal static class ProblemDetailsDefaults
 	internal static ProblemDetails InvalidRoomCount { get; } = new()
 	{
 		Title = "Invalid message count.",
-		Detail = $"The message count must be between {GetAllRooms.MinimumRoomCount} and {GetAllRooms.MaximumRoomCount}.",
+		Detail = $"The message count must be between {GetRooms.MinimumRoomCount} and {GetRooms.MaximumRoomCount}.",
 		Status = StatusCodes.Status400BadRequest,
 	};
 
 	internal static ProblemDetails InvalidAfterRoom { get; } = new()
 	{
-		Title = $"Invalid '{GetAllRooms.AfterQueryParameter}' query parameter.",
+		Title = $"Invalid '{GetRooms.AfterQueryParameter}' query parameter.",
 		Detail = "A message with the specified ID was not found.",
 		Status = StatusCodes.Status400BadRequest,
 	};

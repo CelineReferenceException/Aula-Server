@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WhiteTale.Server.Features.Rooms.Endpoints;
 
-internal sealed class GetAllRooms : IEndpoint
+internal sealed class GetRooms : IEndpoint
 {
 	private const String CountQueryParameter = "count";
 	internal const String AfterQueryParameter = "after";
