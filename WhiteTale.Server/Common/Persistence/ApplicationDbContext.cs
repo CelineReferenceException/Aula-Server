@@ -105,6 +105,13 @@ internal sealed class ApplicationDbContext : DbContext
 			.IsConcurrencyToken()
 			.HasMaxLength(guidMaximumCharacterLength);
 
+		_ = userModel
+			.HasIndex(x => new
+			{
+				x.UserName,
+			})
+			.HasDatabaseName($"IX_{nameof(User)}_{nameof(User.UserName)}");
+
 		var roomModel = modelBuilder.Entity<Room>();
 
 		_ = roomModel.Property(x => x.Id)
