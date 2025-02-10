@@ -44,6 +44,7 @@ internal sealed class CreateRoom : IEndpoint
 			Description = room.Description,
 			IsEntrance = room.IsEntrance,
 			CreationTime = room.CreationTime,
+			ConnectedRoomIds = [],
 		});
 	}
 }
