@@ -64,7 +64,7 @@ internal sealed class GetMessages : IEndpoint
 		var messagesQuery = dbContext.Messages
 			.AsNoTracking()
 			.Where(m => !m.IsRemoved && (m.TargetId == roomId || m.TargetType == MessageTarget.AllRooms))
-			.OrderByDescending(m => m.Id)
+			.OrderByDescending(m => m.CreationTime)
 			.Select(m => new
 			{
 				m.Id,
