@@ -6,13 +6,13 @@ internal sealed class RoomConnection : DefaultDomainEntity
 	{
 	}
 
-	public UInt64 Id { get; private init; }
+	internal UInt64 Id { get; private init; }
 
-	public UInt64 SourceRoomId { get; private init; }
+	internal UInt64 SourceRoomId { get; private init; }
 
 	internal Room SourceRoom { get; private init; }
 
-	public UInt64 TargetRoomId { get; private init; }
+	internal UInt64 TargetRoomId { get; private init; }
 
 	internal Room TargetRoom { get; private init; }
 
