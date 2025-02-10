@@ -11,7 +11,7 @@ internal sealed class AddRoomConnection : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapPut("rooms/{roomId}/connections", HandleAsync)
+		_ = route.MapPost("rooms/{roomId}/connections", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.ManageRooms)
