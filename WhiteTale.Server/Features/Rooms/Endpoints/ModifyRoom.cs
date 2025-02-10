@@ -35,6 +35,7 @@ internal sealed class ModifyRoom : IEndpoint
 		var room = await dbContext.Rooms
 			.AsTracking()
 			.Where(r => r.Id == roomId && !r.IsRemoved)
+			.Include(r => r.Connections)
 			.FirstOrDefaultAsync();
 		if (room is null)
 		{
@@ -59,6 +60,7 @@ internal sealed class ModifyRoom : IEndpoint
 			Name = room.Name,
 			Description = room.Description,
 			IsEntrance = room.IsEntrance,
+			ConnectedRoomIds = room.Connections.Select(c => c.TargetRoomId),
 			CreationTime = room.CreationTime,
 		});
 	}

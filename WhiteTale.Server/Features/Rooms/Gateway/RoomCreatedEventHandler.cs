@@ -29,6 +29,7 @@ internal sealed class RoomCreatedEventHandler : INotificationHandler<RoomCreated
 				Name = room.Name,
 				Description = room.Description,
 				IsEntrance = room.IsEntrance,
+				ConnectedRoomIds = room.Connections.Select(x => x.TargetRoomId),
 				CreationTime = room.CreationTime,
 			},
 		}.GetJsonUtf8Bytes(_jsonSerializerOptions);
