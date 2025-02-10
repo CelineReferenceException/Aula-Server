@@ -144,11 +144,6 @@ internal sealed class ApplicationDbContext : DbContext
 			.HasForeignKey(x => x.SourceRoomId)
 			.HasPrincipalKey(x => x.Id);
 
-		_ = roomModel.HasMany(x => x.Connections)
-			.WithOne(x => x.TargetRoom)
-			.HasForeignKey(x => x.TargetRoomId)
-			.HasPrincipalKey(x => x.Id);
-
 		_ = roomModel.Navigation(x => x.Connections)
 			.AutoInclude();
 
