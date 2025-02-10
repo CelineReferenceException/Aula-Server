@@ -39,15 +39,15 @@ internal sealed class GetRooms : IEndpoint
 			.AsNoTracking()
 			.Where(r => !r.IsRemoved)
 			.OrderBy(r => r.CreationTime)
-			.Select(r =>
-				new
-				{
-					r.Id,
-					r.Name,
-					r.Description,
-					r.IsEntrance,
-					r.CreationTime,
-				})
+			.Select(r => new RoomData
+			{
+				Id = r.Id,
+				Name = r.Name,
+				Description = r.Description,
+				IsEntrance = r.IsEntrance,
+				ConnectedRoomIds = r.Connections.Select(c => c.TargetRoomId),
+				CreationTime = r.CreationTime,
+			})
 			.Take((Int32)count);
 
 		if (afterId is not null)
@@ -70,34 +70,6 @@ internal sealed class GetRooms : IEndpoint
 		}
 
 		var rooms = await roomsQuery.ToListAsync();
-		var roomConnections = await dbContext.RoomConnections
-			.AsNoTracking()
-			.Where(c => rooms.Select(r => r.Id).Contains(c.SourceRoomId))
-			.Select(c =>
-				new
-				{
-					c.SourceRoomId,
-					c.TargetRoomId,
-				})
-			.ToListAsync();
-
-		List<RoomData> roomsData = new(rooms.Count);
-		foreach (var room in rooms)
-		{
-			roomsData.Add(new RoomData
-			{
-				Id = room.Id,
-				Name = room.Name,
-				Description = room.Description,
-				IsEntrance = room.IsEntrance,
-				ConnectedRoomIds = roomConnections
-					.Where(c => c.SourceRoomId == room.Id)
-					.Select(c => c.TargetRoomId)
-					.ToList(),
-				CreationTime = room.CreationTime,
-			});
-		}
-
-		return TypedResults.Ok(roomsData);
+		return TypedResults.Ok(rooms);
 	}
 }
