@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using WhiteTale.Server.Features.Rooms;
 
 namespace WhiteTale.Server.Features.RoomConnections.Endpoints;
 
@@ -18,7 +19,7 @@ internal sealed class GetRoomConnections : IEndpoint
 			.HasApiVersion(1);
 	}
 
-	private static async Task<Results<Ok<List<UInt64>>, ProblemHttpResult>> HandleAsync(
+	private static async Task<Results<Ok<List<RoomData>>, ProblemHttpResult>> HandleAsync(
 		[FromRoute] UInt64 roomId,
 		[FromServices] ApplicationDbContext dbContext)
 	{
@@ -35,6 +36,46 @@ internal sealed class GetRoomConnections : IEndpoint
 			.Select(c => c.TargetRoomId)
 			.ToListAsync();
 
-		return TypedResults.Ok(connections);
+		var targetRooms = await dbContext.Rooms
+			.Where(r => connections.Contains(r.Id))
+			.Select(r => new
+			{
+				r.Id,
+				r.Name,
+				r.Description,
+				r.IsEntrance,
+				r.CreationTime,
+			})
+			.ToListAsync();
+
+		var targetRoomConnections = await dbContext.RoomConnections
+			.AsNoTracking()
+			.Where(c => targetRooms.Select(r => r.Id).Contains(c.SourceRoomId))
+			.Select(c =>
+				new
+				{
+					c.SourceRoomId,
+					c.TargetRoomId,
+				})
+			.ToListAsync();
+
+		List<RoomData> targetRoomsData = new(targetRooms.Count);
+		foreach (var room in targetRooms)
+		{
+			targetRoomsData.Add(new RoomData
+			{
+				Id = room.Id,
+				Name = room.Name,
+				Description = room.Description,
+				IsEntrance = room.IsEntrance,
+				ConnectedRoomIds = targetRoomConnections
+					.Where(c => c.SourceRoomId == room.Id)
+					.Select(c => c.TargetRoomId)
+					.ToList(),
+				CreationTime = room.CreationTime,
+			});
+		}
+
+		return TypedResults.Ok(targetRoomsData);
 	}
 }
