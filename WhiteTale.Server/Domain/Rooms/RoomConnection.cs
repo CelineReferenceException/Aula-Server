@@ -10,7 +10,11 @@ internal sealed class RoomConnection : DefaultDomainEntity
 
 	public UInt64 SourceRoomId { get; private init; }
 
+	internal Room SourceRoom { get; private init; }
+
 	public UInt64 TargetRoomId { get; private init; }
+
+	internal Room TargetRoom { get; private init; }
 
 	internal static RoomConnection Create(UInt64 id, UInt64 sourceRoomId, UInt64 targetRoomId)
 	{

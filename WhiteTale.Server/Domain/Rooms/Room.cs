@@ -25,6 +25,8 @@ internal sealed class Room : DefaultDomainEntity
 
 	internal String ConcurrencyStamp { get; private set; }
 
+	internal List<RoomConnection> Connections { get; private set; }
+
 	internal DateTime CreationTime { get; private init; }
 
 	internal Boolean IsRemoved { get; private set; }
@@ -37,6 +39,7 @@ internal sealed class Room : DefaultDomainEntity
 			Name = name,
 			Description = description,
 			IsEntrance = isEntrance,
+			Connections = [],
 			ConcurrencyStamp = Guid.NewGuid().ToString("N"),
 			CreationTime = DateTime.UtcNow,
 		};

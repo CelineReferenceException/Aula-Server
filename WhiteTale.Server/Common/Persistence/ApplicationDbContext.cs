@@ -139,6 +139,16 @@ internal sealed class ApplicationDbContext : DbContext
 		_ = roomModel.Property(x => x.CreationTime)
 			.IsRequired();
 
+		_ = roomModel.HasMany(x => x.Connections)
+			.WithOne(x => x.SourceRoom)
+			.HasForeignKey(x => x.SourceRoomId)
+			.HasPrincipalKey(x => x.Id);
+
+		_ = roomModel.HasMany(x => x.Connections)
+			.WithOne(x => x.TargetRoom)
+			.HasForeignKey(x => x.TargetRoomId)
+			.HasPrincipalKey(x => x.Id);
+
 		_ = roomModel.Property(x => x.ConcurrencyStamp)
 			.IsRequired()
 			.IsConcurrencyToken()
