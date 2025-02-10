@@ -149,6 +149,9 @@ internal sealed class ApplicationDbContext : DbContext
 			.HasForeignKey(x => x.TargetRoomId)
 			.HasPrincipalKey(x => x.Id);
 
+		_ = roomModel.Navigation(x => x.Connections)
+			.AutoInclude();
+
 		_ = roomModel.Property(x => x.ConcurrencyStamp)
 			.IsRequired()
 			.IsConcurrencyToken()
@@ -201,10 +204,16 @@ internal sealed class ApplicationDbContext : DbContext
 			.WithOne(x => x.Message)
 			.HasForeignKey<MessageUserJoin>();
 
+		_ = messageModel.Navigation(x => x.JoinData)
+			.AutoInclude();
+
 		_ = messageModel
 			.HasOne(x => x.LeaveData)
 			.WithOne(x => x.Message)
 			.HasForeignKey<MessageUserLeave>();
+
+		_ = messageModel.Navigation(x => x.LeaveData)
+			.AutoInclude();
 
 		_ = messageModel.Property(x => x.Content)
 			.IsRequired(false)
