@@ -26,6 +26,11 @@ internal sealed record RoomData
 	public required Boolean IsEntrance { get; init; }
 
 	/// <summary>
+	///     A collection of ids of all rooms connected with this room.
+	/// </summary>
+	public required IEnumerable<UInt64> ConnectedRoomIds { get; init; }
+
+	/// <summary>
 	///     The date and time when the room was created.
 	/// </summary>
 	public required DateTime CreationTime { get; init; }
