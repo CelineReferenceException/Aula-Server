@@ -112,6 +112,13 @@ internal sealed class ApplicationDbContext : DbContext
 			})
 			.HasDatabaseName($"IX_{nameof(User)}_{nameof(User.UserName)}");
 
+		_ = userModel
+			.HasIndex(x => new
+			{
+				x.Email,
+			})
+			.HasDatabaseName($"IX_{nameof(User)}_{nameof(User.Email)}");
+
 		var roomModel = modelBuilder.Entity<Room>();
 
 		_ = roomModel.Property(x => x.Id)
