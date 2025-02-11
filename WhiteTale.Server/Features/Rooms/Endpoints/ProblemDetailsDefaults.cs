@@ -22,7 +22,7 @@ internal static class ProblemDetailsDefaults
 	internal static ProblemDetails TargetRoomCannotBeSourceRoom { get; } = new()
 	{
 		Title = "Invalid target room",
-		Detail = "The specified target room cannot be the same as the source room.",
+		Detail = "A target room cannot be the same as the source room.",
 		Status = StatusCodes.Status400BadRequest,
 	};
 
@@ -36,7 +36,7 @@ internal static class ProblemDetailsDefaults
 	internal static ProblemDetails TargetRoomDoesNotExist { get; } = new()
 	{
 		Title = "Invalid target room",
-		Detail = "The specified target room does not exist.",
+		Detail = "A specified target room does not exist.",
 		Status = StatusCodes.Status400BadRequest,
 	};
 }
