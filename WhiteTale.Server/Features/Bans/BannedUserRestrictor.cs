@@ -1,6 +1,7 @@
 ﻿using System.Net.WebSockets;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Polly;
 
 namespace WhiteTale.Server.Features.Bans;
 
@@ -8,12 +9,16 @@ internal sealed class BannedUserRestrictor : INotificationHandler<BanCreatedEven
 {
 	private readonly ApplicationDbContext _dbContext;
 	private readonly GatewayService _gatewayService;
-	private readonly ResiliencePipelines _resiliencePipelines;
+	private readonly ResiliencePipeline _retryOnDbConcurrencyProblem;
 
-	public BannedUserRestrictor(ApplicationDbContext dbContext, ResiliencePipelines resiliencePipelines, GatewayService gatewayService)
+	public BannedUserRestrictor(
+		ApplicationDbContext dbContext,
+		[FromKeyedServices(ResiliencePipelineNames.RetryOnDbConcurrencyProblem)]
+		ResiliencePipeline retryOnDbConcurrencyProblem,
+		GatewayService gatewayService)
 	{
 		_dbContext = dbContext;
-		_resiliencePipelines = resiliencePipelines;
+		_retryOnDbConcurrencyProblem = retryOnDbConcurrencyProblem;
 		_gatewayService = gatewayService;
 	}
 
@@ -33,7 +38,7 @@ internal sealed class BannedUserRestrictor : INotificationHandler<BanCreatedEven
 			await session.StopAsync(WebSocketCloseStatus.Empty);
 		}
 
-		await _resiliencePipelines.RetryOnDbConcurrencyProblem.ExecuteAsync(async ct =>
+		await _retryOnDbConcurrencyProblem.ExecuteAsync(async ct =>
 		{
 			var user = await _dbContext.Users
 				.AsTracking()

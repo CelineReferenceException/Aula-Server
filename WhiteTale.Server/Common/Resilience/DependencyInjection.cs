@@ -18,8 +18,6 @@ internal static class DependencyInjection
 				});
 		});
 
-		_ = services.AddSingleton<ResiliencePipelines>();
-
 		return services;
 	}
 }

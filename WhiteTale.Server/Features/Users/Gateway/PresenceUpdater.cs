@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Polly;
 
 namespace WhiteTale.Server.Features.Users.Gateway;
 
@@ -17,16 +18,16 @@ internal sealed class PresenceUpdater :
 	private static readonly ConcurrentDictionary<UInt64, UserPresenceState> s_presenceStates = new();
 	private readonly ApplicationDbContext _dbContext;
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
-	private readonly ResiliencePipelines _resiliencePipelines;
+	private readonly ResiliencePipeline _retryOnDbConcurrencyProblem;
 
 	public PresenceUpdater(
 		IOptions<JsonOptions> jsonOptions,
 		ApplicationDbContext dbContext,
-		ResiliencePipelines resiliencePipelines)
+		[FromKeyedServices(ResiliencePipelineNames.RetryOnDbConcurrencyProblem)] ResiliencePipeline retryOnDbConcurrencyProblem)
 	{
 		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
 		_dbContext = dbContext;
-		_resiliencePipelines = resiliencePipelines;
+		_retryOnDbConcurrencyProblem = retryOnDbConcurrencyProblem;
 	}
 
 	public async Task Handle(GatewayConnectedEvent notification, CancellationToken cancellationToken)
@@ -38,7 +39,7 @@ internal sealed class PresenceUpdater :
 
 		presenceState.GatewayCount++;
 
-		await _resiliencePipelines.RetryOnDbConcurrencyProblem.ExecuteAsync(async ct =>
+		await _retryOnDbConcurrencyProblem.ExecuteAsync(async ct =>
 		{
 			var user = await _dbContext.Users
 				.Where(u => u.Id == session.UserId)
@@ -71,7 +72,7 @@ internal sealed class PresenceUpdater :
 			_ = s_presenceStates.TryRemove(session.UserId, out _);
 		}
 
-		await _resiliencePipelines.RetryOnDbConcurrencyProblem.ExecuteAsync(async ct =>
+		await _retryOnDbConcurrencyProblem.ExecuteAsync(async ct =>
 		{
 			var user = await _dbContext.Users
 				.Where(u => u.Id == notification.Session.UserId)
@@ -114,7 +115,7 @@ internal sealed class PresenceUpdater :
 
 		await presenceState.UpdateSemaphore.WaitAsync(cancellationToken);
 
-		await _resiliencePipelines.RetryOnDbConcurrencyProblem.ExecuteAsync(async ct =>
+		await _retryOnDbConcurrencyProblem.ExecuteAsync(async ct =>
 		{
 			var user = await _dbContext.Users
 				.Where(u => u.Id == session.UserId)
