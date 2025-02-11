@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace WhiteTale.Server.Common.Endpoints;
 
@@ -14,15 +13,6 @@ internal static class HttpContextExtensions
 		var pathBase = request.PathBase.Value ?? String.Empty;
 		var path = request.Path.Value ?? String.Empty;
 
-		var length = scheme.Length + SchemeDelimiter.Length + host.Length
-		             + pathBase.Length + path.Length;
-
-		return new StringBuilder(length)
-			.Append(scheme)
-			.Append(SchemeDelimiter)
-			.Append(host)
-			.Append(pathBase)
-			.Append(path)
-			.ToString();
+		return $"{scheme}{SchemeDelimiter}{host}{pathBase}{path}";
 	}
 }
