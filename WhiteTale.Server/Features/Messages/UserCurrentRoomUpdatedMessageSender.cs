@@ -38,7 +38,6 @@ internal sealed class UserCurrentRoomUpdatedMessageSender : INotificationHandler
 				MessageTarget.Room, null, new MessageUserJoin
 				{
 					MessageId = joinMessageId,
-					Message = null!,
 					UserId = notification.UserId,
 				}, null, notification.CurrentRoomId.Value);
 
