@@ -24,7 +24,6 @@ internal sealed class UserCurrentRoomUpdatedMessageSender : INotificationHandler
 				MessageTarget.Room, null, null, new MessageUserLeave
 				{
 					MessageId = leaveMessageId,
-					Message = null!,
 					UserId = notification.UserId,
 					RoomId = notification.CurrentRoomId,
 				}, notification.PreviousRoomId.Value);
