@@ -182,7 +182,6 @@ internal sealed class User : DefaultDomainEntity
 	{
 		IsRemoved = true;
 		SecurityStamp = null;
-		AddEvent(new UserSecurityStampUpdatedEvent(this));
 		AddEvent(new UserRemovedEvent(this));
 	}
 
