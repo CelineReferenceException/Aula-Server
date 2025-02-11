@@ -6,7 +6,10 @@ internal sealed class SetPermissionsRequestBodyValidator : AbstractValidator<Set
 {
 	public SetPermissionsRequestBodyValidator()
 	{
-		_ = RuleFor(x => x.Permissions).IsInEnum();
+		_ = RuleFor(x => x.Permissions)
+			.IsInEnum()
+			.WithErrorCode("Invalid permissions")
+			.WithMessage("The permissions contains an invalid value.");
 
 		_ = RuleFor(x => x.Permissions)
 			.Must(x => !x.HasFlag(Permissions.Administrator))
