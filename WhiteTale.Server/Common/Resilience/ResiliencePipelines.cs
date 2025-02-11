@@ -10,5 +10,5 @@ internal sealed class ResiliencePipelines
 		RetryOnDbConcurrencyProblem = retryOnDbConcurrencyProblem;
 	}
 
-	internal ResiliencePipeline RetryOnDbConcurrencyProblem { get; private set; }
+	internal ResiliencePipeline RetryOnDbConcurrencyProblem { get; }
 }
