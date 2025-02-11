@@ -5,25 +5,13 @@
 /// </summary>
 internal sealed record ModifyOwnUserRequestBody
 {
-	private readonly String? _description;
-
-	private readonly String? _displayName;
-
 	/// <summary>
 	///     The name of the user.
 	/// </summary>
-	public String? DisplayName
-	{
-		get => _displayName;
-		init => _displayName = value?.Trim();
-	}
+	public String? DisplayName { get; init; }
 
 	/// <summary>
 	///     The description of the user.
 	/// </summary>
-	public String? Description
-	{
-		get => _description;
-		init => _description = value?.Trim();
-	}
+	public String? Description { get; init; }
 }
