@@ -8,6 +8,7 @@ internal static class DependencyInjection
 			.AddAuthenticatedUserPolicy()
 			.AddBanPolicy()
 			.AddUserTypePolicy()
+			.AddConfirmedEmailPolicy()
 			.AddPermissionsPolicy();
 
 		return services;
