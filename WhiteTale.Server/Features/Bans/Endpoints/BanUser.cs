@@ -70,14 +70,7 @@ internal sealed class BanUser : IEndpoint
 		var ban = Ban.Create(snowflakeGenerator.NewSnowflake(), BanType.Id, userId, body.Reason, targetId);
 		_ = dbContext.Bans.Add(ban);
 
-		try
-		{
-			_ = await dbContext.SaveChangesAsync();
-		}
-		catch (DbUpdateConcurrencyException)
-		{
-			return TypedResults.InternalServerError();
-		}
+		_ = await dbContext.SaveChangesAsync();
 
 		return TypedResults.Created(httpContext.Request.GetUrl(), new BanData
 		{
