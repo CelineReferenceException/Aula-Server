@@ -28,7 +28,7 @@ internal sealed class Room : DefaultDomainEntity
 
 	// Navigation property, values are set through reflection.
 	[SuppressMessage("ReSharper", "UnassignedGetOnlyAutoProperty")]
-	internal List<RoomConnection> Connections { get; }
+	internal IReadOnlyList<RoomConnection> Connections { get; }
 
 	internal DateTime CreationTime { get; private init; }
 
