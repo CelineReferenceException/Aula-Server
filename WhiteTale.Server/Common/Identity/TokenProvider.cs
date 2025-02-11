@@ -1,4 +1,5 @@
-﻿using System.Buffers.Text;
+﻿using System.Buffers;
+using System.Buffers.Text;
 using System.Diagnostics.CodeAnalysis;
 using Encoding = System.Text.Encoding;
 
@@ -20,7 +21,7 @@ internal sealed class TokenProvider
 		var idBase64Length = Base64.GetMaxEncodedToUtf8Length(idUtf8Length);
 		var securityStampBase64Length = Base64.GetMaxEncodedToUtf8Length(securityStampUtf8Length);
 
-		var buffer = new Byte[idUtf8Length + securityStampUtf8Length + idBase64Length + securityStampBase64Length];
+		var buffer = ArrayPool<Byte>.Shared.Rent(idUtf8Length + securityStampUtf8Length + idBase64Length + securityStampBase64Length);
 		var idUtf8 = buffer.AsSpan(0, idUtf8Length);
 		var securityStampUtf8 = buffer.AsSpan(idUtf8Length, securityStampUtf8Length);
 		var idBase64 = buffer.AsSpan(idUtf8Length + securityStampUtf8Length, idBase64Length);
@@ -56,6 +57,8 @@ internal sealed class TokenProvider
 				{
 					span[position] = (Char)segments.SecurityStamp[i];
 				}
+
+				ArrayPool<Byte>.Shared.Return(buffer);
 			});
 	}
 
@@ -101,7 +104,7 @@ internal sealed class TokenProvider
 		var userIdUtf8Length = Base64.GetMaxDecodedFromUtf8Length(userIdBase64.Length);
 		var securityStampUtf8Length = Base64.GetMaxDecodedFromUtf8Length(securityStampBase64.Length);
 
-		var buffer = new Byte[userIdUtf8Length + securityStampUtf8Length];
+		var buffer = ArrayPool<Byte>.Shared.Rent(userIdUtf8Length + securityStampUtf8Length);
 		var userIdUtf8 = buffer.AsSpan(0, userIdUtf8Length);
 		var securityStampUtf8 = buffer.AsSpan(userIdUtf8Length, securityStampUtf8Length);
 
@@ -123,6 +126,7 @@ internal sealed class TokenProvider
 		}
 
 		securityStamp = Encoding.UTF8.GetString(securityStampUtf8[..securityStampUtf8BytesWritten]);
+		ArrayPool<Byte>.Shared.Return(buffer);
 		return true;
 	}
 
