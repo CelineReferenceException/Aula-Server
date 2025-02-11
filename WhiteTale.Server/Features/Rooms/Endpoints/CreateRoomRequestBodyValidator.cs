@@ -8,22 +8,22 @@ internal sealed class CreateRoomRequestBodyValidator : AbstractValidator<CreateR
 	{
 		_ = RuleFor(x => x.Name)
 			.MinimumLength(Room.NameMinimumLength)
-			.WithErrorCode($"{nameof(Room.Name)} is too short")
-			.WithMessage($"{nameof(Room.Name)} length must be at least {Room.NameMinimumLength}");
+			.WithErrorCode($"{nameof(CreateRoomRequestBody.Name)} is too short")
+			.WithMessage($"{nameof(CreateRoomRequestBody.Name)} length must be at least {Room.NameMinimumLength}");
 
 		_ = RuleFor(x => x.Name)
 			.MaximumLength(Room.NameMaximumLength)
-			.WithErrorCode($"{nameof(Room.Name)} is too long")
-			.WithMessage($"{nameof(Room.Name)} length must be at most {Room.NameMaximumLength}");
+			.WithErrorCode($"{nameof(CreateRoomRequestBody.Name)} is too long")
+			.WithMessage($"{nameof(CreateRoomRequestBody.Name)} length must be at most {Room.NameMaximumLength}");
 
 		_ = RuleFor(x => x.Description)
 			.MinimumLength(Room.DescriptionMinimumLength)
-			.WithErrorCode($"{nameof(Room.Description)} is too short")
-			.WithMessage($"{nameof(Room.Description)} length must be at least {Room.DescriptionMinimumLength}");
+			.WithErrorCode($"{nameof(CreateRoomRequestBody.Description)} is too short")
+			.WithMessage($"{nameof(CreateRoomRequestBody.Description)} length must be at least {Room.DescriptionMinimumLength}");
 
 		_ = RuleFor(x => x.Description)
 			.MaximumLength(Room.DescriptionMaximumLength)
-			.WithErrorCode($"{nameof(Room.Description)} is too long")
-			.WithMessage($"{nameof(Room.Description)} length must be at most {Room.DescriptionMaximumLength}");
+			.WithErrorCode($"{nameof(CreateRoomRequestBody.Description)} is too long")
+			.WithMessage($"{nameof(CreateRoomRequestBody.Description)} length must be at most {Room.DescriptionMaximumLength}");
 	}
 }
