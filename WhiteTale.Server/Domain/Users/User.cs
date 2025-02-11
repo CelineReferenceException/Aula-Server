@@ -20,7 +20,7 @@ internal sealed class User : DefaultDomainEntity
 
 	internal UInt64 Id { get; private init; }
 
-	internal String UserName { get; private init; }
+	internal String UserName { get; private set; }
 
 	internal String? Email { get; private set; }
 
@@ -183,6 +183,11 @@ internal sealed class User : DefaultDomainEntity
 		IsRemoved = true;
 		SecurityStamp = null;
 		Email = null;
+
+		var nameStamp = Guid.CreateVersion7().ToString("N");
+		UserName = $"removed_user_{nameStamp}";
+		DisplayName = $"Removed user {nameStamp}";
+
 		AddEvent(new UserRemovedEvent(this));
 	}
 
