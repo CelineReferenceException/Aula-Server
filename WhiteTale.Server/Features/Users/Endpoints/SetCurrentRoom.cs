@@ -22,18 +22,10 @@ internal sealed class SetCurrentRoom : IEndpoint
 	private static async Task<Results<NoContent, ProblemHttpResult, InternalServerError>> HandleAsync(
 		[FromRoute] UInt64 userId,
 		[FromBody] SetCurrentRoomRequestBody body,
-		[FromServices] SetCurrentRoomRequestBodyValidator bodyValidator,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] UserManager userManager,
 		HttpContext httpContext)
 	{
-		var validation = await bodyValidator.ValidateAsync(body);
-		if (!validation.IsValid)
-		{
-			var problemDetails = validation.Errors.ToProblemDetails();
-			return TypedResults.Problem(problemDetails);
-		}
-
 		var user = await dbContext.Users
 			.AsTracking()
 			.Where(u => u.Id == userId && !u.IsRemoved)
