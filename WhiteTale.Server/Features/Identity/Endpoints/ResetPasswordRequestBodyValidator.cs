@@ -6,15 +6,10 @@ internal sealed class ResetPasswordRequestBodyValidator : AbstractValidator<Rese
 {
 	public ResetPasswordRequestBodyValidator()
 	{
-		_ = RuleFor(x => x.UserId)
-			.NotNull()
-			.WithErrorCode($"{nameof(ResetPasswordRequestBody.UserId)} is null")
-			.WithMessage($"{nameof(ResetPasswordRequestBody.UserId)} cannot be null.");
-
-		_ = RuleFor(x => x.ResetToken)
+		_ = RuleFor(x => x.Code)
 			.NotEmpty()
-			.WithErrorCode($"{nameof(ResetPasswordRequestBody.ResetToken)} is empty")
-			.WithMessage($"{nameof(ResetPasswordRequestBody.ResetToken)} cannot be empty.");
+			.WithErrorCode($"{nameof(ResetPasswordRequestBody.Code)} is empty")
+			.WithMessage($"{nameof(ResetPasswordRequestBody.Code)} cannot be empty.");
 
 		_ = RuleFor(x => x.NewPassword)
 			.NotEmpty()

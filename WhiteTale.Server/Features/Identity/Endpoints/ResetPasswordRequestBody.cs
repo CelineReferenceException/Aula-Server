@@ -6,14 +6,9 @@
 internal sealed record ResetPasswordRequestBody
 {
 	/// <summary>
-	///     The ID of the user.
-	/// </summary>
-	public required UInt64 UserId { get; init; }
-
-	/// <summary>
 	///     The token used to validate the password reset request.
 	/// </summary>
-	public required String ResetToken { get; init; }
+	public required String Code { get; init; }
 
 	/// <summary>
 	///     The new password to be set for the user.

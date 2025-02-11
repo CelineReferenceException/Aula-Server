@@ -19,7 +19,8 @@ internal sealed class ResetPassword : IEndpoint
 	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(
 		[FromBody] ResetPasswordRequestBody body,
 		[FromServices] ResetPasswordRequestBodyValidator bodyValidator,
-		[FromServices] UserManager userManager)
+		[FromServices] UserManager userManager,
+		[FromServices] TokenProvider tokenProvider)
 	{
 		var bodyValidation = await bodyValidator.ValidateAsync(body);
 		if (!bodyValidation.IsValid)
@@ -28,13 +29,23 @@ internal sealed class ResetPassword : IEndpoint
 			return TypedResults.Problem(problemDetails);
 		}
 
-		var user = await userManager.FindByIdAsync(body.UserId);
-		if (user?.Type is not UserType.Standard)
+		if (!tokenProvider.TryReadFromToken(body.Code, out var userIdString, out var resetToken) ||
+		    !UInt64.TryParse(userIdString, out var userId))
 		{
-			return TypedResults.Problem(ProblemDetailsDefaults.UserDoesNotExist);
+			return TypedResults.Problem(ProblemDetailsDefaults.InvalidResetPasswordToken);
 		}
 
-		var passwordReset = await userManager.ResetPasswordAsync(user, body.NewPassword, body.ResetToken);
+		var user = await userManager.FindByIdAsync(userId);
+		if (user?.Type is not UserType.Standard)
+		{
+			return TypedResults.Problem(ProblemDetailsDefaults.InvalidResetPasswordToken);
+		}
+
+		var passwordReset = await userManager.ResetPasswordAsync(user, body.NewPassword, resetToken);
+		if (passwordReset == ResetPasswordResult.InvalidToken)
+		{
+			return TypedResults.Problem(ProblemDetailsDefaults.InvalidResetPasswordToken);
+		}
 		if (!passwordReset.Succeeded)
 		{
 			return TypedResults.Problem(new ProblemDetails

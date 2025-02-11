@@ -32,4 +32,11 @@ internal static class ProblemDetailsDefaults
 		Detail = "The email must be confirmed to login.",
 		Status = StatusCodes.Status403Forbidden,
 	};
+
+	internal static ProblemDetails InvalidResetPasswordToken { get; } = new()
+	{
+		Title = "Invalid reset password code",
+		Detail = "The reset password code is invalid.",
+		Status = StatusCodes.Status400BadRequest,
+	};
 }
