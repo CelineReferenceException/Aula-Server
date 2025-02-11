@@ -13,7 +13,7 @@ internal sealed class TokenProvider
 		const Char separator = '.';
 
 		var id = user.Id.ToString();
-		var securityStamp = user.SecurityStamp;
+		var securityStamp = user.SecurityStamp ?? throw new ArgumentException("User cannot have a null security stamp.", nameof(user));
 
 		// Calculate the max count of bytes to use when encoding so we can reduce allocations by storing all into a single buffer.
 		var idUtf8Length = Encoding.UTF8.GetMaxByteCount(id.Length);
