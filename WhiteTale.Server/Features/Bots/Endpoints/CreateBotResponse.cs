@@ -1,6 +1,6 @@
 ﻿namespace WhiteTale.Server.Features.Bots.Endpoints;
 
-internal sealed class CreateBotResponse
+internal sealed record CreateBotResponse
 {
 	public required UserData User { get; set; }
 
