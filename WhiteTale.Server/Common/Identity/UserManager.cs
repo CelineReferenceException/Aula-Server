@@ -9,7 +9,7 @@ namespace WhiteTale.Server.Common.Identity;
 
 internal sealed class UserManager
 {
-	private const String UserNameAllowedCharacters = "abcdefghijklmnopqrstuvwxyz._";
+	private const String UserNameAllowedCharacters = $"abcdefghijklmnopqrstuvwxyz._{Digits}";
 	private const String UppercaseCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	private const String LowercaseCharacters = "abcdefghijklmnopqrstuvwxyz";
 	private const String Digits = "0123456789";
