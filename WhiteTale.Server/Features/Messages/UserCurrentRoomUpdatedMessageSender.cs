@@ -23,7 +23,7 @@ internal sealed class UserCurrentRoomUpdatedMessageSender : INotificationHandler
 			var leaveMessage = Message.Create(leaveMessageId, MessageType.UserLeave, 0, MessageAuthor.System, null,
 				MessageTarget.Room, null, null, new MessageUserLeave
 				{
-					Id = leaveMessageId,
+					MessageId = leaveMessageId,
 					Message = null!,
 					UserId = notification.UserId,
 					RoomId = notification.CurrentRoomId,
@@ -38,7 +38,7 @@ internal sealed class UserCurrentRoomUpdatedMessageSender : INotificationHandler
 			var joinMessage = Message.Create(joinMessageId, MessageType.UserJoin, 0, MessageAuthor.System, null,
 				MessageTarget.Room, null, new MessageUserJoin
 				{
-					Id = joinMessageId,
+					MessageId = joinMessageId,
 					Message = null!,
 					UserId = notification.UserId,
 				}, null, notification.CurrentRoomId.Value);

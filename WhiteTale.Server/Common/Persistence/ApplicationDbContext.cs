@@ -224,10 +224,10 @@ internal sealed class ApplicationDbContext : DbContext
 
 		_ = messageUserJoinModel.ToTable($"{nameof(Messages)}_{nameof(MessageUserJoin)}");
 
-		_ = messageUserJoinModel.Property(x => x.Id)
+		_ = messageUserJoinModel.Property(x => x.MessageId)
 			.IsRequired()
 			.ValueGeneratedNever();
-		_ = messageUserJoinModel.HasKey(x => x.Id);
+		_ = messageUserJoinModel.HasKey(x => x.MessageId);
 
 		_ = messageUserJoinModel.Property(x => x.UserId)
 			.IsRequired();
@@ -236,10 +236,10 @@ internal sealed class ApplicationDbContext : DbContext
 
 		_ = messageUserLeaveModel.ToTable($"{nameof(Messages)}_{nameof(MessageUserLeave)}");
 
-		_ = messageUserLeaveModel.Property(x => x.Id)
+		_ = messageUserLeaveModel.Property(x => x.MessageId)
 			.IsRequired()
 			.ValueGeneratedNever();
-		_ = messageUserLeaveModel.HasKey(x => x.Id);
+		_ = messageUserLeaveModel.HasKey(x => x.MessageId);
 
 		_ = messageUserLeaveModel.Property(x => x.UserId)
 			.IsRequired();

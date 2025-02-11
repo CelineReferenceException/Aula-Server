@@ -2,7 +2,7 @@
 
 internal sealed record MessageUserLeave
 {
-	internal required UInt64 Id { get; init; }
+	internal required UInt64 MessageId { get; init; }
 
 	internal required Message Message { get; init; }
 
