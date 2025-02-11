@@ -2,9 +2,9 @@
 
 namespace WhiteTale.Server.Features.Rooms.Endpoints;
 
-internal sealed class RemoveConnectionRequestBodyValidator : AbstractValidator<RemoveRoomConnectionRequestBody>
+internal sealed class RemoveRoomConnectionRequestBodyValidator : AbstractValidator<RemoveRoomConnectionRequestBody>
 {
-	public RemoveConnectionRequestBodyValidator()
+	public RemoveRoomConnectionRequestBodyValidator()
 	{
 		_ = RuleFor(x => x.RoomId)
 			.NotEmpty()
