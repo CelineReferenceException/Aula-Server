@@ -8,12 +8,12 @@ internal static class UserTypePolicyExtensions
 {
 	private const String PolicyName = nameof(UserTypeRequirement);
 
-	internal static TBuilder RequireUserType<TBuilder>(this TBuilder builder, params IEnumerable<UserType> authorized)
+	internal static TBuilder RequireUserType<TBuilder>(this TBuilder builder, params IEnumerable<UserType> authorizedTypes)
 		where TBuilder : IEndpointConventionBuilder
 	{
 		_ = builder
 			.RequireAuthorization(PolicyName)
-			.WithMetadata(new RequireUserTypeAttribute(authorized.ToArray()));
+			.WithMetadata(new RequireUserTypeAttribute(authorizedTypes.ToArray()));
 		return builder;
 	}
 
