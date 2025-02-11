@@ -4,9 +4,8 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
-using WhiteTale.Server.Features.Rooms;
 
-namespace WhiteTale.Server.Features.RoomConnections.Endpoints;
+namespace WhiteTale.Server.Features.Rooms.Endpoints;
 
 internal sealed class GetRoomConnections : IEndpoint
 {

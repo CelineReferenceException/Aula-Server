@@ -1,4 +1,4 @@
-﻿namespace WhiteTale.Server.Features.RoomConnections;
+﻿namespace WhiteTale.Server.Features.Rooms;
 
 /// <summary>
 ///     Represents a connection between two rooms.

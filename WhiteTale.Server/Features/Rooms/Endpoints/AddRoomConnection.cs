@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 
-namespace WhiteTale.Server.Features.RoomConnections.Endpoints;
+namespace WhiteTale.Server.Features.Rooms.Endpoints;
 
-internal sealed class RemoveRoomConnection : IEndpoint
+internal sealed class AddRoomConnection : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapDelete("rooms/{sourceRoomId}/connections/{targetRoomId}", HandleAsync)
+		_ = route.MapPost("rooms/{roomId}/connections", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.ManageRooms)
@@ -20,14 +20,27 @@ internal sealed class RemoveRoomConnection : IEndpoint
 	}
 
 	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(
-		[FromRoute] UInt64 sourceRoomId,
-		[FromRoute] UInt64 targetRoomId,
+		[FromRoute] UInt64 roomId,
+		[FromBody] AddRoomConnectionRequestBody body,
+		[FromServices] AddRoomConnectionRequestBodyValidator bodyValidator,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] SnowflakeGenerator snowflakeGenerator)
 	{
+		var validation = await bodyValidator.ValidateAsync(body);
+		if (!validation.IsValid)
+		{
+			var problemDetails = validation.Errors.ToProblemDetails();
+			return TypedResults.Problem(problemDetails);
+		}
+
+		if (roomId == body.RoomId)
+		{
+			return TypedResults.Problem(ProblemDetailsDefaults.TargetRoomCannotBeSourceRoom);
+		}
+
 		var sourceRoomExists = await dbContext.Rooms
 			.AsNoTracking()
-			.AnyAsync(r => r.Id == sourceRoomId && !r.IsRemoved);
+			.AnyAsync(r => r.Id == roomId && !r.IsRemoved);
 		if (!sourceRoomExists)
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.RoomDoesNotExist);
@@ -35,22 +48,15 @@ internal sealed class RemoveRoomConnection : IEndpoint
 
 		var targetRoomExists = dbContext.Rooms
 			.AsNoTracking()
-			.Any(r => r.Id == targetRoomId && !r.IsRemoved);
+			.Any(r => r.Id == body.RoomId && !r.IsRemoved);
 		if (!targetRoomExists)
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.TargetRoomDoesNotExist);
 		}
 
-		var connection = await dbContext.RoomConnections
-			.Where(c => c.SourceRoomId == sourceRoomId && c.TargetRoomId == targetRoomId)
-			.FirstOrDefaultAsync();
-		if (connection is null)
-		{
-			return TypedResults.NoContent();
-		}
+		var roomConnection = RoomConnection.Create(snowflakeGenerator.NewSnowflake(), roomId, body.RoomId);
 
-		connection.Remove();
-		_ = dbContext.RoomConnections.Remove(connection);
+		_ = await dbContext.AddAsync(roomConnection);
 		_ = await dbContext.SaveChangesAsync();
 
 		return TypedResults.NoContent();

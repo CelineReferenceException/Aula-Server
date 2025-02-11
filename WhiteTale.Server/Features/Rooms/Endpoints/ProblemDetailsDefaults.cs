@@ -18,4 +18,25 @@ internal static class ProblemDetailsDefaults
 		Detail = "A message with the specified ID was not found.",
 		Status = StatusCodes.Status400BadRequest,
 	};
+
+	internal static ProblemDetails TargetRoomCannotBeSourceRoom { get; } = new()
+	{
+		Title = "Invalid target room",
+		Detail = "The specified target room cannot be the same as the source room.",
+		Status = StatusCodes.Status400BadRequest,
+	};
+
+	internal static ProblemDetails RoomDoesNotExist { get; } = new()
+	{
+		Title = "Invalid room",
+		Detail = "The specified room does not exist.",
+		Status = StatusCodes.Status400BadRequest,
+	};
+
+	internal static ProblemDetails TargetRoomDoesNotExist { get; } = new()
+	{
+		Title = "Invalid target room",
+		Detail = "The specified target room does not exist.",
+		Status = StatusCodes.Status400BadRequest,
+	};
 }

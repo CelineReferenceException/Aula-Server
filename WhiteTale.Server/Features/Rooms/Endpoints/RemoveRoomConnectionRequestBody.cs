@@ -1,4 +1,4 @@
-﻿namespace WhiteTale.Server.Features.RoomConnections.Endpoints;
+﻿namespace WhiteTale.Server.Features.Rooms.Endpoints;
 
 /// <summary>
 ///     Holds the data required to remove a connection from this room.

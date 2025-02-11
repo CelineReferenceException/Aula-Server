@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 
-namespace WhiteTale.Server.Features.RoomConnections.Endpoints;
+namespace WhiteTale.Server.Features.Rooms.Endpoints;
 
 internal sealed class RemoveAllRoomConnections : IEndpoint
 {

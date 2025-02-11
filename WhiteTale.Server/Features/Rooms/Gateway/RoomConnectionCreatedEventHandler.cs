@@ -3,26 +3,26 @@ using MediatR;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 
-namespace WhiteTale.Server.Features.RoomConnections.Gateway;
+namespace WhiteTale.Server.Features.Rooms.Gateway;
 
-internal sealed class RoomConnectionRemovedEventHandler : INotificationHandler<RoomConnectionRemovedEvent>
+internal sealed class RoomConnectionCreatedEventHandler : INotificationHandler<RoomConnectionCreatedEvent>
 {
 	private readonly GatewayService _gatewayService;
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-	public RoomConnectionRemovedEventHandler(IOptions<JsonOptions> jsonOptions, GatewayService gatewayService)
+	public RoomConnectionCreatedEventHandler(IOptions<JsonOptions> jsonOptions, GatewayService gatewayService)
 	{
 		_gatewayService = gatewayService;
 		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
 	}
 
-	public Task Handle(RoomConnectionRemovedEvent notification, CancellationToken cancellationToken)
+	public Task Handle(RoomConnectionCreatedEvent notification, CancellationToken cancellationToken)
 	{
 		var roomConnection = notification.Connection;
 		var payload = new GatewayPayload<RoomConnectionData>
 		{
 			Operation = OperationType.Dispatch,
-			Event = EventType.RoomConnectionRemoved,
+			Event = EventType.RoomConnectionCreated,
 			Data = new RoomConnectionData
 			{
 				SourceRoomId = roomConnection.SourceRoomId,
