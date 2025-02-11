@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using FluentValidation;
+﻿using FluentValidation;
 
 #pragma warning disable CS8618
 namespace WhiteTale.Server.Domain.Rooms;
@@ -26,9 +25,8 @@ internal sealed class Room : DefaultDomainEntity
 
 	internal String ConcurrencyStamp { get; private set; }
 
-	// Navigation property, values are set through reflection.
-	[SuppressMessage("ReSharper", "UnassignedGetOnlyAutoProperty")]
-	internal IReadOnlyList<RoomConnection> Connections { get; }
+	// Readonly navigation property
+	internal IReadOnlyList<RoomConnection> Connections { get; private init; }
 
 	internal DateTime CreationTime { get; private init; }
 
@@ -42,6 +40,7 @@ internal sealed class Room : DefaultDomainEntity
 			Name = name,
 			Description = description,
 			IsEntrance = isEntrance,
+			Connections = [],
 			ConcurrencyStamp = Guid.NewGuid().ToString("N"),
 			CreationTime = DateTime.UtcNow,
 		};
