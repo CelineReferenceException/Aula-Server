@@ -37,10 +37,6 @@ internal sealed class DefaultEmailSender : IEmailSender
 
 	public async Task SendEmailAsync(String email, String subject, String htmlMessage)
 	{
-		ArgumentNullException.ThrowIfNull(email, nameof(email));
-		ArgumentNullException.ThrowIfNull(subject, nameof(subject));
-		ArgumentNullException.ThrowIfNull(htmlMessage, nameof(htmlMessage));
-
 		await _taskQueue.QueueBackgroundWorkItemAsync(async ct =>
 		{
 			using var message = new MailMessage();
