@@ -7,11 +7,6 @@ internal sealed class CreateBotRequestBodyValidator : AbstractValidator<CreateBo
 	public CreateBotRequestBodyValidator()
 	{
 		_ = RuleFor(x => x.DisplayName)
-			.NotNull()
-			.WithErrorCode($"{nameof(CreateBotRequestBody.DisplayName)} is null")
-			.WithMessage($"{nameof(CreateBotRequestBody.DisplayName)} cannot be null.");
-
-		_ = RuleFor(x => x.DisplayName)
 			.MinimumLength(User.DisplayNameMinimumLength)
 			.WithErrorCode($"{nameof(CreateBotRequestBody.DisplayName)} is too short")
 			.WithMessage($"{nameof(CreateBotRequestBody.DisplayName)} length must be at least {User.DisplayNameMinimumLength}");

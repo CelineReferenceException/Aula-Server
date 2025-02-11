@@ -17,11 +17,6 @@ internal sealed class RegisterRequestBodyValidator : AbstractValidator<RegisterR
 			.WithMessage($"{nameof(RegisterRequestBody.DisplayName)} length must be at most {User.DisplayNameMaximumLength}");
 
 		_ = RuleFor(x => x.UserName)
-			.NotNull()
-			.WithErrorCode($"{nameof(RegisterRequestBody.UserName)} is null")
-			.WithMessage($"{nameof(RegisterRequestBody.UserName)} cannot be null.");
-
-		_ = RuleFor(x => x.UserName)
 			.MinimumLength(User.UserNameMinimumLength)
 			.WithErrorCode($"{nameof(RegisterRequestBody.UserName)} is too short")
 			.WithMessage($"{nameof(RegisterRequestBody.UserName)} length must be at least {User.DisplayNameMinimumLength}");
@@ -30,11 +25,6 @@ internal sealed class RegisterRequestBodyValidator : AbstractValidator<RegisterR
 			.MaximumLength(User.UserNameMaximumLength)
 			.WithErrorCode($"{nameof(RegisterRequestBody.UserName)} is too long")
 			.WithMessage($"{nameof(RegisterRequestBody.UserName)} length must be at most {User.DisplayNameMaximumLength}");
-
-		_ = RuleFor(x => x.Email)
-			.NotNull()
-			.WithErrorCode($"{nameof(RegisterRequestBody.Email)} is null")
-			.WithMessage($"{nameof(RegisterRequestBody.Email)} cannot be null.");
 
 		_ = RuleFor(x => x.Email)
 			.EmailAddress()
