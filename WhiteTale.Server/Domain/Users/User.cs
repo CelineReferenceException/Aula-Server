@@ -22,7 +22,7 @@ internal sealed class User : DefaultDomainEntity
 
 	internal String UserName { get; private init; }
 
-	internal String? Email { get; private init; }
+	internal String? Email { get; private set; }
 
 	internal Boolean EmailConfirmed { get; private set; }
 
@@ -182,6 +182,7 @@ internal sealed class User : DefaultDomainEntity
 	{
 		IsRemoved = true;
 		SecurityStamp = null;
+		Email = null;
 		AddEvent(new UserRemovedEvent(this));
 	}
 
