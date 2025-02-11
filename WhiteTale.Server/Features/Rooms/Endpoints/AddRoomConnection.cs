@@ -11,7 +11,7 @@ internal sealed class AddRoomConnection : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapPost("rooms/{roomId}/connections", HandleAsync)
+		_ = route.MapPost("rooms/{roomId}/connections/{targetId}", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.ManageRooms)
@@ -21,19 +21,11 @@ internal sealed class AddRoomConnection : IEndpoint
 
 	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(
 		[FromRoute] UInt64 roomId,
-		[FromBody] AddRoomConnectionRequestBody body,
-		[FromServices] AddRoomConnectionRequestBodyValidator bodyValidator,
+		[FromRoute] UInt64 targetId,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] SnowflakeGenerator snowflakeGenerator)
 	{
-		var validation = await bodyValidator.ValidateAsync(body);
-		if (!validation.IsValid)
-		{
-			var problemDetails = validation.Errors.ToProblemDetails();
-			return TypedResults.Problem(problemDetails);
-		}
-
-		if (roomId == body.RoomId)
+		if (roomId == targetId)
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.TargetRoomCannotBeSourceRoom);
 		}
@@ -48,13 +40,13 @@ internal sealed class AddRoomConnection : IEndpoint
 
 		var targetRoomExists = dbContext.Rooms
 			.AsNoTracking()
-			.Any(r => r.Id == body.RoomId && !r.IsRemoved);
+			.Any(r => r.Id == targetId && !r.IsRemoved);
 		if (!targetRoomExists)
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.TargetRoomDoesNotExist);
 		}
 
-		var roomConnection = RoomConnection.Create(snowflakeGenerator.NewSnowflake(), roomId, body.RoomId);
+		var roomConnection = RoomConnection.Create(snowflakeGenerator.NewSnowflake(), roomId, targetId);
 
 		_ = await dbContext.AddAsync(roomConnection);
 		_ = await dbContext.SaveChangesAsync();
