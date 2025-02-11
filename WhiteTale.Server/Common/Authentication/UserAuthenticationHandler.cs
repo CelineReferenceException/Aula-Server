@@ -46,19 +46,20 @@ internal sealed class UserAuthenticationHandler : AuthenticationHandler<Authenti
 			return AuthenticateResult.NoResult();
 		}
 
-		if (!_tokenProvider.TryReadFromToken(tokenSegment, out var userId, out var securityStamp))
+		if (!_tokenProvider.TryReadFromToken(tokenSegment, out var userIdString, out var securityStamp) ||
+		    !UInt64.TryParse(userIdString, out var userId))
 		{
 			return AuthenticateResult.NoResult();
 		}
 
-		var user = await userManager.FindByIdAsync((UInt64)userId);
+		var user = await userManager.FindByIdAsync(userId);
 		if (user is null ||
 		    user.SecurityStamp != securityStamp)
 		{
 			return AuthenticateResult.NoResult();
 		}
 
-		var claims = new[] { new Claim(ClaimTypes.NameIdentifier, user.Id.ToString(), ClaimValueTypes.UInteger64), };
+		var claims = new[] { new Claim(ClaimTypes.NameIdentifier, userIdString, ClaimValueTypes.UInteger64), };
 		var claimsIdentity = new ClaimsIdentity(claims, AuthenticationSchemeNames.BearerToken);
 		var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 		return AuthenticateResult.Success(new AuthenticationTicket(claimsPrincipal, AuthenticationSchemeNames.BearerToken));
