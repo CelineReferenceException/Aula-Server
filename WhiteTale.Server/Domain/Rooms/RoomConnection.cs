@@ -1,4 +1,6 @@
-﻿namespace WhiteTale.Server.Domain.Rooms;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace WhiteTale.Server.Domain.Rooms;
 
 internal sealed class RoomConnection : DefaultDomainEntity
 {
@@ -10,11 +12,16 @@ internal sealed class RoomConnection : DefaultDomainEntity
 
 	internal UInt64 SourceRoomId { get; private init; }
 
-	internal Room SourceRoom { get; private init; }
+
+	// Navigation property, values are set through reflection.
+	[SuppressMessage("ReSharper", "UnassignedGetOnlyAutoProperty")]
+	internal Room SourceRoom { get; }
 
 	internal UInt64 TargetRoomId { get; private init; }
 
-	internal Room TargetRoom { get; private init; }
+	// Navigation property, values are set through reflection.
+	[SuppressMessage("ReSharper", "UnassignedGetOnlyAutoProperty")]
+	internal Room TargetRoom { get; }
 
 	internal static RoomConnection Create(UInt64 id, UInt64 sourceRoomId, UInt64 targetRoomId)
 	{
