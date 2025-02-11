@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
@@ -23,25 +22,19 @@ internal sealed class ConfirmEmailEmailSender
 		_applicationName = applicationOptions.Value.Name;
 	}
 
-	internal async Task SendEmailAsync(User user, HttpRequest httpRequest)
+	internal async Task SendEmailAsync(User user)
 	{
 		if (user.Email is null)
 		{
 			throw new ArgumentException("The user email address cannot be null.", nameof(user));
 		}
 
-		var email = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(user.Email));
 		var confirmationToken = _userManager.GenerateEmailConfirmationToken(user);
 		confirmationToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));
-		var confirmationUrl =
-			$"{httpRequest.GetUrl()}?" +
-			$"{ConfirmEmail.EmailQueryParameter}={email}&" +
-			$"{ConfirmEmail.TokenQueryParameter}={confirmationToken}";
-
 		var content =
 			$"""
 			 <p>Hello {user.UserName}, Welcome to {_applicationName}!</p>
-			 <p>To complete your registration and verify your email address, you can <a href='{confirmationUrl}'>click here</a>.
+			 <p>Here's your email confirmation token: <code>{confirmationToken}</code>
 			 <p>If you didn’t sign up for {_applicationName}, you can ignore this email.</p>
 			 """;
 		await _emailSender.SendEmailAsync(user.Email!, "Confirm your email", content);

@@ -24,7 +24,6 @@ internal sealed class Register : IEndpoint
 		[FromServices] UserManager userManager,
 		[FromServices] PasswordHasher<User> passwordHasher,
 		[FromServices] IOptions<IdentityFeatureOptions> featureOptions,
-		HttpRequest httpRequest,
 		[FromServices] ConfirmEmailEmailSender confirmEmailEmailSender,
 		[FromServices] ResetPasswordEmailSender resetPasswordEmailSender)
 	{
@@ -57,7 +56,7 @@ internal sealed class Register : IEndpoint
 			});
 		}
 
-		await confirmEmailEmailSender.SendEmailAsync(newUser, httpRequest);
+		await confirmEmailEmailSender.SendEmailAsync(newUser);
 		return TypedResults.NoContent();
 	}
 }

@@ -25,7 +25,6 @@ internal sealed class ConfirmEmail : IEndpoint
 		[FromQuery(Name = EmailQueryParameter)] String email,
 		[FromQuery(Name = TokenQueryParameter)] String? token,
 		[FromServices] UserManager userManager,
-		HttpRequest httpRequest,
 		[FromServices] ConfirmEmailEmailSender confirmEmailEmailSender,
 		[FromServices] IOptions<IdentityFeatureOptions> featureOptions)
 	{
@@ -46,7 +45,7 @@ internal sealed class ConfirmEmail : IEndpoint
 
 		if (token is null)
 		{
-			await confirmEmailEmailSender.SendEmailAsync(user, httpRequest);
+			await confirmEmailEmailSender.SendEmailAsync(user);
 			return RedirectOrSendNoContent(redirectUri);
 		}
 
