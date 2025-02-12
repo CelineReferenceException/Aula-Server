@@ -36,9 +36,9 @@ internal sealed record MessageData
 	public required MessageTarget TargetType { get; init; }
 
 	/// <summary>
-	///     The ID of the message's main target.
+	///     The ID of the message's room.
 	/// </summary>
-	public required UInt64 TargetId { get; init; }
+	public required UInt64 RoomId { get; init; }
 
 	/// <summary>
 	///     The text content of the message.

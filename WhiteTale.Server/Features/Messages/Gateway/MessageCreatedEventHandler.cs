@@ -34,7 +34,7 @@ internal sealed class MessageCreatedEventHandler : INotificationHandler<MessageC
 				AuthorType = message.AuthorType,
 				AuthorId = message.AuthorId,
 				TargetType = message.TargetType,
-				TargetId = message.TargetId,
+				RoomId = message.RoomId,
 				Content = message.Content,
 				JoinData = message.JoinData is not null
 					? new MessageUserJoinData
@@ -79,7 +79,7 @@ internal sealed class MessageCreatedEventHandler : INotificationHandler<MessageC
 
 			var user = sessionUsers[session.UserId];
 			if ((user.CurrentRoomId is null ||
-			     (user.CurrentRoomId != message.TargetId && message.TargetType is not MessageTarget.AllRooms)) &&
+			     (user.CurrentRoomId != message.RoomId && message.TargetType is not MessageTarget.AllRooms)) &&
 			    !user.Permissions.HasFlag(Permissions.Administrator))
 			{
 				continue;

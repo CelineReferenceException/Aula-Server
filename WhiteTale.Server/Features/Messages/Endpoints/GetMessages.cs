@@ -63,7 +63,7 @@ internal sealed class GetMessages : IEndpoint
 
 		var messagesQuery = dbContext.Messages
 			.AsNoTracking()
-			.Where(m => !m.IsRemoved && (m.TargetId == roomId || m.TargetType == MessageTarget.AllRooms))
+			.Where(m => !m.IsRemoved && (m.RoomId == roomId || m.TargetType == MessageTarget.AllRooms))
 			.OrderByDescending(m => m.CreationTime)
 			.Select(m => new
 			{
@@ -73,7 +73,7 @@ internal sealed class GetMessages : IEndpoint
 				m.AuthorType,
 				m.AuthorId,
 				m.TargetType,
-				m.TargetId,
+				m.RoomId,
 				m.Content,
 				m.JoinData,
 				m.LeaveData,
@@ -85,7 +85,7 @@ internal sealed class GetMessages : IEndpoint
 		{
 			var target = await dbContext.Messages
 				.AsNoTracking()
-				.Where(m => m.Id == beforeId && !m.IsRemoved && (m.TargetId == roomId || m.TargetType == MessageTarget.AllRooms))
+				.Where(m => m.Id == beforeId && !m.IsRemoved && (m.RoomId == roomId || m.TargetType == MessageTarget.AllRooms))
 				.Select(m => new
 				{
 					m.CreationTime,
@@ -103,7 +103,7 @@ internal sealed class GetMessages : IEndpoint
 		{
 			var target = await dbContext.Messages
 				.AsNoTracking()
-				.Where(m => m.Id == afterId && !m.IsRemoved && (m.TargetId == roomId || m.TargetType == MessageTarget.AllRooms))
+				.Where(m => m.Id == afterId && !m.IsRemoved && (m.RoomId == roomId || m.TargetType == MessageTarget.AllRooms))
 				.Select(m => new
 				{
 					m.CreationTime,
@@ -126,7 +126,7 @@ internal sealed class GetMessages : IEndpoint
 			AuthorType = m.AuthorType,
 			AuthorId = m.AuthorId,
 			TargetType = m.TargetType,
-			TargetId = m.TargetId,
+			RoomId = m.RoomId,
 			Content = m.Content,
 			JoinData = m.JoinData is not null
 				? new MessageUserJoinData

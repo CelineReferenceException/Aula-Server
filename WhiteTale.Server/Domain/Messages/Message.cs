@@ -27,7 +27,7 @@ internal sealed class Message : DefaultDomainEntity
 
 	internal MessageTarget TargetType { get; private init; }
 
-	internal UInt64 TargetId { get; private init; }
+	internal UInt64 RoomId { get; private init; }
 
 	internal String? Content { get; private init; }
 
@@ -49,7 +49,7 @@ internal sealed class Message : DefaultDomainEntity
 		String? content,
 		MessageUserJoin? joinData,
 		MessageUserLeave? leaveData,
-		UInt64 targetId)
+		UInt64 roomId)
 	{
 		var message = new Message
 		{
@@ -59,7 +59,7 @@ internal sealed class Message : DefaultDomainEntity
 			AuthorType = authorType,
 			AuthorId = authorId,
 			TargetType = target,
-			TargetId = targetId,
+			RoomId = roomId,
 			Content = content,
 			JoinData = joinData,
 			LeaveData = leaveData,

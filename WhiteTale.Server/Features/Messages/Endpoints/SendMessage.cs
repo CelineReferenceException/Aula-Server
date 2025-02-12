@@ -88,7 +88,7 @@ internal sealed class SendMessage : IEndpoint
 			AuthorType = message.AuthorType,
 			AuthorId = message.AuthorId,
 			TargetType = message.TargetType,
-			TargetId = message.TargetId,
+			RoomId = message.RoomId,
 			Content = message.Content,
 			CreationTime = message.CreationTime,
 		});
