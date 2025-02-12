@@ -56,22 +56,7 @@ internal sealed class SendMessage : IEndpoint
 		}
 
 		var messageId = snowflakeGenerator.NewSnowflake();
-
-		var allowedFlags = body.Type switch
-		{
-			MessageType.Standard => Message.StandardTypeAllowedFlags,
-			MessageType.UserJoin => (MessageFlags)0,
-			MessageType.UserLeave => (MessageFlags)0,
-			_ => throw new UnreachableException(),
-		};
 		var flags = body.Flags ?? 0;
-		if (flags is not 0)
-		{
-			flags = flags
-				.GetFlags()
-				.Where(flag => allowedFlags.HasFlag(flag))
-				.Aggregate((x, y) => x | y);
-		}
 
 		var message = Message.Create(messageId, body.Type, flags, MessageAuthor.User, user.Id, body.Target ?? MessageTarget.Room,
 			body.Content,

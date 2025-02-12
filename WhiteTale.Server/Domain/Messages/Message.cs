@@ -51,6 +51,19 @@ internal sealed class Message : DefaultDomainEntity
 		MessageUserLeave? leaveData,
 		UInt64 roomId)
 	{
+		var allowedFlags = type switch
+		{
+			MessageType.Standard => StandardTypeAllowedFlags,
+			MessageType.UserJoin => (MessageFlags)0,
+			MessageType.UserLeave => (MessageFlags)0,
+			_ => throw new InvalidOperationException($"Invalid {nameof(MessageType)} value: '{type}')"),
+		};
+
+		flags = flags
+			.GetFlags()
+			.Where(flag => allowedFlags.HasFlag(flag))
+			.Aggregate((x, y) => x | y);
+
 		var message = new Message
 		{
 			Id = id,
