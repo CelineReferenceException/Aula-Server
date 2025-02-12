@@ -34,7 +34,7 @@ internal sealed class TokenProvider
 		idBase64 = idBase64[..idBase64BytesWritten];
 		stampBase64 = stampBase64[..stampBase64BytesWritten];
 
-		return String.Create(idBase64.Length + 1 + stampBase64.Length,
+		var token = String.Create(idBase64.Length + 1 + stampBase64.Length,
 			new Base64TokenSegments
 			{
 				Id = idBase64,
@@ -54,9 +54,10 @@ internal sealed class TokenProvider
 				{
 					span[position] = (Char)segments.SecurityStamp[i];
 				}
-
-				ArrayPool<Byte>.Shared.Return(buffer);
 			});
+
+		ArrayPool<Byte>.Shared.Return(buffer);
+		return token;
 	}
 
 	internal String CreateToken(User user)
