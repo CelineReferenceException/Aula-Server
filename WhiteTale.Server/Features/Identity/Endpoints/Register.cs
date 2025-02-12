@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Options;
 
 namespace WhiteTale.Server.Features.Identity.Endpoints;
 
@@ -22,6 +23,7 @@ internal sealed class Register : IEndpoint
 		[FromServices] SnowflakeGenerator snowflakeGenerator,
 		[FromServices] UserManager userManager,
 		[FromServices] PasswordHasher<User> passwordHasher,
+		[FromServices] IOptions<IdentityFeatureOptions> featureOptions,
 		[FromServices] ConfirmEmailEmailSender confirmEmailEmailSender,
 		[FromServices] ResetPasswordEmailSender resetPasswordEmailSender)
 	{
@@ -39,7 +41,8 @@ internal sealed class Register : IEndpoint
 			return TypedResults.NoContent();
 		}
 
-		var newUser = User.Create(snowflakeGenerator.NewSnowflake(), body.UserName, body.Email, body.DisplayName, UserType.Standard, 0);
+		var newUser = User.Create(snowflakeGenerator.NewSnowflake(), body.UserName, body.Email, body.DisplayName, UserType.Standard,
+			featureOptions.Value.DefaultPermissions);
 		newUser.PasswordHash = passwordHasher.HashPassword(newUser, body.Password);
 
 		var registerResult = await userManager.RegisterAsync(newUser);

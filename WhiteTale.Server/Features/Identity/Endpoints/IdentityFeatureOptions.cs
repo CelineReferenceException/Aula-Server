@@ -16,4 +16,9 @@ internal sealed class IdentityFeatureOptions
 	///     The Uri where users should reset their password, should be a trusted origin.
 	/// </summary>
 	public Uri? ResetPasswordRedirectUri { get; set; }
+
+	/// <summary>
+	///     The default permissions to assign to users after registration.
+	/// </summary>
+	public Permissions DefaultPermissions { get; set; }
 }
