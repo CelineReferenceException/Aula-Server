@@ -8,7 +8,6 @@ internal sealed class SendMessageRequestBodyValidator : AbstractValidator<SendMe
 	{
 		_ = RuleFor(x => x.Type).IsInEnum();
 		_ = RuleFor(x => x.Flags).IsInEnum();
-		_ = RuleFor(x => x.Target).IsInEnum();
 
 		_ = When(x => x.Type is MessageType.Standard, () =>
 		{

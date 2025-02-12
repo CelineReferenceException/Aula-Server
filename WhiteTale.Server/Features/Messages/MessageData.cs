@@ -31,11 +31,6 @@ internal sealed record MessageData
 	public UInt64? AuthorId { get; init; }
 
 	/// <summary>
-	///     Who or what the message targets.
-	/// </summary>
-	public required MessageTarget TargetType { get; init; }
-
-	/// <summary>
 	///     The ID of the message's room.
 	/// </summary>
 	public required UInt64 RoomId { get; init; }

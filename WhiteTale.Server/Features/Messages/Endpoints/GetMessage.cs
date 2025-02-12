@@ -46,7 +46,7 @@ internal sealed class GetMessage : IEndpoint
 
 		var message = await dbContext.Messages
 			.AsNoTracking()
-			.Where(m => m.Id == messageId && (m.RoomId == roomId || m.TargetType == MessageTarget.AllRooms) && !m.IsRemoved)
+			.Where(m => m.Id == messageId && m.RoomId == roomId && !m.IsRemoved)
 			.Select(m => new
 			{
 				m.Id,
@@ -54,7 +54,6 @@ internal sealed class GetMessage : IEndpoint
 				m.Flags,
 				m.AuthorType,
 				m.AuthorId,
-				m.TargetType,
 				m.RoomId,
 				m.Content,
 				m.JoinData,
@@ -74,7 +73,6 @@ internal sealed class GetMessage : IEndpoint
 			Flags = message.Flags,
 			AuthorType = message.AuthorType,
 			AuthorId = message.AuthorId,
-			TargetType = message.TargetType,
 			RoomId = message.RoomId,
 			Content = message.Content,
 			JoinData = message.JoinData is not null

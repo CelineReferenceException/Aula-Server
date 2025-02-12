@@ -188,9 +188,6 @@ internal sealed class ApplicationDbContext : DbContext
 		_ = messageModel.Property(x => x.AuthorId)
 			.IsRequired(false);
 
-		_ = messageModel.Property(x => x.TargetType)
-			.IsRequired();
-
 		_ = messageModel.Property(x => x.RoomId)
 			.IsRequired();
 

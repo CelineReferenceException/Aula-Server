@@ -25,8 +25,6 @@ internal sealed class Message : DefaultDomainEntity
 
 	internal UInt64? AuthorId { get; private init; }
 
-	internal MessageTarget TargetType { get; private init; }
-
 	internal UInt64 RoomId { get; private init; }
 
 	internal String? Content { get; private init; }
@@ -45,7 +43,6 @@ internal sealed class Message : DefaultDomainEntity
 		MessageFlags flags,
 		MessageAuthor authorType,
 		UInt64? authorId,
-		MessageTarget target,
 		String? content,
 		MessageUserJoin? joinData,
 		MessageUserLeave? leaveData,
@@ -71,7 +68,6 @@ internal sealed class Message : DefaultDomainEntity
 			Flags = flags,
 			AuthorType = authorType,
 			AuthorId = authorId,
-			TargetType = target,
 			RoomId = roomId,
 			Content = content,
 			JoinData = joinData,

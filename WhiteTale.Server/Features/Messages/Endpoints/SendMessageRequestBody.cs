@@ -16,11 +16,6 @@ internal sealed record SendMessageRequestBody
 	public MessageFlags? Flags { get; init; }
 
 	/// <summary>
-	///     Who or what the message targets.
-	/// </summary>
-	public MessageTarget? Target { get; init; }
-
-	/// <summary>
 	///     The text content of the message. Required for <see cref="MessageType.Standard" /> messages.
 	/// </summary>
 	public String? Content { get; init; }
