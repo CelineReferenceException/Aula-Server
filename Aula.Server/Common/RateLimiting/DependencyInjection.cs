@@ -43,7 +43,6 @@ internal static class DependencyInjection
 					{
 						PermitLimit = permitLimit,
 						Window = window,
-						AutoReplenishment = true,
 					});
 			});
 
