@@ -1,0 +1,16 @@
+﻿namespace Aula.Server.Common.Authorization;
+
+internal static class DependencyInjection
+{
+	internal static IServiceCollection AddApplicationAuthorization(this IServiceCollection services)
+	{
+		_ = services.AddAuthorizationBuilder()
+			.AddAuthenticatedUserPolicy()
+			.AddBanPolicy()
+			.AddUserTypePolicy()
+			.AddConfirmedEmailPolicy()
+			.AddPermissionsPolicy();
+
+		return services;
+	}
+}

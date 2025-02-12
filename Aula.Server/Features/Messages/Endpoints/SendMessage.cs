@@ -1,0 +1,85 @@
+﻿using System.Diagnostics;
+using Aula.Server.Common;
+using Aula.Server.Common.Endpoints;
+using Aula.Server.Common.Identity;
+using Aula.Server.Common.Persistence;
+using Aula.Server.Common.RateLimiting;
+using Aula.Server.Domain.Messages;
+using Aula.Server.Domain.Users;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
+
+namespace Aula.Server.Features.Messages.Endpoints;
+
+internal sealed class SendMessage : IEndpoint
+{
+	public void Build(IEndpointRouteBuilder route)
+	{
+		_ = route.MapPost("rooms/{roomId}/messages", HandleAsync)
+			.RequireRateLimiting(RateLimitPolicyNames.Global)
+			.RequireAuthenticatedUser()
+			.RequirePermissions(Permissions.SendMessages)
+			.DenyBannedUsers()
+			.HasApiVersion(1);
+	}
+
+	private static async Task<Results<Created<MessageData>, ProblemHttpResult, InternalServerError>> HandleAsync(
+		[FromRoute] UInt64 roomId,
+		[FromBody] SendMessageRequestBody body,
+		[FromServices] SendMessageRequestBodyValidator bodyValidator,
+		HttpContext httpContext,
+		[FromServices] UserManager userManager,
+		[FromServices] ApplicationDbContext dbContext,
+		[FromServices] SnowflakeGenerator snowflakeGenerator)
+	{
+		var validation = await bodyValidator.ValidateAsync(body);
+		if (!validation.IsValid)
+		{
+			var problemDetails = validation.Errors.ToProblemDetails();
+			return TypedResults.Problem(problemDetails);
+		}
+
+		var roomExists = await dbContext.Rooms
+			.AsNoTracking()
+			.AnyAsync(r => r.Id == roomId && !r.IsRemoved);
+		if (!roomExists)
+		{
+			return TypedResults.Problem(ProblemDetailsDefaults.RoomDoesNotExist);
+		}
+
+		var user = await userManager.GetUserAsync(httpContext.User);
+		if (user is null)
+		{
+			return TypedResults.InternalServerError();
+		}
+
+		if (user.CurrentRoomId != roomId)
+		{
+			return TypedResults.Problem(ProblemDetailsDefaults.UserIsNotInTheRoom);
+		}
+
+		var messageId = snowflakeGenerator.NewSnowflake();
+		var flags = body.Flags ?? 0;
+
+		var message = Message.Create(messageId, body.Type, flags, MessageAuthor.User, user.Id, body.Content, null, null, roomId);
+
+		_ = dbContext.Messages.Add(message);
+		_ = await dbContext.SaveChangesAsync();
+
+		return TypedResults.Created($"{httpContext.Request.GetUrl()}/{messageId}", new MessageData
+		{
+			Id = message.Id,
+			Type = message.Type,
+			Flags = message.Flags,
+			AuthorType = message.AuthorType,
+			AuthorId = message.AuthorId,
+			RoomId = message.RoomId,
+			Content = message.Content,
+			CreationTime = message.CreationTime,
+		});
+	}
+}

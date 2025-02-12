@@ -1,0 +1,18 @@
+﻿using FluentValidation;
+
+namespace Aula.Server.Domain.Rooms;
+
+internal sealed class RoomValidator : AbstractValidator<Room>
+{
+	public RoomValidator()
+	{
+		_ = RuleFor(x => x.Name)
+			.NotEmpty()
+			.MinimumLength(Room.NameMinimumLength)
+			.MaximumLength(Room.NameMaximumLength);
+
+		_ = RuleFor(x => x.Description)
+			.MinimumLength(Room.DescriptionMinimumLength)
+			.MaximumLength(Room.DescriptionMaximumLength);
+	}
+}
