@@ -49,7 +49,8 @@ internal sealed class RemoveMessage : IEndpoint
 		}
 
 		if (message.AuthorId != user.Id &&
-		    !user.Permissions.HasAnyFlag(Permissions.Administrator | Permissions.ManageMessages))
+		    !(user.Permissions.HasFlag(Permissions.Administrator) ||
+		      user.Permissions.HasFlag(Permissions.SendMessages)))
 		{
 			return TypedResults.Forbid();
 		}
