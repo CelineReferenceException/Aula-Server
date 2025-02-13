@@ -1,9 +1,9 @@
-﻿namespace Aula.Server.Features.Rooms;
+﻿namespace Aula.Server.Features.Rooms.Gateway;
 
 /// <summary>
 ///     Represents a connection between two rooms.
 /// </summary>
-internal sealed record RoomConnectionData
+internal sealed record RoomConnectionEventData
 {
 	/// <summary>
 	///     The source room from where users come from.

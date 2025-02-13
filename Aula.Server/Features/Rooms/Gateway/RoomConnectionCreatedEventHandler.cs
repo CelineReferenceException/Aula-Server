@@ -19,11 +19,11 @@ internal sealed class RoomConnectionCreatedEventHandler : INotificationHandler<R
 	public Task Handle(RoomConnectionCreatedEvent notification, CancellationToken cancellationToken)
 	{
 		var roomConnection = notification.Connection;
-		var payload = new GatewayPayload<RoomConnectionData>
+		var payload = new GatewayPayload<RoomConnectionEventData>
 		{
 			Operation = OperationType.Dispatch,
 			Event = EventType.RoomConnectionCreated,
-			Data = new RoomConnectionData
+			Data = new RoomConnectionEventData
 			{
 				SourceRoomId = roomConnection.SourceRoomId,
 				TargetRoomId = roomConnection.TargetRoomId,
