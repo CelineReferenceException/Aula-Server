@@ -3,7 +3,7 @@ using System.Buffers.Text;
 using System.Diagnostics.CodeAnalysis;
 using Encoding = System.Text.Encoding;
 
-namespace Aula.Server.Common.Identity;
+namespace Aula.Server.Common;
 
 internal sealed class TokenProvider
 {
