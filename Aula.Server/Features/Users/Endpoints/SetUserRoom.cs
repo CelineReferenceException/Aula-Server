@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Aula.Server.Features.Users.Endpoints;
 
-internal sealed class SetCurrentRoom : IEndpoint
+internal sealed class SetUserRoom : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
@@ -26,7 +26,7 @@ internal sealed class SetCurrentRoom : IEndpoint
 
 	private static async Task<Results<NoContent, ProblemHttpResult, InternalServerError>> HandleAsync(
 		[FromRoute] UInt64 userId,
-		[FromBody] SetCurrentRoomRequestBody body,
+		[FromBody] SetUserRoomRequestBody body,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] UserManager userManager,
 		HttpContext httpContext)

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Aula.Server.Features.Users.Endpoints;
 
-internal sealed class ModifyOwnUser : IEndpoint
+internal sealed class ModifyCurrentUser : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder builder)
 	{
@@ -23,12 +23,12 @@ internal sealed class ModifyOwnUser : IEndpoint
 	}
 
 	private static async Task<Results<Ok<UserData>, ProblemHttpResult, InternalServerError>> HandleAsync(
-		[FromBody] ModifyOwnUserRequestBody body,
+		[FromBody] ModifyCurrentUserRequestBody body,
 		HttpContext httpContext,
 		[FromServices] UserManager userManager,
-		[FromServices] ModifyOwnUserRequestBodyValidator bodyValidator,
+		[FromServices] ModifyCurrentUserRequestBodyValidator bodyValidator,
 		[FromServices] ApplicationDbContext dbContext,
-		[FromServices] ILogger<ModifyOwnUser> logger)
+		[FromServices] ILogger<ModifyCurrentUser> logger)
 	{
 		var bodyValidation = await bodyValidator.ValidateAsync(body);
 		if (!bodyValidation.IsValid)

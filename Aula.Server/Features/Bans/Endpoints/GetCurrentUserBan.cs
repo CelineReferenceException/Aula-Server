@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Aula.Server.Features.Bans.Endpoints;
 
-internal sealed class ImBanned : IEndpoint
+internal sealed class GetCurrentUserBan : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
@@ -21,7 +21,7 @@ internal sealed class ImBanned : IEndpoint
 			.HasApiVersion(1);
 	}
 
-	private static async Task<Results<Ok<ImBannedResponse>, InternalServerError>> HandleAsync(
+	private static async Task<Results<Ok<GetCurrentUserBanResponse>, InternalServerError>> HandleAsync(
 		HttpContext httpContext,
 		[FromServices] UserManager userManager,
 		[FromServices] ApplicationDbContext dbContext)
@@ -36,7 +36,7 @@ internal sealed class ImBanned : IEndpoint
 			.AsNoTracking()
 			.AnyAsync(x => x.TargetId == userId);
 
-		return TypedResults.Ok(new ImBannedResponse
+		return TypedResults.Ok(new GetCurrentUserBanResponse
 		{
 			Banned = banned,
 		});

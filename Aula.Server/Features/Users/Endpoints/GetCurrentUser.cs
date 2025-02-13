@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Routing;
 
 namespace Aula.Server.Features.Users.Endpoints;
 
-internal sealed class GetOwnUser : IEndpoint
+internal sealed class GetCurrentUser : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
