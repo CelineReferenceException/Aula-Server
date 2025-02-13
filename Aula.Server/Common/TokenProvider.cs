@@ -1,7 +1,6 @@
 ﻿using System.Buffers;
 using System.Buffers.Text;
 using System.Diagnostics.CodeAnalysis;
-using Aula.Server.Domain.Users;
 using Encoding = System.Text.Encoding;
 
 namespace Aula.Server.Common.Identity;

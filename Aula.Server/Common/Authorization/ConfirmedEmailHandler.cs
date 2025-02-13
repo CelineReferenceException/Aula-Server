@@ -1,6 +1,4 @@
-﻿using Aula.Server.Common.Identity;
-using Aula.Server.Domain.Users;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 
 namespace Aula.Server.Common.Authorization;

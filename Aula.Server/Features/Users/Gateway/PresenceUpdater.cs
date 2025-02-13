@@ -2,10 +2,6 @@
 using System.Diagnostics;
 using System.Net.WebSockets;
 using System.Text.Json;
-using Aula.Server.Common.Gateway;
-using Aula.Server.Common.Persistence;
-using Aula.Server.Common.Resilience;
-using Aula.Server.Domain.Users;
 using MediatR;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +23,8 @@ internal sealed class PresenceUpdater :
 	public PresenceUpdater(
 		IOptions<JsonOptions> jsonOptions,
 		ApplicationDbContext dbContext,
-		[FromKeyedServices(ResiliencePipelineNames.RetryOnDbConcurrencyProblem)] ResiliencePipeline retryOnDbConcurrencyProblem)
+		[FromKeyedServices(ResiliencePipelineNames.RetryOnDbConcurrencyProblem)]
+		ResiliencePipeline retryOnDbConcurrencyProblem)
 	{
 		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
 		_dbContext = dbContext;

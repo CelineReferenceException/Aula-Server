@@ -1,9 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Aula.Server.Domain;
-using Aula.Server.Domain.Bans;
-using Aula.Server.Domain.Messages;
-using Aula.Server.Domain.Rooms;
-using Aula.Server.Domain.Users;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

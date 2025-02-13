@@ -1,6 +1,4 @@
 ﻿using System.Text.Json;
-using Aula.Server.Common.Gateway;
-using Aula.Server.Domain.Users;
 using MediatR;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;

@@ -1,7 +1,4 @@
-﻿using Aula.Server.Common.Endpoints;
-using Aula.Server.Common.Identity;
-using Aula.Server.Common.RateLimiting;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;

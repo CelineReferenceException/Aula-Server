@@ -1,7 +1,4 @@
-﻿using Aula.Server.Common.Endpoints;
-using Aula.Server.Common.Gateway;
-using Aula.Server.Common.Identity;
-using Aula.Server.Features.Users.Gateway;
+﻿using Aula.Server.Features.Users.Gateway;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;

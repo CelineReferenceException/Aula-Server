@@ -1,4 +1,3 @@
-using Aula.Server.Common.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 

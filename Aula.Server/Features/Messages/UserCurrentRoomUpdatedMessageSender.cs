@@ -1,8 +1,4 @@
-﻿using Aula.Server.Common;
-using Aula.Server.Common.Persistence;
-using Aula.Server.Domain.Messages;
-using Aula.Server.Domain.Users;
-using MediatR;
+﻿using MediatR;
 
 namespace Aula.Server.Features.Messages;
 

@@ -1,5 +1,4 @@
-﻿using Aula.Server.Domain.Bans;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace Aula.Server.Features.Bans.Endpoints;
 

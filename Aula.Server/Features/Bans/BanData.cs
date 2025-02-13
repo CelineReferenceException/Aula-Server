@@ -1,6 +1,4 @@
-﻿using Aula.Server.Domain.Bans;
-
-namespace Aula.Server.Features.Bans;
+﻿namespace Aula.Server.Features.Bans;
 
 internal sealed record BanData
 {

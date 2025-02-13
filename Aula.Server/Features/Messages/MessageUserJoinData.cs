@@ -1,6 +1,4 @@
-﻿using Aula.Server.Domain.Messages;
-
-namespace Aula.Server.Features.Messages;
+﻿namespace Aula.Server.Features.Messages;
 
 /// <summary>
 ///     Holds data required by <see cref="MessageType.UserJoin" /> messages.

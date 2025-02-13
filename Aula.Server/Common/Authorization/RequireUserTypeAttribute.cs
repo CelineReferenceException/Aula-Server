@@ -1,5 +1,3 @@
-using Aula.Server.Domain.Users;
-
 namespace Aula.Server.Common.Authorization;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]

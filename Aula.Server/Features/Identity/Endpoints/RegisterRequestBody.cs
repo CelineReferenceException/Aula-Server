@@ -5,7 +5,6 @@
 /// </summary>
 internal sealed record RegisterRequestBody
 {
-
 	/// <summary>
 	///     The display name for this user. Defaults to the <see cref="UserName">userName</see>.
 	/// </summary>

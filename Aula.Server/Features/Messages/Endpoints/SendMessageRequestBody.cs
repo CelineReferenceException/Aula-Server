@@ -1,6 +1,4 @@
-﻿using Aula.Server.Domain.Messages;
-
-namespace Aula.Server.Features.Messages.Endpoints;
+﻿namespace Aula.Server.Features.Messages.Endpoints;
 
 /// <summary>
 ///     Holds the data required to send a message.

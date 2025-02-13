@@ -1,5 +1,4 @@
-﻿using Aula.Server.Domain.Users;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace Aula.Server.Features.Identity.Endpoints;
 

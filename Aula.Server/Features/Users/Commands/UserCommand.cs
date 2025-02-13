@@ -1,6 +1,4 @@
-﻿using Aula.Server.Common.CommandLine;
-
-namespace Aula.Server.Features.Users.Commands;
+﻿namespace Aula.Server.Features.Users.Commands;
 
 internal sealed class UserCommand : Command
 {

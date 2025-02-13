@@ -1,9 +1,4 @@
-﻿using Aula.Server.Common.Authentication;
-using Aula.Server.Common.Endpoints;
-using Aula.Server.Common.Identity;
-using Aula.Server.Common.RateLimiting;
-using Aula.Server.Domain.Users;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +8,6 @@ namespace Aula.Server.Features.Identity.Endpoints;
 
 internal sealed class ResetPassword : IEndpoint
 {
-
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapPost("identity/reset-password", HandleAsync)
@@ -51,6 +45,7 @@ internal sealed class ResetPassword : IEndpoint
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.InvalidResetPasswordToken);
 		}
+
 		if (!passwordReset.Succeeded)
 		{
 			return TypedResults.Problem(new ProblemDetails
