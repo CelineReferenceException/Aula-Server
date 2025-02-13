@@ -9,8 +9,8 @@ internal sealed class MessageValidator : AbstractValidator<Message>
 		_ = RuleFor(x => x.Type).IsInEnum();
 		_ = RuleFor(x => x.AuthorType).IsInEnum();
 
-		_ = When(x => x.AuthorType is MessageAuthor.User, () => RuleFor(x => x.AuthorId).NotNull());
-		_ = When(x => x.AuthorType is MessageAuthor.System, () => RuleFor(x => x.AuthorId).Null());
+		_ = When(x => x.AuthorType is MessageAuthorType.User, () => RuleFor(x => x.AuthorId).NotNull());
+		_ = When(x => x.AuthorType is MessageAuthorType.System, () => RuleFor(x => x.AuthorId).Null());
 
 		_ = When(x => x.Type is MessageType.Standard, () =>
 		{

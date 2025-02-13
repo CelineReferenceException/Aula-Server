@@ -57,7 +57,7 @@ internal sealed class SendMessage : IEndpoint
 		var messageId = snowflakeGenerator.NewSnowflake();
 		var flags = body.Flags ?? 0;
 
-		var message = Message.Create(messageId, body.Type, flags, MessageAuthor.User, user.Id, body.Content, null, null, roomId);
+		var message = Message.Create(messageId, body.Type, flags, MessageAuthorType.User, user.Id, body.Content, null, null, roomId);
 
 		_ = dbContext.Messages.Add(message);
 		_ = await dbContext.SaveChangesAsync();

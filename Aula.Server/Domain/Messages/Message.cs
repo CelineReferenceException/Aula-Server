@@ -21,7 +21,7 @@ internal sealed class Message : DefaultDomainEntity
 
 	internal MessageFlags Flags { get; private init; }
 
-	internal MessageAuthor AuthorType { get; private init; }
+	internal MessageAuthorType AuthorType { get; private init; }
 
 	internal UInt64? AuthorId { get; private init; }
 
@@ -41,7 +41,7 @@ internal sealed class Message : DefaultDomainEntity
 		UInt64 id,
 		MessageType type,
 		MessageFlags flags,
-		MessageAuthor authorType,
+		MessageAuthorType authorType,
 		UInt64? authorId,
 		String? content,
 		MessageUserJoin? joinData,

@@ -20,7 +20,7 @@ internal sealed class UserCurrentRoomUpdatedMessageSender : INotificationHandler
 		if (notification.PreviousRoomId is not null)
 		{
 			var leaveMessageId = _snowflakeGenerator.NewSnowflake();
-			var leaveMessage = Message.Create(leaveMessageId, MessageType.UserLeave, 0, MessageAuthor.System, null, null, null,
+			var leaveMessage = Message.Create(leaveMessageId, MessageType.UserLeave, 0, MessageAuthorType.System, null, null, null,
 				new MessageUserLeave
 				{
 					MessageId = leaveMessageId,
@@ -34,7 +34,7 @@ internal sealed class UserCurrentRoomUpdatedMessageSender : INotificationHandler
 		if (notification.CurrentRoomId is not null)
 		{
 			var joinMessageId = _snowflakeGenerator.NewSnowflake();
-			var joinMessage = Message.Create(joinMessageId, MessageType.UserJoin, 0, MessageAuthor.System, null, null,
+			var joinMessage = Message.Create(joinMessageId, MessageType.UserJoin, 0, MessageAuthorType.System, null, null,
 				new MessageUserJoin
 				{
 					MessageId = joinMessageId,
