@@ -2,6 +2,6 @@
 
 internal enum MessageAuthor
 {
-	User,
-	System,
+	User = 0,
+	System = 1,
 }
