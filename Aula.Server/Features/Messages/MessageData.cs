@@ -1,6 +1,4 @@
-﻿using Aula.Server.Domain.Messages;
-
-namespace Aula.Server.Features.Messages;
+﻿namespace Aula.Server.Features.Messages;
 
 /// <summary>
 ///     Represents a message within a room.

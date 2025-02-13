@@ -1,7 +1,4 @@
-﻿using Aula.Server.Common.CommandLine;
-using Aula.Server.Common.Persistence;
-using Aula.Server.Domain.Users;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Aula.Server.Features.Users.Commands;
 

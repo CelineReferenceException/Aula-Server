@@ -1,6 +1,6 @@
 ﻿namespace Aula.Server.Features.Bans.Endpoints;
 
-internal sealed record ImBannedResponse
+internal sealed record GetCurrentUserBanResponse
 {
 	public Boolean Banned { get; init; }
 }

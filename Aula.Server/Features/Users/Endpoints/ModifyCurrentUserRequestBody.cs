@@ -3,7 +3,7 @@
 /// <summary>
 ///     Holds the data required to update the current user.
 /// </summary>
-internal sealed record ModifyOwnUserRequestBody
+internal sealed record ModifyCurrentUserRequestBody
 {
 	/// <summary>
 	///     The name of the user.

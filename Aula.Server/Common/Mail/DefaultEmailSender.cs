@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using System.Net.Mail;
-using Aula.Server.Common.BackgroundTaskQueue;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 

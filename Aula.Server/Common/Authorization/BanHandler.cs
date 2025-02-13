@@ -1,6 +1,4 @@
-﻿using Aula.Server.Common.Identity;
-using Aula.Server.Common.Persistence;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 

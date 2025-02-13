@@ -1,9 +1,4 @@
-﻿using Aula.Server.Common.Endpoints;
-using Aula.Server.Common.Identity;
-using Aula.Server.Common.Persistence;
-using Aula.Server.Common.RateLimiting;
-using Aula.Server.Domain.Users;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Aula.Server.Features.Users.Endpoints;
 
-internal sealed class SetCurrentRoom : IEndpoint
+internal sealed class SetUserRoom : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
@@ -26,7 +21,7 @@ internal sealed class SetCurrentRoom : IEndpoint
 
 	private static async Task<Results<NoContent, ProblemHttpResult, InternalServerError>> HandleAsync(
 		[FromRoute] UInt64 userId,
-		[FromBody] SetCurrentRoomRequestBody body,
+		[FromBody] SetUserRoomRequestBody body,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] UserManager userManager,
 		HttpContext httpContext)

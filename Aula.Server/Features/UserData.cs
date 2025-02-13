@@ -1,6 +1,4 @@
-﻿using Aula.Server.Domain.Users;
-
-namespace Aula.Server.Features;
+﻿namespace Aula.Server.Features;
 
 /// <summary>
 ///     Represents a user within the application.

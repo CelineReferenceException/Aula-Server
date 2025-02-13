@@ -1,9 +1,4 @@
-﻿using Aula.Server.Common.Endpoints;
-using Aula.Server.Common.Identity;
-using Aula.Server.Common.Persistence;
-using Aula.Server.Common.RateLimiting;
-using Aula.Server.Domain.Users;
-using Aula.Server.Features.Messages.Gateway;
+﻿using Aula.Server.Features.Messages.Gateway;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

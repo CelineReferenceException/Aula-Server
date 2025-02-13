@@ -1,8 +1,8 @@
 using System.Diagnostics;
+using Aula.Server.Features;
 using MartinCostello.OpenApi;
 using Microsoft.AspNetCore.Builder;
 using Scalar.AspNetCore;
-using Aula.Server.Features;
 
 var startTimestamp = Stopwatch.GetTimestamp();
 

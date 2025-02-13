@@ -1,6 +1,4 @@
-﻿using Aula.Server.Domain.Users;
-
-namespace Aula.Server.Features.Identity.Endpoints;
+﻿namespace Aula.Server.Features.Identity.Endpoints;
 
 /// <summary>
 ///     User identity related configurations.

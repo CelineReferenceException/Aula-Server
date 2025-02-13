@@ -1,6 +1,4 @@
 ﻿using System.Text;
-using Aula.Server.Common.CommandLine;
-using Aula.Server.Domain.Users;
 
 namespace Aula.Server.Features.Users.Commands;
 

@@ -1,9 +1,4 @@
 ﻿using Asp.Versioning;
-using Aula.Server.Common;
-using Aula.Server.Common.Endpoints;
-using Aula.Server.Common.Identity;
-using Aula.Server.Common.RateLimiting;
-using Aula.Server.Domain.Users;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;

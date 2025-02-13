@@ -1,6 +1,4 @@
 ﻿using System.Net.WebSockets;
-using Aula.Server.Common.Gateway;
-using Aula.Server.Domain.Users;
 using MediatR;
 
 namespace Aula.Server.Features.Identity.Gateway;

@@ -1,6 +1,4 @@
-﻿using Aula.Server.Common.Identity;
-using Aula.Server.Domain.Users;
-using Microsoft.AspNetCore.Identity.UI.Services;
+﻿using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -9,8 +7,8 @@ namespace Aula.Server.Features.Identity.Endpoints;
 internal sealed class ResetPasswordEmailSender
 {
 	private readonly IEmailSender _emailSender;
-	private readonly TokenProvider _tokenProvider;
 	private readonly Uri? _redirectUri;
+	private readonly TokenProvider _tokenProvider;
 	private readonly UserManager _userManager;
 
 	public ResetPasswordEmailSender(

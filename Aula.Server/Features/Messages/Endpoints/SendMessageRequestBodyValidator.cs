@@ -1,5 +1,4 @@
-﻿using Aula.Server.Domain.Messages;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace Aula.Server.Features.Messages.Endpoints;
 

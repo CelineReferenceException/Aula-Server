@@ -1,5 +1,4 @@
-﻿using Aula.Server.Domain.Rooms;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace Aula.Server.Features.Rooms.Endpoints;
 
