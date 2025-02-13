@@ -28,7 +28,7 @@ internal sealed record RoomData
 	/// <summary>
 	///     A collection of ids of all rooms connected with this room.
 	/// </summary>
-	public required IEnumerable<UInt64> ConnectedRoomIds { get; init; }
+	public required IReadOnlyList<UInt64> ConnectedRoomIds { get; init; }
 
 	/// <summary>
 	///     The date and time when the room was created.

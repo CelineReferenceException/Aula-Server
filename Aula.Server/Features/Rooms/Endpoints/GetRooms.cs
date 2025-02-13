@@ -45,7 +45,7 @@ internal sealed class GetRooms : IEndpoint
 				Name = r.Name,
 				Description = r.Description,
 				IsEntrance = r.IsEntrance,
-				ConnectedRoomIds = r.Connections.Select(c => c.TargetRoomId),
+				ConnectedRoomIds = r.Connections.Select(c => c.TargetRoomId).ToList(),
 				CreationTime = r.CreationTime,
 			})
 			.Take((Int32)count);
