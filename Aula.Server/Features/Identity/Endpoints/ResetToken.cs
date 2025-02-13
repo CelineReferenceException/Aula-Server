@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 
 namespace Aula.Server.Features.Identity.Endpoints;
 
@@ -33,7 +34,11 @@ internal sealed class ResetToken : IEndpoint
 			return TypedResults.Problem(problemDetails);
 		}
 
-		var user = await userManager.FindByUserNameAsync(body.UserName);
+		// We fetch the user entity so we don't modify the cached one by the UserManager
+		var user = await dbContext.Users
+			.AsTracking()
+			.Where(u => u.UserName == body.UserName && !u.IsRemoved)
+			.FirstOrDefaultAsync();
 		if (user?.Type is not UserType.Standard)
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.UserDoesNotExist);
@@ -46,7 +51,6 @@ internal sealed class ResetToken : IEndpoint
 			return TypedResults.Problem(ProblemDetailsDefaults.IncorrectPassword);
 		}
 
-		_ = dbContext.Attach(user);
 		user.UpdateSecurityStamp();
 		_ = dbContext.SaveChangesWithConcurrencyCheckBypassAsync();
 
