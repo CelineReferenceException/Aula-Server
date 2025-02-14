@@ -1,6 +1,6 @@
 ﻿namespace Aula.Server.Common.CommandLine;
 
-internal sealed class CommandParameter
+internal sealed class CommandOption
 {
 	internal const String Prefix = "-";
 

@@ -6,7 +6,7 @@ internal sealed partial class HelpCommand : Command
 {
 	private readonly CommandLineService _commandLineService;
 
-	private readonly CommandParameter _commandOption = new()
+	private readonly CommandOption _commandOption = new()
 	{
 		Name = "c",
 		Description = "Show information about a specific command.",
@@ -78,7 +78,7 @@ internal sealed partial class HelpCommand : Command
 
 		foreach (var parameter in command.Options.Select(kvp => kvp.Value))
 		{
-			var name = $"{CommandParameter.Prefix}{parameter.Name}";
+			var name = $"{CommandOption.Prefix}{parameter.Name}";
 			parameters.Options.Add(new ParameterInfo(name, parameter.Description));
 
 			if (name.Length > alignment)

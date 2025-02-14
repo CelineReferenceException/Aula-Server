@@ -67,7 +67,7 @@ internal sealed class CommandLineService
 
 			var segment = input.Span.Slice(segmentStart, segmentLength);
 
-			var startsWithParameterPrefix = segment.StartsWith(CommandParameter.Prefix);
+			var startsWithParameterPrefix = segment.StartsWith(CommandOption.Prefix);
 			if (!startsWithParameterPrefix &&
 			    command.SubCommands.Count is not 0)
 			{
@@ -76,13 +76,13 @@ internal sealed class CommandLineService
 					cancellationToken);
 			}
 
-			CommandParameter? option;
+			CommandOption? option;
 			if (startsWithParameterPrefix)
 			{
-				var optionName = segment[CommandParameter.Prefix.Length..].ToString();
+				var optionName = segment[CommandOption.Prefix.Length..].ToString();
 				if (!command.Options.TryGetValue(optionName, out option))
 				{
-					_logger.InvalidCommandParameter(optionName);
+					_logger.InvalidCommandOption(optionName);
 					return false;
 				}
 
@@ -99,15 +99,15 @@ internal sealed class CommandLineService
 
 			if (command.Options.Count is 1)
 			{
-				// If a command has no subcommands, only one parameter, and no parameter name is provided,
-				// then that parameter is automatically selected.
+				// If a command has no subcommands, only one option, and no option name is provided,
+				// then that option is automatically selected.
 				option = command.Options
 					.Select(kvp => kvp.Value)
 					.First();
 			}
 			else
 			{
-				// The command multiple parameters, and we cannot guess which select.
+				// The command multiple options, and we cannot guess which select.
 				// returns the same response for unrecognized subcommands.
 				_logger.UnknownCommand(commandName);
 				return false;

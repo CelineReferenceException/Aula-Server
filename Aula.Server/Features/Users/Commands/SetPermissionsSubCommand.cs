@@ -7,7 +7,7 @@ internal sealed class SetPermissionsSubCommand : SubCommand
 	private readonly ApplicationDbContext _dbContext;
 	private readonly ILogger<SetPermissionsSubCommand> _logger;
 
-	private readonly CommandParameter _permissionsOption = new()
+	private readonly CommandOption _permissionsOption = new()
 	{
 		Name = "p",
 		Description = "The permission flags to set.",
@@ -16,7 +16,7 @@ internal sealed class SetPermissionsSubCommand : SubCommand
 		CanOverflow = false,
 	};
 
-	private readonly CommandParameter _userIdOption = new()
+	private readonly CommandOption _userIdOption = new()
 	{
 		Name = "u",
 		Description = "The ID of the user to set the permissions for.",

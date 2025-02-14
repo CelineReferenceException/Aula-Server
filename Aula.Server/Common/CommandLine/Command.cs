@@ -3,9 +3,9 @@
 internal abstract class Command
 {
 	private readonly IServiceProvider _serviceProvider;
-	private readonly Dictionary<String, CommandParameter> _options = [];
+	private readonly Dictionary<String, CommandOption> _options = [];
 	private readonly Dictionary<String, Command> _subCommands = [];
-	private CommandParameter? _previousDefinedParameter;
+	private CommandOption? _previousDefinedOption;
 
 	private protected Command(IServiceProvider serviceProvider)
 	{
@@ -16,7 +16,7 @@ internal abstract class Command
 
 	internal abstract String Description { get; }
 
-	internal IReadOnlyDictionary<String, CommandParameter> Options => _options;
+	internal IReadOnlyDictionary<String, CommandOption> Options => _options;
 
 	internal IReadOnlyDictionary<String, Command> SubCommands => _subCommands;
 
@@ -25,39 +25,39 @@ internal abstract class Command
 		return ValueTask.CompletedTask;
 	}
 
-	private protected void AddOptions(CommandParameter parameter)
+	private protected void AddOptions(CommandOption option)
 	{
-		ArgumentNullException.ThrowIfNull(parameter, nameof(parameter));
+		ArgumentNullException.ThrowIfNull(option, nameof(option));
 
-		if (!_options.TryAdd(parameter.Name, parameter))
+		if (!_options.TryAdd(option.Name, option))
 		{
-			throw new ArgumentException($"Duplicate command option name: '{parameter.Name}'.", nameof(parameter));
+			throw new ArgumentException($"Duplicate command option name: '{option.Name}'.", nameof(option));
 		}
 
-		if (_previousDefinedParameter is null)
+		if (_previousDefinedOption is null)
 		{
 			return;
 		}
 
-		if (parameter.IsRequired &&
-		    !_previousDefinedParameter.IsRequired)
+		if (option.IsRequired &&
+		    !_previousDefinedOption.IsRequired)
 		{
 			throw new ArgumentException(
-				$"An optional option parameter cannot follow a required one. '{_previousDefinedParameter.Name}' is optional but '{parameter.Name}' is required.",
-				nameof(parameter));
+				$"An optional option parameter cannot follow a required one. '{_previousDefinedOption.Name}' is optional but '{option.Name}' is required.",
+				nameof(option));
 		}
 
-		if (_previousDefinedParameter.CanOverflow)
+		if (_previousDefinedOption.CanOverflow)
 		{
 			throw new ArgumentException(
-				$"The option '{_previousDefinedParameter.Name}' is marked for overflow, but is followed by another option.",
-				nameof(parameter));
+				$"The option '{_previousDefinedOption.Name}' is marked for overflow, but is followed by another option.",
+				nameof(option));
 		}
 
-		_previousDefinedParameter = parameter;
+		_previousDefinedOption = option;
 	}
 
-	private protected void AddOptions(params IEnumerable<CommandParameter> parameters)
+	private protected void AddOptions(params IEnumerable<CommandOption> parameters)
 	{
 		foreach (var parameter in parameters)
 		{
