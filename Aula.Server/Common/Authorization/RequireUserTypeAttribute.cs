@@ -1,5 +1,8 @@
 namespace Aula.Server.Common.Authorization;
 
+/// <summary>
+///     Indicates the allowed user types for an endpoint.
+/// </summary>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 internal sealed class RequireUserTypeAttribute : Attribute
 {

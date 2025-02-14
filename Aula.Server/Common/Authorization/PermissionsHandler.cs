@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Http;
 
 namespace Aula.Server.Common.Authorization;
 
+/// <summary>
+///     Forbid users who do not have the required permissions specified in the endpoint metadata.
+/// </summary>
 internal sealed class PermissionsHandler : AuthorizationHandler<PermissionsRequirement>
 {
 	protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionsRequirement requirement)

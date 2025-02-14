@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Aula.Server.Common.Authorization;
 
+/// <summary>
+///     Denies access banned users.
+/// </summary>
 internal sealed class BanHandler : AuthorizationHandler<BanRequirement>
 {
 	protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, BanRequirement requirement)

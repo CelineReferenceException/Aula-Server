@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Http;
 
 namespace Aula.Server.Common.Authorization;
 
+/// <summary>
+///     Denies access to users whose type is not permitted for the endpoint.
+/// </summary>
 internal sealed class UserTypeHandler : AuthorizationHandler<UserTypeRequirement>
 {
 	protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, UserTypeRequirement requirement)

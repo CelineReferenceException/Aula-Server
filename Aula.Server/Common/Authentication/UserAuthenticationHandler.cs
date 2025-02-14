@@ -5,6 +5,9 @@ using Microsoft.Extensions.Options;
 
 namespace Aula.Server.Common.Authentication;
 
+/// <summary>
+///     Authenticate clients that provide a bearer token.
+/// </summary>
 internal sealed class UserAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {
 	private readonly TokenProvider _tokenProvider;
