@@ -13,7 +13,7 @@ internal sealed class StopTyping : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapDelete("rooms/{roomId}/stop-typing", HandleAsync)
+		_ = route.MapPost("rooms/{roomId}/stop-typing", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.SendMessages)
