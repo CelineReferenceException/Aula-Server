@@ -9,7 +9,6 @@ internal sealed class ListPermissionsCommand : SubCommand
 	public ListPermissionsCommand(ILogger<PermissionsCommand> logger, IServiceProvider serviceProvider) : base(serviceProvider)
 	{
 		_logger = logger;
-		AddSubCommand<SetPermissionsSubCommand>();
 	}
 
 	internal override String Name => "list";
