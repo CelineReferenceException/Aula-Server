@@ -9,13 +9,13 @@ internal sealed class DefaultEmailSender : IEmailSender
 {
 	private readonly MailAddress _mailAddress;
 	private readonly SmtpClient _smtpClient;
-	private readonly IBackgroundTaskQueue<DefaultEmailSender> _taskQueue;
+	private readonly IBackgroundTaskQueue<IEmailSender> _taskQueue;
 
 	public DefaultEmailSender(
 		SmtpClient smtpClient,
 		IOptions<ApplicationOptions> applicationOptions,
 		IOptions<MailOptions> mailOptions,
-		IBackgroundTaskQueue<DefaultEmailSender> taskQueue)
+		IBackgroundTaskQueue<IEmailSender> taskQueue)
 	{
 		_taskQueue = taskQueue;
 

@@ -15,7 +15,7 @@ internal static class DependencyInjection
 
 		services.TryAddTransient<SmtpClient>();
 		services.TryAddSingleton<IEmailSender, DefaultEmailSender>();
-		_ = services.AddBackgroundTaskQueueFor<DefaultEmailSender>();
+		_ = services.AddBackgroundTaskQueueFor<IEmailSender>();
 		return services;
 	}
 }
