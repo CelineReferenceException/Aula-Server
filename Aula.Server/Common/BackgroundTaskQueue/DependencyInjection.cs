@@ -4,10 +4,10 @@ namespace Aula.Server.Common.BackgroundTaskQueue;
 
 internal static class DependencyInjection
 {
-	internal static IServiceCollection AddBackgroundTaskQueueFor<TOwner>(this IServiceCollection services)
+	internal static IServiceCollection AddBackgroundTaskQueueFor<T>(this IServiceCollection services)
 	{
-		services.TryAddSingleton<IBackgroundTaskQueue<TOwner>, DefaultBackgroundTaskQueue<TOwner>>();
-		_ = services.AddHostedService<QueueHostedService<TOwner>>();
+		services.TryAddSingleton<IBackgroundTaskQueue<T>, DefaultBackgroundTaskQueue<T>>();
+		_ = services.AddHostedService<QueueHostedService<T>>();
 
 		return services;
 	}

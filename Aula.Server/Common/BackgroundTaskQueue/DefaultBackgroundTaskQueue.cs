@@ -2,7 +2,7 @@
 
 namespace Aula.Server.Common.BackgroundTaskQueue;
 
-internal sealed class DefaultBackgroundTaskQueue<TOwner> : IBackgroundTaskQueue<TOwner>
+internal sealed class DefaultBackgroundTaskQueue<T> : IBackgroundTaskQueue<T>
 {
 	private readonly Channel<Func<CancellationToken, ValueTask>> _taskQueue = Channel.CreateUnbounded<Func<CancellationToken, ValueTask>>();
 
