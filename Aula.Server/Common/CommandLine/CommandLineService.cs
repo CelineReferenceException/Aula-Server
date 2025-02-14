@@ -67,28 +67,49 @@ internal sealed class CommandLineService
 
 			var segment = input.Span.Slice(segmentStart, segmentLength);
 
-			if (!segment.StartsWith(CommandParameter.Prefix)) // It is a subcommand
+			var startsWithParameterPrefix = segment.StartsWith(CommandParameter.Prefix);
+			if (!startsWithParameterPrefix &&
+			    command.SubCommands.Count is not 0)
 			{
+				// Should be a subcommand
 				return await ProcessCommandAsync(input.Slice(segmentStart, input.Length - segmentStart), command.SubCommands,
 					cancellationToken);
 			}
 
-			var optionName = segment[CommandParameter.Prefix.Length..].ToString();
-			if (!command.Options.TryGetValue(optionName, out var option))
+			CommandParameter? option;
+			if (startsWithParameterPrefix)
 			{
-				_logger.InvalidCommandParameter(optionName);
-				return false;
-			}
+				var optionName = segment[CommandParameter.Prefix.Length..].ToString();
+				if (!command.Options.TryGetValue(optionName, out option))
+				{
+					_logger.InvalidCommandParameter(optionName);
+					return false;
+				}
 
-			if (!option.RequiresArgument)
-			{
+				if (option.RequiresArgument &&
+				    !inputSegments.MoveNext())
+				{
+					_logger.MissingArgument(option.Name);
+					return false;
+				}
+
 				arguments.Add(option.Name, String.Empty);
 				continue;
 			}
 
-			if (!inputSegments.MoveNext())
+			if (command.Options.Count is 1)
 			{
-				_logger.MissingArgument(optionName);
+				// If a command has no subcommands, only one parameter, and no parameter name is provided,
+				// then that parameter is automatically selected.
+				option = command.Options
+					.Select(kvp => kvp.Value)
+					.First();
+			}
+			else
+			{
+				// The command multiple parameters, and we cannot guess which select.
+				// returns the same response for unrecognized subcommands.
+				_logger.UnknownCommand(commandName);
 				return false;
 			}
 
