@@ -10,7 +10,7 @@ namespace Aula.Server.Features.Rooms.Endpoints;
 internal sealed class GetRooms : IEndpoint
 {
 	private const String CountQueryParameter = "count";
-	internal const String AfterQueryParameter = "after";
+	internal const String AfterQueryParameter = "afterId";
 	internal const Int32 MinimumRoomCount = 2;
 	internal const Int32 MaximumRoomCount = 100;
 	private const Int32 DefaultRoomCount = 10;
