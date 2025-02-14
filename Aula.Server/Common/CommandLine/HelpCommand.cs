@@ -47,7 +47,12 @@ internal sealed partial class HelpCommand : Command
 		}
 
 		var querySegments = query.Split(' ');
-		var command = _commandLineService.Commands[querySegments[0]];
+		var commandName = querySegments[0];
+		if (!_commandLineService.Commands.TryGetValue(commandName, out var command))
+		{
+			ShowHelp(_logger, $"Unknown command '{commandName}'.");
+			return ValueTask.CompletedTask;
+		}
 
 		foreach (var subCommandName in querySegments.Skip(1))
 		{
