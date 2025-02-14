@@ -1,15 +1,15 @@
 ﻿namespace Aula.Server.Common.CommandLine;
 
-internal abstract class Command : IDisposable
+internal abstract class Command
 {
+	private readonly IServiceProvider _serviceProvider;
 	private readonly Dictionary<String, CommandParameter> _options = [];
-	private readonly IServiceScope _serviceScope;
 	private readonly Dictionary<String, Command> _subCommands = [];
 	private CommandParameter? _previousDefinedParameter;
 
 	private protected Command(IServiceProvider serviceProvider)
 	{
-		_serviceScope = serviceProvider.CreateScope();
+		_serviceProvider = serviceProvider;
 	}
 
 	internal abstract String Name { get; }
@@ -19,12 +19,6 @@ internal abstract class Command : IDisposable
 	internal IReadOnlyDictionary<String, CommandParameter> Options => _options;
 
 	internal IReadOnlyDictionary<String, Command> SubCommands => _subCommands;
-
-	public void Dispose()
-	{
-		Dispose(true);
-		GC.SuppressFinalize(this);
-	}
 
 	internal virtual ValueTask Callback(IReadOnlyDictionary<String, String> args, CancellationToken cancellationToken)
 	{
@@ -73,7 +67,7 @@ internal abstract class Command : IDisposable
 
 	private protected void AddSubCommand(Type type)
 	{
-		var subCommand = (Command)_serviceScope.ServiceProvider.GetRequiredService(type);
+		var subCommand = (Command)_serviceProvider.GetRequiredService(type);
 		if (!_subCommands.TryAdd(subCommand.Name, subCommand))
 		{
 			throw new InvalidOperationException($"A subcommand with the name '{type.Name}' has already been registered.");
@@ -83,18 +77,5 @@ internal abstract class Command : IDisposable
 	private protected void AddSubCommand<TCommand>() where TCommand : Command
 	{
 		AddSubCommand(typeof(TCommand));
-	}
-
-	private protected virtual void Dispose(Boolean disposing)
-	{
-		if (disposing)
-		{
-			_serviceScope.Dispose();
-		}
-	}
-
-	~Command()
-	{
-		Dispose(false);
 	}
 }
