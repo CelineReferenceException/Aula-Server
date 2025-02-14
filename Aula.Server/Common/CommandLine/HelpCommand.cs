@@ -113,7 +113,7 @@ internal sealed partial class HelpCommand : Command
 
 		if (parameters.Options.Count > 0)
 		{
-			_ = message.AppendLine("Options: ");
+			_ = message.AppendLine("OPTIONS: ");
 		}
 
 		foreach (var param in parameters.Options)
@@ -125,7 +125,7 @@ internal sealed partial class HelpCommand : Command
 		if (parameters.SubCommands.Count > 0)
 		{
 			_ = message.AppendLine();
-			_ = message.AppendLine("Sub-commands: ");
+			_ = message.AppendLine("SUB-COMMANDS: ");
 		}
 
 		foreach (var param in parameters.SubCommands)
