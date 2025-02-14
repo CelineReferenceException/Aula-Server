@@ -6,7 +6,8 @@ namespace Aula.Server.Common.CommandLine;
 internal static class DependencyInjection
 {
 	// We hold a reference to the service scope to prevent it from being disposed,
-	// ensuring that all commands within the scope remain available.
+	// ensuring that all commands within the scope remain available and
+	// the services injected into them are not being disposed.
 	private static IServiceScope? s_serviceScope;
 
 	internal static IServiceCollection AddCommandLine(this IServiceCollection services)
