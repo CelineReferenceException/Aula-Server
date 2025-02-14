@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Aula.Server.Features.Users.Endpoints;
 
-internal sealed class GetAllUsers : IEndpoint
+internal sealed class GetUsers : IEndpoint
 {
 	private const String TypeQueryParameter = "type";
 	private const String CountQueryParameter = "count";

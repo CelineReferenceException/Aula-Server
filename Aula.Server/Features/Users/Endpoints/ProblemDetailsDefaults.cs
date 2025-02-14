@@ -29,13 +29,13 @@ internal static class ProblemDetailsDefaults
 	internal static ProblemDetails InvalidUserCount { get; } = new()
 	{
 		Title = "Invalid user count.",
-		Detail = $"The message count must be between {GetAllUsers.MinimumUserCount} and {GetAllUsers.MaximumUserCount}.",
+		Detail = $"The message count must be between {GetUsers.MinimumUserCount} and {GetUsers.MaximumUserCount}.",
 		Status = StatusCodes.Status400BadRequest,
 	};
 
 	internal static ProblemDetails InvalidAfterUser { get; } = new()
 	{
-		Title = $"Invalid '{GetAllUsers.AfterQueryParameter}' query parameter.",
+		Title = $"Invalid '{GetUsers.AfterQueryParameter}' query parameter.",
 		Detail = "A message with the specified ID was not found.",
 		Status = StatusCodes.Status400BadRequest,
 	};
