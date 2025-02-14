@@ -50,7 +50,7 @@ internal sealed partial class HelpCommand : Command
 		var commandName = querySegments[0];
 		if (!_commandLineService.Commands.TryGetValue(commandName, out var command))
 		{
-			ShowHelp(_logger, $"Unknown command '{commandName}'.");
+			LogUnknownCommandMessage(_logger, commandName);
 			return ValueTask.CompletedTask;
 		}
 
@@ -58,7 +58,7 @@ internal sealed partial class HelpCommand : Command
 		{
 			if (!command.SubCommands.TryGetValue(subCommandName, out var subCommand))
 			{
-				ShowHelp(_logger, $"Unknown subcommand '{subCommandName}'.");
+				LogUnknownSubCommandMessage(_logger, subCommandName);
 				return ValueTask.CompletedTask;
 			}
 
@@ -159,6 +159,12 @@ internal sealed partial class HelpCommand : Command
 
 	[LoggerMessage(LogLevel.Information, Message = "Here's a list of all available commands: {message}")]
 	private static partial void ShowHelp(ILogger logger, String message);
+
+	[LoggerMessage(LogLevel.Error, Message = "Unknown command: '{commandName}'")]
+	private static partial void LogUnknownCommandMessage(ILogger logger, String commandName);
+
+	[LoggerMessage(LogLevel.Error, Message = "Unknown sub-command: '{commandName}'")]
+	private static partial void LogUnknownSubCommandMessage(ILogger logger, String commandName);
 
 	private sealed record CommandParameters
 	{
