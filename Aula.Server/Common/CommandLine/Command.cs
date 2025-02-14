@@ -31,7 +31,7 @@ internal abstract class Command
 
 		if (!_options.TryAdd(option.Name, option))
 		{
-			throw new ArgumentException($"Duplicate command option name: '{option.Name}'.", nameof(option));
+			throw new InvalidOperationException($"Duplicate command option name: '{option.Name}'.");
 		}
 
 		if (_previousDefinedOption is null)
@@ -42,16 +42,14 @@ internal abstract class Command
 		if (option.IsRequired &&
 		    !_previousDefinedOption.IsRequired)
 		{
-			throw new ArgumentException(
-				$"An optional option parameter cannot follow a required one. '{_previousDefinedOption.Name}' is optional but '{option.Name}' is required.",
-				nameof(option));
+			throw new InvalidOperationException(
+				$"An optional option parameter cannot follow a required one. '{_previousDefinedOption.Name}' is optional but '{option.Name}' is required.");
 		}
 
 		if (_previousDefinedOption.CanOverflow)
 		{
-			throw new ArgumentException(
-				$"The option '{_previousDefinedOption.Name}' is marked for overflow, but is followed by another option.",
-				nameof(option));
+			throw new InvalidOperationException(
+				$"The option '{_previousDefinedOption.Name}' is marked for overflow, but is followed by another option.");
 		}
 
 		_previousDefinedOption = option;
