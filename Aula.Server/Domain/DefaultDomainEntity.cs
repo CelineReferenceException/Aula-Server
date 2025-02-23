@@ -6,6 +6,11 @@ internal abstract class DefaultDomainEntity : IDomainEntity
 
 	IReadOnlyList<DomainEvent> IDomainEntity.Events => _events;
 
+	void IDomainEntity.ClearEvents()
+	{
+		_events.Clear();
+	}
+
 	private protected void AddEvent(DomainEvent domainEvent)
 	{
 		_events.Add(domainEvent);

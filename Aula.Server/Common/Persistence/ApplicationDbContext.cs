@@ -320,13 +320,16 @@ internal sealed class ApplicationDbContext : DbContext
 
 	private async ValueTask PublishDomainEventsAsync(CancellationToken cancellationToken = default)
 	{
-		var domainEvents = ChangeTracker
-			.Entries<IDomainEntity>()
-			.SelectMany(x => x.Entity.Events);
-
-		foreach (var domainEvent in domainEvents)
+		foreach (var entry in ChangeTracker.Entries<IDomainEntity>())
 		{
-			await _publisher.Publish(domainEvent, cancellationToken);
+			var entity = entry.Entity;
+
+			foreach (var domainEvent in entity.Events)
+			{
+				await _publisher.Publish(domainEvent, cancellationToken);
+			}
+
+			entity.ClearEvents();
 		}
 	}
 }
