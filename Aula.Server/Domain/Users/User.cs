@@ -9,7 +9,6 @@ internal sealed class User : DefaultDomainEntity
 	internal const Int32 DisplayNameMaximumLength = 32;
 	internal const Int32 UserNameMinimumLength = 6;
 	internal const Int32 UserNameMaximumLength = 32;
-	internal const Int32 DescriptionMinimumLength = 1;
 	internal const Int32 DescriptionMaximumLength = 1024;
 	internal const Int32 PasswordMaximumLength = 128;
 	private static readonly UserValidator s_validator = new();
@@ -36,7 +35,7 @@ internal sealed class User : DefaultDomainEntity
 
 	internal String DisplayName { get; private set; }
 
-	internal String? Description { get; private set; }
+	internal String Description { get; private set; }
 
 	internal Permissions Permissions { get; private set; }
 
@@ -65,6 +64,7 @@ internal sealed class User : DefaultDomainEntity
 			UserName = userName,
 			Email = email?.ToUpper(),
 			DisplayName = displayName ?? userName,
+			Description = String.Empty,
 			Permissions = permissions,
 			Type = type,
 			CreationTime = DateTime.UtcNow,
@@ -92,7 +92,8 @@ internal sealed class User : DefaultDomainEntity
 			modified = true;
 		}
 
-		if (description != Description)
+		if (description is not null &&
+		    description != Description)
 		{
 			Description = description;
 			modified = true;

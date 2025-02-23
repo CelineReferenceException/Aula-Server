@@ -16,7 +16,6 @@ internal sealed class UserValidator : AbstractValidator<User>
 			.MaximumLength(User.DisplayNameMaximumLength);
 
 		_ = RuleFor(x => x.Description)
-			.MinimumLength(User.DescriptionMinimumLength)
 			.MaximumLength(User.DescriptionMaximumLength);
 
 		_ = RuleFor(x => x.Permissions).IsInEnum();

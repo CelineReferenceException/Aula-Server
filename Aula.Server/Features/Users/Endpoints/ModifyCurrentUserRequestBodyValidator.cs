@@ -17,11 +17,6 @@ internal sealed class ModifyCurrentUserRequestBodyValidator : AbstractValidator<
 			.WithMessage($"{nameof(ModifyCurrentUserRequestBody.DisplayName)} length must be at most {User.DisplayNameMaximumLength}");
 
 		_ = RuleFor(x => x.Description)
-			.MinimumLength(User.DescriptionMinimumLength)
-			.WithErrorCode($"{nameof(ModifyCurrentUserRequestBody.Description)} is too long")
-			.WithMessage($"{nameof(ModifyCurrentUserRequestBody.Description)} length must be at most {User.DescriptionMinimumLength}");
-
-		_ = RuleFor(x => x.Description)
 			.MaximumLength(User.DescriptionMaximumLength)
 			.WithErrorCode($"{nameof(ModifyCurrentUserRequestBody.Description)} is too long")
 			.WithMessage($"{nameof(ModifyCurrentUserRequestBody.Description)} length must be at most {User.DescriptionMaximumLength}");

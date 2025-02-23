@@ -18,7 +18,7 @@ internal sealed record UserData
 	/// <summary>
 	///     The description of the user.
 	/// </summary>
-	public required String? Description { get; init; }
+	public required String Description { get; init; }
 
 	/// <summary>
 	///     The type of entity who owns the user.
