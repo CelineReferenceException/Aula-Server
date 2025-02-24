@@ -7,7 +7,7 @@ internal sealed class RoomValidator : AbstractValidator<Room>
 	public RoomValidator()
 	{
 		_ = RuleFor(x => x.Name)
-			.NotEmpty()
+			.NotNull()
 			.MinimumLength(Room.NameMinimumLength)
 			.MaximumLength(Room.NameMaximumLength);
 
