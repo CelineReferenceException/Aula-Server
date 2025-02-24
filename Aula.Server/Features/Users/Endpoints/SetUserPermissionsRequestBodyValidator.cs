@@ -2,9 +2,9 @@
 
 namespace Aula.Server.Features.Users.Endpoints;
 
-internal sealed class SetPermissionsRequestBodyValidator : AbstractValidator<SetPermissionsRequestBody>
+internal sealed class SetUserPermissionsRequestBodyValidator : AbstractValidator<SetUserPermissionsRequestBody>
 {
-	public SetPermissionsRequestBodyValidator()
+	public SetUserPermissionsRequestBodyValidator()
 	{
 		_ = RuleFor(x => x.Permissions)
 			.IsInEnum()

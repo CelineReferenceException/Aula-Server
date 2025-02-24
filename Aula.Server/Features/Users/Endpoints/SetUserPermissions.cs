@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Aula.Server.Features.Users.Endpoints;
 
-internal sealed class SetPermissions : IEndpoint
+internal sealed class SetUserPermissions : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
@@ -20,8 +20,8 @@ internal sealed class SetPermissions : IEndpoint
 
 	private static async Task<Results<NoContent, ProblemHttpResult, InternalServerError>> HandleAsync(
 		[FromRoute] UInt64 userId,
-		[FromBody] SetPermissionsRequestBody body,
-		[FromServices] SetPermissionsRequestBodyValidator bodyValidator,
+		[FromBody] SetUserPermissionsRequestBody body,
+		[FromServices] SetUserPermissionsRequestBodyValidator bodyValidator,
 		[FromServices] ApplicationDbContext dbContext)
 	{
 		var validation = await bodyValidator.ValidateAsync(body);
