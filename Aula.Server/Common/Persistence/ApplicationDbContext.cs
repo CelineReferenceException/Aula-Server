@@ -131,6 +131,7 @@ internal sealed class ApplicationDbContext : DbContext
 			.HasMaxLength(Room.NameMaximumLength);
 
 		_ = roomModel.Property(x => x.Description)
+			.IsRequired()
 			.HasMaxLength(Room.DescriptionMaximumLength);
 
 		_ = roomModel.Property(x => x.IsEntrance)

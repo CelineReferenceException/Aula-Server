@@ -17,11 +17,6 @@ internal sealed class ModifyRoomRequestBodyValidator : AbstractValidator<ModifyR
 			.WithMessage($"{nameof(ModifyRoomRequestBody.Name)} length must be at most {Room.NameMaximumLength}");
 
 		_ = RuleFor(x => x.Description)
-			.MinimumLength(Room.DescriptionMinimumLength)
-			.WithErrorCode($"{nameof(ModifyRoomRequestBody.Description)} is too short")
-			.WithMessage($"{nameof(ModifyRoomRequestBody.Description)} length must be at least {Room.DescriptionMinimumLength}");
-
-		_ = RuleFor(x => x.Description)
 			.MaximumLength(Room.DescriptionMaximumLength)
 			.WithErrorCode($"{nameof(ModifyRoomRequestBody.Description)} is too long")
 			.WithMessage($"{nameof(ModifyRoomRequestBody.Description)} length must be at most {Room.DescriptionMaximumLength}");

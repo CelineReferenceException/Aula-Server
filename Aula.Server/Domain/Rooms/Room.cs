@@ -7,7 +7,6 @@ internal sealed class Room : DefaultDomainEntity
 {
 	internal const Int32 NameMinimumLength = 3;
 	internal const Int32 NameMaximumLength = 32;
-	internal const Int32 DescriptionMinimumLength = 1;
 	internal const Int32 DescriptionMaximumLength = 2048;
 	private static readonly RoomValidator s_validator = new();
 
@@ -19,7 +18,7 @@ internal sealed class Room : DefaultDomainEntity
 
 	internal String Name { get; private set; }
 
-	internal String? Description { get; private set; }
+	internal String Description { get; private set; }
 
 	internal Boolean IsEntrance { get; private set; }
 
@@ -32,7 +31,7 @@ internal sealed class Room : DefaultDomainEntity
 
 	internal Boolean IsRemoved { get; private set; }
 
-	internal static Room Create(UInt64 id, String name, String? description, Boolean isEntrance)
+	internal static Room Create(UInt64 id, String name, String description, Boolean isEntrance)
 	{
 		var room = new Room
 		{
@@ -66,7 +65,8 @@ internal sealed class Room : DefaultDomainEntity
 			modified = true;
 		}
 
-		if (description != Description)
+		if (description is not null &&
+		    description != Description)
 		{
 			Description = description;
 			modified = true;

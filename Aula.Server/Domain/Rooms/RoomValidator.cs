@@ -12,7 +12,7 @@ internal sealed class RoomValidator : AbstractValidator<Room>
 			.MaximumLength(Room.NameMaximumLength);
 
 		_ = RuleFor(x => x.Description)
-			.MinimumLength(Room.DescriptionMinimumLength)
+			.NotNull()
 			.MaximumLength(Room.DescriptionMaximumLength);
 	}
 }
