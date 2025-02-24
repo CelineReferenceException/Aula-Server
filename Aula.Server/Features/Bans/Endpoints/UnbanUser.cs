@@ -11,7 +11,7 @@ internal sealed class UnbanUser : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapDelete("bans/users/{targetId}", HandleAsync)
+		_ = route.MapDelete("bans/users/{userId}", HandleAsync)
 			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.BanUsers)
@@ -20,12 +20,12 @@ internal sealed class UnbanUser : IEndpoint
 	}
 
 	private static async Task<Results<NoContent, ProblemHttpResult, InternalServerError>> HandleAsync(
-		[FromRoute] UInt64 targetId,
+		[FromRoute] UInt64 userId,
 		[FromServices] ApplicationDbContext dbContext)
 	{
 		var ban = await dbContext.Bans
 			.AsTracking()
-			.Where(x => x.TargetId == targetId)
+			.Where(x => x.TargetId == userId)
 			.FirstOrDefaultAsync();
 		if (ban is null)
 		{
