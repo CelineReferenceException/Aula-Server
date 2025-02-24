@@ -11,7 +11,7 @@ internal sealed class BanUser : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapPut("bans/users/{targetId}", HandleAsync)
+		_ = route.MapPut("bans/users/{userId}", HandleAsync)
 			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.BanUsers)
 			.DenyBannedUsers()
@@ -19,7 +19,7 @@ internal sealed class BanUser : IEndpoint
 	}
 
 	private static async Task<Results<Created<BanData>, ProblemHttpResult, InternalServerError>> HandleAsync(
-		[FromRoute] UInt64 targetId,
+		[FromRoute] UInt64 userId,
 		[FromBody] CreateBanRequestBody body,
 		[FromServices] CreateBanRequestBodyValidator bodyValidator,
 		HttpContext httpContext,
@@ -34,24 +34,24 @@ internal sealed class BanUser : IEndpoint
 			return TypedResults.Problem(problemDetails);
 		}
 
-		var userId = userManager.GetUserId(httpContext.User);
-		if (userId is null)
+		var currentUserId = userManager.GetUserId(httpContext.User);
+		if (currentUserId is null)
 		{
 			return TypedResults.InternalServerError();
 		}
 
-		var currentBan = await dbContext.Bans
+		var targetUserBan = await dbContext.Bans
 			.AsTracking()
-			.Where(b => b.TargetId == targetId)
+			.Where(b => b.TargetId == userId)
 			.FirstOrDefaultAsync();
-		if (currentBan is not null)
+		if (targetUserBan is not null)
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.UserAlreadyBanned);
 		}
 
 		var targetUser = await dbContext.Users
 			.AsNoTracking()
-			.Where(u => u.Id == targetId)
+			.Where(u => u.Id == userId)
 			.Select(u => new
 			{
 				u.Permissions,
@@ -67,7 +67,7 @@ internal sealed class BanUser : IEndpoint
 			return TypedResults.Problem(ProblemDetailsDefaults.TargetIsAdministrator);
 		}
 
-		var ban = Ban.Create(snowflakeGenerator.NewSnowflake(), BanType.Id, userId, body.Reason, targetId);
+		var ban = Ban.Create(snowflakeGenerator.NewSnowflake(), BanType.Id, currentUserId, body.Reason, userId);
 		_ = dbContext.Bans.Add(ban);
 
 		_ = await dbContext.SaveChangesAsync();
