@@ -56,10 +56,13 @@ internal sealed class Message : DefaultDomainEntity
 			_ => throw new InvalidOperationException($"Invalid {nameof(MessageType)} value: '{type}')"),
 		};
 
-		flags = flags
-			.GetFlags()
-			.Where(flag => allowedFlags.HasFlag(flag))
-			.Aggregate((x, y) => x | y);
+		if (flags > 0)
+		{
+			flags = flags
+				.GetFlags()
+				.Where(flag => allowedFlags.HasFlag(flag))
+				.Aggregate((x, y) => x | y);
+		}
 
 		var message = new Message
 		{
