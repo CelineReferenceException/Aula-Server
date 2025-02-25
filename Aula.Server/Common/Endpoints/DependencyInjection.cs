@@ -8,11 +8,9 @@ namespace Aula.Server.Common.Endpoints;
 
 internal static class DependencyInjection
 {
-	internal static IServiceCollection AddEndpoints(this IServiceCollection services)
+	internal static IServiceCollection AddEndpoints(this IServiceCollection services, Type assemblyType)
 	{
-		var assembly = typeof(IAssemblyMarker).Assembly;
-
-		var descriptors = assembly.DefinedTypes
+		var descriptors = assemblyType.Assembly.DefinedTypes
 			.Where(static t => t.IsAssignableTo(typeof(IEndpoint)) && t is { IsInterface: false, IsAbstract: false, })
 			.Select(static t => ServiceDescriptor.Transient(typeof(IEndpoint), t));
 
@@ -26,6 +24,11 @@ internal static class DependencyInjection
 		});
 
 		return services;
+	}
+
+	internal static IServiceCollection AddEndpoints<TAssembly>(this IServiceCollection services)
+	{
+		return AddEndpoints(services, typeof(TAssembly));
 	}
 
 	internal static IEndpointRouteBuilder MapEndpoints(this IEndpointRouteBuilder builder)

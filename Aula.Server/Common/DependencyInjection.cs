@@ -29,7 +29,7 @@ internal static class DependencyInjection
 		_ = builder.Services.AddSingleton<SnowflakeGenerator>();
 		_ = builder.Services.AddPersistence(builder.Configuration);
 		_ = builder.Services.AddResilience();
-		_ = builder.Services.AddEndpoints();
+		_ = builder.Services.AddEndpoints<IAssemblyMarker>();
 		_ = builder.Services.AddGateway();
 
 		_ = builder.Logging.ClearProviders();
