@@ -281,8 +281,11 @@ internal sealed class ApplicationDbContext : DbContext
 	public override async Task<Int32> SaveChangesAsync(CancellationToken cancellationToken = default)
 	{
 		var entriesWritten = await base.SaveChangesAsync(cancellationToken);
-		ChangeTracker.Clear();
+
 		await PublishDomainEventsAsync(cancellationToken);
+
+		ChangeTracker.Clear();
+
 		return entriesWritten;
 	}
 
@@ -314,8 +317,10 @@ internal sealed class ApplicationDbContext : DbContext
 			}
 		}
 
-		ChangeTracker.Clear();
 		await PublishDomainEventsAsync(cancellationToken);
+
+		ChangeTracker.Clear();
+
 		return entriesWritten;
 	}
 
