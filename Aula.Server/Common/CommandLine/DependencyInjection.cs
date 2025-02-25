@@ -10,12 +10,12 @@ internal static class DependencyInjection
 	// the services injected into them are not being disposed.
 	private static IServiceScope? s_serviceScope;
 
-	internal static IServiceCollection AddCommandLine(this IServiceCollection services)
+	internal static IServiceCollection AddCommandLine(this IServiceCollection services, Type assemblyType)
 	{
 		_ = services.AddSingleton<CommandLineService>();
 		_ = services.AddHostedService<CommandLineHostedService>();
 
-		var assembly = typeof(IAssemblyMarker).Assembly;
+		var assembly = assemblyType.Assembly;
 
 		var commandTypes = assembly.DefinedTypes
 			.Where(t => t.IsAssignableTo(typeof(Command)) && t is { IsInterface: false, IsAbstract: false, })
@@ -34,6 +34,11 @@ internal static class DependencyInjection
 		}
 
 		return services;
+	}
+
+	internal static IServiceCollection AddCommandLine<TAssembly>(this IServiceCollection services)
+	{
+		return services.AddCommandLine(typeof(TAssembly));
 	}
 
 	internal static IEndpointRouteBuilder MapCommands(this IEndpointRouteBuilder builder)

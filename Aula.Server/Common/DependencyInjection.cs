@@ -34,7 +34,7 @@ internal static class DependencyInjection
 
 		_ = builder.Logging.ClearProviders();
 		_ = builder.Logging.AddLogging();
-		_ = builder.Services.AddCommandLine();
+		_ = builder.Services.AddCommandLine<IAssemblyMarker>();
 
 		return builder;
 	}
