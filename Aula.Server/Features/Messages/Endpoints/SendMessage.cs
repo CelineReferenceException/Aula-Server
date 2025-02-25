@@ -9,6 +9,8 @@ namespace Aula.Server.Features.Messages.Endpoints;
 
 internal sealed class SendMessage : IEndpoint
 {
+	private static readonly IReadOnlyList<MessageType> s_allowedMessageTypes = [MessageType.Standard,];
+
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapPost("rooms/{roomId}/messages", HandleAsync)
@@ -52,6 +54,11 @@ internal sealed class SendMessage : IEndpoint
 		if (user.CurrentRoomId != roomId)
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.UserIsNotInTheRoom);
+		}
+
+		if (!s_allowedMessageTypes.Contains(body.Type))
+		{
+			return TypedResults.Problem(ProblemDetailsDefaults.InvalidMessageType);
 		}
 
 		var messageId = snowflakeGenerator.NewSnowflake();

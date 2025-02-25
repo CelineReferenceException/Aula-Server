@@ -19,6 +19,13 @@ internal static class ProblemDetailsDefaults
 		Status = StatusCodes.Status403Forbidden,
 	};
 
+	internal static ProblemDetails InvalidMessageType { get; } = new()
+	{
+		Title = "Invalid message type",
+		Detail = "Cannot send messages of the specified type.",
+		Status = StatusCodes.Status400BadRequest,
+	};
+
 	internal static ProblemDetails InvalidMessageCount { get; } = new()
 	{
 		Title = "Invalid message count.",
