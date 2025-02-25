@@ -10,6 +10,12 @@ internal static class DependencyInjection
 	// the services injected into them are not being disposed.
 	private static IServiceScope? s_serviceScope;
 
+	/// <summary>
+	///     Registers command-line services and discovers command implementations within the specified assembly.
+	/// </summary>
+	/// <param name="services">The service collection to configure.</param>
+	/// <param name="assemblyType">A type from the assembly containing command implementations.</param>
+	/// <returns>The modified <see cref="IServiceCollection" />.</returns>
 	internal static IServiceCollection AddCommandLine(this IServiceCollection services, Type assemblyType)
 	{
 		_ = services.AddSingleton<CommandLineService>();
@@ -36,6 +42,12 @@ internal static class DependencyInjection
 		return services;
 	}
 
+	/// <summary>
+	///     Registers command-line services and discovers command implementations within the specified assembly.
+	/// </summary>
+	/// <typeparam name="TAssembly">A type within the target assembly.</typeparam>
+	/// <param name="services">The service collection to configure.</param>
+	/// <returns>The modified <see cref="IServiceCollection" />.</returns>
 	internal static IServiceCollection AddCommandLine<TAssembly>(this IServiceCollection services)
 	{
 		return services.AddCommandLine(typeof(TAssembly));

@@ -3,6 +3,9 @@ using System.IO;
 
 namespace Aula.Server.Common.CommandLine;
 
+/// <summary>
+///     A background service that asynchronously reads from the console input stream and executes commands.
+/// </summary>
 internal sealed class CommandLineHostedService : BackgroundService
 {
 	private readonly CommandLineService _commandLineService;

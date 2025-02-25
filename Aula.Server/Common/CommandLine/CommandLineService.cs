@@ -2,6 +2,9 @@
 
 namespace Aula.Server.Common.CommandLine;
 
+/// <summary>
+///     Provides a service for handling and executing command-line commands.
+/// </summary>
 internal sealed class CommandLineService
 {
 	private readonly ConcurrentDictionary<String, Command> _commands = new();
@@ -12,8 +15,16 @@ internal sealed class CommandLineService
 		_logger = logger;
 	}
 
+	/// <summary>
+	///     A dictionary with the registered commands, where the <see cref="Command.Name" /> is the key.
+	/// </summary>
 	internal IReadOnlyDictionary<String, Command> Commands => _commands;
 
+	/// <summary>
+	///     Adds a new command to the command-line service.
+	/// </summary>
+	/// <param name="command">The command to register.</param>
+	/// <exception cref="InvalidOperationException">Thrown if a command with the same name is already registered.</exception>
 	internal void AddCommand(Command command)
 	{
 		if (!_commands.TryAdd(command.Name, command))
@@ -22,6 +33,14 @@ internal sealed class CommandLineService
 		}
 	}
 
+	/// <summary>
+	///     Processes a command asynchronously.
+	/// </summary>
+	/// <param name="input">The raw command input as a <see cref="ReadOnlyMemory{Char}" />.</param>
+	/// <param name="cancellationToken">A cancellation token to observe while executing the command.</param>
+	/// <returns>
+	///     A task that resolves to <see langword="true" /> if the command was successfully executed; otherwise, <see langword="false" />.
+	/// </returns>
 	internal async ValueTask<Boolean> ProcessCommandAsync(ReadOnlyMemory<Char> input, CancellationToken cancellationToken = default)
 	{
 		return await ProcessCommandAsync(input, _commands, cancellationToken);
