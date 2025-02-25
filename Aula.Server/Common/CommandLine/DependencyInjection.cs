@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Routing;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Aula.Server.Common.CommandLine;
@@ -41,9 +41,9 @@ internal static class DependencyInjection
 		return services.AddCommandLine(typeof(TAssembly));
 	}
 
-	internal static IEndpointRouteBuilder MapCommands(this IEndpointRouteBuilder builder)
+	internal static IApplicationBuilder MapCommands(this IApplicationBuilder builder)
 	{
-		s_serviceScope = builder.ServiceProvider.CreateScope();
+		s_serviceScope = builder.ApplicationServices.CreateScope();
 		var service = s_serviceScope.ServiceProvider.GetRequiredService<CommandLineService>();
 		var commands = s_serviceScope.ServiceProvider.GetRequiredService<IEnumerable<Command>>();
 
