@@ -17,7 +17,7 @@ internal sealed class SendMessageRequestBodyValidator : AbstractValidator<SendMe
 				.WithMessage($"{nameof(SendMessageRequestBody.Content)} cannot be null.");
 
 			_ = RuleFor(x => x.Content)
-				.MaximumLength(Message.ContentMinimumLength)
+				.MinimumLength(Message.ContentMinimumLength)
 				.WithErrorCode($"{nameof(SendMessageRequestBody.Content)} is too short")
 				.WithMessage($"{nameof(SendMessageRequestBody.Content)} length must be at least {Message.ContentMinimumLength}");
 
