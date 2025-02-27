@@ -43,7 +43,14 @@ internal static class DependencyInjection
 				var userManager = ServiceProviderServiceExtensions.GetRequiredService<UserManager>(httpContext.RequestServices);
 
 				var userId = userManager.GetUserId(httpContext.User);
-				var partitionKey = userId.ToString() ?? httpContext.Connection.RemoteIpAddress?.ToString() ?? String.Empty;
+				var partitionKey = userId.HasValue
+					? userId.Value.ToString()
+					: httpContext.Connection.RemoteIpAddress?.ToString();
+				if (partitionKey is null ||
+				    partitionKey.Length == 0)
+				{
+					throw new NotImplementedException("Fallback not implemented.");
+				}
 
 				return RateLimitPartitionExtensions.GetExtendedFixedWindowRateLimiter(partitionKey, _ =>
 				{
