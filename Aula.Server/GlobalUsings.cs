@@ -15,7 +15,6 @@ global using Aula.Server.Common.JsonSerialization;
 global using Aula.Server.Common.Logging;
 global using Aula.Server.Common.Mail;
 global using Aula.Server.Common.Persistence;
-global using Aula.Server.Common.RateLimiting;
 global using Aula.Server.Common.Resilience;
 global using Aula.Server.Domain;
 global using Aula.Server.Domain.Bans;
