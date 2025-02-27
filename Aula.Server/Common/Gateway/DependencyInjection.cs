@@ -1,5 +1,5 @@
 ﻿using System.Threading.RateLimiting;
-using Microsoft.AspNetCore.Builder;
+using Aula.Server.Common.RateLimiting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebSockets;
 using Microsoft.Extensions.Options;
@@ -30,7 +30,7 @@ internal static class DependencyInjection
 			options.PermitLimit ??= 1000;
 		});
 
-		_ = services.AddRateLimiter(options =>
+		_ = services.AddCustomRateLimiter(options =>
 		{
 			options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 
@@ -41,18 +41,18 @@ internal static class DependencyInjection
 				var userId = userManager.GetUserId(httpContext.User);
 				var partitionKey = userId.ToString() ?? httpContext.Connection.RemoteIpAddress?.ToString() ?? String.Empty;
 
-				var rateLimitOptions = httpContext.RequestServices
-					.GetRequiredService<IOptionsSnapshot<RateLimitOptions>>()
-					.Get(GatewayRateLimitPolicyNames.Default);
-
-				var rateLimiterOptions = new FixedWindowRateLimiterOptions
+				return RateLimitPartitionExtensions.GetExtendedFixedWindowRateLimiter(partitionKey, _ =>
 				{
-					PermitLimit = rateLimitOptions.PermitLimit!.Value,
-					Window = TimeSpan.FromMilliseconds(rateLimitOptions.WindowMilliseconds!.Value),
-					AutoReplenishment = true,
-				};
+					var rateLimitOptions = httpContext.RequestServices
+						.GetRequiredService<IOptionsSnapshot<RateLimitOptions>>()
+						.Get(GatewayRateLimitPolicyNames.Default);
 
-				return RateLimitPartition.GetFixedWindowLimiter(partitionKey, _ => rateLimiterOptions);
+					return new FixedWindowRateLimiterOptions
+					{
+						PermitLimit = rateLimitOptions.PermitLimit!.Value,
+						Window = TimeSpan.FromMilliseconds(rateLimitOptions.WindowMilliseconds!.Value),
+					};
+				});
 			});
 		});
 
