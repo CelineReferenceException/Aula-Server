@@ -5,7 +5,6 @@ namespace Aula.Server.Common.RateLimiting;
 internal sealed class ExtendedReplenishingRateLimiter : ReplenishingRateLimiter
 {
 	private readonly ReplenishingRateLimiter _underlyingRateLimiter;
-	private DateTime? _firstWindowAcquireDateTime;
 
 	internal ExtendedReplenishingRateLimiter(ReplenishingRateLimiter underlyingRateLimiter)
 	{
@@ -18,19 +17,21 @@ internal sealed class ExtendedReplenishingRateLimiter : ReplenishingRateLimiter
 
 	public override TimeSpan ReplenishmentPeriod => _underlyingRateLimiter.ReplenishmentPeriod;
 
-	internal DateTime? ReplenishmentDateTime => _firstWindowAcquireDateTime + _underlyingRateLimiter.ReplenishmentPeriod;
+	internal DateTime? FirstWindowAcquireDateTime { get; private set; }
+
+	internal DateTime? ReplenishmentDateTime => FirstWindowAcquireDateTime + _underlyingRateLimiter.ReplenishmentPeriod;
 
 	protected override async ValueTask<RateLimitLease> AcquireAsyncCore(Int32 permitCount, CancellationToken cancellationToken)
 	{
 		ReplenishIfAcceptable();
-		_firstWindowAcquireDateTime ??= DateTime.UtcNow;
+		FirstWindowAcquireDateTime ??= DateTime.UtcNow;
 		return await _underlyingRateLimiter.AcquireAsync(permitCount, cancellationToken);
 	}
 
 	protected override RateLimitLease AttemptAcquireCore(Int32 permitCount)
 	{
 		ReplenishIfAcceptable();
-		_firstWindowAcquireDateTime ??= DateTime.UtcNow;
+		FirstWindowAcquireDateTime ??= DateTime.UtcNow;
 		return _underlyingRateLimiter.AttemptAcquire(permitCount);
 	}
 
@@ -44,7 +45,7 @@ internal sealed class ExtendedReplenishingRateLimiter : ReplenishingRateLimiter
 		var replenished = _underlyingRateLimiter.TryReplenish();
 		if (replenished)
 		{
-			_firstWindowAcquireDateTime = null;
+			FirstWindowAcquireDateTime = null;
 		}
 
 		return replenished;
@@ -54,8 +55,8 @@ internal sealed class ExtendedReplenishingRateLimiter : ReplenishingRateLimiter
 	{
 		var now = DateTime.UtcNow;
 		if (ReplenishmentDateTime is not null &&
-		    _firstWindowAcquireDateTime is not null &&
-		    now - _firstWindowAcquireDateTime > ReplenishmentPeriod)
+		    FirstWindowAcquireDateTime is not null &&
+		    now - FirstWindowAcquireDateTime > ReplenishmentPeriod)
 		{
 			_ = TryReplenish();
 		}

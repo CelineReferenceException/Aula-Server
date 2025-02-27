@@ -7,23 +7,18 @@ internal sealed class RateLimiterManager
 {
 	private readonly ConcurrentDictionary<DefaultKeyType, RateLimiter> _rateLimiters = new();
 
-	internal TimeSpan MaximumReplenishmentPeriod { get; private set; } = TimeSpan.Zero;
-
 	internal RateLimiter GetOrAdd(RateLimitPartition<DefaultKeyType> partition)
 	{
 		var rateLimiter = _rateLimiters.GetOrAdd(partition.PartitionKey, static (_, p) => p.Factory(p.PartitionKey), partition);
-		if (rateLimiter is ReplenishingRateLimiter replenishingRateLimiter &&
-		    replenishingRateLimiter.ReplenishmentPeriod > MaximumReplenishmentPeriod)
-		{
-			MaximumReplenishmentPeriod = replenishingRateLimiter.ReplenishmentPeriod;
-		}
 
 		return rateLimiter;
 	}
 
-	internal void RemoveUnusedRateLimiters(TimeSpan idleDuration)
+	internal void RemoveUnusedRateLimiters()
 	{
-		foreach (var entry in _rateLimiters.Where(r => r.Value.IdleDuration > idleDuration))
+		foreach (var entry in _rateLimiters
+			         .Where(r => r.Value is ExtendedReplenishingRateLimiter er &&
+			                     er.FirstWindowAcquireDateTime + er.ReplenishmentPeriod * 2 < DateTime.UtcNow))
 		{
 			entry.Value.Dispose();
 			_ = _rateLimiters.TryRemove(entry);
