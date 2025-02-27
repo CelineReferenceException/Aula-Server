@@ -1,4 +1,5 @@
-﻿using Aula.Server.Features.Users.Gateway;
+﻿using Aula.Server.Common.RateLimiting;
+using Aula.Server.Features.Users.Gateway;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -12,6 +13,7 @@ internal sealed class ConnectToGateway : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.Map("gateway", HandleAsync)
+			.ApplyRateLimiting(GatewayRateLimitPolicyNames.Default)
 			.RequireAuthenticatedUser()
 			.DenyBannedUsers()
 			.HasApiVersion(1);
