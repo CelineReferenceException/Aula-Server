@@ -12,7 +12,6 @@ internal sealed class GetRoomUsers : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapGet("/rooms/{roomId}/users", HandleAsync)
-			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthenticatedUser()
 			.DenyBannedUsers()
 			.HasApiVersion(1);

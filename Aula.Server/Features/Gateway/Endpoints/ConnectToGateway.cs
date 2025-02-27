@@ -12,7 +12,6 @@ internal sealed class ConnectToGateway : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.Map("gateway", HandleAsync)
-			.RequireRateLimiting(GatewayRateLimitPolicyNames.Default)
 			.RequireAuthenticatedUser()
 			.DenyBannedUsers()
 			.HasApiVersion(1);

@@ -12,7 +12,6 @@ internal sealed class UnbanUser : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapDelete("bans/users/{userId}", HandleAsync)
-			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.BanUsers)
 			.DenyBannedUsers()

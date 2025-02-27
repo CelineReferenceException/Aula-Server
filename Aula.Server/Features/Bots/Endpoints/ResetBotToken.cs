@@ -12,7 +12,6 @@ internal sealed class ResetBotToken : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapPost("bots/{userId}/reset-token", HandleAsync)
-			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthenticatedUser()
 			.RequireUserType(UserType.Standard)
 			.RequirePermissions()

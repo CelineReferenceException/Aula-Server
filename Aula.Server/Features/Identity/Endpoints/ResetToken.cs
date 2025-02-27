@@ -12,7 +12,6 @@ internal sealed class ResetToken : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapPost("identity/reset-token", HandleAsync)
-			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.HasApiVersion(1);
 	}
 

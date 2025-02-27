@@ -12,7 +12,6 @@ internal sealed class ModifyCurrentUser : IEndpoint
 	public void Build(IEndpointRouteBuilder builder)
 	{
 		_ = builder.MapPatch("users/@me", HandleAsync)
-			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthenticatedUser()
 			.DenyBannedUsers()
 			.HasApiVersion(1);

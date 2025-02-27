@@ -12,7 +12,6 @@ internal sealed class GetCurrentUserBanStatus : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapGet("bans/@me", HandleAsync)
-			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthenticatedUser()
 			.HasApiVersion(1);
 	}

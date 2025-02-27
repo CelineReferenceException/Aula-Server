@@ -17,7 +17,6 @@ internal sealed class ConfirmEmail : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapPost("identity/confirm-email", HandleAsync)
-			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.HasApiVersion(1);
 	}
 

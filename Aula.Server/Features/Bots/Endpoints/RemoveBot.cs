@@ -12,7 +12,6 @@ internal sealed class RemoveBot : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapDelete("bots/{userId}", HandleAsync)
-			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthenticatedUser()
 			.RequireUserType(UserType.Standard)
 			.RequirePermissions()

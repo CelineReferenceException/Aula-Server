@@ -12,7 +12,6 @@ internal sealed class SetUserRoom : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapPut("users/{userId}/current-room/", HandleAsync)
-			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.SetCurrentRoom)
 			.DenyBannedUsers()

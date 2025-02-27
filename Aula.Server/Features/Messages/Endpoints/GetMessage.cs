@@ -12,7 +12,6 @@ internal sealed class GetMessage : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapGet("rooms/{roomId}/messages/{messageId}", HandleAsync)
-			.RequireRateLimiting(RateLimitPolicyNames.Global)
 			.RequirePermissions(Permissions.ReadMessages)
 			.DenyBannedUsers()
 			.HasApiVersion(1);
