@@ -10,7 +10,7 @@ internal sealed class RateLimiterOptions
 
 	internal IReadOnlyDictionary<String, RateLimiterPolicy> PolicyMap => _policyMap;
 
-	internal RateLimiterPolicy? GlobalPolicy { get; set; }
+	internal RateLimiterPolicy? GlobalPolicy { get; private set; }
 
 	/// <summary>
 	///     Gets or sets a <see cref="Func{OnRejectedContext, CancellationToken, ValueTask}" /> that handles requests rejected by this middleware.
@@ -35,17 +35,36 @@ internal sealed class RateLimiterOptions
 	///     Method called every time an Acquire or WaitAsync call is made to determine what rate limiter to apply to the
 	///     request.
 	/// </param>
-	internal RateLimiterOptions AddPolicy(
+	internal RateLimiterOptions AddPolicy<TPartitionKey>(
 		String policyName,
-		Func<HttpContext, RateLimitPartition<String>> partitioner)
+		Func<HttpContext, RateLimitPartition<TPartitionKey>> partitioner)
 	{
 		if (_policyMap.ContainsKey(policyName))
 		{
 			throw new ArgumentException($"There already exists a policy with the name {policyName}.", nameof(policyName));
 		}
 
-		_policyMap.Add(policyName, new RateLimiterPolicy(partitioner, null));
+		_policyMap.Add(policyName, new RateLimiterPolicy(ConvertPartitioner(policyName, partitioner), null));
 
 		return this;
+	}
+
+	internal RateLimiterOptions SetGlobalPolicy<TPartitionKey>(Func<HttpContext, RateLimitPartition<TPartitionKey>> partitioner)
+	{
+		GlobalPolicy = new RateLimiterPolicy(ConvertPartitioner(nameof(GlobalPolicy), partitioner), null);
+		return this;
+	}
+
+	private static Func<HttpContext, RateLimitPartition<DefaultKeyType>> ConvertPartitioner<TPartitionKey>(
+		String? policyName,
+		Func<HttpContext, RateLimitPartition<TPartitionKey>> partitioner)
+	{
+		return context =>
+		{
+			var partition = partitioner(context);
+			var partitionKey = new DefaultKeyType(policyName, partition.PartitionKey, partition.Factory);
+			return new RateLimitPartition<DefaultKeyType>(partitionKey,
+				static key => ((Func<TPartitionKey, RateLimiter>)key.Factory!)((TPartitionKey)key.Key!));
+		};
 	}
 }

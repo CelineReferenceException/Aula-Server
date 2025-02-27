@@ -6,10 +6,10 @@ namespace Aula.Server.Common.RateLimiting;
 
 internal sealed class RateLimiterPolicy
 {
-	private readonly Func<HttpContext, RateLimitPartition<String>> _partitioner;
+	private readonly Func<HttpContext, RateLimitPartition<DefaultKeyType>> _partitioner;
 
 	internal RateLimiterPolicy(
-		Func<HttpContext, RateLimitPartition<String>> partitioner,
+		Func<HttpContext, RateLimitPartition<DefaultKeyType>> partitioner,
 		Func<OnRejectedContext, CancellationToken, ValueTask>? onRejected)
 	{
 		_partitioner = partitioner;
@@ -18,7 +18,7 @@ internal sealed class RateLimiterPolicy
 
 	internal Func<OnRejectedContext, CancellationToken, ValueTask>? OnRejected { get; }
 
-	internal RateLimitPartition<String> GetPartition(HttpContext httpContext)
+	internal RateLimitPartition<DefaultKeyType> GetPartition(HttpContext httpContext)
 	{
 		return _partitioner(httpContext);
 	}

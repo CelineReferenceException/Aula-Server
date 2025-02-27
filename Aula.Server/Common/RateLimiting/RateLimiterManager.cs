@@ -5,11 +5,11 @@ namespace Aula.Server.Common.RateLimiting;
 
 internal sealed class RateLimiterManager
 {
-	private readonly ConcurrentDictionary<String, RateLimiter> _rateLimiters = new();
+	private readonly ConcurrentDictionary<DefaultKeyType, RateLimiter> _rateLimiters = new();
 
 	internal TimeSpan MaximumReplenishmentPeriod { get; private set; } = TimeSpan.Zero;
 
-	internal RateLimiter GetOrAdd(RateLimitPartition<String> partition)
+	internal RateLimiter GetOrAdd(RateLimitPartition<DefaultKeyType> partition)
 	{
 		var rateLimiter = _rateLimiters.GetOrAdd(partition.PartitionKey, static (_, p) => p.Factory(p.PartitionKey), partition);
 		if (rateLimiter is ReplenishingRateLimiter replenishingRateLimiter &&

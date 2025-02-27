@@ -38,7 +38,7 @@ internal static class DependencyInjection
 		{
 			options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 
-			options.GlobalPolicy = new RateLimiterPolicy(httpContext =>
+			_ = options.SetGlobalPolicy(httpContext =>
 			{
 				var userManager = ServiceProviderServiceExtensions.GetRequiredService<UserManager>(httpContext.RequestServices);
 
@@ -57,7 +57,7 @@ internal static class DependencyInjection
 						Window = TimeSpan.FromMilliseconds(rateLimit.WindowMilliseconds!.Value),
 					};
 				});
-			}, null);
+			});
 		});
 
 		return services;
