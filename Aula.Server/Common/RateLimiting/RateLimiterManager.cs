@@ -14,7 +14,7 @@ internal sealed class RateLimiterManager
 		return rateLimiter;
 	}
 
-	internal void RemoveUnusedRateLimiters()
+	internal void RemoveUnusedReplenishingRateLimiters()
 	{
 		foreach (var entry in _rateLimiters
 			         .Where(r => r.Value is ExtendedReplenishingRateLimiter er &&

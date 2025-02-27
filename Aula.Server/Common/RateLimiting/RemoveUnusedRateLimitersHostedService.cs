@@ -15,7 +15,7 @@ internal sealed class RemoveUnusedRateLimitersHostedService : BackgroundService
 		while (!stoppingToken.IsCancellationRequested)
 		{
 			await Task.Delay(s_interval, stoppingToken);
-			_rateLimiterManager.RemoveUnusedRateLimiters();
+			_rateLimiterManager.RemoveUnusedReplenishingRateLimiters();
 		}
 	}
 }
