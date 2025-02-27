@@ -1,0 +1,25 @@
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.RateLimiting;
+
+namespace Aula.Server.Common.RateLimiting;
+
+internal sealed class RateLimiterPolicy
+{
+	private readonly Func<HttpContext, RateLimitPartition<String>> _partitioner;
+
+	internal RateLimiterPolicy(
+		Func<HttpContext, RateLimitPartition<String>> partitioner,
+		Func<OnRejectedContext, CancellationToken, ValueTask>? onRejected)
+	{
+		_partitioner = partitioner;
+		OnRejected = onRejected;
+	}
+
+	internal Func<OnRejectedContext, CancellationToken, ValueTask>? OnRejected { get; }
+
+	internal RateLimitPartition<String> GetPartition(HttpContext httpContext)
+	{
+		return _partitioner(httpContext);
+	}
+}
