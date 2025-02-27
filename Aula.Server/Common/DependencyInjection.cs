@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Aula.Server.Common.RateLimiting;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 
@@ -24,7 +25,7 @@ internal static class DependencyInjection
 		_ = builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<IAssemblyMarker>());
 		_ = builder.Services.AddJsonSerialization();
 
-		_ = builder.Services.AddRateLimiters();
+		_ = builder.Services.AddCustomRateLimiter();
 		_ = builder.Services.AddMailSender();
 		_ = builder.Services.AddSingleton<SnowflakeGenerator>();
 		_ = builder.Services.AddPersistence(builder.Configuration);
@@ -42,7 +43,7 @@ internal static class DependencyInjection
 	internal static TApp UseCommon<TApp>(this TApp app) where TApp : IApplicationBuilder, IEndpointRouteBuilder
 	{
 		_ = app.UseCors();
-		_ = app.UseRateLimiter();
+		_ = app.UseCustomRateLimiting();
 		_ = app.UseAuthentication();
 		_ = app.UseAuthorization();
 		_ = app.UseWebSockets();
