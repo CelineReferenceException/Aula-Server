@@ -20,8 +20,8 @@ internal sealed class RateLimiterManager
 			         .Where(r => r.Value is ExtendedReplenishingRateLimiter er &&
 			                     er.FirstWindowAcquireDateTime + er.ReplenishmentPeriod * 2 < DateTime.UtcNow))
 		{
-			entry.Value.Dispose();
 			_ = _rateLimiters.TryRemove(entry);
+			entry.Value.Dispose();
 		}
 	}
 }
