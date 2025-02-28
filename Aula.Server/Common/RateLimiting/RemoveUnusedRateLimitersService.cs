@@ -1,11 +1,11 @@
 namespace Aula.Server.Common.RateLimiting;
 
-internal sealed class RemoveUnusedRateLimitersHostedService : BackgroundService
+internal sealed class RemoveUnusedRateLimitersService : BackgroundService
 {
 	private static readonly TimeSpan s_interval = TimeSpan.FromMinutes(1);
 	private readonly RateLimiterManager _rateLimiterManager;
 
-	public RemoveUnusedRateLimitersHostedService(RateLimiterManager rateLimiterManager)
+	public RemoveUnusedRateLimitersService(RateLimiterManager rateLimiterManager)
 	{
 		_rateLimiterManager = rateLimiterManager;
 	}
