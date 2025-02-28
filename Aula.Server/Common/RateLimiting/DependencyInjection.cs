@@ -142,6 +142,11 @@ internal static class DependencyInjection
 		PolicyType type,
 		HttpContext httpContext)
 	{
+		var rateLimitOptions = httpContext.RequestServices
+			.GetRequiredService<IOptionsSnapshot<RateLimitOptions>>()
+			.Get("Global");
+		httpContext.Response.Headers.Append($"X-RateLimit-{type}-Limit", rateLimitOptions.PermitLimit.ToString());
+
 		var rateLimiterManager = httpContext.RequestServices.GetRequiredService<RateLimiterManager>();
 		var rateLimiter = rateLimiterManager.GetOrAdd(policy.GetPartition(httpContext));
 
