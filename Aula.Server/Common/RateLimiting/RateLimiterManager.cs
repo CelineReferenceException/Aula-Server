@@ -14,15 +14,20 @@ internal sealed class RateLimiterManager
 		return rateLimiter;
 	}
 
-	internal void RemoveUnusedReplenishingRateLimiters()
+	internal Int32 RemoveUnusedReplenishingRateLimiters()
 	{
-		foreach (var entry in _rateLimiters
-			         .Where(r => r.Value is ExtendedReplenishingRateLimiter er &&
-			                     er.FirstWindowAcquireDateTime + er.ReplenishmentPeriod * 2 < DateTime.UtcNow))
+		var unusedRateLimiters = _rateLimiters
+			.Where(r => r.Value is ExtendedReplenishingRateLimiter er &&
+			            er.FirstWindowAcquireDateTime + er.ReplenishmentPeriod * 2 < DateTime.UtcNow)
+			.ToList();
+
+		foreach (var entry in unusedRateLimiters)
 		{
 			_ = _rateLimiters.TryRemove(entry);
 			entry.Value.Dispose();
 		}
+
+		return unusedRateLimiters.Count;
 	}
 
 	internal Int32 ClearCache()
