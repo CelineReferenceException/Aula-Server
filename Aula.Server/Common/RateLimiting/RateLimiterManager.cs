@@ -3,15 +3,9 @@ using System.Threading.RateLimiting;
 
 namespace Aula.Server.Common.RateLimiting;
 
-internal sealed partial class RateLimiterManager
+internal sealed class RateLimiterManager
 {
-	private readonly ILogger<RateLimiterManager> _logger;
 	private readonly ConcurrentDictionary<DefaultKeyType, RateLimiter> _rateLimiters = new();
-
-	public RateLimiterManager(ILogger<RateLimiterManager> logger)
-	{
-		_logger = logger;
-	}
 
 	internal RateLimiter GetOrAdd(RateLimitPartition<DefaultKeyType> partition)
 	{
@@ -31,7 +25,7 @@ internal sealed partial class RateLimiterManager
 		}
 	}
 
-	internal void ClearCache()
+	internal Int32 ClearCache()
 	{
 		var count = _rateLimiters.Count;
 		foreach (var entry in _rateLimiters)
@@ -40,9 +34,6 @@ internal sealed partial class RateLimiterManager
 			entry.Value.Dispose();
 		}
 
-		LogCacheClear(_logger, count);
+		return count;
 	}
-
-	[LoggerMessage(LogLevel.Information, Message = "Rate limiters cache clear, {count} elements removed.")]
-	private static partial void LogCacheClear(ILogger logger, Int32 count);
 }
