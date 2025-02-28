@@ -9,7 +9,7 @@ internal static class DependencyInjection
 {
 	internal static TBuilder AddCommon<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
 	{
-		_ = builder.Configuration.AddJsonFile("configuration.json", false);
+		_ = builder.Configuration.AddJsonFile("configuration.json", false, true);
 
 		_ = builder.Services.AddOptions<ApplicationOptions>()
 			.BindConfiguration(ApplicationOptions.SectionName)
