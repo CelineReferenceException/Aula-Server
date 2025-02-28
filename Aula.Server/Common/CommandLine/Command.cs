@@ -5,8 +5,8 @@
 /// </summary>
 internal abstract class Command
 {
-	private readonly IServiceProvider _serviceProvider;
 	private readonly Dictionary<String, CommandOption> _options = [];
+	private readonly IServiceProvider _serviceProvider;
 	private readonly Dictionary<String, Command> _subCommands = [];
 	private CommandOption? _previousDefinedOption;
 

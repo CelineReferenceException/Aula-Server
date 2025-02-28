@@ -4,11 +4,11 @@ namespace Aula.Server.Common.RateLimiting;
 
 internal sealed partial class ClearCacheOnConfigurationUpdateService : IHostedService
 {
-	private readonly RateLimiterManager _rateLimiterManager;
-	private readonly IOptionsMonitor<RateLimitOptions> _optionsMonitor;
 	private readonly ILogger<ClearCacheOnConfigurationUpdateService> _logger;
-	private IDisposable? _listenerDisposable;
+	private readonly IOptionsMonitor<RateLimitOptions> _optionsMonitor;
+	private readonly RateLimiterManager _rateLimiterManager;
 	private DateTime _lastClearDateTime = DateTime.UtcNow;
+	private IDisposable? _listenerDisposable;
 
 	public ClearCacheOnConfigurationUpdateService(
 		RateLimiterManager rateLimiterManager,

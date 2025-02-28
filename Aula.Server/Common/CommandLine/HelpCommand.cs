@@ -5,6 +5,7 @@ namespace Aula.Server.Common.CommandLine;
 internal sealed partial class HelpCommand : Command
 {
 	private readonly CommandLineService _commandLineService;
+
 	private readonly CommandOption _commandOption = new()
 	{
 		Name = "c",
