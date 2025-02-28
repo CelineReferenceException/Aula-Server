@@ -21,8 +21,8 @@ internal static class DependencyInjection
 	internal static IServiceCollection AddCustomRateLimiter(this IServiceCollection services)
 	{
 		services.TryAddSingleton<RateLimiterManager>();
-		_ = services.AddHostedService<RemoveUnusedRateLimitersService>();
-		_ = services.AddHostedService<ClearCacheOnConfigurationUpdateService>();
+		_ = services.AddHostedService<ClearIdleRateLimitersService>();
+		_ = services.AddHostedService<ClearRateLimitersOnConfigurationUpdateService>();
 
 		_ = services.AddOptions<RateLimitOptions>("Global")
 			.BindConfiguration("RateLimiters:Global")

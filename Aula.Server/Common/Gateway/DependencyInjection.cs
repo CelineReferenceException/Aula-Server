@@ -11,7 +11,7 @@ internal static class DependencyInjection
 	internal static IServiceCollection AddGateway(this IServiceCollection services)
 	{
 		_ = services.AddSingleton<GatewayService>();
-		_ = services.AddHostedService<RemoveExpiredSessionsHostedService>();
+		_ = services.AddHostedService<RemoveExpiredSessionsService>();
 
 		_ = services.AddWebSockets(options =>
 		{

@@ -2,18 +2,18 @@ using Microsoft.Extensions.Options;
 
 namespace Aula.Server.Common.RateLimiting;
 
-internal sealed partial class ClearCacheOnConfigurationUpdateService : IHostedService
+internal sealed partial class ClearRateLimitersOnConfigurationUpdateService : IHostedService
 {
-	private readonly ILogger<ClearCacheOnConfigurationUpdateService> _logger;
+	private readonly ILogger<ClearRateLimitersOnConfigurationUpdateService> _logger;
 	private readonly IOptionsMonitor<RateLimitOptions> _optionsMonitor;
 	private readonly RateLimiterManager _rateLimiterManager;
 	private DateTime _lastClearDateTime = DateTime.UtcNow;
 	private IDisposable? _listenerDisposable;
 
-	public ClearCacheOnConfigurationUpdateService(
+	public ClearRateLimitersOnConfigurationUpdateService(
 		RateLimiterManager rateLimiterManager,
 		IOptionsMonitor<RateLimitOptions> optionsMonitor,
-		ILogger<ClearCacheOnConfigurationUpdateService> logger)
+		ILogger<ClearRateLimitersOnConfigurationUpdateService> logger)
 	{
 		_rateLimiterManager = rateLimiterManager;
 		_optionsMonitor = optionsMonitor;
