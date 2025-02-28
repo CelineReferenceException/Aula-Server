@@ -22,6 +22,7 @@ internal static class DependencyInjection
 	{
 		services.TryAddSingleton<RateLimiterManager>();
 		_ = services.AddHostedService<RemoveUnusedRateLimitersHostedService>();
+		_ = services.AddHostedService<ClearCacheOnConfigurationUpdateService>();
 
 		_ = services.AddOptions<RateLimitOptions>("Global")
 			.BindConfiguration("RateLimiters:Global")
