@@ -158,12 +158,13 @@ internal static class DependencyInjection
 		{
 			httpContext.Response.Headers.Append($"X-RateLimit-{type}-Remaining",
 				statistics.CurrentAvailablePermits.ToString());
-		}
 
-		if (rateLimiter is ExtendedReplenishingRateLimiter { ReplenishmentDateTime: not null, } replenishingRateLimiter)
-		{
-			var replenishmentDateTime = replenishingRateLimiter.ReplenishmentDateTime.Value;
-			httpContext.Response.Headers.Append($"X-RateLimit-{type}-ResetDateTime", replenishmentDateTime.ToString("O"));
+			if (statistics.CurrentAvailablePermits is 0 &&
+			    rateLimiter is ExtendedReplenishingRateLimiter { ReplenishmentDateTime: not null, } replenishingRateLimiter)
+			{
+				var replenishmentDateTime = replenishingRateLimiter.ReplenishmentDateTime.Value;
+				httpContext.Response.Headers.Append($"X-RateLimit-{type}-ResetDateTime", replenishmentDateTime.ToString("O"));
+			}
 		}
 
 		if (!rateLimitLease.IsAcquired &&
