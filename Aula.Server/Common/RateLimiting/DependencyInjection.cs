@@ -128,6 +128,7 @@ internal static class DependencyInjection
 				.GetRequiredService<IOptionsSnapshot<RateLimitOptions>>()
 				.Get(rateLimit.PolicyName);
 			httpContext.Response.Headers.Append("X-RateLimit-Endpoint-Limit", rateLimitOptions.PermitLimit.ToString());
+			httpContext.Response.Headers.Append("X-RateLimit-WindowMilliseconds-Remaining", rateLimitOptions.WindowMilliseconds.ToString());
 
 			if (!rateLimiterOptions.PolicyMap.TryGetValue(rateLimit.PolicyName, out var policy))
 			{
