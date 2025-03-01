@@ -1,7 +1,7 @@
+using System.Diagnostics;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 
@@ -73,55 +73,86 @@ internal static class DependencyInjection
 
 	internal static TBuilder UseCustomRateLimiting<TBuilder>(this TBuilder builder) where TBuilder : IApplicationBuilder
 	{
-		_ = builder.Use(async (httpContext, next) =>
+		_ = builder.Use((httpContext, next) =>
 		{
 			var endpoint = httpContext.GetEndpoint();
 			if (endpoint is null)
 			{
 				_ = next(httpContext);
-				return;
+				return Task.CompletedTask;
 			}
 
 			var ignoreRateLimitingAttribute = endpoint.Metadata.GetMetadata<IgnoreRateLimitingAttribute>();
 			if (ignoreRateLimitingAttribute is not null)
 			{
 				_ = next(httpContext);
-				return;
+				return Task.CompletedTask;
 			}
 
-			var options = httpContext.RequestServices.GetRequiredService<IOptions<RateLimiterOptions>>()
-				.Value;
-			if (options.GlobalPolicy is not null)
+			var rateLimiterManager = httpContext.RequestServices.GetRequiredService<RateLimiterManager>();
+			var rateLimiterOptions = httpContext.RequestServices.GetRequiredService<IOptions<RateLimiterOptions>>().Value;
+
+			var globalRateLimitOptions = httpContext.RequestServices
+				.GetRequiredService<IOptionsSnapshot<RateLimitOptions>>()
+				.Get("Global");
+			httpContext.Response.Headers.Append("X-RateLimit-Global-Limit", globalRateLimitOptions.PermitLimit.ToString());
+
+			var globalRateLimiter = rateLimiterManager.GetOrAdd(rateLimiterOptions.GlobalPolicy!.GetPartition(httpContext));
+			var globalLease = globalRateLimiter.AttemptAcquire();
+			var globalStatistics = globalRateLimiter.GetStatistics() ?? throw new UnreachableException();
+
+			if (globalStatistics.CurrentAvailablePermits is 0)
 			{
-				var globalLease = await ExecuteRateLimiterPolicyAsync(options.GlobalPolicy, RateLimitTargetType.Global, httpContext);
-				if (!globalLease.IsAcquired)
-				{
-					httpContext.Response.StatusCode = options.RejectionStatusCode;
-					return;
-				}
+				var replenishmentDateTime = ((ExtendedReplenishingRateLimiter)globalRateLimiter).ReplenishmentDateTime!.Value;
+				httpContext.Response.Headers.Append("X-RateLimit-ResetsAt", replenishmentDateTime.ToString("O"));
+			}
+
+			if (!globalLease.IsAcquired)
+			{
+				httpContext.Response.StatusCode = rateLimiterOptions.RejectionStatusCode;
+				httpContext.Response.Headers.Append("X-RateLimit-IsGlobal", "true");
+				return Task.CompletedTask;
 			}
 
 			var rateLimit = endpoint.Metadata.GetMetadata<RequireRateLimitingAttribute>();
 			if (rateLimit is null)
 			{
 				_ = next(httpContext);
-				return;
+				return Task.CompletedTask;
 			}
 
-			if (!options.PolicyMap.TryGetValue(rateLimit.PolicyName, out var policy))
+			// We assume that the rate limit configuration will have the same name as the policy
+			var rateLimitOptions = httpContext.RequestServices
+				.GetRequiredService<IOptionsSnapshot<RateLimitOptions>>()
+				.Get(rateLimit.PolicyName);
+			httpContext.Response.Headers.Append("X-RateLimit-Endpoint-Limit", globalRateLimitOptions.PermitLimit.ToString());
+
+			if (!rateLimiterOptions.PolicyMap.TryGetValue(rateLimit.PolicyName, out var policy))
 			{
 				throw new InvalidOperationException(
 					$"This endpoint requires a rate limiting policy with name {rateLimit.PolicyName}, but no such policy exists.");
 			}
 
-			var lease = await ExecuteRateLimiterPolicyAsync(policy, RateLimitTargetType.Endpoint, httpContext);
+			var rateLimiter = rateLimiterManager.GetOrAdd(policy.GetPartition(httpContext));
+			var lease = rateLimiter.AttemptAcquire();
+			var statistics = rateLimiter.GetStatistics() ?? throw new UnreachableException();
+
+			if (statistics.CurrentAvailablePermits is 0 &&
+			    rateLimiter is ExtendedReplenishingRateLimiter replenishingRateLimiter)
+			{
+				var replenishmentDateTime = replenishingRateLimiter.ReplenishmentDateTime!.Value;
+				httpContext.Response.Headers.Append("X-RateLimit-RateLimit-ResetsAt", replenishmentDateTime.ToString("O"));
+			}
+
 			if (!lease.IsAcquired)
 			{
-				httpContext.Response.StatusCode = options.RejectionStatusCode;
-				return;
+				httpContext.Response.StatusCode = rateLimiterOptions.RejectionStatusCode;
+				httpContext.Response.Headers.Append("X-RateLimit-IsGlobal", "false");
+				return Task.CompletedTask;
 			}
 
 			_ = next(httpContext);
+			return Task.CompletedTask;
 		});
 
 		return builder;
@@ -136,53 +167,5 @@ internal static class DependencyInjection
 		where TBuilder : IEndpointConventionBuilder
 	{
 		return builder.WithMetadata(new RequireRateLimitingAttribute(policyName));
-	}
-
-	private static async ValueTask<RateLimitLease> ExecuteRateLimiterPolicyAsync(
-		RateLimiterPolicy policy,
-		RateLimitTargetType type,
-		HttpContext httpContext)
-	{
-		var rateLimitOptions = httpContext.RequestServices
-			.GetRequiredService<IOptionsSnapshot<RateLimitOptions>>()
-			.Get("Global");
-		httpContext.Response.Headers.Append($"X-RateLimit-{type}-Limit", rateLimitOptions.PermitLimit.ToString());
-
-		var rateLimiterManager = httpContext.RequestServices.GetRequiredService<RateLimiterManager>();
-		var rateLimiter = rateLimiterManager.GetOrAdd(policy.GetPartition(httpContext));
-
-		var rateLimitLease = rateLimiter.AttemptAcquire();
-
-		var statistics = rateLimiter.GetStatistics();
-		if (statistics is not null)
-		{
-			httpContext.Response.Headers.Append($"X-RateLimit-{type}-Remaining",
-				statistics.CurrentAvailablePermits.ToString());
-
-			if (statistics.CurrentAvailablePermits is 0 &&
-			    rateLimiter is ExtendedReplenishingRateLimiter { ReplenishmentDateTime: not null, } replenishingRateLimiter)
-			{
-				var replenishmentDateTime = replenishingRateLimiter.ReplenishmentDateTime.Value;
-				httpContext.Response.Headers.Append($"X-RateLimit-{type}-ResetDateTime", replenishmentDateTime.ToString("O"));
-			}
-		}
-
-		if (!rateLimitLease.IsAcquired &&
-		    policy.OnRejected is not null)
-		{
-			await policy.OnRejected(new OnRejectedContext
-			{
-				HttpContext = httpContext,
-				Lease = rateLimitLease,
-			}, httpContext.RequestAborted);
-		}
-
-		return rateLimitLease;
-	}
-
-	private enum RateLimitTargetType
-	{
-		Global,
-		Endpoint,
 	}
 }
