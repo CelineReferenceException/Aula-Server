@@ -93,7 +93,7 @@ internal static class DependencyInjection
 				.Value;
 			if (options.GlobalPolicy is not null)
 			{
-				var globalLease = await ExecuteRateLimiterPolicyAsync(options.GlobalPolicy, PolicyType.Global, httpContext);
+				var globalLease = await ExecuteRateLimiterPolicyAsync(options.GlobalPolicy, RateLimitTargetType.Global, httpContext);
 				if (!globalLease.IsAcquired)
 				{
 					httpContext.Response.StatusCode = options.RejectionStatusCode;
@@ -114,7 +114,7 @@ internal static class DependencyInjection
 					$"This endpoint requires a rate limiting policy with name {rateLimit.PolicyName}, but no such policy exists.");
 			}
 
-			var lease = await ExecuteRateLimiterPolicyAsync(policy, PolicyType.Scope, httpContext);
+			var lease = await ExecuteRateLimiterPolicyAsync(policy, RateLimitTargetType.Endpoint, httpContext);
 			if (!lease.IsAcquired)
 			{
 				httpContext.Response.StatusCode = options.RejectionStatusCode;
@@ -140,7 +140,7 @@ internal static class DependencyInjection
 
 	private static async ValueTask<RateLimitLease> ExecuteRateLimiterPolicyAsync(
 		RateLimiterPolicy policy,
-		PolicyType type,
+		RateLimitTargetType type,
 		HttpContext httpContext)
 	{
 		var rateLimitOptions = httpContext.RequestServices
@@ -179,9 +179,9 @@ internal static class DependencyInjection
 		return rateLimitLease;
 	}
 
-	private enum PolicyType
+	private enum RateLimitTargetType
 	{
 		Global,
-		Scope,
+		Endpoint,
 	}
 }
