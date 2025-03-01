@@ -96,6 +96,8 @@ internal static class DependencyInjection
 				.GetRequiredService<IOptionsSnapshot<RateLimitOptions>>()
 				.Get("Global");
 			httpContext.Response.Headers.Append("X-RateLimit-Global-Limit", globalRateLimitOptions.PermitLimit.ToString());
+			httpContext.Response.Headers.Append("X-RateLimit-Global-WindowMilliseconds",
+				globalRateLimitOptions.WindowMilliseconds.ToString());
 
 			var globalRateLimiter = rateLimiterManager.GetOrAdd(rateLimiterOptions.GlobalPolicy!.GetPartition(httpContext));
 			var globalLease = globalRateLimiter.AttemptAcquire();
