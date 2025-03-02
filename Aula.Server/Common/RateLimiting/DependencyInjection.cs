@@ -111,15 +111,14 @@ internal static class DependencyInjection
 				httpContext.Response.Headers.Append("X-RateLimit-ResetsAt", replenishmentDateTime.ToString("O"));
 			}
 
-			if (!globalLease.IsAcquired)
-			{
-				return Task.CompletedTask;
-			}
-
 			var rateLimit = endpoint.Metadata.GetMetadata<RequireRateLimitingAttribute>();
 			if (rateLimit is null)
 			{
-				_ = next(httpContext);
+				if (globalLease.IsAcquired)
+				{
+					_ = next(httpContext);
+				}
+
 				return Task.CompletedTask;
 			}
 
@@ -129,6 +128,11 @@ internal static class DependencyInjection
 				.Get(rateLimit.PolicyName);
 			httpContext.Response.Headers.Append("X-RateLimit-Endpoint-Limit", rateLimitOptions.PermitLimit.ToString());
 			httpContext.Response.Headers.Append("X-RateLimit-WindowMilliseconds-Remaining", rateLimitOptions.WindowMilliseconds.ToString());
+
+			if (!globalLease.IsAcquired)
+			{
+				return Task.CompletedTask;
+			}
 
 			if (!rateLimiterOptions.PolicyMap.TryGetValue(rateLimit.PolicyName, out var policy))
 			{
