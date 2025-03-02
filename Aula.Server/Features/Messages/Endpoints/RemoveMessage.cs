@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Aula.Server.Common.RateLimiting;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ internal sealed class RemoveMessage : IEndpoint
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapDelete("rooms/{roomId}/messages/{messageId}", HandleAsync)
+			.ApplyRateLimiting(MessageRateLimitingPolicies.RemoveMessage)
 			.RequireAuthenticatedUser()
 			.DenyBannedUsers()
 			.HasApiVersion(1);
