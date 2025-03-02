@@ -105,14 +105,14 @@ internal static class DependencyInjection
 
 			if (globalStatistics.CurrentAvailablePermits is 0)
 			{
+				httpContext.Response.StatusCode = rateLimiterOptions.RejectionStatusCode;
+				httpContext.Response.Headers.Append("X-RateLimit-IsGlobal", "true");
 				var replenishmentDateTime = ((ExtendedReplenishingRateLimiter)globalRateLimiter).ReplenishmentDateTime!.Value;
 				httpContext.Response.Headers.Append("X-RateLimit-ResetsAt", replenishmentDateTime.ToString("O"));
 			}
 
 			if (!globalLease.IsAcquired)
 			{
-				httpContext.Response.StatusCode = rateLimiterOptions.RejectionStatusCode;
-				httpContext.Response.Headers.Append("X-RateLimit-IsGlobal", "true");
 				return Task.CompletedTask;
 			}
 
