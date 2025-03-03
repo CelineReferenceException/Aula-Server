@@ -126,8 +126,8 @@ internal static class DependencyInjection
 			var rateLimitOptions = httpContext.RequestServices
 				.GetRequiredService<IOptionsSnapshot<RateLimitOptions>>()
 				.Get(rateLimit.PolicyName);
-			httpContext.Response.Headers.Append("X-RateLimit-Endpoint-Limit", rateLimitOptions.PermitLimit.ToString());
-			httpContext.Response.Headers.Append("X-RateLimit-WindowMilliseconds-Remaining", rateLimitOptions.WindowMilliseconds.ToString());
+			httpContext.Response.Headers.Append("X-RateLimit-Route-Limit", rateLimitOptions.PermitLimit.ToString());
+			httpContext.Response.Headers.Append("X-RateLimit-Route-WindowMilliseconds", rateLimitOptions.WindowMilliseconds.ToString());
 
 			if (!globalLease.IsAcquired)
 			{
@@ -148,7 +148,7 @@ internal static class DependencyInjection
 			    rateLimiter is ExtendedReplenishingRateLimiter replenishingRateLimiter)
 			{
 				var replenishmentDateTime = replenishingRateLimiter.ReplenishmentDateTime!.Value;
-				httpContext.Response.Headers.Append("X-RateLimit-RateLimit-ResetsAt", replenishmentDateTime.ToString("O"));
+				httpContext.Response.Headers.Append("X-RateLimit-Route-ResetsAt", replenishmentDateTime.ToString("O"));
 			}
 
 			if (!lease.IsAcquired)
