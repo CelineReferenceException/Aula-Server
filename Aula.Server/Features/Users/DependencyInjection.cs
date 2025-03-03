@@ -2,7 +2,7 @@
 
 internal static class DependencyInjection
 {
-	internal static IServiceCollection AddUserFeatures(this IServiceCollection services)
+	internal static IServiceCollection AddUserPresenceServices(this IServiceCollection services)
 	{
 		_ = services.AddHostedService<ResetPresencesHostedService>();
 

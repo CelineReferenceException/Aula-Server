@@ -8,8 +8,8 @@ internal static class DependencyInjection
 {
 	internal static IServiceCollection AddFeatures(this IServiceCollection services)
 	{
-		_ = services.AddIdentityFeatures();
-		_ = services.AddUserFeatures();
+		_ = services.AddIdentityEndpointEmailSenders();
+		_ = services.AddUserPresenceServices();
 		_ = services.AddMessageEndpointRateLimiters();
 
 		return services;
