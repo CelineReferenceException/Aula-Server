@@ -1,4 +1,5 @@
 ﻿using Aula.Server.Features.Identity.Endpoints;
+using Aula.Server.Features.Messages.Endpoints;
 using Aula.Server.Features.Users;
 
 namespace Aula.Server.Features;
@@ -9,6 +10,7 @@ internal static class DependencyInjection
 	{
 		_ = services.AddIdentityFeatures();
 		_ = services.AddUserFeatures();
+		_ = services.AddMessageEndpointRateLimiters();
 
 		return services;
 	}
