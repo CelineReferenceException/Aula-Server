@@ -148,7 +148,7 @@ internal static class DependencyInjection
 			    rateLimiter is ExtendedReplenishingRateLimiter replenishingRateLimiter)
 			{
 				var replenishmentDateTime = replenishingRateLimiter.ReplenishmentDateTime!.Value;
-				httpContext.Response.Headers.Append("X-RateLimit-Route-ResetsAt", replenishmentDateTime.ToString("O"));
+				httpContext.Response.Headers.Append("X-RateLimit-ResetsAt", replenishmentDateTime.ToString("O"));
 			}
 
 			if (!lease.IsAcquired)
