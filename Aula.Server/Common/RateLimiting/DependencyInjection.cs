@@ -78,15 +78,13 @@ internal static class DependencyInjection
 			var endpoint = httpContext.GetEndpoint();
 			if (endpoint is null)
 			{
-				_ = next(httpContext);
-				return Task.CompletedTask;
+				return next(httpContext);
 			}
 
 			var ignoreRateLimitingAttribute = endpoint.Metadata.GetMetadata<IgnoreRateLimitingAttribute>();
 			if (ignoreRateLimitingAttribute is not null)
 			{
-				_ = next(httpContext);
-				return Task.CompletedTask;
+				return next(httpContext);
 			}
 
 			var rateLimiterManager = httpContext.RequestServices.GetRequiredService<RateLimiterManager>();
@@ -116,7 +114,7 @@ internal static class DependencyInjection
 			{
 				if (globalLease.IsAcquired)
 				{
-					_ = next(httpContext);
+					return next(httpContext);
 				}
 
 				return Task.CompletedTask;
@@ -158,8 +156,7 @@ internal static class DependencyInjection
 				return Task.CompletedTask;
 			}
 
-			_ = next(httpContext);
-			return Task.CompletedTask;
+			return next(httpContext);
 		});
 
 		return builder;
