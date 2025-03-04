@@ -6,7 +6,7 @@ internal sealed class BanValidator : AbstractValidator<Ban>
 {
 	public BanValidator()
 	{
-		_ = RuleFor(x => x.Id).NotEmpty();
+		_ = RuleFor(x => x.Id).NotNull();
 
 		_ = RuleFor(x => x.Type)
 			.IsInEnum();
@@ -15,6 +15,6 @@ internal sealed class BanValidator : AbstractValidator<Ban>
 			.MinimumLength(Ban.ReasonMinimumLength)
 			.MaximumLength(Ban.ReasonMaximumLength);
 
-		_ = When(x => x.Type is BanType.Id, () => { _ = RuleFor(x => x.TargetId).NotEmpty(); });
+		_ = When(x => x.Type is BanType.Id, () => { _ = RuleFor(x => x.TargetId).NotNull(); });
 	}
 }
