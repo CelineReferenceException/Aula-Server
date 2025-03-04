@@ -1,4 +1,5 @@
-﻿using Aula.Server.Features.Identity.Endpoints;
+﻿using Aula.Server.Features.Gateway.Endpoints;
+using Aula.Server.Features.Identity.Endpoints;
 using Aula.Server.Features.Messages.Endpoints;
 using Aula.Server.Features.Users;
 
@@ -11,6 +12,7 @@ internal static class DependencyInjection
 		_ = services.AddIdentityEndpointEmailSenders();
 		_ = services.AddUserPresenceServices();
 		_ = services.AddMessageEndpointRateLimiters();
+		_ = services.AddGatewayEndpointRateLimiters();
 
 		return services;
 	}
