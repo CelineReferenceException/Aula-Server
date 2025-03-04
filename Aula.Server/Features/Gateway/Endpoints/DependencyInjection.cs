@@ -31,17 +31,14 @@ internal static class DependencyInjection
 				var userId = userManager.GetUserId(httpContext.User);
 				var partitionKey = userId.ToString() ?? httpContext.Connection.RemoteIpAddress?.ToString() ?? String.Empty;
 
-				return RateLimitPartitionExtensions.GetExtendedFixedWindowRateLimiter(partitionKey, _ =>
-				{
-					var rateLimitOptions = httpContext.RequestServices
-						.GetRequiredService<IOptionsSnapshot<RateLimitOptions>>()
-						.Get(GatewayRateLimitPolicies.Gateway);
+				var rateLimitOptions = httpContext.RequestServices
+					.GetRequiredService<IOptionsSnapshot<RateLimitOptions>>()
+					.Get(GatewayRateLimitPolicies.Gateway);
 
-					return new FixedWindowRateLimiterOptions
-					{
-						PermitLimit = rateLimitOptions.PermitLimit!.Value,
-						Window = TimeSpan.FromMilliseconds(rateLimitOptions.WindowMilliseconds!.Value),
-					};
+				return RateLimitPartitionExtensions.GetExtendedFixedWindowRateLimiter(partitionKey, _ => new FixedWindowRateLimiterOptions
+				{
+					PermitLimit = rateLimitOptions.PermitLimit!.Value,
+					Window = TimeSpan.FromMilliseconds(rateLimitOptions.WindowMilliseconds!.Value),
 				});
 			});
 		});
