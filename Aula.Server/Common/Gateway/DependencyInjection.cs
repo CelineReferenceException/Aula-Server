@@ -6,6 +6,11 @@ internal static class DependencyInjection
 {
 	internal static IServiceCollection AddGateway(this IServiceCollection services)
 	{
+		_ = services.AddOptions<GatewayOptions>()
+			.BindConfiguration(GatewayOptions.SectionName)
+			.ValidateDataAnnotations()
+			.ValidateOnStart();
+
 		_ = services.AddSingleton<GatewayService>();
 		_ = services.AddHostedService<RemoveExpiredSessionsService>();
 
