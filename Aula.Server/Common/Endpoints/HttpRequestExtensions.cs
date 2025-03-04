@@ -2,7 +2,7 @@
 
 namespace Aula.Server.Common.Endpoints;
 
-internal static class HttpContextExtensions
+internal static class HttpRequestExtensions
 {
 	private const String SchemeDelimiter = "://";
 
