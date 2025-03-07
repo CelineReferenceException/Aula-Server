@@ -13,10 +13,10 @@ internal sealed class GatewayService : IDisposable
 	private readonly IServiceScope _serviceScope;
 	private readonly ConcurrentDictionary<String, GatewaySession> _sessions = [];
 
-	public GatewayService(IOptions<GatewayOptions> gatewayOptions, IOptions<JsonOptions> jsonOptions, IServiceProvider serviceProvider)
+	public GatewayService(IOptions<GatewayOptions> gatewayOptions, IOptions<JsonOptions> jsonOptions, IServiceScopeFactory scopeFactory)
 	{
 		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
-		_serviceScope = serviceProvider.CreateScope();
+		_serviceScope = scopeFactory.CreateScope();
 		_publisher = _serviceScope.ServiceProvider.GetRequiredService<IPublisher>();
 		TimeToExpire = TimeSpan.FromSeconds(gatewayOptions.Value.SecondsToExpire);
 	}
