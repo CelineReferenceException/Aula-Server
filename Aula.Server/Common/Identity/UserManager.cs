@@ -156,7 +156,7 @@ internal sealed class UserManager
 			Token = Guid.CreateVersion7().ToString("N"),
 			CreationTime = DateTime.UtcNow,
 		};
-		_ = s_pendingEmailConfirmations.AddOrUpdate(user.Id, _ => emailConfirmation, (_, _) => emailConfirmation);
+		_ = s_pendingEmailConfirmations.AddOrUpdate(user.Id, static (_, e) => e, static (_, _, e) => e, emailConfirmation);
 		return emailConfirmation.Token;
 	}
 
