@@ -99,6 +99,7 @@ internal sealed class GatewaySession : IDisposable
 
 	internal async Task StopAsync(WebSocketCloseStatus closeStatus)
 	{
+		ObjectDisposedException.ThrowIf(_isDisposed, this);
 		ThrowIfNullWebSocket();
 
 		if (!_isRunning)
@@ -121,6 +122,7 @@ internal sealed class GatewaySession : IDisposable
 
 	private async Task StartSendingEventsAsync()
 	{
+		ObjectDisposedException.ThrowIf(_isDisposed, this);
 		ThrowIfNullWebSocket();
 		try
 		{
@@ -144,6 +146,7 @@ internal sealed class GatewaySession : IDisposable
 
 	private async Task StartReceivingEventsAsync(IPublisher publisher)
 	{
+		ObjectDisposedException.ThrowIf(_isDisposed, this);
 		ThrowIfNullWebSocket();
 		try
 		{
