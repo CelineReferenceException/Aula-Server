@@ -28,7 +28,7 @@ internal static class AuthenticatedUserPolicyExtensions
 		_ = builder.AddPolicy(PolicyName, policy =>
 		{
 			_ = policy.RequireAuthenticatedUser();
-			_ = policy.AddAuthenticationSchemes(AuthenticationSchemeNames.BearerToken);
+			_ = policy.AddAuthenticationSchemes(AuthenticationSchemes.BearerToken);
 		});
 
 		return builder;

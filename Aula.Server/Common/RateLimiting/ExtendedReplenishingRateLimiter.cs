@@ -17,21 +17,21 @@ internal sealed class ExtendedReplenishingRateLimiter : ReplenishingRateLimiter
 
 	public override TimeSpan ReplenishmentPeriod => _underlyingRateLimiter.ReplenishmentPeriod;
 
-	internal DateTime? FirstWindowAcquireDateTime { get; private set; }
+	internal DateTime? FirstWindowAcquireDate { get; private set; }
 
-	internal DateTime? ReplenishmentDateTime => FirstWindowAcquireDateTime + _underlyingRateLimiter.ReplenishmentPeriod;
+	internal DateTime? ReplenishmentDate => FirstWindowAcquireDate + _underlyingRateLimiter.ReplenishmentPeriod;
 
 	protected override async ValueTask<RateLimitLease> AcquireAsyncCore(Int32 permitCount, CancellationToken cancellationToken)
 	{
 		ReplenishIfAcceptable();
-		FirstWindowAcquireDateTime ??= DateTime.UtcNow;
+		FirstWindowAcquireDate ??= DateTime.UtcNow;
 		return await _underlyingRateLimiter.AcquireAsync(permitCount, cancellationToken);
 	}
 
 	protected override RateLimitLease AttemptAcquireCore(Int32 permitCount)
 	{
 		ReplenishIfAcceptable();
-		FirstWindowAcquireDateTime ??= DateTime.UtcNow;
+		FirstWindowAcquireDate ??= DateTime.UtcNow;
 		return _underlyingRateLimiter.AttemptAcquire(permitCount);
 	}
 
@@ -45,7 +45,7 @@ internal sealed class ExtendedReplenishingRateLimiter : ReplenishingRateLimiter
 		var replenished = _underlyingRateLimiter.TryReplenish();
 		if (replenished)
 		{
-			FirstWindowAcquireDateTime = null;
+			FirstWindowAcquireDate = null;
 		}
 
 		return replenished;
@@ -54,9 +54,9 @@ internal sealed class ExtendedReplenishingRateLimiter : ReplenishingRateLimiter
 	private void ReplenishIfAcceptable()
 	{
 		var now = DateTime.UtcNow;
-		if (ReplenishmentDateTime is not null &&
-		    FirstWindowAcquireDateTime is not null &&
-		    now - FirstWindowAcquireDateTime > ReplenishmentPeriod)
+		if (ReplenishmentDate is not null &&
+		    FirstWindowAcquireDate is not null &&
+		    now - FirstWindowAcquireDate > ReplenishmentPeriod)
 		{
 			_ = TryReplenish();
 		}

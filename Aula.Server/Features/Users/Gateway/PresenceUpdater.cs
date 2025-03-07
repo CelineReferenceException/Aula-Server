@@ -23,7 +23,7 @@ internal sealed class PresenceUpdater :
 	public PresenceUpdater(
 		IOptions<JsonOptions> jsonOptions,
 		ApplicationDbContext dbContext,
-		[FromKeyedServices(ResiliencePipelineNames.RetryOnDbConcurrencyProblem)]
+		[FromKeyedServices(ResiliencePipelines.RetryOnDbConcurrencyProblem)]
 		ResiliencePipeline retryOnDbConcurrencyProblem)
 	{
 		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;

@@ -13,9 +13,9 @@ internal sealed class GatewaySession : IDisposable
 	private readonly Channel<Byte[]> _eventsQueue = Channel.CreateUnbounded<Byte[]>();
 	private readonly JsonSerializerOptions _eventsReceivedJsonOptions;
 	private readonly IPublisher _publisher;
-	private Boolean _isDisposed;
-	private Boolean _isFirstConnection = true;
-	private Boolean _isRunning;
+	private Boolean _disposed;
+	private Boolean _isFirstConnect = true;
+	private Boolean _running;
 	private Byte[]? _nextEvent;
 	private CancellationTokenSource _sendingEventsCancellation = null!;
 	private WebSocket? _webSocket;
@@ -33,7 +33,7 @@ internal sealed class GatewaySession : IDisposable
 		Id = Guid.NewGuid().ToString("N");
 	}
 
-	internal Boolean IsActive => _isRunning;
+	internal Boolean IsActive => _running;
 
 	internal String Id { get; }
 
@@ -51,10 +51,10 @@ internal sealed class GatewaySession : IDisposable
 
 	internal async Task RunAsync(PresenceOptions presence)
 	{
-		ObjectDisposedException.ThrowIf(_isDisposed, this);
+		ObjectDisposedException.ThrowIf(_disposed, this);
 		ThrowIfNullWebSocket();
 
-		if (Interlocked.Exchange(ref _isRunning, true))
+		if (Interlocked.Exchange(ref _running, true))
 		{
 			throw new InvalidOperationException("Gateway is already running.");
 		}
@@ -70,14 +70,14 @@ internal sealed class GatewaySession : IDisposable
 		var receiving = StartReceivingEventsAsync(_publisher);
 		var sending = StartSendingEventsAsync();
 
-		if (_isFirstConnection)
+		if (_isFirstConnect)
 		{
 			await _publisher.Publish(new HelloEvent
 			{
 				Session = this,
 			});
 
-			_isFirstConnection = false;
+			_isFirstConnect = false;
 		}
 
 		await _publisher.Publish(new GatewayConnectedEvent
@@ -94,15 +94,15 @@ internal sealed class GatewaySession : IDisposable
 		});
 
 		CloseTime = DateTime.UtcNow;
-		_isRunning = false;
+		_running = false;
 	}
 
 	internal async Task StopAsync(WebSocketCloseStatus closeStatus)
 	{
-		ObjectDisposedException.ThrowIf(_isDisposed, this);
+		ObjectDisposedException.ThrowIf(_disposed, this);
 		ThrowIfNullWebSocket();
 
-		if (!_isRunning)
+		if (!_running)
 		{
 			return;
 		}
@@ -122,7 +122,7 @@ internal sealed class GatewaySession : IDisposable
 
 	private async Task StartSendingEventsAsync()
 	{
-		ObjectDisposedException.ThrowIf(_isDisposed, this);
+		ObjectDisposedException.ThrowIf(_disposed, this);
 		ThrowIfNullWebSocket();
 		try
 		{
@@ -146,29 +146,29 @@ internal sealed class GatewaySession : IDisposable
 
 	private async Task StartReceivingEventsAsync(IPublisher publisher)
 	{
-		ObjectDisposedException.ThrowIf(_isDisposed, this);
+		ObjectDisposedException.ThrowIf(_disposed, this);
 		ThrowIfNullWebSocket();
 		try
 		{
 			var buffer = new Byte[1024 / 4].AsMemory();
 			do
 			{
-				using var payloadStream = new MemoryStream();
+				using var payloadBytes = new MemoryStream();
 				ValueWebSocketReceiveResult received;
 				do
 				{
-					if (payloadStream.Length > 4095)
+					if (payloadBytes.Length > 1024 * 4)
 					{
 						await StopAsync(WebSocketCloseStatus.MessageTooBig);
 						return;
 					}
 
 					received = await _webSocket.ReceiveAsync(buffer, CancellationToken.None);
-					await payloadStream.WriteAsync(buffer[..received.Count], CancellationToken.None);
+					await payloadBytes.WriteAsync(buffer[..received.Count], CancellationToken.None);
 				} while (!received.EndOfMessage);
 
-				_ = payloadStream.Seek(0, SeekOrigin.Begin);
-				var payload = await JsonSerializer.DeserializeAsync<GatewayPayload>(payloadStream, _eventsReceivedJsonOptions);
+				_ = payloadBytes.Seek(0, SeekOrigin.Begin);
+				var payload = await JsonSerializer.DeserializeAsync<GatewayPayload>(payloadBytes, _eventsReceivedJsonOptions);
 				if (payload is null)
 				{
 					await StopAsync(WebSocketCloseStatus.InvalidPayloadData);
@@ -192,7 +192,7 @@ internal sealed class GatewaySession : IDisposable
 
 	internal async Task QueueEventAsync(Byte[] payload, CancellationToken cancellationToken = default)
 	{
-		ObjectDisposedException.ThrowIf(_isDisposed, this);
+		ObjectDisposedException.ThrowIf(_disposed, this);
 
 		_ = await _eventsQueue.Writer.WaitToWriteAsync(cancellationToken);
 		await _eventsQueue.Writer.WriteAsync(payload, cancellationToken);
@@ -200,9 +200,9 @@ internal sealed class GatewaySession : IDisposable
 
 	internal void SetWebSocket(WebSocket webSocket)
 	{
-		ObjectDisposedException.ThrowIf(_isDisposed, this);
+		ObjectDisposedException.ThrowIf(_disposed, this);
 		ArgumentNullException.ThrowIfNull(webSocket, nameof(webSocket));
-		if (_isRunning)
+		if (_running)
 		{
 			throw new InvalidOperationException("Cannot set the websocket while the gateway is running.");
 		}
@@ -212,12 +212,12 @@ internal sealed class GatewaySession : IDisposable
 
 	private void Dispose(Boolean disposing)
 	{
-		if (_isDisposed)
+		if (_disposed)
 		{
 			return;
 		}
 
-		_isDisposed = true;
+		_disposed = true;
 
 		if (disposing)
 		{

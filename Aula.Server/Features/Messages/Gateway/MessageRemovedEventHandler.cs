@@ -51,7 +51,7 @@ internal sealed class MessageRemovedEventHandler : INotificationHandler<MessageR
 						RoomId = message.LeaveData.RoomId,
 					}
 					: null,
-				CreationTime = message.CreationTime,
+				CreationTime = message.CreationDate,
 			},
 		}.GetJsonUtf8Bytes(_jsonSerializerOptions);
 

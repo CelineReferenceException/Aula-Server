@@ -91,7 +91,7 @@ internal sealed class ApplicationDbContext : DbContext
 		_ = userModel.Property(x => x.Presence)
 			.IsRequired();
 
-		_ = userModel.Property(x => x.CreationTime)
+		_ = userModel.Property(x => x.CreationDate)
 			.IsRequired();
 
 		_ = userModel.Property(x => x.CurrentRoomId)
@@ -137,7 +137,7 @@ internal sealed class ApplicationDbContext : DbContext
 		_ = roomModel.Property(x => x.IsEntrance)
 			.IsRequired();
 
-		_ = roomModel.Property(x => x.CreationTime)
+		_ = roomModel.Property(x => x.CreationDate)
 			.IsRequired();
 
 		_ = roomModel.HasMany(x => x.Connections)
@@ -212,7 +212,7 @@ internal sealed class ApplicationDbContext : DbContext
 			.IsRequired(false)
 			.HasMaxLength(Message.ContentMaximumLength);
 
-		_ = messageModel.Property(x => x.CreationTime)
+		_ = messageModel.Property(x => x.CreationDate)
 			.IsRequired();
 
 		_ = messageModel.Property(x => x.IsRemoved)
@@ -265,7 +265,7 @@ internal sealed class ApplicationDbContext : DbContext
 		_ = banModel.Property(x => x.TargetId)
 			.IsRequired(false);
 
-		_ = banModel.Property(x => x.CreationTime)
+		_ = banModel.Property(x => x.CreationDate)
 			.IsRequired();
 
 		_ = banModel

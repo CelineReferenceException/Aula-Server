@@ -63,7 +63,7 @@ internal sealed class GetMessages : IEndpoint
 		var messagesQuery = dbContext.Messages
 			.AsNoTracking()
 			.Where(m => !m.IsRemoved && m.RoomId == roomId)
-			.OrderByDescending(m => m.CreationTime)
+			.OrderByDescending(m => m.CreationDate)
 			.Select(m => new
 			{
 				m.Id,
@@ -75,7 +75,7 @@ internal sealed class GetMessages : IEndpoint
 				m.Content,
 				m.JoinData,
 				m.LeaveData,
-				m.CreationTime,
+				CreationTime = m.CreationDate,
 			})
 			.Take(count.Value);
 
@@ -86,7 +86,7 @@ internal sealed class GetMessages : IEndpoint
 				.Where(m => m.Id == beforeId && !m.IsRemoved && m.RoomId == roomId)
 				.Select(m => new
 				{
-					m.CreationTime,
+					CreationTime = m.CreationDate,
 				})
 				.FirstOrDefaultAsync();
 
@@ -104,7 +104,7 @@ internal sealed class GetMessages : IEndpoint
 				.Where(m => m.Id == afterId && !m.IsRemoved && m.RoomId == roomId)
 				.Select(m => new
 				{
-					m.CreationTime,
+					CreationTime = m.CreationDate,
 				})
 				.FirstOrDefaultAsync();
 

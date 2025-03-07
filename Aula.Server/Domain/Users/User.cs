@@ -45,9 +45,10 @@ internal sealed class User : DefaultDomainEntity
 
 	internal UInt64? CurrentRoomId { get; private set; }
 
-	internal DateTime CreationTime { get; private init; }
+	internal DateTime CreationDate { get; private init; }
 
 	internal Boolean IsRemoved { get; private set; }
+
 	internal String ConcurrencyStamp { get; private set; }
 
 	internal static User Create(
@@ -67,7 +68,7 @@ internal sealed class User : DefaultDomainEntity
 			Description = String.Empty,
 			Permissions = permissions,
 			Type = type,
-			CreationTime = DateTime.UtcNow,
+			CreationDate = DateTime.UtcNow,
 			ConcurrencyStamp = GenerateConcurrencyStamp(),
 			SecurityStamp = GenerateSecurityStamp(),
 		};

@@ -37,7 +37,7 @@ internal sealed class GetRooms : IEndpoint
 		var roomsQuery = dbContext.Rooms
 			.AsNoTracking()
 			.Where(r => !r.IsRemoved)
-			.OrderBy(r => r.CreationTime)
+			.OrderBy(r => r.CreationDate)
 			.Select(r => new RoomData
 			{
 				Id = r.Id,
@@ -45,7 +45,7 @@ internal sealed class GetRooms : IEndpoint
 				Description = r.Description,
 				IsEntrance = r.IsEntrance,
 				ConnectedRoomIds = r.Connections.Select(c => c.TargetRoomId).ToList(),
-				CreationTime = r.CreationTime,
+				CreationTime = r.CreationDate,
 			})
 			.Take((Int32)count);
 
@@ -56,7 +56,7 @@ internal sealed class GetRooms : IEndpoint
 				.Where(r => r.Id == afterId && !r.IsRemoved)
 				.Select(r => new
 				{
-					r.CreationTime,
+					CreationTime = r.CreationDate,
 				})
 				.FirstOrDefaultAsync();
 

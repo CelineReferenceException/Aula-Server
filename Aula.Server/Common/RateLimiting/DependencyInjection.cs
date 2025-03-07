@@ -105,7 +105,7 @@ internal static class DependencyInjection
 			{
 				httpContext.Response.StatusCode = rateLimiterOptions.RejectionStatusCode;
 				httpContext.Response.Headers.Append("X-RateLimit-IsGlobal", "true");
-				var replenishmentDateTime = ((ExtendedReplenishingRateLimiter)globalRateLimiter).ReplenishmentDateTime!.Value;
+				var replenishmentDateTime = ((ExtendedReplenishingRateLimiter)globalRateLimiter).ReplenishmentDate!.Value;
 				httpContext.Response.Headers.Append("X-RateLimit-ResetsAt", replenishmentDateTime.ToString("O"));
 			}
 
@@ -145,7 +145,7 @@ internal static class DependencyInjection
 			if (statistics.CurrentAvailablePermits is 0 &&
 			    rateLimiter is ExtendedReplenishingRateLimiter replenishingRateLimiter)
 			{
-				var replenishmentDateTime = replenishingRateLimiter.ReplenishmentDateTime!.Value;
+				var replenishmentDateTime = replenishingRateLimiter.ReplenishmentDate!.Value;
 				httpContext.Response.Headers.Append("X-RateLimit-ResetsAt", replenishmentDateTime.ToString("O"));
 			}
 

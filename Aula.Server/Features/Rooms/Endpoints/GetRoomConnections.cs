@@ -42,7 +42,7 @@ internal sealed class GetRoomConnections : IEndpoint
 				r.Name,
 				r.Description,
 				r.IsEntrance,
-				r.CreationTime,
+				CreationTime = r.CreationDate,
 			})
 			.ToListAsync();
 

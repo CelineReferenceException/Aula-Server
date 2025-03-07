@@ -1,6 +1,6 @@
 ﻿namespace Aula.Server.Common.Identity;
 
-internal sealed class PendingPasswordResetsCleanerHostedService : BackgroundService
+internal sealed class PendingPasswordResetsCleanerService : BackgroundService
 {
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 	{

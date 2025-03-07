@@ -8,7 +8,7 @@ internal static class DependencyInjection
 {
 	internal static IServiceCollection AddResilience(this IServiceCollection services)
 	{
-		_ = services.AddResiliencePipeline(ResiliencePipelineNames.RetryOnDbConcurrencyProblem, builder =>
+		_ = services.AddResiliencePipeline(ResiliencePipelines.RetryOnDbConcurrencyProblem, builder =>
 		{
 			_ = builder
 				.AddRetry(new RetryStrategyOptions

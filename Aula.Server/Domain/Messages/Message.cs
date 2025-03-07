@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 
-#pragma warning disable CS8618
 namespace Aula.Server.Domain.Messages;
 
 internal sealed class Message : DefaultDomainEntity
@@ -33,7 +32,7 @@ internal sealed class Message : DefaultDomainEntity
 
 	internal MessageUserLeave? LeaveData { get; private init; }
 
-	internal DateTime CreationTime { get; private init; }
+	internal DateTime CreationDate { get; private init; }
 
 	internal Boolean IsRemoved { get; private set; }
 
@@ -75,7 +74,7 @@ internal sealed class Message : DefaultDomainEntity
 			Content = content,
 			JoinData = joinData,
 			LeaveData = leaveData,
-			CreationTime = DateTime.UtcNow,
+			CreationDate = DateTime.UtcNow,
 		};
 
 		s_validator.ValidateAndThrow(message);

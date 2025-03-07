@@ -57,7 +57,7 @@ internal sealed class GetMessage : IEndpoint
 				m.Content,
 				m.JoinData,
 				m.LeaveData,
-				m.CreationTime,
+				CreationTime = m.CreationDate,
 			})
 			.FirstOrDefaultAsync();
 		if (message is null)

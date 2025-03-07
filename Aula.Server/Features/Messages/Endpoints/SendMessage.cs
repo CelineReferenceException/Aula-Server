@@ -79,7 +79,7 @@ internal sealed class SendMessage : IEndpoint
 			AuthorId = message.AuthorId,
 			RoomId = message.RoomId,
 			Content = message.Content,
-			CreationTime = message.CreationTime,
+			CreationTime = message.CreationDate,
 		});
 	}
 }

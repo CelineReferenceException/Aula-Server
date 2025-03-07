@@ -22,7 +22,7 @@ internal sealed class Ban : DefaultDomainEntity
 
 	internal UInt64? TargetId { get; private init; }
 
-	internal DateTime CreationTime { get; private init; }
+	internal DateTime CreationDate { get; private init; }
 
 	internal static Ban Create(
 		UInt64 id,
@@ -38,7 +38,7 @@ internal sealed class Ban : DefaultDomainEntity
 			ExecutorId = executorId,
 			Reason = reason,
 			TargetId = targetId,
-			CreationTime = DateTime.Now,
+			CreationDate = DateTime.Now,
 		};
 
 		s_validator.ValidateAndThrow(ban);

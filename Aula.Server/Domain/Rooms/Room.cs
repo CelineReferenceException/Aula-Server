@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 
-#pragma warning disable CS8618
 namespace Aula.Server.Domain.Rooms;
 
 internal sealed class Room : DefaultDomainEntity
@@ -27,7 +26,7 @@ internal sealed class Room : DefaultDomainEntity
 	// Readonly navigation property
 	internal IReadOnlyList<RoomConnection> Connections { get; private init; }
 
-	internal DateTime CreationTime { get; private init; }
+	internal DateTime CreationDate { get; private init; }
 
 	internal Boolean IsRemoved { get; private set; }
 
@@ -41,7 +40,7 @@ internal sealed class Room : DefaultDomainEntity
 			IsEntrance = isEntrance,
 			Connections = [],
 			ConcurrencyStamp = Guid.NewGuid().ToString("N"),
-			CreationTime = DateTime.UtcNow,
+			CreationDate = DateTime.UtcNow,
 		};
 
 		s_validator.ValidateAndThrow(room);

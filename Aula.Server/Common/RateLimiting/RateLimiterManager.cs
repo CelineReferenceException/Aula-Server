@@ -18,7 +18,7 @@ internal sealed class RateLimiterManager
 	{
 		var unusedRateLimiters = _rateLimiterCache
 			.Where(r => r.Value is ExtendedReplenishingRateLimiter er &&
-			            er.FirstWindowAcquireDateTime + er.ReplenishmentPeriod * 2 < DateTime.UtcNow)
+			            er.FirstWindowAcquireDate + er.ReplenishmentPeriod * 2 < DateTime.UtcNow)
 			.ToList();
 
 		foreach (var entry in unusedRateLimiters)

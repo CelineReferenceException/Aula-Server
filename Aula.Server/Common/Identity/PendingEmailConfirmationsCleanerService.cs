@@ -1,6 +1,6 @@
 ﻿namespace Aula.Server.Common.Identity;
 
-internal sealed class PendingEmailConfirmationsCleanerHostedService : BackgroundService
+internal sealed class PendingEmailConfirmationsCleanerService : BackgroundService
 {
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 	{

@@ -60,7 +60,7 @@ internal sealed class ModifyRoom : IEndpoint
 			Description = room.Description,
 			IsEntrance = room.IsEntrance,
 			ConnectedRoomIds = room.Connections.Select(c => c.TargetRoomId).ToList(),
-			CreationTime = room.CreationTime,
+			CreationTime = room.CreationDate,
 		});
 	}
 }

@@ -21,7 +21,8 @@ internal static class DependencyInjection
 			_ = settings.Provider switch
 			{
 				PersistenceProvider.InMemory => builder.UseInMemoryDatabase(nameof(PersistenceProvider.InMemory)),
-				PersistenceProvider.Sqlite or _ => builder.UseSqlite(settings.ConnectionString),
+				PersistenceProvider.Sqlite => builder.UseSqlite(settings.ConnectionString),
+				_ => throw new NotImplementedException(),
 			};
 		}, ServiceLifetime.Transient);
 

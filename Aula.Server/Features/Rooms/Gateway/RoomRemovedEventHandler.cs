@@ -30,7 +30,7 @@ internal sealed class RoomRemovedEventHandler : INotificationHandler<RoomRemoved
 				Description = room.Description,
 				IsEntrance = room.IsEntrance,
 				ConnectedRoomIds = room.Connections.Select(x => x.TargetRoomId).ToList(),
-				CreationTime = room.CreationTime,
+				CreationTime = room.CreationDate,
 			},
 		}.GetJsonUtf8Bytes(_jsonSerializerOptions);
 

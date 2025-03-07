@@ -8,7 +8,7 @@ internal sealed class SnowflakeGenerator
 	private readonly Lock _newSnowflakeLock = new();
 	private readonly UInt32 _workerId;
 	private UInt32 _increment;
-	private DateTime _lastOperationTime;
+	private DateTime _lastOperationDate;
 
 	public SnowflakeGenerator(IOptions<ApplicationOptions> applicationOptions)
 	{
@@ -17,7 +17,7 @@ internal sealed class SnowflakeGenerator
 		ArgumentOutOfRangeException.ThrowIfGreaterThan<UInt32>(workerId, 1023);
 
 		_workerId = workerId;
-		_lastOperationTime = DateTime.UtcNow;
+		_lastOperationDate = DateTime.UtcNow;
 	}
 
 	public UInt64 NewSnowflake()
@@ -26,15 +26,15 @@ internal sealed class SnowflakeGenerator
 
 		if (++_increment >= 4096)
 		{
-			while (_lastOperationTime == DateTime.UtcNow)
+			while (_lastOperationDate == DateTime.UtcNow)
 			{
 			}
 
 			_increment = 0;
 		}
 
-		_lastOperationTime = DateTime.UtcNow;
-		var sinceEpoch = _lastOperationTime - s_epoch;
+		_lastOperationDate = DateTime.UtcNow;
+		var sinceEpoch = _lastOperationDate - s_epoch;
 		var snowflake = ((UInt64)sinceEpoch.TotalMilliseconds << 22) | (_workerId << 12) | _increment++;
 
 		_newSnowflakeLock.Exit();

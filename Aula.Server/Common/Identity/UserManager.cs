@@ -154,7 +154,7 @@ internal sealed class UserManager
 		var emailConfirmation = new PendingEmailConfirmation
 		{
 			Token = Guid.CreateVersion7().ToString("N"),
-			CreationTime = DateTime.UtcNow,
+			CreationDate = DateTime.UtcNow,
 		};
 		_ = s_pendingEmailConfirmations.AddOrUpdate(user.Id, static (_, e) => e, static (_, _, e) => e, emailConfirmation);
 		return emailConfirmation.Token;
@@ -164,7 +164,7 @@ internal sealed class UserManager
 	{
 		if (!s_pendingEmailConfirmations.TryGetValue(user.Id, out var emailConfirmation) ||
 		    emailConfirmation.Token != token ||
-		    DateTime.UtcNow - emailConfirmation.CreationTime > s_pendingEmailConfirmationsLifeTime)
+		    DateTime.UtcNow - emailConfirmation.CreationDate > s_pendingEmailConfirmationsLifeTime)
 		{
 			return false;
 		}
@@ -196,7 +196,7 @@ internal sealed class UserManager
 		var passwordReset = new PendingPasswordReset
 		{
 			Token = Guid.CreateVersion7().ToString("N"),
-			CreationTime = DateTime.UtcNow,
+			CreationDate = DateTime.UtcNow,
 		};
 		_ = s_pendingPasswordResets.AddOrUpdate(user.Id, static (_, p) => p, static (_, _, p) => p, passwordReset);
 		return passwordReset.Token;
@@ -206,7 +206,7 @@ internal sealed class UserManager
 	{
 		if (!s_pendingPasswordResets.TryGetValue(user.Id, out var passwordReset) ||
 		    passwordReset.Token != token ||
-		    DateTime.UtcNow - passwordReset.CreationTime > s_pendingPasswordResetsLifeTime)
+		    DateTime.UtcNow - passwordReset.CreationDate > s_pendingPasswordResetsLifeTime)
 		{
 			return ResetPasswordResult.InvalidToken;
 		}
@@ -290,7 +290,7 @@ internal sealed class UserManager
 
 		foreach (var pendingEmailConfirmation in s_pendingEmailConfirmations)
 		{
-			if (now - pendingEmailConfirmation.Value.CreationTime > s_pendingEmailConfirmationsLifeTime)
+			if (now - pendingEmailConfirmation.Value.CreationDate > s_pendingEmailConfirmationsLifeTime)
 			{
 				_ = s_pendingEmailConfirmations.TryRemove(pendingEmailConfirmation.Key, out _);
 			}
@@ -303,7 +303,7 @@ internal sealed class UserManager
 
 		foreach (var pendingPasswordReset in s_pendingPasswordResets)
 		{
-			if (now - pendingPasswordReset.Value.CreationTime > s_pendingPasswordResetsLifeTime)
+			if (now - pendingPasswordReset.Value.CreationDate > s_pendingPasswordResetsLifeTime)
 			{
 				_ = s_pendingEmailConfirmations.TryRemove(pendingPasswordReset.Key, out _);
 			}
@@ -314,13 +314,13 @@ internal sealed class UserManager
 	{
 		internal required String Token { get; init; }
 
-		internal required DateTime CreationTime { get; init; }
+		internal required DateTime CreationDate { get; init; }
 	}
 
 	private sealed class PendingPasswordReset
 	{
 		internal required String Token { get; init; }
 
-		internal required DateTime CreationTime { get; init; }
+		internal required DateTime CreationDate { get; init; }
 	}
 }
