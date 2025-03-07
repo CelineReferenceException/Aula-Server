@@ -198,7 +198,7 @@ internal sealed class UserManager
 			Token = Guid.CreateVersion7().ToString("N"),
 			CreationTime = DateTime.UtcNow,
 		};
-		_ = s_pendingPasswordResets.AddOrUpdate(user.Id, _ => passwordReset, (_, _) => passwordReset);
+		_ = s_pendingPasswordResets.AddOrUpdate(user.Id, static (_, p) => p, static (_, _, p) => p, passwordReset);
 		return passwordReset.Token;
 	}
 
