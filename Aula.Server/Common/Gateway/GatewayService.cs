@@ -36,7 +36,10 @@ internal sealed class GatewayService : IDisposable
 		Intents intents)
 	{
 		var session = new GatewaySession(userId, intents, _jsonSerializerOptions, _publisher);
-		_ = _sessions.TryAdd(session.Id, session);
+		if (_sessions.TryAdd(session.Id, session))
+		{
+			throw new UnreachableException("A session with the same id already exists.");
+		}
 
 		return session;
 	}
