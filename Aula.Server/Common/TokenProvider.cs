@@ -10,7 +10,6 @@ internal sealed class TokenProvider
 	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Used through dependency injection")]
 	internal String CreateToken(String id, String stamp)
 	{
-
 		// Calculate the max count of bytes to use when encoding so we can reduce allocations by storing all into a single buffer.
 		var idUtf8Length = Encoding.UTF8.GetMaxByteCount(id.Length);
 		var stampUtf8Length = Encoding.UTF8.GetMaxByteCount(stamp.Length);
