@@ -165,7 +165,7 @@ internal sealed partial class HelpCommand : Command
 	[LoggerMessage(LogLevel.Error, Message = "Unknown sub-command: '{commandName}'")]
 	private static partial void LogUnknownSubCommandMessage(ILogger logger, String commandName);
 
-	private sealed record CommandParameters
+	private readonly record struct CommandParameters()
 	{
 		internal List<ParameterInfo> Options { get; } = [];
 		internal List<ParameterInfo> SubCommands { get; } = [];
