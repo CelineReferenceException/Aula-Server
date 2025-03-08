@@ -9,7 +9,7 @@ namespace Aula.Server.Common.RateLimiting;
 
 internal static class DependencyInjection
 {
-	private const String GlobalPolicyName = GlobalPolicyName;
+	private const String GlobalPolicyName = "Global";
 
 	internal static IServiceCollection AddCustomRateLimiter(
 		this IServiceCollection services,
