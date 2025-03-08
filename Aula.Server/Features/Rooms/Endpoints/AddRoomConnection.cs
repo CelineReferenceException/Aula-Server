@@ -45,6 +45,14 @@ internal sealed class AddRoomConnection : IEndpoint
 			return TypedResults.Problem(ProblemDetailsDefaults.TargetRoomDoesNotExist);
 		}
 
+		var connectionExists = await dbContext.RoomConnections
+			.AsNoTracking()
+			.AnyAsync(r => r.SourceRoomId == roomId && r.TargetRoomId == targetId);
+		if (connectionExists)
+		{
+			return TypedResults.NoContent();
+		}
+
 		var roomConnection = RoomConnection.Create(snowflakeGenerator.NewSnowflake(), roomId, targetId);
 
 		_ = await dbContext.AddAsync(roomConnection);
