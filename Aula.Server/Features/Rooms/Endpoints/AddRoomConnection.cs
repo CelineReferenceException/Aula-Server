@@ -11,7 +11,7 @@ internal sealed class AddRoomConnection : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapPost("rooms/{roomId}/connections/{targetId}", HandleAsync)
+		_ = route.MapPut("rooms/{roomId}/connections/{targetId}", HandleAsync)
 			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.ManageRooms)
 			.DenyBannedUsers()
