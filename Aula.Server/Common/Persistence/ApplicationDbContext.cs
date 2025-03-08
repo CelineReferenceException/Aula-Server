@@ -275,6 +275,18 @@ internal sealed class ApplicationDbContext : DbContext
 			})
 			.HasDatabaseName($"IX_{nameof(Ban)}_{nameof(Ban.TargetId)}");
 
+		foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+		{
+			var dateTimeConverter = new DateTimeToStringConverter();
+			foreach (var property in entityType.GetProperties())
+			{
+				if (property.ClrType == typeof(DateTime))
+				{
+					property.SetValueConverter(dateTimeConverter);
+				}
+			}
+		}
+
 		base.OnModelCreating(modelBuilder);
 	}
 
