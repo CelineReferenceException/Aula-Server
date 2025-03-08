@@ -55,10 +55,9 @@ internal sealed class SetCurrentUserRoom : IEndpoint
 		}
 
 		// We fetch the user entity from the DbContext because we don't want to modify the one cached by the UserManager.
-		var userId = user.Id;
 		user = await dbContext.Users
 			.AsTracking()
-			.Where(x => x.Id == userId)
+			.Where(x => x.Id == user.Id)
 			.FirstOrDefaultAsync();
 		if (user is null)
 		{
