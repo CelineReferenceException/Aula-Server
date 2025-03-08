@@ -26,6 +26,13 @@ internal static class ProblemDetailsDefaults
 		Status = StatusCodes.Status400BadRequest,
 	};
 
+	internal static ProblemDetails NoRoomConnection { get; } = new()
+	{
+		Title = "Room connection required",
+		Detail = "The current room is not connected to the specified room.",
+		Status = StatusCodes.Status400BadRequest,
+	};
+
 	internal static ProblemDetails InvalidUserCount { get; } = new()
 	{
 		Title = "Invalid user count.",

@@ -53,6 +53,14 @@ internal sealed class SetUserRoom : IEndpoint
 			return TypedResults.Problem(ProblemDetailsDefaults.RoomIsNotEntrance);
 		}
 
+		if (user.CurrentRoomId is not null &&
+		    !await dbContext.RoomConnections
+			    .AsNoTracking()
+			    .AnyAsync(r => r.SourceRoomId == user.CurrentRoomId && r.TargetRoomId == body.RoomId))
+		{
+			return TypedResults.Problem(ProblemDetailsDefaults.NoRoomConnection);
+		}
+
 		user.SetCurrentRoom(body.RoomId);
 		user.UpdateConcurrencyStamp();
 

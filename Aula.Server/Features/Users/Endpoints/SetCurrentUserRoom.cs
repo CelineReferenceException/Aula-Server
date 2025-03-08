@@ -54,6 +54,14 @@ internal sealed class SetCurrentUserRoom : IEndpoint
 			return TypedResults.Problem(ProblemDetailsDefaults.RoomIsNotEntrance);
 		}
 
+		if (user.CurrentRoomId is not null &&
+		    !await dbContext.RoomConnections
+			    .AsNoTracking()
+			    .AnyAsync(r => r.SourceRoomId == user.CurrentRoomId && r.TargetRoomId == body.RoomId))
+		{
+			return TypedResults.Problem(ProblemDetailsDefaults.NoRoomConnection);
+		}
+
 		// We fetch the user entity from the DbContext because we don't want to modify the one cached by the UserManager.
 		user = await dbContext.Users
 			.AsTracking()
