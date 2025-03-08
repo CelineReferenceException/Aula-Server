@@ -9,6 +9,8 @@ namespace Aula.Server.Common.RateLimiting;
 
 internal static class DependencyInjection
 {
+	private const String GlobalPolicyName = GlobalPolicyName;
+
 	internal static IServiceCollection AddCustomRateLimiter(
 		this IServiceCollection services,
 		Action<RateLimiterOptions> configureOptions)
@@ -24,12 +26,12 @@ internal static class DependencyInjection
 		_ = services.AddHostedService<ClearIdleRateLimitersService>();
 		_ = services.AddHostedService<ClearRateLimitersOnConfigurationUpdateService>();
 
-		_ = services.AddOptions<RateLimitOptions>("Global")
+		_ = services.AddOptions<RateLimitOptions>(GlobalPolicyName)
 			.BindConfiguration("RateLimiters:Global")
 			.ValidateDataAnnotations()
 			.ValidateOnStart();
 
-		_ = services.PostConfigure<RateLimitOptions>("Global", options =>
+		_ = services.PostConfigure<RateLimitOptions>(GlobalPolicyName, options =>
 		{
 			options.WindowMilliseconds ??= 1000;
 			options.PermitLimit ??= 30;
@@ -57,7 +59,7 @@ internal static class DependencyInjection
 				{
 					var rateLimit = httpContext.RequestServices
 						.GetRequiredService<IOptionsSnapshot<RateLimitOptions>>()
-						.Get("Global");
+						.Get(GlobalPolicyName);
 
 					return new FixedWindowRateLimiterOptions
 					{
@@ -92,7 +94,7 @@ internal static class DependencyInjection
 
 			var globalRateLimitOptions = httpContext.RequestServices
 				.GetRequiredService<IOptionsSnapshot<RateLimitOptions>>()
-				.Get("Global");
+				.Get(GlobalPolicyName);
 			httpContext.Response.Headers.Append("X-RateLimit-Global-Limit", globalRateLimitOptions.PermitLimit.ToString());
 			httpContext.Response.Headers.Append("X-RateLimit-Global-WindowMilliseconds",
 				globalRateLimitOptions.WindowMilliseconds.ToString());
