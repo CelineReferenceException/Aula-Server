@@ -37,9 +37,9 @@ internal sealed class AddRoomConnection : IEndpoint
 			return TypedResults.Problem(ProblemDetailsDefaults.RoomDoesNotExist);
 		}
 
-		var targetRoomExists = dbContext.Rooms
+		var targetRoomExists = await dbContext.Rooms
 			.AsNoTracking()
-			.Any(r => r.Id == targetId && !r.IsRemoved);
+			.AnyAsync(r => r.Id == targetId && !r.IsRemoved);
 		if (!targetRoomExists)
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.TargetRoomDoesNotExist);
