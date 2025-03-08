@@ -63,17 +63,17 @@ internal sealed class SetCurrentUserRoom : IEndpoint
 		}
 
 		// We fetch the user entity from the DbContext because we don't want to modify the one cached by the UserManager.
-		user = await dbContext.Users
+		var u = await dbContext.Users
 			.AsTracking()
 			.Where(x => x.Id == user.Id)
 			.FirstOrDefaultAsync();
-		if (user is null)
+		if (u is null)
 		{
 			return TypedResults.InternalServerError();
 		}
 
-		user.SetCurrentRoom(body.RoomId);
-		user.UpdateConcurrencyStamp();
+		u.SetCurrentRoom(body.RoomId);
+		u.UpdateConcurrencyStamp();
 
 		try
 		{
