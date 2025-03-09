@@ -45,7 +45,7 @@ internal sealed class GetRooms : IEndpoint
 				Description = r.Description,
 				IsEntrance = r.IsEntrance,
 				ConnectedRoomIds = r.Connections.Select(c => c.TargetRoomId).ToList(),
-				CreationTime = r.CreationDate,
+				CreationDate = r.CreationDate,
 			})
 			.Take((Int32)count);
 
@@ -65,7 +65,7 @@ internal sealed class GetRooms : IEndpoint
 				return TypedResults.Problem(ProblemDetailsDefaults.InvalidAfterRoom);
 			}
 
-			roomsQuery = roomsQuery.Where(r => r.CreationTime > target.CreationTime);
+			roomsQuery = roomsQuery.Where(r => r.CreationDate > target.CreationTime);
 		}
 
 		var rooms = await roomsQuery.ToListAsync();

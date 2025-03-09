@@ -33,5 +33,5 @@ internal sealed record RoomData
 	/// <summary>
 	///     The date and time when the room was created.
 	/// </summary>
-	public required DateTime CreationTime { get; init; }
+	public required DateTime CreationDate { get; init; }
 }

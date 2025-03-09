@@ -78,7 +78,7 @@ internal sealed class BanUser : IEndpoint
 			ExecutorId = ban.ExecutorId,
 			Reason = ban.Reason,
 			TargetId = ban.TargetId,
-			CreationTime = ban.CreationDate,
+			CreationDate = ban.CreationDate,
 		});
 	}
 }

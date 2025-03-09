@@ -33,7 +33,7 @@ internal sealed class BanCreatedEventHandler : INotificationHandler<BanCreatedEv
 				ExecutorId = ban.ExecutorId,
 				Reason = ban.Reason,
 				TargetId = ban.TargetId,
-				CreationTime = ban.CreationDate,
+				CreationDate = ban.CreationDate,
 			},
 		}.GetJsonUtf8Bytes(_jsonSerializerOptions);
 

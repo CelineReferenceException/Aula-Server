@@ -70,7 +70,7 @@ internal sealed class GetRoomConnections : IEndpoint
 					.Where(c => c.SourceRoomId == room.Id)
 					.Select(c => c.TargetRoomId)
 					.ToList(),
-				CreationTime = room.CreationTime,
+				CreationDate = room.CreationTime,
 			});
 		}
 

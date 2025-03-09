@@ -138,7 +138,7 @@ internal sealed class GetMessages : IEndpoint
 					RoomId = m.LeaveData.RoomId,
 				}
 				: null,
-			CreationTime = m.CreationTime,
+			CreationDate = m.CreationTime,
 		});
 
 		return TypedResults.Ok(messages);

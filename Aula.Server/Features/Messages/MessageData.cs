@@ -53,5 +53,5 @@ internal sealed record MessageData
 	/// <summary>
 	///     The date and time when the message was created.
 	/// </summary>
-	public required DateTime CreationTime { get; init; }
+	public required DateTime CreationDate { get; init; }
 }

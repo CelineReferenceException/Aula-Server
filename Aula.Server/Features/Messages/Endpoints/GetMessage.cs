@@ -87,7 +87,7 @@ internal sealed class GetMessage : IEndpoint
 					RoomId = message.LeaveData.RoomId,
 				}
 				: null,
-			CreationTime = message.CreationTime,
+			CreationDate = message.CreationTime,
 		});
 	}
 }

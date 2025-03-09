@@ -32,7 +32,7 @@ internal sealed class GetRoom : IEndpoint
 					Description = r.Description,
 					IsEntrance = r.IsEntrance,
 					ConnectedRoomIds = Enumerable.Select(r.Connections, c => c.TargetRoomId).ToList(),
-					CreationTime = r.CreationDate,
+					CreationDate = r.CreationDate,
 				})
 			.FirstOrDefaultAsync();
 		if (room is null)
