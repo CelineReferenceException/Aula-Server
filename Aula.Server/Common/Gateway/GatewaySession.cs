@@ -37,7 +37,7 @@ internal sealed class GatewaySession : IDisposable
 
 	internal String Id { get; }
 
-	internal DateTime? CloseTime { get; private set; }
+	internal DateTime? CloseDate { get; private set; }
 
 	internal UInt64 UserId { get; }
 
@@ -64,7 +64,7 @@ internal sealed class GatewaySession : IDisposable
 			throw new InvalidOperationException("WebSocket is not available.");
 		}
 
-		CloseTime = null;
+		CloseDate = null;
 		_sendingEventsCancellation = new CancellationTokenSource();
 
 		var receiving = StartReceivingEventsAsync(_publisher);
@@ -93,7 +93,7 @@ internal sealed class GatewaySession : IDisposable
 			Session = this,
 		});
 
-		CloseTime = DateTime.UtcNow;
+		CloseDate = DateTime.UtcNow;
 		_running = false;
 	}
 

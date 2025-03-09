@@ -45,7 +45,7 @@ internal sealed class ConnectToGateway : IEndpoint
 			if (!gatewayService.Sessions.TryGetValue(sessionId, out var previousSession) ||
 			    previousSession.UserId != userId ||
 			    previousSession.IsActive ||
-			    previousSession.CloseTime < DateTime.UtcNow - gatewayService.TimeToExpire)
+			    previousSession.CloseDate < DateTime.UtcNow - gatewayService.ExpirePeriod)
 			{
 				return TypedResults.BadRequest();
 			}

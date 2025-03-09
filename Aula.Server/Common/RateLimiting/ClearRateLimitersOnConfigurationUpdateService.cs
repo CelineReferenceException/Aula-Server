@@ -7,7 +7,7 @@ internal sealed partial class ClearRateLimitersOnConfigurationUpdateService : IH
 	private readonly ILogger<ClearRateLimitersOnConfigurationUpdateService> _logger;
 	private readonly IOptionsMonitor<RateLimitOptions> _optionsMonitor;
 	private readonly RateLimiterManager _rateLimiterManager;
-	private DateTime _lastClearDateTime = DateTime.UtcNow;
+	private DateTime _lastClearDate = DateTime.UtcNow;
 	private IDisposable? _listenerDisposable;
 
 	public ClearRateLimitersOnConfigurationUpdateService(
@@ -25,12 +25,12 @@ internal sealed partial class ClearRateLimitersOnConfigurationUpdateService : IH
 		_listenerDisposable = _optionsMonitor.OnChange(_ =>
 		{
 			// The file watcher sometimes trigger more than once for the same change.
-			if (DateTime.UtcNow - _lastClearDateTime < TimeSpan.FromSeconds(1))
+			if (DateTime.UtcNow - _lastClearDate < TimeSpan.FromSeconds(1))
 			{
 				return;
 			}
 
-			_lastClearDateTime = DateTime.UtcNow;
+			_lastClearDate = DateTime.UtcNow;
 			var count = _rateLimiterManager.ClearCache();
 			LogCacheClear(_logger, count);
 		});

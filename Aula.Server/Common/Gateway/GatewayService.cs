@@ -17,12 +17,12 @@ internal sealed class GatewayService : IDisposable
 	public GatewayService(IOptions<GatewayOptions> gatewayOptions, IOptions<JsonOptions> jsonOptions, IServiceScopeFactory scopeFactory)
 	{
 		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
-		TimeToExpire = TimeSpan.FromSeconds(gatewayOptions.Value.SecondsToExpire);
+		ExpirePeriod = TimeSpan.FromSeconds(gatewayOptions.Value.SecondsToExpire);
 		_serviceScope = scopeFactory.CreateScope();
 		_publisher = _serviceScope.ServiceProvider.GetRequiredService<IPublisher>();
 	}
 
-	internal TimeSpan TimeToExpire { get; }
+	internal TimeSpan ExpirePeriod { get; }
 
 	internal IReadOnlyDictionary<String, GatewaySession> Sessions => _sessions;
 
@@ -47,7 +47,7 @@ internal sealed class GatewayService : IDisposable
 
 	internal void RemoveExpiredSessions()
 	{
-		var expiredSessions = _sessions.Values.Where(s => s.CloseTime < DateTime.UtcNow - TimeToExpire);
+		var expiredSessions = _sessions.Values.Where(s => s.CloseDate < DateTime.UtcNow - ExpirePeriod);
 		foreach (var session in expiredSessions)
 		{
 			_ = _sessions.TryRemove(session.Id, out _);

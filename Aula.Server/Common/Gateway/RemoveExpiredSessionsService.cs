@@ -13,7 +13,7 @@ internal sealed class RemoveExpiredSessionsService : BackgroundService
 	{
 		while (!stoppingToken.IsCancellationRequested)
 		{
-			await Task.Delay(_gatewayService.TimeToExpire, stoppingToken);
+			await Task.Delay(_gatewayService.ExpirePeriod, stoppingToken);
 			_gatewayService.RemoveExpiredSessions();
 		}
 	}
