@@ -73,6 +73,13 @@ internal static class DependencyInjection
 					remainingProtocols.RemoveAt(i);
 
 					httpContext.Request.Headers.SecWebSocketProtocol = new StringValues([.. remainingProtocols,]);
+
+					if (protocols.Count == 1)
+					{
+						// To comply with RFC 6455, if no extra protocols were defined return the headers as the selected protocol.
+						httpContext.Response.Headers.SecWebSocketProtocol = protocol;
+					}
+
 					break;
 				}
 				catch (JsonException)
