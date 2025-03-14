@@ -52,16 +52,16 @@ internal static class DependencyInjection
 
 				try
 				{
-					var headersAsBase64 = protocol.AsSpan()[2..];
-					var maxDecodedByteLength = Base64.GetMaxDecodedFromUtf8Length(headersAsBase64.Length * 2);
-					var decodingBuffer = ArrayPool<Byte>.Shared.Rent(maxDecodedByteLength);
-					if (!Convert.TryFromBase64Chars(headersAsBase64, decodingBuffer, out var bytesWritten))
+					var headersAsBase64Url = protocol.AsSpan()[2..];
+					var headersUtf8MaxDecodedLength = Base64Url.GetMaxDecodedLength(headersAsBase64Url.Length);
+					var headersUtf8Buffer = ArrayPool<Byte>.Shared.Rent(headersUtf8MaxDecodedLength);
+					if (!Base64Url.TryDecodeFromChars(headersAsBase64Url, headersUtf8Buffer, out var bytesWritten))
 					{
 						break;
 					}
 
-					var headersAsJsonString = Encoding.UTF8.GetString(decodingBuffer[..bytesWritten]);
-					ArrayPool<Byte>.Shared.Return(decodingBuffer);
+					var headersAsJsonString = Encoding.UTF8.GetString(headersUtf8Buffer[..bytesWritten]);
+					ArrayPool<Byte>.Shared.Return(headersUtf8Buffer);
 
 					var headers = JsonSerializer.Deserialize<Dictionary<String, String>>(headersAsJsonString)?.AsEnumerable() ?? [];
 					foreach (var header in headers)
