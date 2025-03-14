@@ -105,8 +105,8 @@ internal sealed class TokenProvider
 		}
 
 		// Calculate the max count of bytes to use when decoding so we can reduce allocations by storing all into a single buffer.
-		var userIdUtf8Length = Base64.GetMaxDecodedFromUtf8Length(userIdBase64.Length);
-		var stampUtf8Length = Base64.GetMaxDecodedFromUtf8Length(stampBase64.Length);
+		var userIdUtf8Length = Base64.GetMaxDecodedFromUtf8Length(userIdBase64.Length * 2);
+		var stampUtf8Length = Base64.GetMaxDecodedFromUtf8Length(stampBase64.Length * 2);
 
 		var buffer = ArrayPool<Byte>.Shared.Rent(userIdUtf8Length + stampUtf8Length);
 		var userIdUtf8 = buffer.AsSpan(0, userIdUtf8Length);
