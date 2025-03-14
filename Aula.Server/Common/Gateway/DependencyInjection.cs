@@ -78,6 +78,7 @@ internal static class DependencyInjection
 				catch (JsonException)
 				{
 					// Prevent stopping if the received JSON was invalid.
+					break;
 				}
 			}
 
