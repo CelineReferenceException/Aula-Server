@@ -1,4 +1,7 @@
-﻿using System.Text.Json;
+﻿using System.Buffers;
+using System.Buffers.Text;
+using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebSockets;
@@ -42,15 +45,25 @@ internal static class DependencyInjection
 				var protocol = protocols[i];
 
 				if (protocol == null ||
-				    !protocol.StartsWith('{') ||
-				    !protocol.EndsWith('}'))
+				    !protocol.StartsWith("h_"))
 				{
 					continue;
 				}
 
 				try
 				{
-					var headers = JsonSerializer.Deserialize<Dictionary<String, String>>(protocol)!;
+					var headersAsBase64 = protocol.AsSpan()[2..];
+					var maxDecodedByteLength = Base64.GetMaxDecodedFromUtf8Length(headersAsBase64.Length * 2);
+					var decodingBuffer = ArrayPool<Byte>.Shared.Rent(maxDecodedByteLength);
+					if (!Convert.TryFromBase64Chars(headersAsBase64, decodingBuffer, out var bytesWritten))
+					{
+						break;
+					}
+
+					var headersAsJsonString = Encoding.UTF8.GetString(decodingBuffer[..bytesWritten]);
+					ArrayPool<Byte>.Shared.Return(decodingBuffer);
+
+					var headers = JsonSerializer.Deserialize<Dictionary<String, String>>(headersAsJsonString)?.AsEnumerable() ?? [];
 					foreach (var header in headers)
 					{
 						httpContext.Request.Headers.Append(header.Key, header.Value);
