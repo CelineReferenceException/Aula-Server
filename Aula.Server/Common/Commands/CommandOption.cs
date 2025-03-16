@@ -1,4 +1,4 @@
-﻿namespace Aula.Server.Common.CommandLine;
+﻿namespace Aula.Server.Common.Commands;
 
 /// <summary>
 ///     Represents a <see cref="Command" /> option.

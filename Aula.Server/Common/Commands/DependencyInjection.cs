@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Aula.Server.Common.CommandLine;
+namespace Aula.Server.Common.Commands;
 
 internal static class DependencyInjection
 {

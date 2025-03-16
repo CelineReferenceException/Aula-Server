@@ -1,4 +1,4 @@
-﻿namespace Aula.Server.Common.CommandLine;
+﻿namespace Aula.Server.Common.Commands;
 
 /// <summary>
 ///     A Command that is not automatically added to the <see cref="CommandLineService" /> by <see cref="DependencyInjection.MapCommands" />.

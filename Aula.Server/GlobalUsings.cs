@@ -7,7 +7,7 @@ global using Aula.Server.Common;
 global using Aula.Server.Common.Authentication;
 global using Aula.Server.Common.Authorization;
 global using Aula.Server.Common.BackgroundTaskQueue;
-global using Aula.Server.Common.CommandLine;
+global using Aula.Server.Common.Commands;
 global using Aula.Server.Common.Endpoints;
 global using Aula.Server.Common.Gateway;
 global using Aula.Server.Common.Identity;

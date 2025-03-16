@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
-namespace Aula.Server.Common.CommandLine;
+namespace Aula.Server.Common.Commands;
 
 /// <summary>
 ///     A background service that asynchronously reads from the console input stream and executes commands.

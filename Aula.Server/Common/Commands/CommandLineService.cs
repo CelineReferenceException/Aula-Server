@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace Aula.Server.Common.CommandLine;
+namespace Aula.Server.Common.Commands;
 
 /// <summary>
 ///     Provides a service for handling and executing command-line commands.
