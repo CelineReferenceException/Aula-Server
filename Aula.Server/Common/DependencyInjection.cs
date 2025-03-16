@@ -20,7 +20,15 @@ internal static class DependencyInjection
 		_ = builder.Services.AddCustomAuthentication();
 		_ = builder.Services.AddCustomAuthorization();
 
-		_ = builder.Services.AddCors();
+		_ = builder.Services.AddCors(options =>
+		{
+			options.AddDefaultPolicy(policy =>
+			{
+				_ = policy.AllowAnyOrigin()
+					.AllowAnyHeader()
+					.AllowAnyMethod();
+			});
+		});
 		_ = builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>(ServiceLifetime.Singleton, includeInternalTypes: true);
 		_ = builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<IAssemblyMarker>());
 		_ = builder.Services.AddJsonSerialization();
