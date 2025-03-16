@@ -4,7 +4,7 @@ namespace Aula.Server.Common.Commands;
 
 internal sealed partial class HelpCommand : Command
 {
-	private readonly CommandLineService _commandLineService;
+	private readonly CommandLine _commandLine;
 
 	private readonly CommandOption _commandOption = new()
 	{
@@ -16,11 +16,11 @@ internal sealed partial class HelpCommand : Command
 	private readonly ILogger<HelpCommand> _logger;
 
 	public HelpCommand(
-		CommandLineService commandLineService,
+		CommandLine commandLine,
 		ILogger<HelpCommand> logger,
 		IServiceProvider serviceProvider) : base(serviceProvider)
 	{
-		_commandLineService = commandLineService;
+		_commandLine = commandLine;
 		_logger = logger;
 
 		AddOptions(_commandOption);
@@ -34,7 +34,7 @@ internal sealed partial class HelpCommand : Command
 	{
 		ct.ThrowIfCancellationRequested();
 
-		var commands = _commandLineService.Commands
+		var commands = _commandLine.Commands
 			.Select(kvp => kvp.Value)
 			.ToList();
 
@@ -47,7 +47,7 @@ internal sealed partial class HelpCommand : Command
 
 		var querySegments = query.Split(' ');
 		var commandName = querySegments[0];
-		if (!_commandLineService.Commands.TryGetValue(commandName, out var command))
+		if (!_commandLine.Commands.TryGetValue(commandName, out var command))
 		{
 			LogUnknownCommandMessage(_logger, commandName);
 			return ValueTask.CompletedTask;

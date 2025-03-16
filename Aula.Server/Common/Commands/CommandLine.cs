@@ -5,12 +5,12 @@ namespace Aula.Server.Common.Commands;
 /// <summary>
 ///     Provides a service for handling and executing command-line commands.
 /// </summary>
-internal sealed class CommandLineService
+internal sealed class CommandLine
 {
 	private readonly ConcurrentDictionary<String, Command> _commands = new();
-	private readonly ILogger<CommandLineService> _logger;
+	private readonly ILogger<CommandLine> _logger;
 
-	public CommandLineService(ILogger<CommandLineService> logger)
+	public CommandLine(ILogger<CommandLine> logger)
 	{
 		_logger = logger;
 	}

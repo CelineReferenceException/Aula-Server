@@ -8,12 +8,12 @@ namespace Aula.Server.Common.Commands;
 /// </summary>
 internal sealed class CommandLineHostedService : BackgroundService
 {
-	private readonly CommandLineService _commandLineService;
+	private readonly CommandLine _commandLine;
 	private readonly ILogger<CommandLineHostedService> _logger;
 
-	public CommandLineHostedService(CommandLineService commandLineService, ILogger<CommandLineHostedService> logger)
+	public CommandLineHostedService(CommandLine commandLine, ILogger<CommandLineHostedService> logger)
 	{
-		_commandLineService = commandLineService;
+		_commandLine = commandLine;
 		_logger = logger;
 	}
 
@@ -26,7 +26,7 @@ internal sealed class CommandLineHostedService : BackgroundService
 		{
 			try
 			{
-				_ = await _commandLineService.ProcessCommandAsync(line.AsMemory(), stoppingToken);
+				_ = await _commandLine.ProcessCommandAsync(line.AsMemory(), stoppingToken);
 			}
 			catch (Exception ex)
 			{

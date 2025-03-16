@@ -18,7 +18,7 @@ internal static class DependencyInjection
 	/// <returns>The modified <see cref="IServiceCollection" />.</returns>
 	internal static IServiceCollection AddCommandLine(this IServiceCollection services, Type assemblyType)
 	{
-		_ = services.AddSingleton<CommandLineService>();
+		_ = services.AddSingleton<CommandLine>();
 		_ = services.AddHostedService<CommandLineHostedService>();
 
 		var assembly = assemblyType.Assembly;
@@ -56,7 +56,7 @@ internal static class DependencyInjection
 	internal static TBuilder MapCommands<TBuilder>(this TBuilder builder) where TBuilder : IApplicationBuilder
 	{
 		s_serviceScope = builder.ApplicationServices.CreateScope();
-		var service = s_serviceScope.ServiceProvider.GetRequiredService<CommandLineService>();
+		var service = s_serviceScope.ServiceProvider.GetRequiredService<CommandLine>();
 		var commands = s_serviceScope.ServiceProvider.GetRequiredService<IEnumerable<Command>>();
 
 		foreach (var command in commands)
