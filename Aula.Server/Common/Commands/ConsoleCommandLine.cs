@@ -6,12 +6,12 @@ namespace Aula.Server.Common.Commands;
 /// <summary>
 ///     A background service that asynchronously reads from the console input stream and executes commands.
 /// </summary>
-internal sealed class CommandLineHostedService : BackgroundService
+internal sealed class ConsoleCommandLine : BackgroundService
 {
 	private readonly CommandLine _commandLine;
-	private readonly ILogger<CommandLineHostedService> _logger;
+	private readonly ILogger<ConsoleCommandLine> _logger;
 
-	public CommandLineHostedService(CommandLine commandLine, ILogger<CommandLineHostedService> logger)
+	public ConsoleCommandLine(CommandLine commandLine, ILogger<ConsoleCommandLine> logger)
 	{
 		_commandLine = commandLine;
 		_logger = logger;
