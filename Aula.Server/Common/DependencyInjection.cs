@@ -51,7 +51,7 @@ internal static class DependencyInjection
 	internal static TApp UseCommon<TApp>(this TApp app) where TApp : IApplicationBuilder, IEndpointRouteBuilder
 	{
 		_ = app.UseCors();
-		_ = app.ExtractHeadersFromWebSocketProtocols();
+		_ = app.UseWebSocketHeaderParsing();
 		_ = app.UseAuthentication();
 		_ = app.UseCustomRateLimiting();
 		_ = app.UseAuthorization();
