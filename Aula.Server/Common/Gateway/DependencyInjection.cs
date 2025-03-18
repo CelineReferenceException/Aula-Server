@@ -34,7 +34,8 @@ internal static class DependencyInjection
 	{
 		_ = builder.Use((httpContext, next) =>
 		{
-			if (!httpContext.Request.Headers.TryGetValue("Sec-WebSocket-Protocol", out var protocols) ||
+			if (!httpContext.WebSockets.IsWebSocketRequest ||
+			    !httpContext.Request.Headers.TryGetValue("Sec-WebSocket-Protocol", out var protocols) ||
 			    protocols.Count == 0)
 			{
 				return next(httpContext);
