@@ -180,7 +180,7 @@ internal sealed class GatewaySession : IDisposable
 					Session = this,
 					Payload = payload,
 				});
-			} while (_webSocket.State is not WebSocketState.CloseReceived);
+			} while (_webSocket.State is WebSocketState.Open);
 
 			await StopAsync(WebSocketCloseStatus.NormalClosure);
 		}
