@@ -76,8 +76,8 @@ internal sealed class MessageCreatedEventHandler : INotificationHandler<MessageC
 				continue;
 			}
 
-			var user = sessionUsers[session.UserId];
-			if (user.CurrentRoomId is null ||
+			if (!sessionUsers.TryGetValue(session.UserId, out var user) ||
+			    user.CurrentRoomId is null ||
 			    !user.Permissions.HasFlag(Permissions.Administrator))
 			{
 				continue;
