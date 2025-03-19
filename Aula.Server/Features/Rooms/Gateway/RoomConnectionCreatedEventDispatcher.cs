@@ -5,12 +5,12 @@ using Microsoft.Extensions.Options;
 
 namespace Aula.Server.Features.Rooms.Gateway;
 
-internal sealed class RoomConnectionCreatedEventHandler : INotificationHandler<RoomConnectionCreatedEvent>
+internal sealed class RoomConnectionCreatedEventDispatcher : INotificationHandler<RoomConnectionCreatedEvent>
 {
 	private readonly GatewayService _gatewayService;
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-	public RoomConnectionCreatedEventHandler(IOptions<JsonOptions> jsonOptions, GatewayService gatewayService)
+	public RoomConnectionCreatedEventDispatcher(IOptions<JsonOptions> jsonOptions, GatewayService gatewayService)
 	{
 		_gatewayService = gatewayService;
 		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
