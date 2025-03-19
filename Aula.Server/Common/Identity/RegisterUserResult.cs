@@ -5,18 +5,11 @@
 /// </summary>
 internal sealed class RegisterUserResult
 {
-	private RegisterUserResult(String name, String description, Boolean succeeded)
+	private RegisterUserResult(String description, Boolean succeeded)
 	{
-		Name = name;
 		Description = description;
 		Succeeded = succeeded;
 	}
-
-	/// <summary>
-	///     The identifier of the result.
-	/// </summary>
-	internal String Name { get; }
-
 
 	/// <summary>
 	///     A more detailed description of the result.
@@ -31,33 +24,22 @@ internal sealed class RegisterUserResult
 	/// <summary>
 	///     The operation succeeded.
 	/// </summary>
-	internal static RegisterUserResult Success { get; } = new(nameof(Success), "Register succeeded", true);
+	internal static RegisterUserResult Success { get; } = new("Register succeeded", true);
 
 	/// <summary>
 	///     The email provided is already in use.
 	/// </summary>
-	internal static RegisterUserResult EmailInUse { get; } = new(nameof(EmailInUse), "The email provided is already in use.", false);
+	internal static RegisterUserResult EmailInUse { get; } = new("The email provided is already in use.", false);
 
 
 	/// <summary>
 	///     The username provided is already in use.
 	/// </summary>
-	internal static RegisterUserResult UserNameInUse { get; } =
-		new(nameof(UserNameInUse),
-			"The username provided is already in use.",
-			false);
+	internal static RegisterUserResult UserNameInUse { get; } = new("The username provided is already in use.", false);
 
 	/// <summary>
 	///     The username provided contains invalid characters.
 	/// </summary>
 	internal static RegisterUserResult InvalidUserNameCharacter { get; } =
-		new(nameof(InvalidUserNameCharacter),
-			$"Usernames can only contain the following characters: {UserManager.UserNameAllowedCharacters}",
-			false);
-
-	/// <inheritdoc />
-	public override String ToString()
-	{
-		return _name;
-	}
+		new($"Usernames can only contain the following characters: {UserManager.UserNameAllowedCharacters}", false);
 }
