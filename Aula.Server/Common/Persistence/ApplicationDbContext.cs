@@ -1,20 +1,16 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Aula.Server.Common.Persistence;
 
 internal sealed class ApplicationDbContext : DbContext
 {
-	private readonly IHostEnvironment _hostEnvironment;
 	private readonly IPublisher _publisher;
 
 	public ApplicationDbContext(
 		DbContextOptions<ApplicationDbContext> options,
-		IHostEnvironment hostEnvironment,
 		IPublisher publisher) : base(options)
 	{
-		_hostEnvironment = hostEnvironment;
 		_publisher = publisher;
 	}
 
@@ -27,18 +23,6 @@ internal sealed class ApplicationDbContext : DbContext
 	internal DbSet<RoomConnection> RoomConnections => Set<RoomConnection>();
 
 	internal DbSet<Message> Messages => Set<Message>();
-
-	[SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope")]
-	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-	{
-		if (_hostEnvironment.IsDevelopment())
-		{
-			var loggerFactory = LoggerFactory.Create(builder => builder.AddLogging());
-			_ = optionsBuilder.UseLoggerFactory(loggerFactory);
-		}
-
-		base.OnConfiguring(optionsBuilder);
-	}
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
