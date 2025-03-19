@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Text.Json;
 using MediatR;
 using Microsoft.AspNetCore.Http.Json;
@@ -37,11 +36,7 @@ internal sealed class GatewayService : IDisposable
 		Intents intents)
 	{
 		var session = new GatewaySession(userId, intents, _jsonSerializerOptions, _publisher);
-		if (!_sessions.TryAdd(session.Id, session))
-		{
-			throw new UnreachableException("A session with the same id already exists.");
-		}
-
+		_ = _sessions.TryAdd(session.Id, session);
 		return session;
 	}
 
