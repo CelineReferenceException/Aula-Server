@@ -1,4 +1,4 @@
-namespace Aula.Server.Common.Authentication;
+namespace Aula.Server.Common.Identity;
 
 /// <summary>
 ///     Represents the outcome of a password reset operation.
