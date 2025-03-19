@@ -71,12 +71,8 @@ internal sealed class MessageCreatedEventHandler : INotificationHandler<MessageC
 
 		foreach (var session in _gatewayService.Sessions.Values)
 		{
-			if (!session.Intents.HasFlag(Intents.Messages))
-			{
-				continue;
-			}
-
-			if (!sessionUsers.TryGetValue(session.UserId, out var user) ||
+			if (!session.Intents.HasFlag(Intents.Messages) ||
+			    !sessionUsers.TryGetValue(session.UserId, out var user) ||
 			    user.CurrentRoomId is null ||
 			    !user.Permissions.HasFlag(Permissions.Administrator))
 			{
