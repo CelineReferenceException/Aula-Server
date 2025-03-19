@@ -35,7 +35,7 @@ internal sealed class UserManager
 
 	internal IdentityOptions Options { get; }
 
-	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Should be used through dependency injection")]
+	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Prefer to use an instance")]
 	internal UInt64? GetUserId(ClaimsPrincipal user)
 	{
 		var idClaimValue = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -148,7 +148,7 @@ internal sealed class UserManager
 		return RegisterUserResult.Success;
 	}
 
-	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Should be used through dependency injection")]
+	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Prefer to use an instance")]
 	internal String GenerateEmailConfirmationToken(User user)
 	{
 		var emailConfirmation = new PendingEmailConfirmation();
@@ -186,7 +186,7 @@ internal sealed class UserManager
 	}
 
 
-	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Should be used through dependency injection")]
+	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Prefer to use an instance")]
 	internal String GeneratePasswordResetToken(User user)
 	{
 		var passwordReset = new PendingPasswordReset();
