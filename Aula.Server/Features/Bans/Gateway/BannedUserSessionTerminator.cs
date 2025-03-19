@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Polly;
 
-namespace Aula.Server.Features.Bans;
+namespace Aula.Server.Features.Bans.Gateway;
 
 internal sealed class BannedUserSessionTerminator : INotificationHandler<BanCreatedEvent>
 {
