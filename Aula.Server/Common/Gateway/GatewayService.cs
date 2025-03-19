@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace Aula.Server.Common.Gateway;
 
-internal sealed class GatewayService : IDisposable
+internal sealed class GatewayService
 {
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
 	private readonly IServiceScope _serviceScope;
@@ -22,12 +22,6 @@ internal sealed class GatewayService : IDisposable
 	internal TimeSpan ExpirePeriod { get; }
 
 	internal IReadOnlyDictionary<String, GatewaySession> Sessions => _sessions;
-
-	public void Dispose()
-	{
-		Dispose(true);
-		GC.SuppressFinalize(this);
-	}
 
 	internal GatewaySession CreateSession(
 		UInt64 userId,
@@ -49,18 +43,5 @@ internal sealed class GatewayService : IDisposable
 		{
 			_ = _sessions.TryRemove(session.Id, out _);
 		}
-	}
-
-	private void Dispose(Boolean disposing)
-	{
-		if (disposing)
-		{
-			_serviceScope.Dispose();
-		}
-	}
-
-	~GatewayService()
-	{
-		Dispose(false);
 	}
 }
