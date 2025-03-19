@@ -151,11 +151,7 @@ internal sealed class UserManager
 	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Should be used through dependency injection")]
 	internal String GenerateEmailConfirmationToken(User user)
 	{
-		var emailConfirmation = new PendingEmailConfirmation
-		{
-			Token = Guid.CreateVersion7().ToString("N"),
-			CreationDate = DateTime.UtcNow,
-		};
+		var emailConfirmation = new PendingEmailConfirmation();
 		_ = s_pendingEmailConfirmations.AddOrUpdate(user.Id, static (_, e) => e, static (_, _, e) => e, emailConfirmation);
 		return emailConfirmation.Token;
 	}
