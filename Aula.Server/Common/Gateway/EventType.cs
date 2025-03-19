@@ -11,6 +11,11 @@ internal enum EventType
 	#region Send
 
 	/// <summary>
+	///     The gateway connection is ready.
+	/// </summary>
+	Ready,
+
+	/// <summary>
 	///     A new room has been created.
 	/// </summary>
 	RoomCreated,
