@@ -6,13 +6,13 @@ using Microsoft.Extensions.Options;
 
 namespace Aula.Server.Features.Messages.Gateway;
 
-internal sealed class MessageRemovedEventHandler : INotificationHandler<MessageRemovedEvent>
+internal sealed class MessageRemovedEventDispatcher : INotificationHandler<MessageRemovedEvent>
 {
 	private readonly ApplicationDbContext _dbContext;
 	private readonly GatewayService _gatewayService;
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-	public MessageRemovedEventHandler(IOptions<JsonOptions> jsonOptions, ApplicationDbContext dbContext, GatewayService gatewayService)
+	public MessageRemovedEventDispatcher(IOptions<JsonOptions> jsonOptions, ApplicationDbContext dbContext, GatewayService gatewayService)
 	{
 		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
 		_dbContext = dbContext;
