@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Aula.Server.Features;
 using MartinCostello.OpenApi;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Options;
 using Scalar.AspNetCore;
 
 var startTimestamp = Stopwatch.GetTimestamp();
@@ -41,7 +42,30 @@ if (application.Environment.IsDevelopment())
 	});
 }
 
-await application.StartAsync();
+try
+{
+	await application.StartAsync();
+}
+catch (AggregateException e)
+{
+	foreach (var innerException in e.InnerExceptions)
+	{
+		if (innerException is not OptionsValidationException validationException)
+		{
+			continue;
+		}
+
+		foreach (var failure in validationException.Failures)
+		{
+			Console.WriteLine(failure);
+		}
+	}
+
+	if (e.InnerExceptions.All(innerE => innerE is not OptionsValidationException))
+	{
+		throw;
+	}
+}
 
 var elapsedTime = Stopwatch.GetElapsedTime(startTimestamp);
 var logger = application.Services.GetRequiredService<ILogger<Program>>();
