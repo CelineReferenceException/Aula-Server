@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Aula.Server.Features.Bans.Endpoints;
 
-internal sealed class BanUser : IEndpoint
+internal sealed class CreateBan : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
