@@ -48,7 +48,8 @@ internal sealed class BanCreatedEventHandler : INotificationHandler<BanCreatedEv
 				.FirstOrDefaultAsync(cancellationToken) ?? throw new UnreachableException("User should exist");
 
 			if (!session.Intents.HasFlag(Intents.Moderation) &&
-			    sessionUser.Permissions.HasFlag(Permissions.BanUsers | Permissions.Administrator))
+			    (sessionUser.Permissions.HasFlag(Permissions.BanUsers) ||
+			     sessionUser.Permissions.HasFlag(Permissions.Administrator)))
 			{
 				continue;
 			}
