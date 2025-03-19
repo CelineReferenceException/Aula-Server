@@ -18,6 +18,8 @@ internal static class DependencyInjection
 
 		_ = services.AddDbContext<ApplicationDbContext>(builder =>
 		{
+			_ = builder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+
 			_ = settings.Provider switch
 			{
 				PersistenceProvider.InMemory => builder.UseInMemoryDatabase(nameof(PersistenceProvider.InMemory)),
