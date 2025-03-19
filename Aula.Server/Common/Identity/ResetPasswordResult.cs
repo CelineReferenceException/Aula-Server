@@ -5,11 +5,11 @@ namespace Aula.Server.Common.Identity;
 /// </summary>
 internal sealed class ResetPasswordResult
 {
-	private readonly String _name;
+	private readonly String _description;
 
-	private ResetPasswordResult(String name, Boolean succeeded)
+	private ResetPasswordResult(String description, Boolean succeeded)
 	{
-		_name = name;
+		_description = description;
 		Succeeded = succeeded;
 	}
 
@@ -66,6 +66,6 @@ internal sealed class ResetPasswordResult
 	/// <inheritdoc />
 	public override String ToString()
 	{
-		return _name;
+		return _description;
 	}
 }
