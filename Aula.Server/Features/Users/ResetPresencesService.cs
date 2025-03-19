@@ -2,11 +2,11 @@
 
 namespace Aula.Server.Features.Users;
 
-internal sealed class ResetPresencesHostedService : IHostedService, IDisposable
+internal sealed class ResetPresencesService : IHostedService, IDisposable
 {
 	private readonly IServiceScope _serviceScope;
 
-	public ResetPresencesHostedService(IServiceProvider serviceProvider)
+	public ResetPresencesService(IServiceProvider serviceProvider)
 	{
 		_serviceScope = serviceProvider.CreateScope();
 	}
@@ -43,7 +43,7 @@ internal sealed class ResetPresencesHostedService : IHostedService, IDisposable
 		}
 	}
 
-	~ResetPresencesHostedService()
+	~ResetPresencesService()
 	{
 		Dispose(false);
 	}
