@@ -43,6 +43,7 @@ internal sealed partial class ClearRateLimitersOnConfigurationUpdateService : IH
 		return Task.CompletedTask;
 	}
 
-	[LoggerMessage(LogLevel.Information, Message = "Rate limiters cache clear, {count} elements removed.")]
 	private static partial void LogCacheClear(ILogger logger, Int32 count);
+	[LoggerMessage(LogLevel.Information,
+		Message = "Rate Limiting configuration has been updated. ${count} rate limiters have been cleared.")]
 }
