@@ -58,8 +58,7 @@ internal sealed class UserStoppedTypingEventHandler : INotificationHandler<UserS
 			}
 
 			var user = sessionUsers[session.UserId];
-			if ((user.CurrentRoomId is null ||
-			     user.CurrentRoomId != notification.RoomId) &&
+			if (user.CurrentRoomId != notification.RoomId &&
 			    !user.Permissions.HasFlag(Permissions.Administrator))
 			{
 				continue;
