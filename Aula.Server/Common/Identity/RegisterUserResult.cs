@@ -6,10 +6,12 @@
 internal sealed class RegisterUserResult
 {
 	private readonly String _name;
+	private readonly String _description;
 
-	private RegisterUserResult(String name, Boolean succeeded)
+	private RegisterUserResult(String name, String description, Boolean succeeded)
 	{
 		_name = name;
+		_description = description;
 		Succeeded = succeeded;
 	}
 
