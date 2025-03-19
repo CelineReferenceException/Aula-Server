@@ -37,7 +37,6 @@ internal sealed class GetUsers : IEndpoint
 		}
 
 		var userQuery = dbContext.Users
-			.AsNoTracking()
 			.Where(u => !u.IsRemoved)
 			.OrderBy(u => u.Id)
 			.Select(u => new UserData
@@ -57,11 +56,7 @@ internal sealed class GetUsers : IEndpoint
 
 		if (afterId is not null)
 		{
-			var targetExists = await dbContext.Users
-				.AsNoTracking()
-				.AnyAsync(m => m.Id == afterId && !m.IsRemoved);
-
-			if (!targetExists)
+			if (!await dbContext.Users.AnyAsync(m => m.Id == afterId && !m.IsRemoved))
 			{
 				return TypedResults.Problem(ProblemDetailsDefaults.InvalidAfterUser);
 			}

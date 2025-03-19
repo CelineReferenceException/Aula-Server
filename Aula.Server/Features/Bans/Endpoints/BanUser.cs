@@ -46,7 +46,6 @@ internal sealed class BanUser : IEndpoint
 		}
 
 		var targetUser = await dbContext.Users
-			.AsNoTracking()
 			.Where(u => u.Id == userId)
 			.Select(u => new
 			{

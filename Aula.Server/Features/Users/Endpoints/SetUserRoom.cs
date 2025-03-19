@@ -35,7 +35,6 @@ internal sealed class SetUserRoom : IEndpoint
 		}
 
 		var room = await dbContext.Rooms
-			.AsNoTracking()
 			.Where(r => r.Id == body.RoomId && !r.IsRemoved)
 			.Select(r => new
 			{
@@ -54,9 +53,7 @@ internal sealed class SetUserRoom : IEndpoint
 		}
 
 		if (user.CurrentRoomId is not null &&
-		    !await dbContext.RoomConnections
-			    .AsNoTracking()
-			    .AnyAsync(r => r.SourceRoomId == user.CurrentRoomId && r.TargetRoomId == body.RoomId))
+		    !await dbContext.RoomConnections.AnyAsync(r => r.SourceRoomId == user.CurrentRoomId && r.TargetRoomId == body.RoomId))
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.NoRoomConnection);
 		}

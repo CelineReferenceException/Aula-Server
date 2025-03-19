@@ -33,10 +33,7 @@ internal sealed class StopTyping : IEndpoint
 			return TypedResults.InternalServerError();
 		}
 
-		var roomExists = await dbContext.Rooms
-			.AsNoTracking()
-			.AnyAsync(r => r.Id == roomId && !r.IsRemoved);
-		if (!roomExists)
+		if (!await dbContext.Rooms.AnyAsync(r => r.Id == roomId && !r.IsRemoved))
 		{
 			return TypedResults.Problem(new ProblemDetails
 			{

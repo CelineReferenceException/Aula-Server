@@ -21,16 +21,12 @@ internal sealed class GetRoomUsers : IEndpoint
 		[FromRoute] UInt64 roomId,
 		[FromServices] ApplicationDbContext dbContext)
 	{
-		var roomExists = await dbContext.Rooms
-			.AsNoTracking()
-			.AnyAsync(r => r.Id == roomId);
-		if (!roomExists)
+		if (!await dbContext.Rooms.AnyAsync(r => r.Id == roomId))
 		{
 			return TypedResults.NotFound();
 		}
 
 		var users = await dbContext.Users
-			.AsNoTracking()
 			.Where(u => u.CurrentRoomId == roomId && !u.IsRemoved)
 			.Select(u => new UserData
 			{

@@ -43,6 +43,7 @@ internal sealed class PresenceUpdater :
 		await _retryOnDbConcurrencyProblem.ExecuteAsync(async ct =>
 		{
 			var user = await _dbContext.Users
+				.AsTracking()
 				.Where(u => u.Id == session.UserId)
 				.FirstOrDefaultAsync(ct) ?? throw new UnreachableException("User expected to exist");
 
@@ -76,6 +77,7 @@ internal sealed class PresenceUpdater :
 		await _retryOnDbConcurrencyProblem.ExecuteAsync(async ct =>
 		{
 			var user = await _dbContext.Users
+				.AsTracking()
 				.Where(u => u.Id == notification.Session.UserId)
 				.FirstOrDefaultAsync(ct) ?? throw new UnreachableException("User expected to exist");
 
@@ -119,6 +121,7 @@ internal sealed class PresenceUpdater :
 		await _retryOnDbConcurrencyProblem.ExecuteAsync(async ct =>
 		{
 			var user = await _dbContext.Users
+				.AsTracking()
 				.Where(u => u.Id == session.UserId)
 				.FirstOrDefaultAsync(ct) ?? throw new UnreachableException("User expected to exist");
 

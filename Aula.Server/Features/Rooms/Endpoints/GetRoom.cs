@@ -22,7 +22,6 @@ internal sealed class GetRoom : IEndpoint
 		[FromServices] ApplicationDbContext dbContext)
 	{
 		var room = await dbContext.Rooms
-			.AsNoTracking()
 			.Where(r => r.Id == roomId && !r.IsRemoved)
 			.Select(r =>
 				new RoomData

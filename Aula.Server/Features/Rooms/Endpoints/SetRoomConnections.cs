@@ -29,24 +29,17 @@ internal sealed class SetRoomConnections : IEndpoint
 			return TypedResults.Problem(ProblemDetailsDefaults.TargetRoomCannotBeSourceRoom);
 		}
 
-		var sourceRoomExists = await dbContext.Rooms
-			.AsNoTracking()
-			.AnyAsync(r => r.Id == roomId && !r.IsRemoved);
-		if (!sourceRoomExists)
+		if (!await dbContext.Rooms.AnyAsync(r => r.Id == roomId && !r.IsRemoved))
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.RoomDoesNotExist);
 		}
 
-		var targetRoomsExists = dbContext.Rooms
-			.AsNoTracking()
-			.Any(r => body.RoomIds.Contains(r.Id) && !r.IsRemoved);
-		if (!targetRoomsExists)
+		if (!dbContext.Rooms.Any(r => body.RoomIds.Contains(r.Id) && !r.IsRemoved))
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.TargetRoomDoesNotExist);
 		}
 
 		var alreadyConnectedTargetIds = await dbContext.RoomConnections
-			.AsNoTracking()
 			.Where(c => c.SourceRoomId == roomId && body.RoomIds.Contains(c.TargetRoomId))
 			.Select(c => c.TargetRoomId)
 			.ToListAsync();

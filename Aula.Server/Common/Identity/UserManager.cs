@@ -68,7 +68,6 @@ internal sealed class UserManager
 		}
 
 		user = await _dbContext.Users
-			.AsNoTracking()
 			.Where(u => u.Id == userId)
 			.FirstOrDefaultAsync();
 
@@ -89,7 +88,6 @@ internal sealed class UserManager
 		}
 
 		user = await _dbContext.Users
-			.AsNoTracking()
 			.Where(u => u.Email == email)
 			.FirstOrDefaultAsync();
 
@@ -110,7 +108,6 @@ internal sealed class UserManager
 		}
 
 		user = await _dbContext.Users
-			.AsNoTracking()
 			.Where(u => u.UserName == userName)
 			.FirstOrDefaultAsync();
 
@@ -124,16 +121,12 @@ internal sealed class UserManager
 
 	internal async Task<RegisterUserResult> RegisterAsync(User user)
 	{
-		var emailInUse = await _dbContext.Users
-			.AnyAsync(u => u.Email == user.Email);
-		if (emailInUse)
+		if (await _dbContext.Users.AnyAsync(u => u.Email == user.Email))
 		{
 			return RegisterUserResult.EmailInUse;
 		}
 
-		var userNameInUse = await _dbContext.Users
-			.AnyAsync(u => u.UserName == user.UserName);
-		if (userNameInUse)
+		if (await _dbContext.Users.AnyAsync(u => u.UserName == user.UserName))
 		{
 			return RegisterUserResult.UserNameInUse;
 		}

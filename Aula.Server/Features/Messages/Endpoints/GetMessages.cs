@@ -34,10 +34,7 @@ internal sealed class GetMessages : IEndpoint
 		[FromServices] UserManager userManager,
 		HttpContext httpContext)
 	{
-		var roomExists = await dbContext.Rooms
-			.AsNoTracking()
-			.AnyAsync(room => room.Id == roomId && !room.IsRemoved);
-		if (!roomExists)
+		if (!await dbContext.Rooms.AnyAsync(room => room.Id == roomId && !room.IsRemoved))
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.RoomDoesNotExist);
 		}
@@ -61,7 +58,6 @@ internal sealed class GetMessages : IEndpoint
 		}
 
 		var messagesQuery = dbContext.Messages
-			.AsNoTracking()
 			.Where(m => !m.IsRemoved && m.RoomId == roomId)
 			.OrderByDescending(m => m.CreationDate)
 			.Select(m => new
@@ -82,7 +78,6 @@ internal sealed class GetMessages : IEndpoint
 		if (beforeId is not null)
 		{
 			var target = await dbContext.Messages
-				.AsNoTracking()
 				.Where(m => m.Id == beforeId && !m.IsRemoved && m.RoomId == roomId)
 				.Select(m => new
 				{
@@ -100,7 +95,6 @@ internal sealed class GetMessages : IEndpoint
 		else if (afterId is not null)
 		{
 			var target = await dbContext.Messages
-				.AsNoTracking()
 				.Where(m => m.Id == afterId && !m.IsRemoved && m.RoomId == roomId)
 				.Select(m => new
 				{

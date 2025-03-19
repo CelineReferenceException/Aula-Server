@@ -35,7 +35,6 @@ internal sealed class GetRooms : IEndpoint
 		}
 
 		var roomsQuery = dbContext.Rooms
-			.AsNoTracking()
 			.Where(r => !r.IsRemoved)
 			.OrderBy(r => r.CreationDate)
 			.Select(r => new RoomData
@@ -52,7 +51,6 @@ internal sealed class GetRooms : IEndpoint
 		if (afterId is not null)
 		{
 			var target = await dbContext.Rooms
-				.AsNoTracking()
 				.Where(r => r.Id == afterId && !r.IsRemoved)
 				.Select(r => new
 				{

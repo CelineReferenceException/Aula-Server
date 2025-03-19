@@ -31,6 +31,7 @@ internal sealed class SetUserPermissions : IEndpoint
 		}
 
 		var user = await dbContext.Users
+			.AsTracking()
 			.Where(u => u.Id == userId && !u.IsRemoved)
 			.FirstOrDefaultAsync();
 		if (user is null)

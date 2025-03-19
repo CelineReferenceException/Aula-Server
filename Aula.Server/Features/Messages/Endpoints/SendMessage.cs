@@ -38,10 +38,7 @@ internal sealed class SendMessage : IEndpoint
 			return TypedResults.Problem(problemDetails);
 		}
 
-		var roomExists = await dbContext.Rooms
-			.AsNoTracking()
-			.AnyAsync(r => r.Id == roomId && !r.IsRemoved);
-		if (!roomExists)
+		if (!await dbContext.Rooms.AnyAsync(r => r.Id == roomId && !r.IsRemoved))
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.RoomDoesNotExist);
 		}

@@ -24,23 +24,18 @@ internal sealed class RemoveRoomConnection : IEndpoint
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] SnowflakeGenerator snowflakeGenerator)
 	{
-		var sourceRoomExists = await dbContext.Rooms
-			.AsNoTracking()
-			.AnyAsync(r => r.Id == sourceRoomId && !r.IsRemoved);
-		if (!sourceRoomExists)
+		if (!await dbContext.Rooms.AnyAsync(r => r.Id == sourceRoomId && !r.IsRemoved))
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.RoomDoesNotExist);
 		}
 
-		var targetRoomExists = dbContext.Rooms
-			.AsNoTracking()
-			.Any(r => r.Id == targetRoomId && !r.IsRemoved);
-		if (!targetRoomExists)
+		if (!dbContext.Rooms.Any(r => r.Id == targetRoomId && !r.IsRemoved))
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.TargetRoomDoesNotExist);
 		}
 
 		var connection = await dbContext.RoomConnections
+			.AsTracking()
 			.Where(c => c.SourceRoomId == sourceRoomId && c.TargetRoomId == targetRoomId)
 			.FirstOrDefaultAsync();
 		if (connection is null)

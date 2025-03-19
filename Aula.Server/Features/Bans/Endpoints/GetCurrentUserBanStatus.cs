@@ -27,13 +27,9 @@ internal sealed class GetCurrentUserBanStatus : IEndpoint
 			return TypedResults.InternalServerError();
 		}
 
-		var banned = await dbContext.Bans
-			.AsNoTracking()
-			.AnyAsync(x => x.TargetId == userId);
-
 		return TypedResults.Ok(new GetCurrentUserBanStatusResponse
 		{
-			Banned = banned,
+			Banned = await dbContext.Bans.AnyAsync(x => x.TargetId == userId),
 		});
 	}
 }

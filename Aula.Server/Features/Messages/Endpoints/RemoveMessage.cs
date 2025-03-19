@@ -26,10 +26,7 @@ internal sealed class RemoveMessage : IEndpoint
 		HttpContext httpContext,
 		[FromServices] UserManager userManager)
 	{
-		var roomExists = await dbContext.Rooms
-			.AsNoTracking()
-			.AnyAsync(r => r.Id == roomId && !r.IsRemoved);
-		if (!roomExists)
+		if (!await dbContext.Rooms.AnyAsync(r => r.Id == roomId && !r.IsRemoved))
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.RoomDoesNotExist);
 		}

@@ -21,10 +21,7 @@ internal sealed class GetRoomConnections : IEndpoint
 		[FromRoute] UInt64 roomId,
 		[FromServices] ApplicationDbContext dbContext)
 	{
-		var roomExists = await dbContext.Rooms
-			.AsNoTracking()
-			.AnyAsync(r => r.Id == roomId && !r.IsRemoved);
-		if (!roomExists)
+		if (!await dbContext.Rooms.AnyAsync(r => r.Id == roomId && !r.IsRemoved))
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.RoomDoesNotExist);
 		}
@@ -47,7 +44,6 @@ internal sealed class GetRoomConnections : IEndpoint
 			.ToListAsync();
 
 		var targetRoomConnections = await dbContext.RoomConnections
-			.AsNoTracking()
 			.Where(c => targetRooms.Select(r => r.Id).Contains(c.SourceRoomId))
 			.Select(c =>
 				new

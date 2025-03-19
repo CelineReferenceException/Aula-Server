@@ -24,11 +24,8 @@ internal sealed class BanHandler : AuthorizationHandler<BanRequirement>
 		}
 
 		var dbContext = httpContext.RequestServices.GetRequiredService<ApplicationDbContext>();
-		var banned = await dbContext.Bans
-			.AsNoTracking()
-			.AnyAsync(b => b.TargetId == user.Id);
 
-		if (!banned)
+		if (!await dbContext.Bans.AnyAsync(b => b.TargetId == user.Id))
 		{
 			context.Succeed(requirement);
 			return;
