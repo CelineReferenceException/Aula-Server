@@ -19,6 +19,13 @@ internal static class ProblemDetailsDefaults
 		Status = StatusCodes.Status403Forbidden,
 	};
 
+	internal static ProblemDetails UserIsNotInTheRoomAndNoAdministrator { get; } = new()
+	{
+		Title = "Invalid room",
+		Detail = "The current user is not in the room and has no administrator permissions.",
+		Status = StatusCodes.Status403Forbidden,
+	};
+
 	internal static ProblemDetails InvalidMessageType { get; } = new()
 	{
 		Title = "Invalid message type",

@@ -51,7 +51,7 @@ internal sealed class GetMessages : IEndpoint
 		if (user.CurrentRoomId != roomId &&
 		    !user.Permissions.HasFlag(Permissions.Administrator))
 		{
-			return TypedResults.Problem(ProblemDetailsDefaults.UserIsNotInTheRoom);
+			return TypedResults.Problem(ProblemDetailsDefaults.UserIsNotInTheRoomAndNoAdministrator);
 		}
 
 		count ??= DefaultMessageCount;
