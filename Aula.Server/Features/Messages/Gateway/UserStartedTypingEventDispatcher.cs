@@ -6,13 +6,13 @@ using Microsoft.Extensions.Options;
 
 namespace Aula.Server.Features.Messages.Gateway;
 
-internal sealed class UserStartedTypingEventHandler : INotificationHandler<UserStartedTypingEvent>
+internal sealed class UserStartedTypingEventDispatcher : INotificationHandler<UserStartedTypingEvent>
 {
 	private readonly ApplicationDbContext _dbContext;
 	private readonly GatewayService _gatewayService;
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-	public UserStartedTypingEventHandler(IOptions<JsonOptions> jsonOptions, ApplicationDbContext dbContext, GatewayService gatewayService)
+	public UserStartedTypingEventDispatcher(IOptions<JsonOptions> jsonOptions, ApplicationDbContext dbContext, GatewayService gatewayService)
 	{
 		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
 		_dbContext = dbContext;
