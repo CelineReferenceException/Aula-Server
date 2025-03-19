@@ -39,4 +39,11 @@ internal static class ProblemDetailsDefaults
 		Detail = "The reset password code is invalid.",
 		Status = StatusCodes.Status400BadRequest,
 	};
+
+	internal static ProblemDetails InvalidBase64UrlEmail { get; } = new()
+	{
+		Title = "Invalid email",
+		Detail = "The email must be encoded and sent in base64url.",
+		Status = StatusCodes.Status400BadRequest,
+	};
 }

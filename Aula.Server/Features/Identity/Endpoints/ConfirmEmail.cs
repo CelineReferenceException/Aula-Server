@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Buffers.Text;
+using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -20,13 +21,17 @@ internal sealed class ConfirmEmail : IEndpoint
 			.HasApiVersion(1);
 	}
 
-	private static async Task<Results<NoContent, RedirectHttpResult>> HandleAsync(
+	private static async Task<Results<NoContent, RedirectHttpResult, ProblemHttpResult>> HandleAsync(
 		[FromQuery(Name = EmailQueryParameter)] String email,
 		[FromQuery(Name = TokenQueryParameter)] String? token,
 		[FromServices] UserManager userManager,
 		[FromServices] ConfirmEmailEmailSender confirmEmailEmailSender,
 		[FromServices] IOptions<IdentityFeatureOptions> featureOptions)
 	{
+		if (!Base64Url.IsValid(email))
+		{
+			return TypedResults.Problem(ProblemDetailsDefaults.InvalidBase64UrlEmail);
+		}
 		email = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(email));
 		var redirectUri = featureOptions.Value.ConfirmEmailRedirectUri?.ToString();
 
@@ -62,7 +67,7 @@ internal sealed class ConfirmEmail : IEndpoint
 		return RedirectOrSendNoContent(redirectUri);
 	}
 
-	private static Results<NoContent, RedirectHttpResult> RedirectOrSendNoContent(String? redirectUri)
+	private static Results<NoContent, RedirectHttpResult, ProblemHttpResult> RedirectOrSendNoContent(String? redirectUri)
 	{
 		return redirectUri is not null ? TypedResults.Redirect(redirectUri) : TypedResults.NoContent();
 	}
