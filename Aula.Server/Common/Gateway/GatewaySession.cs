@@ -71,7 +71,7 @@ internal sealed class GatewaySession
 
 		if (!_hasConnectedBefore)
 		{
-			await _publisher.Publish(new HelloEvent
+			await _publisher.Publish(new GatewaySessionReadyEvent
 			{
 				Session = this,
 			});

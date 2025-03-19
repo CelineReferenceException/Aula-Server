@@ -5,16 +5,16 @@ using Microsoft.Extensions.Options;
 
 namespace Aula.Server.Common.Gateway;
 
-internal sealed class HelloEventHandler : INotificationHandler<HelloEvent>
+internal sealed class GatewaySessionReadyEventHandler : INotificationHandler<GatewaySessionReadyEvent>
 {
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-	public HelloEventHandler(IOptions<JsonOptions> jsonOptions)
+	public GatewaySessionReadyEventHandler(IOptions<JsonOptions> jsonOptions)
 	{
 		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
 	}
 
-	public Task Handle(HelloEvent notification, CancellationToken cancellationToken)
+	public Task Handle(GatewaySessionReadyEvent notification, CancellationToken cancellationToken)
 	{
 		var session = notification.Session;
 

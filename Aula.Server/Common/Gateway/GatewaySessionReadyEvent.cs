@@ -2,7 +2,7 @@
 
 namespace Aula.Server.Common.Gateway;
 
-internal sealed record HelloEvent : INotification
+internal sealed record GatewaySessionReadyEvent : INotification
 {
 	public required GatewaySession Session { get; init; }
 }
