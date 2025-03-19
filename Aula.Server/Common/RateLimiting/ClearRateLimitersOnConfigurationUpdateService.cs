@@ -44,6 +44,6 @@ internal sealed partial class ClearRateLimitersOnConfigurationUpdateService : IH
 	}
 
 	[LoggerMessage(LogLevel.Information,
-		Message = "Rate Limiting configuration has been updated. {count} rate limiters have been cleared.")]
+		Message = "Configuration has been updated. {count} rate limiters have been cleared.")]
 	private static partial void LogRateLimitersClear(ILogger logger, Int32 count);
 }
