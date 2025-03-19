@@ -57,23 +57,20 @@ internal sealed class GetRoomConnections : IEndpoint
 				})
 			.ToListAsync();
 
-		List<RoomData> targetRoomsData = new(targetRooms.Count);
-		foreach (var room in targetRooms)
-		{
-			targetRoomsData.Add(new RoomData
+		var targetRoomsData = targetRooms
+			.Select(r => new RoomData
 			{
-				Id = room.Id,
-				Name = room.Name,
-				Description = room.Description,
-				IsEntrance = room.IsEntrance,
+				Id = r.Id,
+				Name = r.Name,
+				Description = r.Description,
+				IsEntrance = r.IsEntrance,
 				ConnectedRoomIds = targetRoomConnections
-					.Where(c => c.SourceRoomId == room.Id)
+					.Where(c => c.SourceRoomId == r.Id)
 					.Select(c => c.TargetRoomId)
 					.ToList(),
-				CreationDate = room.CreationTime,
-			});
-		}
-
+				CreationDate = r.CreationTime,
+			})
+			.ToList();
 		return TypedResults.Ok(targetRoomsData);
 	}
 }
