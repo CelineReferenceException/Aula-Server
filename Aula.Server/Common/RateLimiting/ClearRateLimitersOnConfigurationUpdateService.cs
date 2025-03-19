@@ -32,7 +32,7 @@ internal sealed partial class ClearRateLimitersOnConfigurationUpdateService : IH
 
 			_lastClearDate = DateTime.UtcNow;
 			var count = _rateLimiterManager.ClearRateLimiters();
-			LogCacheClear(_logger, count);
+			LogRateLimitersClear(_logger, count);
 		});
 		return Task.CompletedTask;
 	}
@@ -43,7 +43,7 @@ internal sealed partial class ClearRateLimitersOnConfigurationUpdateService : IH
 		return Task.CompletedTask;
 	}
 
-	private static partial void LogCacheClear(ILogger logger, Int32 count);
 	[LoggerMessage(LogLevel.Information,
 		Message = "Rate Limiting configuration has been updated. ${count} rate limiters have been cleared.")]
+	private static partial void LogRateLimitersClear(ILogger logger, Int32 count);
 }
