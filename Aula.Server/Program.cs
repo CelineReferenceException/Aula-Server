@@ -31,7 +31,7 @@ if (application.Environment.IsDevelopment())
 	{
 		options.WithTitle($"{nameof(Aula)} API {{documentName}}")
 			.WithTheme(ScalarTheme.DeepSpace)
-			.WithDarkMode(false)
+			.WithDarkMode(false) // hehehe
 			.WithSidebar(true)
 			.WithDefaultOpenAllTags(false)
 			.WithModels(true)
