@@ -15,7 +15,7 @@ internal sealed class IdleRateLimitersCleanerService : BackgroundService
 		while (!stoppingToken.IsCancellationRequested)
 		{
 			await Task.Delay(s_interval, stoppingToken);
-			_rateLimiterManager.ClearIdleRateLimitersFromCache();
+			_rateLimiterManager.RemoveIdleRateLimiters();
 		}
 	}
 }

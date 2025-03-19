@@ -14,7 +14,7 @@ internal sealed class RateLimiterManager
 		return rateLimiter;
 	}
 
-	internal Int32 ClearIdleRateLimitersFromCache()
+	internal Int32 RemoveIdleRateLimiters()
 	{
 		var unusedRateLimiters = _rateLimiterCache
 			.Where(r => r.Value is ExtendedReplenishingRateLimiter er &&
