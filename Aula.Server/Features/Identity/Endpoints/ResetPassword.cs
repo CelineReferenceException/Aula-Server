@@ -50,7 +50,7 @@ internal sealed class ResetPassword : IEndpoint
 			return TypedResults.Problem(new ProblemDetails
 			{
 				Title = "Password problem",
-				Detail = passwordReset.ToString(),
+				Detail = passwordReset.Description,
 				Status = StatusCodes.Status400BadRequest,
 			});
 		}
