@@ -7,13 +7,13 @@ using Microsoft.Extensions.Options;
 
 namespace Aula.Server.Features.Bans.Gateway;
 
-internal sealed class BanCreatedEventGatewayDispatcher : INotificationHandler<BanCreatedEvent>
+internal sealed class BanCreatedEventDispatcher : INotificationHandler<BanCreatedEvent>
 {
 	private readonly ApplicationDbContext _dbContext;
 	private readonly GatewayService _gatewayService;
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-	public BanCreatedEventGatewayDispatcher(IOptions<JsonOptions> jsonOptions, GatewayService gatewayService, ApplicationDbContext dbContext)
+	public BanCreatedEventDispatcher(IOptions<JsonOptions> jsonOptions, GatewayService gatewayService, ApplicationDbContext dbContext)
 	{
 		_gatewayService = gatewayService;
 		_dbContext = dbContext;
