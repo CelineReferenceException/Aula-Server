@@ -51,7 +51,7 @@ internal sealed class SetRoomConnections : IEndpoint
 			.Select(c => c.TargetRoomId)
 			.ToListAsync();
 
-		var targetsToConnect = body.RoomIds
+		var newConnections = body.RoomIds
 			.Where(targetId => !alreadyConnectedTargetIds.Contains(targetId))
 			.Select(targetId => RoomConnection.Create(snowflakeGenerator.NewSnowflake(), roomId, targetId))
 			.ToList();
@@ -61,7 +61,7 @@ internal sealed class SetRoomConnections : IEndpoint
 			.Where(c => c.SourceRoomId == roomId && !body.RoomIds.Contains(c.TargetRoomId))
 			.ToListAsync();
 
-		dbContext.RoomConnections.AddRange(targetsToConnect);
+		dbContext.RoomConnections.AddRange(newConnections);
 		dbContext.RoomConnections.RemoveRange(targetsToRemove);
 
 		try
