@@ -31,23 +31,29 @@ internal sealed class RegisterUserResult
 	/// <summary>
 	///     The operation succeeded.
 	/// </summary>
-	internal static RegisterUserResult Success { get; } = new(nameof(Success), true);
+	internal static RegisterUserResult Success { get; } = new(nameof(Success), "Register succeeded", true);
 
 	/// <summary>
 	///     The email provided is already in use.
 	/// </summary>
-	internal static RegisterUserResult EmailInUse { get; } = new(nameof(EmailInUse), false);
+	internal static RegisterUserResult EmailInUse { get; } = new(nameof(EmailInUse), "The email provided is already in use.", false);
 
 
 	/// <summary>
 	///     The username provided is already in use.
 	/// </summary>
-	internal static RegisterUserResult UserNameInUse { get; } = new(nameof(UserNameInUse), false);
+	internal static RegisterUserResult UserNameInUse { get; } =
+		new(nameof(UserNameInUse),
+			"The username provided is already in use.",
+			false);
 
 	/// <summary>
 	///     The username provided contains invalid characters.
 	/// </summary>
-	internal static RegisterUserResult InvalidUserNameCharacter { get; } = new(nameof(InvalidUserNameCharacter), false);
+	internal static RegisterUserResult InvalidUserNameCharacter { get; } =
+		new(nameof(InvalidUserNameCharacter),
+			$"Usernames can only contain the following characters: {UserManager.UserNameAllowedCharacters}",
+			false);
 
 	/// <inheritdoc />
 	public override String ToString()
