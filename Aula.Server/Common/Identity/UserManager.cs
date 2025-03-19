@@ -193,11 +193,7 @@ internal sealed class UserManager
 	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Should be used through dependency injection")]
 	internal String GeneratePasswordResetToken(User user)
 	{
-		var passwordReset = new PendingPasswordReset
-		{
-			Token = Guid.CreateVersion7().ToString("N"),
-			CreationDate = DateTime.UtcNow,
-		};
+		var passwordReset = new PendingPasswordReset();
 		_ = s_pendingPasswordResets.AddOrUpdate(user.Id, static (_, p) => p, static (_, _, p) => p, passwordReset);
 		return passwordReset.Token;
 	}
