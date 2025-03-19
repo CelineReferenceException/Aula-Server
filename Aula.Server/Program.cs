@@ -10,7 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddCommon();
 builder.Services.AddFeatures();
-
 builder.Services.AddOpenApi();
 builder.Services.AddOpenApiExtensions(static options => options.XmlDocumentationAssemblies.Add(typeof(IAssemblyMarker).Assembly));
 
