@@ -3,11 +3,11 @@ using MediatR;
 
 namespace Aula.Server.Features.Identity.Gateway;
 
-internal sealed class UserSecurityStampUpdatedEventHandler : INotificationHandler<UserSecurityStampUpdatedEvent>
+internal sealed class UserSecurityStampUpdatedGatewaySessionTerminator : INotificationHandler<UserSecurityStampUpdatedEvent>
 {
 	private readonly GatewayService _gatewayService;
 
-	public UserSecurityStampUpdatedEventHandler(GatewayService gatewayService)
+	public UserSecurityStampUpdatedGatewaySessionTerminator(GatewayService gatewayService)
 	{
 		_gatewayService = gatewayService;
 	}
