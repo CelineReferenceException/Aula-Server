@@ -5,13 +5,13 @@ using Polly;
 
 namespace Aula.Server.Features.Bans;
 
-internal sealed class BannedUserRestrictor : INotificationHandler<BanCreatedEvent>
+internal sealed class BannedUserGatewaySessionTerminator : INotificationHandler<BanCreatedEvent>
 {
 	private readonly ApplicationDbContext _dbContext;
 	private readonly GatewayService _gatewayService;
 	private readonly ResiliencePipeline _retryOnDbConcurrencyProblem;
 
-	public BannedUserRestrictor(
+	public BannedUserGatewaySessionTerminator(
 		ApplicationDbContext dbContext,
 		[FromKeyedServices(ResiliencePipelines.RetryOnDbConcurrencyProblem)] ResiliencePipeline retryOnDbConcurrencyProblem,
 		GatewayService gatewayService)
