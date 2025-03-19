@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.WebSockets;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Channels;
 using Aula.Server.Features.Users.Gateway;
@@ -8,31 +9,31 @@ using MediatR;
 
 namespace Aula.Server.Common.Gateway;
 
-internal sealed class GatewaySession : IDisposable
+internal sealed class GatewaySession
 {
+	private const Int32 MaxMessageSize = 1024 * 4;
 	private readonly Channel<Byte[]> _eventsQueue = Channel.CreateUnbounded<Byte[]>();
-	private readonly JsonSerializerOptions _eventsReceivedJsonOptions;
+	private readonly JsonSerializerOptions _jsonSerializerOptions;
 	private readonly IPublisher _publisher;
-	private Boolean _disposed;
-	private Boolean _isFirstConnect = true;
-	private Boolean _running;
+	private Boolean _hasConnectedBefore;
 	private Byte[]? _nextEvent;
-	private CancellationTokenSource _sendingEventsCancellation = null!;
+	private Boolean _running;
 	private WebSocket? _webSocket;
 
 	internal GatewaySession(
 		UInt64 userId,
 		Intents intents,
-		JsonSerializerOptions eventsReceivedJsonOptions,
+		JsonSerializerOptions jsonSerializerOptions,
 		IPublisher publisher)
 	{
 		UserId = userId;
 		Intents = intents;
-		_eventsReceivedJsonOptions = eventsReceivedJsonOptions;
+		_jsonSerializerOptions = jsonSerializerOptions;
 		_publisher = publisher;
 		Id = Guid.NewGuid().ToString("N");
 	}
 
+	[MemberNotNullWhen(false, nameof(CloseDate))]
 	internal Boolean IsActive => _running;
 
 	internal String Id { get; }
@@ -43,15 +44,8 @@ internal sealed class GatewaySession : IDisposable
 
 	internal Intents Intents { get; }
 
-	public void Dispose()
-	{
-		Dispose(true);
-		GC.SuppressFinalize(this);
-	}
-
 	internal async Task RunAsync(PresenceOptions presence)
 	{
-		ObjectDisposedException.ThrowIf(_disposed, this);
 		ThrowIfNullWebSocket();
 
 		if (Interlocked.Exchange(ref _running, true))
@@ -59,26 +53,15 @@ internal sealed class GatewaySession : IDisposable
 			throw new InvalidOperationException("Gateway is already running.");
 		}
 
-		if (_webSocket.State is not (WebSocketState.Open or WebSocketState.Connecting))
+		if (_webSocket.State is not WebSocketState.Open)
 		{
-			throw new InvalidOperationException("WebSocket is not available.");
+			throw new InvalidOperationException("WebSocket is not open.");
 		}
 
 		CloseDate = null;
-		_sendingEventsCancellation = new CancellationTokenSource();
 
-		var receiving = StartReceivingEventsAsync(_publisher);
-		var sending = StartSendingEventsAsync();
-
-		if (_isFirstConnect)
-		{
-			await _publisher.Publish(new HelloEvent
-			{
-				Session = this,
-			});
-
-			_isFirstConnect = false;
-		}
+		var receivingTask = RunPayloadReceivingAsync();
+		var sendingTask = RunPayloadSendingAsync();
 
 		await _publisher.Publish(new GatewayConnectedEvent
 		{
@@ -86,7 +69,17 @@ internal sealed class GatewaySession : IDisposable
 			Presence = presence,
 		});
 
-		await Task.WhenAll(receiving, sending);
+		if (!_hasConnectedBefore)
+		{
+			await _publisher.Publish(new HelloEvent
+			{
+				Session = this,
+			});
+
+			_hasConnectedBefore = true;
+		}
+
+		await Task.WhenAll(receivingTask, sendingTask);
 
 		await _publisher.Publish(new GatewayDisconnectedEvent
 		{
@@ -99,18 +92,11 @@ internal sealed class GatewaySession : IDisposable
 
 	internal async Task StopAsync(WebSocketCloseStatus closeStatus)
 	{
-		ObjectDisposedException.ThrowIf(_disposed, this);
 		ThrowIfNullWebSocket();
 
 		if (!_running)
 		{
 			return;
-		}
-
-		if (!_sendingEventsCancellation.IsCancellationRequested)
-		{
-			await _sendingEventsCancellation.CancelAsync();
-			_sendingEventsCancellation.Dispose();
 		}
 
 		if (_webSocket.State is WebSocketState.Open or WebSocketState.CloseReceived)
@@ -120,87 +106,21 @@ internal sealed class GatewaySession : IDisposable
 		}
 	}
 
-	private async Task StartSendingEventsAsync()
+	internal async Task QueueEventAsync<T>(GatewayPayload<T> payload, CancellationToken cancellationToken = default)
 	{
-		ObjectDisposedException.ThrowIf(_disposed, this);
-		ThrowIfNullWebSocket();
-		try
-		{
-			while (true)
-			{
-				if (_nextEvent is null)
-				{
-					_ = await _eventsQueue.Reader.WaitToReadAsync(_sendingEventsCancellation.Token);
-					_nextEvent = await _eventsQueue.Reader.ReadAsync(_sendingEventsCancellation.Token);
-				}
-
-				await _webSocket.SendAsync(_nextEvent.AsMemory(), WebSocketMessageType.Text, true, _sendingEventsCancellation.Token);
-
-				_nextEvent = null;
-			}
-		}
-		catch (OperationCanceledException)
-		{
-		}
+		_ = await _eventsQueue.Writer.WaitToWriteAsync(cancellationToken);
+		await _eventsQueue.Writer.WriteAsync(payload.GetJsonUtf8Bytes(_jsonSerializerOptions), cancellationToken);
 	}
 
-	private async Task StartReceivingEventsAsync(IPublisher publisher)
-	{
-		ObjectDisposedException.ThrowIf(_disposed, this);
-		ThrowIfNullWebSocket();
-		try
-		{
-			var buffer = new Byte[1024 / 4].AsMemory();
-			do
-			{
-				using var payloadBytes = new MemoryStream();
-				ValueWebSocketReceiveResult received;
-				do
-				{
-					if (payloadBytes.Length > 1024 * 4)
-					{
-						await StopAsync(WebSocketCloseStatus.MessageTooBig);
-						return;
-					}
-
-					received = await _webSocket.ReceiveAsync(buffer, CancellationToken.None);
-					await payloadBytes.WriteAsync(buffer[..received.Count], CancellationToken.None);
-				} while (!received.EndOfMessage);
-
-				_ = payloadBytes.Seek(0, SeekOrigin.Begin);
-				var payload = await JsonSerializer.DeserializeAsync<GatewayPayload>(payloadBytes, _eventsReceivedJsonOptions);
-				if (payload is null)
-				{
-					await StopAsync(WebSocketCloseStatus.InvalidPayloadData);
-					return;
-				}
-
-				await publisher.Publish(new PayloadReceivedEvent
-				{
-					Session = this,
-					Payload = payload,
-				});
-			} while (_webSocket.State is WebSocketState.Open);
-
-			await StopAsync(WebSocketCloseStatus.NormalClosure);
-		}
-		catch (Exception ex) when (ex is WebSocketException or JsonException)
-		{
-			await StopAsync(WebSocketCloseStatus.InternalServerError);
-		}
-	}
-
+	[Obsolete($"Use the overload that accepts a {nameof(GatewayPayload)} instead.")]
 	internal async Task QueueEventAsync(Byte[] payload, CancellationToken cancellationToken = default)
 	{
-		ObjectDisposedException.ThrowIf(_disposed, this);
-
 		_ = await _eventsQueue.Writer.WaitToWriteAsync(cancellationToken);
 		await _eventsQueue.Writer.WriteAsync(payload, cancellationToken);
 	}
 
 	internal void SetWebSocket(WebSocket webSocket)
 	{
-		ObjectDisposedException.ThrowIf(_disposed, this);
 		ArgumentNullException.ThrowIfNull(webSocket, nameof(webSocket));
 		if (_running)
 		{
@@ -210,24 +130,125 @@ internal sealed class GatewaySession : IDisposable
 		_webSocket = webSocket;
 	}
 
-	private void Dispose(Boolean disposing)
+	private async Task RunPayloadSendingAsync()
 	{
-		if (_disposed)
-		{
-			return;
-		}
+		ThrowIfWebSocketNotOpen();
 
-		_disposed = true;
-
-		if (disposing)
+		while (_webSocket.State is WebSocketState.Open)
 		{
-			_sendingEventsCancellation.Dispose();
+			await SendPayloadAsync();
 		}
 	}
 
-	~GatewaySession()
+	private async Task SendPayloadAsync()
 	{
-		Dispose(false);
+		ThrowIfWebSocketNotOpen();
+
+		if (_nextEvent is null)
+		{
+			if (!await _eventsQueue.Reader.WaitToReadAsync())
+			{
+				return;
+			}
+
+			_nextEvent = await _eventsQueue.Reader.ReadAsync();
+		}
+
+		try
+		{
+			await _webSocket.SendAsync(_nextEvent.AsMemory(), WebSocketMessageType.Text, true, CancellationToken.None);
+			_nextEvent = null;
+		}
+		catch (WebSocketException e)
+		{
+			if (e.WebSocketErrorCode is not WebSocketError.ConnectionClosedPrematurely)
+			{
+				throw;
+			}
+		}
+	}
+
+	private async Task RunPayloadReceivingAsync()
+	{
+		ThrowIfWebSocketNotOpen();
+
+		while (_webSocket.State is WebSocketState.Open)
+		{
+			var message = await ReceiveMessageAsync();
+			if (!message.ReceivedSuccessfully)
+			{
+				await StopAsync((WebSocketCloseStatus)message.CloseStatus);
+				continue;
+			}
+
+			if (message.Type is WebSocketMessageType.Close)
+			{
+				await StopAsync(WebSocketCloseStatus.NormalClosure);
+				continue;
+			}
+
+			try
+			{
+				var messageText = Encoding.UTF8.GetString(message.Content);
+				var payload = JsonSerializer.Deserialize<GatewayPayload>(messageText, _jsonSerializerOptions);
+				if (payload is null)
+				{
+					await StopAsync(WebSocketCloseStatus.InvalidPayloadData);
+					break;
+				}
+
+				await _publisher.Publish(new PayloadReceivedEvent
+				{
+					Session = this,
+					Payload = payload,
+				});
+			}
+			catch (Exception e) when (e is ArgumentException or JsonException)
+			{
+				await StopAsync(WebSocketCloseStatus.InvalidPayloadData);
+				break;
+			}
+		}
+	}
+
+	private async Task<GatewayReceivedMessage> ReceiveMessageAsync()
+	{
+		ThrowIfWebSocketNotOpen();
+
+		var buffer = new Byte[1024].AsMemory();
+		using var messageBytes = new MemoryStream();
+
+		ValueWebSocketReceiveResult received;
+		do
+		{
+			try
+			{
+				received = await _webSocket.ReceiveAsync(buffer, CancellationToken.None);
+			}
+			catch (WebSocketException e)
+			{
+				if (e.WebSocketErrorCode is not WebSocketError.ConnectionClosedPrematurely)
+				{
+					throw;
+				}
+
+				return GatewayReceivedMessage.Close;
+			}
+
+			if (messageBytes.Length + received.Count > MaxMessageSize)
+			{
+				return GatewayReceivedMessage.MessageTooBig;
+			}
+
+			if (received.MessageType is WebSocketMessageType.Binary)
+			{
+				return GatewayReceivedMessage.InvalidMessageType;
+			}
+
+			await messageBytes.WriteAsync(buffer[..received.Count], CancellationToken.None);
+		} while (!received.EndOfMessage);
+
+		return new GatewayReceivedMessage(messageBytes.ToArray(), received.MessageType);
 	}
 
 	[MemberNotNull(nameof(_webSocket))]
@@ -237,5 +258,47 @@ internal sealed class GatewaySession : IDisposable
 		{
 			throw new InvalidOperationException("A websocket for this session has not been assigned.");
 		}
+	}
+
+	[MemberNotNull(nameof(_webSocket))]
+	private void ThrowIfWebSocketNotOpen()
+	{
+		ThrowIfNullWebSocket();
+		if (_webSocket.State is not WebSocketState.Open)
+		{
+			throw new InvalidOperationException("The websocket is not open");
+		}
+	}
+
+	private sealed class GatewayReceivedMessage
+	{
+		internal GatewayReceivedMessage(Byte[] content, WebSocketMessageType messageType)
+		{
+			Content = content;
+			Type = messageType;
+			ReceivedSuccessfully = true;
+		}
+
+		private GatewayReceivedMessage(WebSocketCloseStatus closeStatus)
+		{
+			CloseStatus = closeStatus;
+			ReceivedSuccessfully = false;
+		}
+
+		internal static GatewayReceivedMessage Close { get; } = new([], WebSocketMessageType.Close);
+
+		internal static GatewayReceivedMessage InvalidMessageType { get; } = new(WebSocketCloseStatus.InvalidMessageType);
+
+		internal static GatewayReceivedMessage MessageTooBig { get; } = new(WebSocketCloseStatus.MessageTooBig);
+
+		[MemberNotNullWhen(true, nameof(Content), nameof(Type))]
+		[MemberNotNullWhen(false, nameof(CloseStatus))]
+		internal Boolean ReceivedSuccessfully { get; }
+
+		internal Byte[]? Content { get; }
+
+		internal WebSocketMessageType? Type { get; }
+
+		internal WebSocketCloseStatus? CloseStatus { get; }
 	}
 }
