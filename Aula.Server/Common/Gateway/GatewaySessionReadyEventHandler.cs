@@ -20,7 +20,8 @@ internal sealed class GatewaySessionReadyEventHandler : INotificationHandler<Gat
 
 		var payload = new GatewayPayload<HelloEventPayloadData>
 		{
-			Operation = OperationType.Hello,
+			Operation = OperationType.Dispatch,
+			Event = EventType.Ready,
 			Data = new HelloEventPayloadData
 			{
 				SessionId = session.Id,
