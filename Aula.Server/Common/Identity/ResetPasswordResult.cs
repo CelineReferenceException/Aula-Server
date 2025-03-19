@@ -63,10 +63,4 @@ internal sealed class ResetPasswordResult
 	///     The password has not enough unique characters.
 	/// </summary>
 	internal static ResetPasswordResult NotEnoughUniqueCharacters { get; } = new("The password has not enough unique characters.", false);
-
-	/// <inheritdoc />
-	public override String ToString()
-	{
-		return _description;
-	}
 }
