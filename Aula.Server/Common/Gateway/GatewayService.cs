@@ -9,7 +9,6 @@ namespace Aula.Server.Common.Gateway;
 internal sealed class GatewayService : IDisposable
 {
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
-	private readonly IPublisher _publisher;
 	private readonly IServiceScope _serviceScope;
 	private readonly ConcurrentDictionary<String, GatewaySession> _sessions = [];
 
@@ -18,7 +17,6 @@ internal sealed class GatewayService : IDisposable
 		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
 		ExpirePeriod = TimeSpan.FromSeconds(gatewayOptions.Value.SecondsToExpire);
 		_serviceScope = scopeFactory.CreateScope();
-		_publisher = _serviceScope.ServiceProvider.GetRequiredService<IPublisher>();
 	}
 
 	internal TimeSpan ExpirePeriod { get; }
@@ -35,7 +33,11 @@ internal sealed class GatewayService : IDisposable
 		UInt64 userId,
 		Intents intents)
 	{
-		var session = new GatewaySession(userId, intents, _jsonSerializerOptions, _publisher);
+		var session = new GatewaySession(userId,
+			intents,
+			_jsonSerializerOptions,
+			_serviceScope.ServiceProvider.GetRequiredService<IPublisher>());
+
 		_ = _sessions.TryAdd(session.Id, session);
 		return session;
 	}
