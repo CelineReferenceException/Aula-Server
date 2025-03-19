@@ -13,8 +13,7 @@ internal sealed class BannedUserRestrictor : INotificationHandler<BanCreatedEven
 
 	public BannedUserRestrictor(
 		ApplicationDbContext dbContext,
-		[FromKeyedServices(ResiliencePipelines.RetryOnDbConcurrencyProblem)]
-		ResiliencePipeline retryOnDbConcurrencyProblem,
+		[FromKeyedServices(ResiliencePipelines.RetryOnDbConcurrencyProblem)] ResiliencePipeline retryOnDbConcurrencyProblem,
 		GatewayService gatewayService)
 	{
 		_dbContext = dbContext;
