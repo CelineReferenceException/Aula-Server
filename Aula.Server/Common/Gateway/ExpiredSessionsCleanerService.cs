@@ -1,10 +1,10 @@
 ﻿namespace Aula.Server.Common.Gateway;
 
-internal sealed class RemoveExpiredSessionsService : BackgroundService
+internal sealed class ExpiredSessionsCleanerService : BackgroundService
 {
 	private readonly GatewayService _gatewayService;
 
-	public RemoveExpiredSessionsService(GatewayService gatewayService)
+	public ExpiredSessionsCleanerService(GatewayService gatewayService)
 	{
 		_gatewayService = gatewayService;
 	}
