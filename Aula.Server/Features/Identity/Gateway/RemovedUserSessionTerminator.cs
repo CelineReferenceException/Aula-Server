@@ -3,11 +3,11 @@ using MediatR;
 
 namespace Aula.Server.Features.Identity.Gateway;
 
-internal sealed class UserRemovedGatewaySessionTerminator : INotificationHandler<UserRemovedEvent>
+internal sealed class RemovedUserSessionTerminator : INotificationHandler<UserRemovedEvent>
 {
 	private readonly GatewayService _gatewayService;
 
-	public UserRemovedGatewaySessionTerminator(GatewayService gatewayService)
+	public RemovedUserSessionTerminator(GatewayService gatewayService)
 	{
 		_gatewayService = gatewayService;
 	}
