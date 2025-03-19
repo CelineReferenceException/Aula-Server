@@ -36,7 +36,7 @@ internal sealed class GatewayService
 		return session;
 	}
 
-	internal void RemoveExpiredSessions()
+	internal void ClearExpiredSessions()
 	{
 		var expiredSessions = _sessions.Values.Where(s => s.CloseDate < DateTime.UtcNow - ExpirePeriod);
 		foreach (var session in expiredSessions)

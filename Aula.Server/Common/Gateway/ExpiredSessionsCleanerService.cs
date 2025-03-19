@@ -14,7 +14,7 @@ internal sealed class ExpiredSessionsCleanerService : BackgroundService
 		while (!stoppingToken.IsCancellationRequested)
 		{
 			await Task.Delay(_gatewayService.ExpirePeriod, stoppingToken);
-			_gatewayService.RemoveExpiredSessions();
+			_gatewayService.ClearExpiredSessions();
 		}
 	}
 }
