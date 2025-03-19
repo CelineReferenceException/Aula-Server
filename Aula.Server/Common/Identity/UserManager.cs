@@ -319,8 +319,8 @@ internal sealed class UserManager
 
 	private sealed class PendingPasswordReset
 	{
-		internal required String Token { get; init; }
+		internal String Token { get; } = Guid.CreateVersion7().ToString("N");
 
-		internal required DateTime CreationDate { get; init; }
+		internal DateTime CreationDate { get; } = DateTime.UtcNow;
 	}
 }
