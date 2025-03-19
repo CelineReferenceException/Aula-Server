@@ -21,47 +21,48 @@ internal sealed class ResetPasswordResult
 	/// <summary>
 	///     The operation succeeded.
 	/// </summary>
-	internal static ResetPasswordResult Success { get; } = new(nameof(Success), true);
+	internal static ResetPasswordResult Success { get; } = new("The operation succeeded", true);
 
 	/// <summary>
 	///     An unknown problem has occurred during the operation.
 	/// </summary>
-	internal static ResetPasswordResult UnknownProblem { get; } = new(nameof(UnknownProblem), false);
+	internal static ResetPasswordResult UnknownProblem { get; } = new("An unknown problem has occurred during the operation.", false);
 
 	/// <summary>
 	///     The token provided is invalid.
 	/// </summary>
-	internal static ResetPasswordResult InvalidToken { get; } = new(nameof(InvalidToken), false);
+	internal static ResetPasswordResult InvalidToken { get; } = new("The token provided is invalid.", false);
 
 	/// <summary>
 	///     The password is missing an uppercase character.
 	/// </summary>
-	internal static ResetPasswordResult MissingUppercaseCharacter { get; } = new(nameof(MissingUppercaseCharacter), false);
+	internal static ResetPasswordResult MissingUppercaseCharacter { get; } = new("The password is missing an uppercase character.", false);
 
 	/// <summary>
 	///     The password is missing a lowercase character.
 	/// </summary>
-	internal static ResetPasswordResult MissingLowercaseCharacter { get; } = new(nameof(MissingLowercaseCharacter), false);
+	internal static ResetPasswordResult MissingLowercaseCharacter { get; } = new("The password is missing a lowercase character.", false);
 
 	/// <summary>
 	///     The password is missing a digit.
 	/// </summary>
-	internal static ResetPasswordResult MissingDigit { get; } = new(nameof(MissingDigit), false);
+	internal static ResetPasswordResult MissingDigit { get; } = new("The password is missing a digit.", false);
 
 	/// <summary>
 	///     The password length is invalid.
 	/// </summary>
-	internal static ResetPasswordResult InvalidLength { get; } = new(nameof(InvalidLength), false);
+	internal static ResetPasswordResult InvalidLength { get; } = new("The password length is invalid.", false);
 
 	/// <summary>
 	///     The password is missing a non-alphanumeric character
 	/// </summary>
-	internal static ResetPasswordResult MissingNonAlphanumericCharacter { get; } = new(nameof(MissingNonAlphanumericCharacter), false);
+	internal static ResetPasswordResult MissingNonAlphanumericCharacter { get; } =
+		new("The password is missing a non-alphanumeric character", false);
 
 	/// <summary>
 	///     The password has not enough unique characters.
 	/// </summary>
-	internal static ResetPasswordResult NotEnoughUniqueCharacters { get; } = new(nameof(NotEnoughUniqueCharacters), false);
+	internal static ResetPasswordResult NotEnoughUniqueCharacters { get; } = new("The password has not enough unique characters.", false);
 
 	/// <inheritdoc />
 	public override String ToString()
