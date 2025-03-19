@@ -1,4 +1,4 @@
-﻿namespace Aula.Server.Common.Gateway;
+﻿namespace Aula.Server.Features.Gateway.Endpoints;
 
 internal static class GatewayRateLimitPolicies
 {
