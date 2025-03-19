@@ -5,13 +5,13 @@ namespace Aula.Server.Common.Identity;
 /// </summary>
 internal sealed class ResetPasswordResult
 {
-	private readonly String _description;
-
 	private ResetPasswordResult(String description, Boolean succeeded)
 	{
-		_description = description;
+		Description = description;
 		Succeeded = succeeded;
 	}
+
+	internal String Description { get; }
 
 	/// <summary>
 	///     Whether the operation succeeded.
