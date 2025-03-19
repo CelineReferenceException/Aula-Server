@@ -30,7 +30,7 @@ internal sealed class RateLimiterManager
 		return unusedRateLimiters.Count;
 	}
 
-	internal Int32 ClearCache()
+	internal Int32 ClearRateLimiters()
 	{
 		var count = _rateLimiterCache.Count;
 		foreach (var entry in _rateLimiterCache)

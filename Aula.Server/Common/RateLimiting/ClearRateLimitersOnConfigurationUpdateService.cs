@@ -31,7 +31,7 @@ internal sealed partial class ClearRateLimitersOnConfigurationUpdateService : IH
 			}
 
 			_lastClearDate = DateTime.UtcNow;
-			var count = _rateLimiterManager.ClearCache();
+			var count = _rateLimiterManager.ClearRateLimiters();
 			LogCacheClear(_logger, count);
 		});
 		return Task.CompletedTask;
