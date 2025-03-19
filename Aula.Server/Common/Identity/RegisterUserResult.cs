@@ -5,12 +5,10 @@
 /// </summary>
 internal sealed class RegisterUserResult
 {
-	private readonly String _description;
-
 	private RegisterUserResult(String name, String description, Boolean succeeded)
 	{
 		Name = name;
-		_description = description;
+		Description = description;
 		Succeeded = succeeded;
 	}
 
@@ -18,6 +16,12 @@ internal sealed class RegisterUserResult
 	///     The identifier of the result.
 	/// </summary>
 	internal String Name { get; }
+
+
+	/// <summary>
+	///     A more detailed description of the result.
+	/// </summary>
+	internal String Description { get; }
 
 	/// <summary>
 	///     Whether the operation succeeded.
