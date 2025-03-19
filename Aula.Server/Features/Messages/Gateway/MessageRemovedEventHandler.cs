@@ -3,9 +3,6 @@ using MediatR;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using EventType = Aula.Server.Common.Gateway.EventType;
-using Intents = Aula.Server.Common.Gateway.Intents;
-using OperationType = Aula.Server.Common.Gateway.OperationType;
 
 namespace Aula.Server.Features.Messages.Gateway;
 
