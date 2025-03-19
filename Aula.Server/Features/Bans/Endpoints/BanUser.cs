@@ -40,11 +40,7 @@ internal sealed class BanUser : IEndpoint
 			return TypedResults.InternalServerError();
 		}
 
-		var targetUserBan = await dbContext.Bans
-			.AsTracking()
-			.Where(b => b.TargetId == userId)
-			.FirstOrDefaultAsync();
-		if (targetUserBan is not null)
+		if (await dbContext.Bans.AnyAsync(b => b.TargetId == userId))
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.UserAlreadyBanned);
 		}
