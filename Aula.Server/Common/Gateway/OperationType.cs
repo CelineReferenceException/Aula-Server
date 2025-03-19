@@ -9,9 +9,4 @@ internal enum OperationType
 	///     An event dispatch.
 	/// </summary>
 	Dispatch = 0,
-
-	/// <summary>
-	///     Sent immediately after connecting, contains useful information for the client.
-	/// </summary>
-	Hello = 1,
 }
