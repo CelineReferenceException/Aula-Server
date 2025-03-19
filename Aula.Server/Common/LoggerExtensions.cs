@@ -3,5 +3,5 @@
 internal static partial class LoggerExtensions
 {
 	[LoggerMessage(LogLevel.Information, "{message}")]
-	internal static partial void StartupMessage(this ILogger logger, String message);
+	internal static partial void LogStartupMessage(this ILogger logger, String message);
 }

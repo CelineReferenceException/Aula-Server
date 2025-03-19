@@ -70,8 +70,8 @@ catch (AggregateException e)
 var elapsedTime = Stopwatch.GetElapsedTime(startTimestamp);
 var logger = application.Services.GetRequiredService<ILogger<Program>>();
 
-logger.StartupMessage($"Now listening on: {String.Join(" - ", application.Urls)}");
-logger.StartupMessage($"{nameof(Aula)} is Ready — It only took {(Int32)elapsedTime.TotalMilliseconds} milliseconds!");
-logger.StartupMessage("You can press Ctrl+C to shut down.");
+logger.LogStartupMessage($"Now listening on: {String.Join(" - ", application.Urls)}");
+logger.LogStartupMessage($"{nameof(Aula)} is Ready — It only took {(Int32)elapsedTime.TotalMilliseconds} milliseconds!");
+logger.LogStartupMessage("You can press Ctrl+C to shut down.");
 
 await application.WaitForShutdownAsync();
