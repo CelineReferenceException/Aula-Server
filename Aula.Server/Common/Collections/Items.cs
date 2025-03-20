@@ -45,10 +45,12 @@ internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>> where T : clas
 		{
 			if (_items is T value)
 			{
-				return value;
+				if (index == 0)
+				{
+					return value;
+				}
 			}
-
-			if (_items is not null)
+			else if (_items is not null)
 			{
 				return Unsafe.As<List<T>>(_items)[index];
 			}
