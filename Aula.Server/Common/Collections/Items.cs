@@ -50,7 +50,7 @@ internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>> where T : clas
 
 			if (_items is not null)
 			{
-				return Unsafe.As<IReadOnlyList<T>>(_items)[index];
+				return Unsafe.As<List<T>>(_items)[index];
 			}
 
 			return Array.Empty<T>()[0];
