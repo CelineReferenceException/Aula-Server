@@ -29,7 +29,7 @@ internal sealed class RoomRemovedEventDispatcher : INotificationHandler<RoomRemo
 				Name = room.Name,
 				Description = room.Description,
 				IsEntrance = room.IsEntrance,
-				ConnectedRoomIds = room.Connections.Select(x => x.TargetRoomId).ToList(),
+				ConnectedRoomIds = room.Connections.Select(x => x.TargetRoomId).ToArray(),
 				CreationDate = room.CreationDate,
 			},
 		}.GetJsonUtf8Bytes(_jsonSerializerOptions);
