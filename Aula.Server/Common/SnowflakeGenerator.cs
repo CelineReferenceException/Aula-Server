@@ -21,7 +21,7 @@ internal sealed class SnowflakeGenerator
 		_lastOperationDate = DateTime.UtcNow;
 	}
 
-	public async ValueTask<UInt64> NewSnowflake()
+	public async ValueTask<UInt64> NewSnowflakeAsync()
 	{
 		_newSnowflakeLock.Enter();
 

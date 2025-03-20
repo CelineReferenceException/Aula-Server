@@ -44,7 +44,7 @@ internal sealed class AddRoomConnection : IEndpoint
 			return TypedResults.NoContent();
 		}
 
-		var roomConnection = RoomConnection.Create(snowflakeGenerator.NewSnowflake(), roomId, targetId);
+		var roomConnection = RoomConnection.Create(snowflakeGenerator.NewSnowflakeAsync(), roomId, targetId);
 
 		_ = await dbContext.AddAsync(roomConnection);
 		_ = await dbContext.SaveChangesAsync();

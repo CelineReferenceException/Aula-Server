@@ -62,7 +62,7 @@ internal sealed class CreateBan : IEndpoint
 			return TypedResults.Problem(ProblemDetailsDefaults.TargetIsAdministrator);
 		}
 
-		var ban = Ban.Create(snowflakeGenerator.NewSnowflake(), BanType.Id, currentUserId, body.Reason, userId);
+		var ban = Ban.Create(snowflakeGenerator.NewSnowflakeAsync(), BanType.Id, currentUserId, body.Reason, userId);
 		_ = dbContext.Bans.Add(ban);
 
 		_ = await dbContext.SaveChangesAsync();

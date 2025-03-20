@@ -59,7 +59,7 @@ internal sealed class SendMessage : IEndpoint
 			return TypedResults.Problem(ProblemDetailsDefaults.InvalidMessageType);
 		}
 
-		var messageId = snowflakeGenerator.NewSnowflake();
+		var messageId = snowflakeGenerator.NewSnowflakeAsync();
 		var flags = body.Flags ?? 0;
 
 		var message = Message.Create(messageId, body.Type, flags, MessageAuthorType.User, user.Id, body.Content, null, null, roomId);
