@@ -40,7 +40,8 @@ internal sealed class Register : IEndpoint
 			return TypedResults.NoContent();
 		}
 
-		var newUser = User.Create(snowflakeGenerator.NewSnowflakeAsync(), body.UserName, body.Email, body.DisplayName, UserType.Standard,
+		var newUser = User.Create(await snowflakeGenerator.NewSnowflakeAsync(), body.UserName, body.Email, body.DisplayName,
+			UserType.Standard,
 			featureOptions.Value.DefaultPermissions);
 		newUser.PasswordHash = passwordHasher.HashPassword(newUser, body.Password);
 
