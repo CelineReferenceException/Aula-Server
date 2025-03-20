@@ -17,7 +17,7 @@ internal sealed class GetRoomConnections : IEndpoint
 			.HasApiVersion(1);
 	}
 
-	private static async Task<Results<Ok<List<RoomData>>, ProblemHttpResult>> HandleAsync(
+	private static async Task<Results<Ok<RoomData[]>, ProblemHttpResult>> HandleAsync(
 		[FromRoute] UInt64 roomId,
 		[FromServices] ApplicationDbContext dbContext)
 	{
@@ -63,10 +63,10 @@ internal sealed class GetRoomConnections : IEndpoint
 				ConnectedRoomIds = targetRoomConnections
 					.Where(c => c.SourceRoomId == r.Id)
 					.Select(c => c.TargetRoomId)
-					.ToList(),
+					.ToArray(),
 				CreationDate = r.CreationTime,
 			})
-			.ToList();
+			.ToArray();
 		return TypedResults.Ok(targetRoomsData);
 	}
 }
