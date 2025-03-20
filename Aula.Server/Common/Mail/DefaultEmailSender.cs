@@ -18,20 +18,12 @@ internal sealed class DefaultEmailSender : IEmailSender
 		IBackgroundTaskQueue<IEmailSender> taskQueue)
 	{
 		_taskQueue = taskQueue;
+		_mailAddress = new MailAddress(mailOptions.Value.Address, applicationOptions.Value.Name);
 
-		var applicationName = applicationOptions.Value.Name;
-		var address = mailOptions.Value.Address;
-		var password = mailOptions.Value.Password;
-		var smtpHost = mailOptions.Value.SmtpHost;
-		var smtpPort = mailOptions.Value.SmtpPort.Value;
-		var enableSsl = mailOptions.Value.EnableSsl.Value;
-
-		_mailAddress = new MailAddress(address, applicationName);
-
-		smtpClient.Host = smtpHost;
-		smtpClient.Port = smtpPort;
-		smtpClient.Credentials = new NetworkCredential(address, password);
-		smtpClient.EnableSsl = enableSsl;
+		smtpClient.Host = mailOptions.Value.SmtpHost;
+		smtpClient.Port = mailOptions.Value.SmtpPort.Value;
+		smtpClient.Credentials = new NetworkCredential(mailOptions.Value.Address, mailOptions.Value.Password);
+		smtpClient.EnableSsl = mailOptions.Value.EnableSsl.Value;
 		_smtpClient = smtpClient;
 	}
 
