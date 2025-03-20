@@ -36,8 +36,7 @@ internal sealed class SnowflakeGenerator
 		}
 
 		_lastOperationDate = DateTime.UtcNow;
-		var sinceEpoch = _lastOperationDate - s_epoch;
-		var snowflake = ((UInt64)sinceEpoch.TotalMilliseconds << 22) | (UInt16)(_workerId << 12) | _increment++;
+		var snowflake = new Snowflake(s_epoch, _lastOperationDate, _workerId, _increment++);
 
 		_newSnowflakeLock.Exit();
 		return snowflake;
