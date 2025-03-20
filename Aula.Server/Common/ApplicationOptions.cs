@@ -22,5 +22,5 @@ internal sealed class ApplicationOptions
 	[Required]
 	[NotNull]
 	[Range(0, 31)]
-	public required UInt32? WorkerId { get; set; }
+	public required UInt16? WorkerId { get; set; }
 }
