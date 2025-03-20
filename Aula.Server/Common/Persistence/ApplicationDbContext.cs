@@ -28,6 +28,8 @@ internal sealed class ApplicationDbContext : DbContext
 	{
 		const Int32 guidMaximumCharacterLength = 38;
 
+		#region User Model
+
 		var userModel = modelBuilder.Entity<User>();
 
 		_ = userModel.Property(x => x.Id)
@@ -103,6 +105,10 @@ internal sealed class ApplicationDbContext : DbContext
 			})
 			.HasDatabaseName($"IX_{nameof(User)}_{nameof(User.Email)}");
 
+		#endregion
+
+		#region Room Model
+
 		var roomModel = modelBuilder.Entity<Room>();
 
 		_ = roomModel.Property(x => x.Id)
@@ -140,6 +146,10 @@ internal sealed class ApplicationDbContext : DbContext
 		_ = roomModel.Property(x => x.IsRemoved)
 			.IsRequired();
 
+		#endregion
+
+		#region Room Connection Model
+
 		var roomConnectionModel = modelBuilder.Entity<RoomConnection>();
 
 		_ = roomConnectionModel.Property(x => x.Id)
@@ -152,6 +162,10 @@ internal sealed class ApplicationDbContext : DbContext
 
 		_ = roomConnectionModel.Property(x => x.TargetRoomId)
 			.IsRequired();
+
+		#endregion
+
+		#region Message Model
 
 		var messageModel = modelBuilder.Entity<Message>();
 
@@ -202,6 +216,10 @@ internal sealed class ApplicationDbContext : DbContext
 		_ = messageModel.Property(x => x.IsRemoved)
 			.IsRequired();
 
+		#endregion
+
+		#region MessageUserJoin Model
+
 		var messageUserJoinModel = modelBuilder.Entity<MessageUserJoin>();
 
 		_ = messageUserJoinModel.ToTable($"{nameof(Messages)}_{nameof(MessageUserJoin)}");
@@ -213,6 +231,10 @@ internal sealed class ApplicationDbContext : DbContext
 
 		_ = messageUserJoinModel.Property(x => x.UserId)
 			.IsRequired();
+
+		#endregion
+
+		#region MessageUserLeave Model
 
 		var messageUserLeaveModel = modelBuilder.Entity<MessageUserLeave>();
 
@@ -228,6 +250,10 @@ internal sealed class ApplicationDbContext : DbContext
 
 		_ = messageUserLeaveModel.Property(x => x.RoomId)
 			.IsRequired();
+
+		#endregion
+
+		#region Ban Model
 
 		var banModel = modelBuilder.Entity<Ban>();
 
@@ -258,6 +284,8 @@ internal sealed class ApplicationDbContext : DbContext
 				x.TargetId,
 			})
 			.HasDatabaseName($"IX_{nameof(Ban)}_{nameof(Ban.TargetId)}");
+
+		#endregion
 
 		foreach (var entityType in modelBuilder.Model.GetEntityTypes())
 		{
