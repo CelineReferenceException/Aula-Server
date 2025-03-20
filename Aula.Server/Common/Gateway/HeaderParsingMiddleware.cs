@@ -31,25 +31,16 @@ internal sealed class HeaderParsingMiddleware
 			var protocol = protocols[i];
 
 			if (protocol == null ||
-			    !protocol.StartsWith("h_"))
+			    !protocol.StartsWith("h_") ||
+			    !Base64Url.IsValid(protocol))
 			{
 				continue;
 			}
 
 			try
 			{
-				var headersAsBase64Url = protocol.AsSpan()[2..];
-				var headersUtf8MaxDecodedLength = Base64Url.GetMaxDecodedLength(headersAsBase64Url.Length);
-				var headersUtf8Buffer = ArrayPool<Byte>.Shared.Rent(headersUtf8MaxDecodedLength);
-				if (!Base64Url.TryDecodeFromChars(headersAsBase64Url, headersUtf8Buffer, out var bytesWritten))
-				{
-					break;
-				}
-
-				var headersAsJsonString = Encoding.UTF8.GetString(headersUtf8Buffer[..bytesWritten]);
-				ArrayPool<Byte>.Shared.Return(headersUtf8Buffer);
-
-				var headers = JsonSerializer.Deserialize<Dictionary<String, String>>(headersAsJsonString)?.AsEnumerable() ?? [];
+				var headersAsJson = Encoding.UTF8.GetString(Base64Url.DecodeFromChars(protocol));
+				var headers = JsonSerializer.Deserialize<Dictionary<String, String>>(headersAsJson)?.AsEnumerable() ?? [];
 				foreach (var header in headers)
 				{
 					httpContext.Request.Headers.Append(header.Key, header.Value);
@@ -57,7 +48,6 @@ internal sealed class HeaderParsingMiddleware
 
 				var remainingProtocols = protocols.ToArray().ToList();
 				remainingProtocols.RemoveAt(i);
-
 				httpContext.Request.Headers.SecWebSocketProtocol = new StringValues([.. remainingProtocols,]);
 
 				if (protocols.Count == 1)
