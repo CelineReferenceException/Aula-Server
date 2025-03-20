@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Runtime.CompilerServices;
+using Microsoft.Extensions.Primitives;
 
 namespace Aula.Server.Common.Collections;
 
-internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>> where T : class
+internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>> where T : class?
 {
 	private Object? _items;
 
 	internal Items(T item)
 	{
-		_items = item;
+		_items = item is not null ? item : NullItem.Instance;
 	}
 
 	internal Items(List<T> items)
@@ -21,14 +22,14 @@ internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>> where T : clas
 	{
 		get
 		{
-			if (_items is T)
+			if (_items is List<T> list)
 			{
-				return 1;
+				return list.Count;
 			}
 
 			if (_items is not null)
 			{
-				return Unsafe.As<List<T>>(_items).Count;
+				return 1;
 			}
 
 			return 0;
@@ -50,6 +51,10 @@ internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>> where T : clas
 					return value;
 				}
 			}
+			else if (_items is NullItem)
+			{
+				return null!;
+			}
 			else if (_items is not null)
 			{
 				return Unsafe.As<List<T>>(_items)[index];
@@ -70,13 +75,13 @@ internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>> where T : clas
 		{
 			_items = new List<T>
 			{
-				Unsafe.As<T>(_items),
+				(_items as T)!,
 				value,
 			};
 		}
 		else
 		{
-			_items = value;
+			_items = value is not null ? value : NullItem.Instance;
 		}
 	}
 
@@ -87,44 +92,41 @@ internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>> where T : clas
 
 	public readonly Boolean Equals(Items<T> other)
 	{
-		if (_items is null &&
-		    other._items is null)
+		var thisIsNull = _items is null;
+		var otherIsNull = other._items is null;
+		if (thisIsNull || otherIsNull)
 		{
-			return true;
+			return thisIsNull == otherIsNull;
 		}
 
-		if (_items is T item1)
+		var thisIsNullItem = _items is NullItem;
+		var otherIsNullItem = other._items is NullItem;
+		if (thisIsNullItem || otherIsNullItem)
 		{
-			if (other._items is T item2)
-			{
-				return item1 == item2;
-			}
-
-			if (other._items is not null)
-			{
-				var items2 = Unsafe.As<List<T>>(other._items);
-				return items2.Count == 1 && item1 == items2[0];
-			}
-
-			return false;
+			return thisIsNullItem == otherIsNullItem;
 		}
 
-		if (_items is List<T> items1)
+		if (_items is T thisItem)
 		{
-			if (other._items is List<T> items2)
+			if (other._items is T otherItem)
 			{
-				return items1.SequenceEqual(items2);
+				return thisItem == otherItem;
 			}
 
-			if (other._items is not null)
-			{
-				return items1.Count == 1 && items1[0] == Unsafe.As<T>(other._items);
-			}
-
-			return false;
+			var otherItems = Unsafe.As<List<T>>(other._items!);
+			return otherItems.Count == 1 && thisItem == otherItems[0];
 		}
+		else
+		{
+			var thisItems = Unsafe.As<List<T>>(_items!);
+			if (other._items is List<T> otherItems)
+			{
+				return thisItems.SequenceEqual(otherItems);
+			}
 
-		return false;
+			var otherItem = Unsafe.As<T>(other._items);
+			return thisItems.Count == 1 && thisItems[0] == otherItem;
+		}
 	}
 
 	public override readonly Boolean Equals(Object? obj)
@@ -141,7 +143,7 @@ internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>> where T : clas
 
 	public static Boolean operator !=(Items<T> left, Items<T> right) => !left.Equals(right);
 
-	public static implicit operator Items<T>(T value) => new(value);
+	public static implicit operator Items<T?>(T value) => new(value);
 
 	public static implicit operator Items<T>(List<T> values) => new(values);
 
@@ -162,20 +164,24 @@ internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>> where T : clas
 	internal struct Enumerator : IEnumerator<T>
 	{
 		private readonly List<T>? _items;
-		private T? _current;
+		private Object? _current;
 		private Int32 _index;
 
-		internal Enumerator(Object? items)
+		internal Enumerator(Object? item)
 		{
-			if (items is T item)
+			if (item is List<T> items)
+			{
+				_current = null;
+				_items = items;
+			}
+			else if (item is not null)
 			{
 				_current = item;
 				_items = null;
 			}
-			else if (items is not null)
+			else
 			{
-				_current = null;
-				_items = Unsafe.As<List<T>>(items);
+				_index = -1;
 			}
 		}
 
@@ -201,7 +207,7 @@ internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>> where T : clas
 			}
 
 			_index = -1;
-			return _current is not null;
+			return true;
 		}
 
 		public void Reset()
@@ -209,11 +215,20 @@ internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>> where T : clas
 			throw new NotSupportedException();
 		}
 
-		public readonly T Current => _current ?? throw new InvalidOperationException($"{nameof(Current)} is null");
+		public readonly T Current => (_current as T)!;
 
 		readonly Object? IEnumerator.Current => Current;
 
 		public readonly void Dispose()
+		{
+		}
+	}
+
+	internal sealed class NullItem
+	{
+		internal static NullItem Instance { get; } = new();
+
+		private NullItem()
 		{
 		}
 	}
