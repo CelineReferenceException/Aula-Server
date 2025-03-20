@@ -55,8 +55,6 @@ internal abstract class Command
 	/// <exception cref="InvalidOperationException">Thrown if the last option registered was marked for overflow.</exception>
 	private protected void AddOptions(CommandOption option)
 	{
-		ArgumentNullException.ThrowIfNull(option, nameof(option));
-
 		if (!_options.TryAdd(option.Name, option))
 		{
 			throw new InvalidOperationException($"Duplicate command option name: '{option.Name}'.");
