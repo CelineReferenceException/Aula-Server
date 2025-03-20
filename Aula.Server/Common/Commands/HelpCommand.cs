@@ -41,7 +41,7 @@ internal sealed partial class HelpCommand : Command
 		if (!args.TryGetValue(_commandOption.Name, out var query) ||
 		    String.IsNullOrWhiteSpace(query))
 		{
-			ShowHelp(_logger, FormatCommands(commands));
+			LogHelpMessage(_logger, FormatCommands(commands));
 			return ValueTask.CompletedTask;
 		}
 
@@ -64,7 +64,7 @@ internal sealed partial class HelpCommand : Command
 			command = subCommand;
 		}
 
-		ShowHelp(_logger, FormatCommands(command));
+		LogHelpMessage(_logger, FormatCommands(command));
 		return ValueTask.CompletedTask;
 	}
 
@@ -157,7 +157,7 @@ internal sealed partial class HelpCommand : Command
 	}
 
 	[LoggerMessage(LogLevel.Information, Message = "Here's a list of all available commands: {message}")]
-	private static partial void ShowHelp(ILogger logger, String message);
+	private static partial void LogHelpMessage(ILogger logger, String message);
 
 	[LoggerMessage(LogLevel.Error, Message = "Unknown command: '{commandName}'")]
 	private static partial void LogUnknownCommandMessage(ILogger logger, String commandName);
