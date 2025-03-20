@@ -5,6 +5,7 @@ namespace Aula.Server.Common;
 internal sealed class SnowflakeGenerator
 {
 	private static readonly DateTime s_epoch = new(2024, 12, 1, 12, 0, 0, DateTimeKind.Utc);
+	private static readonly TimeSpan s_oneTickSpan = TimeSpan.FromTicks(1);
 	private readonly Lock _newSnowflakeLock = new();
 	private readonly UInt32 _workerId;
 	private UInt32 _increment;
@@ -20,7 +21,7 @@ internal sealed class SnowflakeGenerator
 		_lastOperationDate = DateTime.UtcNow;
 	}
 
-	public UInt64 NewSnowflake()
+	public async ValueTask<UInt64> NewSnowflake()
 	{
 		_newSnowflakeLock.Enter();
 
@@ -28,6 +29,7 @@ internal sealed class SnowflakeGenerator
 		{
 			while (_lastOperationDate == DateTime.UtcNow)
 			{
+				await Task.Delay(s_oneTickSpan);
 			}
 
 			_increment = 0;
