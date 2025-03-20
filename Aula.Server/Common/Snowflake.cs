@@ -7,6 +7,16 @@ internal readonly struct Snowflake
 		Value = value;
 	}
 
+	internal Snowflake(UInt64 millisecondsSinceEpoch, UInt16 workerId, UInt16 increment)
+		: this((millisecondsSinceEpoch << 22) | (UInt32)(workerId << 12) | increment)
+	{
+	}
+
+	internal Snowflake(DateTime epoch, DateTime instant, UInt16 workerId, UInt16 increment)
+		: this((UInt64)(instant - epoch).TotalMilliseconds, workerId, increment)
+	{
+	}
+
 	internal UInt64 Value { get; }
 
 	internal UInt16 Increment => (UInt16)(Value & 0b1111_1111_1111);
