@@ -13,7 +13,7 @@ internal static class DependencyInjection
 			_ = builder
 				.AddRetry(new RetryStrategyOptions
 				{
-					MaxRetryAttempts = Int32.MaxValue,
+					MaxRetryAttempts = Int32.MaxValue - 1,
 					ShouldHandle = new PredicateBuilder().Handle<DbUpdateConcurrencyException>(),
 				});
 		});
