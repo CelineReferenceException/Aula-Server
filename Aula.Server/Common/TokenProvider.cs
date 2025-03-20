@@ -59,13 +59,6 @@ internal sealed class TokenProvider
 		return token;
 	}
 
-	internal String CreateToken(User user)
-	{
-		var id = user.Id.ToString();
-		var stamp = user.SecurityStamp ?? throw new ArgumentException("The user security stamp cannot be null.");
-		return CreateToken(id, stamp);
-	}
-
 	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Used through dependency injection")]
 	internal Boolean TryReadFromToken(
 		ReadOnlySpan<Char> token,
