@@ -36,7 +36,7 @@ internal sealed partial class HelpCommand : Command
 
 		var commands = _commandLine.Commands
 			.Select(kvp => kvp.Value)
-			.ToList();
+			.ToArray();
 
 		if (!args.TryGetValue(_commandOption.Name, out var query) ||
 		    String.IsNullOrWhiteSpace(query))
