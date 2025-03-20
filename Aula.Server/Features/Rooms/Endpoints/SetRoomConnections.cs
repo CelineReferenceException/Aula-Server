@@ -46,7 +46,7 @@ internal sealed class SetRoomConnections : IEndpoint
 
 		var newConnections = body.RoomIds
 			.Where(targetId => !alreadyConnectedTargetIds.Contains(targetId))
-			.Select(targetId => RoomConnection.Create(await snowflakeGenerator.NewSnowflakeAsync(), roomId, targetId))
+			.Select(targetId => RoomConnection.Create(snowflakeGenerator.NewSnowflakeAsync().AsTask().Result, roomId, targetId))
 			.ToArray();
 
 		var targetsToRemove = await dbContext.RoomConnections
