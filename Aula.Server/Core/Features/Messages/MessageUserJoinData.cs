@@ -8,5 +8,5 @@ internal sealed record MessageUserJoinData
 	/// <summary>
 	///     The ID of user who joined to this room.
 	/// </summary>
-	public required UInt64 UserId { get; init; }
+	public required Snowflake UserId { get; init; }
 }
