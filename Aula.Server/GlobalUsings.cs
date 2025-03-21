@@ -5,6 +5,7 @@ global using System.Threading;
 global using System.Threading.Tasks;
 global using Aula.Server.Common;
 global using Aula.Server.Common.Commands;
+global using Aula.Server.Common.Collections;
 global using Aula.Server.Domain;
 global using Aula.Server.Domain.Bans;
 global using Aula.Server.Domain.Rooms;
