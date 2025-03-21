@@ -6,7 +6,7 @@ internal sealed class Room : DefaultDomainEntity
 	internal const Int32 NameMaximumLength = 32;
 	internal const Int32 DescriptionMaximumLength = 2048;
 
-	internal UInt64 Id { get; }
+	internal Snowflake Id { get; }
 
 	internal String Name { get; private set; }
 
@@ -23,13 +23,8 @@ internal sealed class Room : DefaultDomainEntity
 
 	internal Boolean IsRemoved { get; private set; }
 
-	internal Room(UInt64 id, String name, String description, Boolean isEntrance)
+	internal Room(Snowflake id, String name, String description, Boolean isEntrance)
 	{
-		if (id is 0)
-		{
-			throw new ArgumentException($"{nameof(id)} cannot be 0.", nameof(id));
-		}
-
 		switch (name.Length)
 		{
 			case < NameMinimumLength:
