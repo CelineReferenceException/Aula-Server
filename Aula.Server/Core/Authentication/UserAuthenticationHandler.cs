@@ -32,7 +32,16 @@ internal sealed class UserAuthenticationHandler : AuthenticationHandler<Authenti
 		var headerValue = headerValues.FirstOrDefault().AsSpan();
 
 		var headerValueSegments = headerValue.Split(' ');
-		if (!headerValueSegments.MoveNext() ||
+		if (!headerValueSegments.MoveNext())
+		{
+			return AuthenticateResult.NoResult();
+		}
+
+		var tokenTypeSegmentStart = headerValueSegments.Current.Start.Value;
+		var tokenTypeSegmentLength = headerValueSegments.Current.End.Value - tokenTypeSegmentStart;
+		var tokenTypeSegment = headerValue.Slice(tokenTypeSegmentStart, tokenTypeSegmentLength);
+
+		if (tokenTypeSegment is not "Bearer" ||
 		    !headerValueSegments.MoveNext())
 		{
 			return AuthenticateResult.NoResult();
