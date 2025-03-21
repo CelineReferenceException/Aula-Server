@@ -24,8 +24,6 @@ internal sealed class UserAuthenticationHandler : AuthenticationHandler<Authenti
 
 	protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
 	{
-		var userManager = Context.RequestServices.GetRequiredService<UserManager>();
-
 		if (!Context.Request.Headers.TryGetValue("Authorization", out var headerValues))
 		{
 			return AuthenticateResult.NoResult();
@@ -56,6 +54,7 @@ internal sealed class UserAuthenticationHandler : AuthenticationHandler<Authenti
 			return AuthenticateResult.NoResult();
 		}
 
+		var userManager = Context.RequestServices.GetRequiredService<UserManager>();
 		var user = await userManager.FindByIdAsync(userId);
 		if (user is null ||
 		    user.SecurityStamp != securityStamp)
