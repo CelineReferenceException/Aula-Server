@@ -13,13 +13,13 @@ internal sealed class UInt64JsonConverter : JsonConverter<UInt64>
 		return reader.TokenType switch
 		{
 			JsonTokenType.Number => reader.GetUInt64(),
-			JsonTokenType.String => UInt64.Parse(reader.ValueSpan, CultureInfo.InvariantCulture),
+			JsonTokenType.String => UInt64.Parse(reader.ValueSpan),
 			_ => throw new JsonException(),
 		};
 	}
 
 	public override void Write(Utf8JsonWriter writer, UInt64 value, JsonSerializerOptions options)
 	{
-		writer.WriteStringValue(value.ToString(CultureInfo.InvariantCulture));
+		writer.WriteStringValue(value.ToString());
 	}
 }
