@@ -3,7 +3,7 @@
 internal sealed class Ban : DefaultDomainEntity
 {
 	internal const Int32 ReasonMinimumLength = 1;
-	internal const Int32 ReasonMaximumLength = 512;
+	internal const Int32 ReasonMaximumLength = 4096;
 
 	internal UInt64 Id { get; private init; }
 
