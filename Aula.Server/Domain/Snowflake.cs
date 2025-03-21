@@ -54,6 +54,13 @@ internal readonly struct Snowflake : ISpanParsable<Snowflake>, IEquatable<Snowfl
 		return success;
 	}
 
+	public static Boolean TryParse(ReadOnlySpan<Char> s, out Snowflake value)
+	{
+		var success = UInt64.TryParse(s, out var number);
+		value = new Snowflake(number);
+		return success;
+	}
+
 	public Boolean Equals(Snowflake other)
 	{
 		return _value == other._value;
