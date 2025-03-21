@@ -52,7 +52,7 @@ internal readonly struct Result<TResult> : IEquatable<Result<TResult>>
 	{
 		if (problems.Count < 1)
 		{
-			throw new ArgumentException($"{problems} cannot be empty.", nameof(problems));
+			throw new ArgumentException($"{nameof(problems)} cannot be empty.", nameof(problems));
 		}
 
 		Problems = problems;
