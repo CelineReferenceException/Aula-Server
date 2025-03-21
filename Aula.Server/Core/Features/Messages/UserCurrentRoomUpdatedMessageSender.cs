@@ -21,8 +21,11 @@ internal sealed class UserCurrentRoomUpdatedMessageSender : INotificationHandler
 		if (notification.PreviousRoomId is not null)
 		{
 			var leaveMessageId = await _snowflakeGenerator.NewSnowflakeAsync();
-			var leaveMessage = new Message(leaveMessageId, MessageType.UserLeave, 0, MessageAuthorType.System, null, null, null,
-				new MessageUserLeave(leaveMessageId, notification.UserId, notification.CurrentRoomId), notification.PreviousRoomId.Value);
+			var leaveMessage = new Message(leaveMessageId, MessageType.UserLeave, 0, MessageAuthorType.System, null, null,
+				notification.PreviousRoomId.Value)
+			{
+				LeaveData = new MessageUserLeave(leaveMessageId, notification.UserId, notification.CurrentRoomId),
+			};
 
 			_ = _dbContext.Messages.Add(leaveMessage);
 		}
@@ -31,7 +34,10 @@ internal sealed class UserCurrentRoomUpdatedMessageSender : INotificationHandler
 		{
 			var joinMessageId = await _snowflakeGenerator.NewSnowflakeAsync();
 			var joinMessage = new Message(joinMessageId, MessageType.UserJoin, 0, MessageAuthorType.System, null, null,
-				new MessageUserJoin(joinMessageId, notification.UserId), null, notification.CurrentRoomId.Value);
+				notification.CurrentRoomId.Value)
+			{
+				JoinData = new MessageUserJoin(joinMessageId, notification.UserId),
+			};
 
 			_ = _dbContext.Messages.Add(joinMessage);
 		}
