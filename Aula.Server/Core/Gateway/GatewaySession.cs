@@ -4,7 +4,7 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Channels;
-using Aula.Server.Core.Features.Users.Gateway;
+using Aula.Server.Core.Features.Users;
 using Aula.Server.Core.JsonSerialization;
 using MediatR;
 

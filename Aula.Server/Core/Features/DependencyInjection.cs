@@ -1,6 +1,6 @@
-﻿using Aula.Server.Core.Features.Gateway.Endpoints;
-using Aula.Server.Core.Features.Identity.Endpoints;
-using Aula.Server.Core.Features.Messages.Endpoints;
+﻿using Aula.Server.Core.Features.Gateway;
+using Aula.Server.Core.Features.Identity;
+using Aula.Server.Core.Features.Messages;
 using Aula.Server.Core.Features.Users;
 
 namespace Aula.Server.Core.Features;

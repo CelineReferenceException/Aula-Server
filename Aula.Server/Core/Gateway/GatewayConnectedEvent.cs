@@ -1,4 +1,4 @@
-﻿using Aula.Server.Core.Features.Users.Gateway;
+﻿using Aula.Server.Core.Features.Users;
 using MediatR;
 
 namespace Aula.Server.Core.Gateway;
