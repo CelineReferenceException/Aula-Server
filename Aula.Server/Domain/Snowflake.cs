@@ -1,6 +1,6 @@
 namespace Aula.Server.Domain;
 
-internal readonly struct Snowflake
+internal readonly struct Snowflake : IEquatable<Snowflake>
 {
 	private readonly UInt64 _value;
 
@@ -27,6 +27,25 @@ internal readonly struct Snowflake
 	internal UInt16 WorkerId => (UInt16)((Value >> 12) & 0b11_1111_1111);
 
 	internal UInt64 CreationDate => Value >> 22;
+
+	public Boolean Equals(Snowflake other)
+	{
+		return _value == other._value;
+	}
+
+	public override Boolean Equals(Object? obj)
+	{
+		return obj is Snowflake other && Equals(other);
+	}
+
+	public override Int32 GetHashCode()
+	{
+		return _value.GetHashCode();
+	}
+
+	public static Boolean operator ==(Snowflake left, Snowflake right) => left.Equals(right);
+
+	public static Boolean operator !=(Snowflake left, Snowflake right) => !left.Equals(right);
 
 	public static implicit operator Snowflake(UInt64 value) => new(value);
 
