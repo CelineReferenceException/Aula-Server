@@ -1,5 +1,6 @@
 using System.Diagnostics;
-using Aula.Server.Features;
+using Aula.Server.Core;
+using Aula.Server.Core.Features;
 using MartinCostello.OpenApi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Options;
