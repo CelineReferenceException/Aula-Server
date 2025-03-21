@@ -59,7 +59,7 @@ internal sealed class Message : DefaultDomainEntity
 			};
 
 			flags = flags
-				.GetFlags()
+				.GetDefinedFlags()
 				.Where(flag => allowedFlags.HasFlag(flag))
 				.Aggregate((x, y) => x | y);
 		}
