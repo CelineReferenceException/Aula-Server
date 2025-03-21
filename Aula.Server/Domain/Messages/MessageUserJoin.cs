@@ -8,7 +8,7 @@ internal sealed record MessageUserJoin
 
 	// Navigation property, values are set through reflection.
 	[SuppressMessage("ReSharper", "UnassignedGetOnlyAutoProperty")]
-	internal Message Message { get; } = null!;
+	internal Message? Message { get; init; }
 
 	internal UInt64 UserId { get; }
 
