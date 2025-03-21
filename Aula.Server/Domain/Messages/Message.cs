@@ -24,9 +24,9 @@ internal sealed class Message : DefaultDomainEntity
 
 	internal String? Content { get; }
 
-	internal MessageUserJoin? JoinData { get; }
+	internal MessageUserJoin? JoinData { get; init; }
 
-	internal MessageUserLeave? LeaveData { get; }
+	internal MessageUserLeave? LeaveData { get; init; }
 
 	internal DateTime CreationDate { get; }
 
