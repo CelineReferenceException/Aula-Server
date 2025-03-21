@@ -42,7 +42,6 @@ internal sealed class UserAuthenticationHandler : AuthenticationHandler<Authenti
 		var tokenSegmentLength = headerValueSegments.Current.End.Value - tokenSegmentStart;
 		var tokenSegment = headerValue.Slice(tokenSegmentStart, tokenSegmentLength);
 
-
 		if (tokenSegment.IsEmpty)
 		{
 			return AuthenticateResult.NoResult();
