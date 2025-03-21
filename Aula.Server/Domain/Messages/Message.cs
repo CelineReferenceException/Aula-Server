@@ -39,8 +39,6 @@ internal sealed class Message : DefaultDomainEntity
 		MessageAuthorType authorType,
 		UInt64? authorId,
 		String? content,
-		MessageUserJoin? joinData,
-		MessageUserLeave? leaveData,
 		UInt64 roomId)
 	{
 		if (id is 0)
@@ -105,20 +103,6 @@ internal sealed class Message : DefaultDomainEntity
 			}
 		}
 
-		if (joinData is null &&
-		    type is MessageType.UserJoin)
-		{
-			throw new ArgumentException($"{nameof(joinData)} cannot be null when {nameof(type)} is {MessageType.UserJoin}.",
-				nameof(joinData));
-		}
-
-		if (leaveData is null &&
-		    type is MessageType.UserLeave)
-		{
-			throw new ArgumentException($"{nameof(leaveData)} cannot be null when {nameof(type)} is {MessageType.UserLeave}.",
-				nameof(leaveData));
-		}
-
 		if (roomId is 0)
 		{
 			throw new ArgumentException($"{nameof(roomId)} cannot be 0.", nameof(roomId));
@@ -131,8 +115,6 @@ internal sealed class Message : DefaultDomainEntity
 		AuthorId = authorId;
 		RoomId = roomId;
 		Content = content;
-		JoinData = joinData;
-		LeaveData = leaveData;
 		CreationDate = DateTime.UtcNow;
 
 		AddEvent(new MessageCreatedEvent(this));
