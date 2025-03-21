@@ -5,30 +5,25 @@ internal sealed class Ban : DefaultDomainEntity
 	internal const Int32 ReasonMinimumLength = 1;
 	internal const Int32 ReasonMaximumLength = 4096;
 
-	internal UInt64 Id { get; }
+	internal Snowflake Id { get; }
 
 	internal BanType Type { get; }
 
-	internal UInt64? ExecutorId { get; }
+	internal Snowflake? ExecutorId { get; }
 
 	internal String? Reason { get; }
 
-	internal UInt64? TargetId { get; }
+	internal Snowflake? TargetId { get; }
 
 	internal DateTime CreationDate { get; }
 
 	internal Ban(
-		UInt64 id,
+		Snowflake id,
 		BanType type,
-		UInt64? executorId = null,
+		Snowflake? executorId = null,
 		String? reason = null,
-		UInt64? targetId = null)
+		Snowflake? targetId = null)
 	{
-		if (id is 0)
-		{
-			throw new ArgumentException($"{nameof(id)} cannot be 0.", nameof(id));
-		}
-
 		if (!Enum.IsDefined(type))
 		{
 			throw new ArgumentOutOfRangeException(nameof(type));
@@ -39,11 +34,6 @@ internal sealed class Ban : DefaultDomainEntity
 		{
 			throw new ArgumentException($"{nameof(targetId)} cannot be null when {nameof(type)} is {BanType.Id}.",
 				nameof(targetId));
-		}
-
-		if (executorId is 0)
-		{
-			throw new ArgumentException($"{nameof(executorId)} cannot be 0.", nameof(executorId));
 		}
 
 		if (reason is not null)
