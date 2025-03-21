@@ -110,9 +110,9 @@ internal sealed class User : DefaultDomainEntity
 		}
 
 		Id = id;
-		UserName = userName;
+		UserName = userName.ToUpper();
 		Email = email?.ToUpper();
-		DisplayName = displayName?.ToUpper() ?? userName;
+		DisplayName = displayName ?? userName;
 		Description = description ?? "";
 		Permissions = permissions;
 		Type = type;
