@@ -99,6 +99,16 @@ internal sealed class User : DefaultDomainEntity
 				$"{nameof(description)} length must be at most ${DescriptionMaximumLength}.");
 		}
 
+		if (!Enum.IsDefined(type))
+		{
+			throw new ArgumentOutOfRangeException(nameof(type));
+		}
+
+		if (!permissions.IsEnumFlagDefined())
+		{
+			throw new ArgumentOutOfRangeException(nameof(permissions));
+		}
+
 		Id = id;
 		UserName = userName;
 		Email = email?.ToUpper();
