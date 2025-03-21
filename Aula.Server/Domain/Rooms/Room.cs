@@ -96,7 +96,7 @@ internal sealed class Room : DefaultDomainEntity
 
 	internal void UpdateConcurrencyStamp()
 	{
-		ConcurrencyStamp = Guid.NewGuid().ToString("N");
+		ConcurrencyStamp = GenerateConcurrencyStamp();
 	}
 
 	internal void Remove()
