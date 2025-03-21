@@ -1,6 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Aula.Server.Domain;
 
-internal readonly struct Snowflake : IEquatable<Snowflake>
+internal readonly struct Snowflake : ISpanParsable<Snowflake>, IEquatable<Snowflake>
 {
 	private readonly UInt64 _value;
 
@@ -27,6 +29,30 @@ internal readonly struct Snowflake : IEquatable<Snowflake>
 	internal UInt16 WorkerId => (UInt16)((Value >> 12) & 0b11_1111_1111);
 
 	internal UInt64 CreationDate => Value >> 22;
+
+	public static Snowflake Parse(String s, IFormatProvider? provider)
+	{
+		return UInt64.Parse(s, provider);
+	}
+
+	public static Boolean TryParse([NotNullWhen(true)] String? s, IFormatProvider? provider, out Snowflake value)
+	{
+		var success = UInt64.TryParse(s, provider, out var number);
+		value = new Snowflake(number);
+		return success;
+	}
+
+	public static Snowflake Parse(ReadOnlySpan<Char> s, IFormatProvider? provider)
+	{
+		return UInt64.Parse(s, provider);
+	}
+
+	public static Boolean TryParse(ReadOnlySpan<Char> s, IFormatProvider? provider, out Snowflake value)
+	{
+		var success = UInt64.TryParse(s, provider, out var number);
+		value = new Snowflake(number);
+		return success;
+	}
 
 	public Boolean Equals(Snowflake other)
 	{
