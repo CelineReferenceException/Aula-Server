@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Aula.Server.Common.Results;
 
 internal readonly struct Result : IEquatable<Result>
@@ -48,6 +50,11 @@ internal readonly struct Result<TResult> : IEquatable<Result<TResult>>
 
 	internal Result(ResultProblemValues problems)
 	{
+		if (problems.Count < 1)
+		{
+			throw new ArgumentException($"{problems} cannot be empty.", nameof(problems));
+		}
+
 		Problems = problems;
 	}
 
