@@ -36,9 +36,8 @@ internal sealed class CreateBot : IEndpoint
 			return TypedResults.Problem(problemDetails);
 		}
 
-		var user = User.Create(await snowflakeGenerator.NewSnowflakeAsync(), Guid.CreateVersion7().ToString(), null, body.DisplayName,
-			UserType.Bot,
-			Permissions.None);
+		var user = new User(await snowflakeGenerator.NewSnowflakeAsync(), Guid.CreateVersion7().ToString(), null, body.DisplayName, "",
+			UserType.Bot, Permissions.None);
 
 		var registerResult = await userManager.RegisterAsync(user);
 		if (!registerResult.Succeeded)
