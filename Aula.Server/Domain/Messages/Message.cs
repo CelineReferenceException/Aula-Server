@@ -5,7 +5,8 @@ namespace Aula.Server.Domain.Messages;
 internal sealed class Message : DefaultDomainEntity
 {
 	internal const MessageFlags StandardTypeAllowedFlags = MessageFlags.HideAuthor;
-
+	internal const MessageFlags UserJoinTypeAllowedFlags = 0;
+	internal const MessageFlags UserLeaveTypeAllowedFlags = 0;
 	internal const Int32 ContentMinimumLength = 1;
 	internal const Int32 ContentMaximumLength = 2048;
 
@@ -52,8 +53,8 @@ internal sealed class Message : DefaultDomainEntity
 			var allowedFlags = type switch
 			{
 				MessageType.Standard => StandardTypeAllowedFlags,
-				MessageType.UserJoin => (MessageFlags)0,
-				MessageType.UserLeave => (MessageFlags)0,
+				MessageType.UserJoin => UserJoinTypeAllowedFlags,
+				MessageType.UserLeave => UserLeaveTypeAllowedFlags,
 				_ => throw new UnreachableException($"No case defined for {nameof(MessageType)}.{type}"),
 			};
 
