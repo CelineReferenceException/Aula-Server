@@ -4,25 +4,15 @@ namespace Aula.Server.Domain.Messages;
 
 internal sealed record MessageUserJoin
 {
-	internal UInt64 MessageId { get; }
+	internal Snowflake MessageId { get; }
 
 	// Navigation property, values are set through reflection.
 	internal Message? Message { get; init; }
 
-	internal UInt64 UserId { get; }
+	internal Snowflake UserId { get; }
 
-	internal MessageUserJoin(UInt64 messageId, UInt64 userId)
+	internal MessageUserJoin(Snowflake messageId, Snowflake userId)
 	{
-		if (messageId is 0)
-		{
-			throw new ArgumentException($"{nameof(messageId)} cannot be 0.", nameof(messageId));
-		}
-
-		if (userId is 0)
-		{
-			throw new ArgumentException($"{nameof(userId)} cannot be 0.", nameof(userId));
-		}
-
 		MessageId = messageId;
 		UserId = userId;
 	}
