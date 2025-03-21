@@ -8,7 +8,7 @@ internal sealed record RoomData
 	/// <summary>
 	///     The unique identifier of the room.
 	/// </summary>
-	public required UInt64 Id { get; init; }
+	public required Snowflake Id { get; init; }
 
 	/// <summary>
 	///     The name of the room.
@@ -28,7 +28,7 @@ internal sealed record RoomData
 	/// <summary>
 	///     A collection of ids of all rooms connected with this room.
 	/// </summary>
-	public required IReadOnlyList<UInt64> ConnectedRoomIds { get; init; }
+	public required IReadOnlyList<Snowflake> ConnectedRoomIds { get; init; }
 
 	/// <summary>
 	///     The date and time when the room was created.
