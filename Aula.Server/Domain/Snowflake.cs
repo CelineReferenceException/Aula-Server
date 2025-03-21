@@ -69,6 +69,11 @@ internal readonly struct Snowflake : ISpanParsable<Snowflake>, IEquatable<Snowfl
 		return _value.GetHashCode();
 	}
 
+	public override String ToString()
+	{
+		return Value.ToString();
+	}
+
 	public static Boolean operator ==(Snowflake left, Snowflake right) => left.Equals(right);
 
 	public static Boolean operator !=(Snowflake left, Snowflake right) => !left.Equals(right);
