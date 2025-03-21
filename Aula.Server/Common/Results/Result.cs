@@ -1,6 +1,6 @@
 namespace Aula.Server.Common.Results;
 
-internal readonly struct Result : IEquatable<Result>
+internal readonly ref struct Result : IEquatable<Result>
 {
 	internal static Result Success => new();
 
@@ -20,7 +20,7 @@ internal readonly struct Result : IEquatable<Result>
 
 	public override Boolean Equals(Object? obj)
 	{
-		return obj is Result other && Equals(other);
+		return false;
 	}
 
 	public override Int32 GetHashCode()
@@ -33,7 +33,7 @@ internal readonly struct Result : IEquatable<Result>
 	public static Boolean operator !=(Result left, Result right) => !left.Equals(right);
 }
 
-internal readonly struct Result<TResult> : IEquatable<Result<TResult>>
+internal readonly ref struct Result<TResult>
 {
 	internal TResult? Value { get; }
 
@@ -66,7 +66,7 @@ internal readonly struct Result<TResult> : IEquatable<Result<TResult>>
 
 	public override Boolean Equals(Object? obj)
 	{
-		return obj is Result<TResult> other && Equals(other);
+		return false;
 	}
 
 	public override Int32 GetHashCode()
