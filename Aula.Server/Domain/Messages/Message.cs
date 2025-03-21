@@ -48,6 +48,21 @@ internal sealed class Message : DefaultDomainEntity
 			throw new ArgumentException($"{nameof(id)} cannot be 0.", nameof(id));
 		}
 
+		if (!Enum.IsDefined(type))
+		{
+			throw new ArgumentOutOfRangeException(nameof(type));
+		}
+
+		if (!Enum.IsDefined(flags))
+		{
+			throw new ArgumentOutOfRangeException(nameof(type));
+		}
+
+		if (!Enum.IsDefined(authorType))
+		{
+			throw new ArgumentOutOfRangeException(nameof(type));
+		}
+
 		if (flags > 0)
 		{
 			var allowedFlags = type switch
