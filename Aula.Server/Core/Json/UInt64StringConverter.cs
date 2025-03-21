@@ -1,9 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Aula.Server.Core.JsonSerialization;
+namespace Aula.Server.Core.Json;
 
 internal sealed class UInt64JsonConverter : JsonConverter<UInt64>
 {

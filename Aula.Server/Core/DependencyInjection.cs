@@ -4,7 +4,7 @@ using Aula.Server.Core.Commands;
 using Aula.Server.Core.Endpoints;
 using Aula.Server.Core.Gateway;
 using Aula.Server.Core.Identity;
-using Aula.Server.Core.JsonSerialization;
+using Aula.Server.Core.Json;
 using Aula.Server.Core.Logging;
 using Aula.Server.Core.Mail;
 using Aula.Server.Core.Persistence;

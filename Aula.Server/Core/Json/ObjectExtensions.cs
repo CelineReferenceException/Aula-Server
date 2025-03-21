@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace Aula.Server.Core.JsonSerialization;
+namespace Aula.Server.Core.Json;
 
 internal static class ObjectExtensions
 {

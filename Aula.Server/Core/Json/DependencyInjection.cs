@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.Json;
 
-namespace Aula.Server.Core.JsonSerialization;
+namespace Aula.Server.Core.Json;
 
 internal static class DependencyInjection
 {

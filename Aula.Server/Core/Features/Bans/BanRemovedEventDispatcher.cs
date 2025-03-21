@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
 using Aula.Server.Core.Gateway;
-using Aula.Server.Core.JsonSerialization;
+using Aula.Server.Core.Json;
 using Aula.Server.Core.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Http.Json;
