@@ -104,4 +104,9 @@ internal sealed class Room : DefaultDomainEntity
 		IsRemoved = true;
 		AddEvent(new RoomRemovedEvent(this));
 	}
+
+	private static String GenerateConcurrencyStamp()
+	{
+		return Guid.CreateVersion7().ToString("N");
+	}
 }
