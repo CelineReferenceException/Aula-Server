@@ -2,9 +2,12 @@ namespace Aula.Server.Domain;
 
 internal readonly struct Snowflake
 {
+	private readonly UInt64 _value;
+
 	internal Snowflake(UInt64 value)
 	{
-		Value = value;
+		ArgumentOutOfRangeException.ThrowIfZero(value);
+		_value = value;
 	}
 
 	internal Snowflake(UInt64 millisecondsSinceEpoch, UInt16 workerId, UInt16 increment)
@@ -17,7 +20,7 @@ internal readonly struct Snowflake
 	{
 	}
 
-	internal UInt64 Value { get; }
+	internal UInt64 Value => _value is not 0 ? _value : throw new InvalidOperationException("Value is not initialized.");
 
 	internal UInt16 Increment => (UInt16)(Value & 0b1111_1111_1111);
 
