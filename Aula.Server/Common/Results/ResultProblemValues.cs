@@ -1,5 +1,3 @@
-using System.Collections;
-
 namespace Aula.Server.Common.Results;
 
 internal readonly struct ResultProblemValues : IReadOnlyList<ResultProblem>, IEquatable<ResultProblemValues>
