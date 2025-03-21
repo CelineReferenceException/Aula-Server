@@ -1,3 +1,3 @@
 ﻿namespace Aula.Server.Domain.Users;
 
-internal sealed record UserCurrentRoomUpdatedEvent(UInt64 UserId, UInt64? PreviousRoomId, UInt64? CurrentRoomId) : DomainEvent;
+internal sealed record UserCurrentRoomUpdatedEvent(Snowflake UserId, Snowflake? PreviousRoomId, Snowflake? CurrentRoomId) : DomainEvent;
