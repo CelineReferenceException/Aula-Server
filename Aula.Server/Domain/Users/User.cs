@@ -9,7 +9,7 @@ internal sealed class User : DefaultDomainEntity
 	internal const Int32 DescriptionMaximumLength = 1024;
 	internal const Int32 PasswordMaximumLength = 128;
 
-	internal UInt64 Id { get; private init; }
+	internal UInt64 Id { get; }
 
 	internal String UserName { get; private set; }
 
@@ -31,13 +31,13 @@ internal sealed class User : DefaultDomainEntity
 
 	internal Permissions Permissions { get; private set; }
 
-	internal UserType Type { get; private init; }
+	internal UserType Type { get; }
 
 	internal Presence Presence { get; set; }
 
 	internal UInt64? CurrentRoomId { get; private set; }
 
-	internal DateTime CreationDate { get; private init; }
+	internal DateTime CreationDate { get; }
 
 	internal Boolean IsRemoved { get; private set; }
 
