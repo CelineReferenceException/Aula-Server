@@ -73,7 +73,7 @@ internal readonly struct Result<TResult> : IEquatable<Result<TResult>>
 
 	public override Int32 GetHashCode()
 	{
-		return HashCode.Combine(Succeeded, Value, Problems);
+		return HashCode.Combine(Value, Problems.GetHashCode());
 	}
 
 	public static Boolean operator ==(Result<TResult> left, Result<TResult> right) => left.Equals(right);
