@@ -35,15 +35,15 @@ internal readonly struct CustomValidationResult : IEquatable<CustomValidationRes
 
 internal readonly struct CustomValidationResult<TResult> : IEquatable<CustomValidationResult<TResult>>
 {
-	internal TResult? Result { get; }
+	internal TResult? Value { get; }
 
 	internal CustomValidationProblemValues Problems { get; }
 
 	internal Boolean Succeeded => Problems.Count is 0;
 
-	internal CustomValidationResult(TResult result)
+	internal CustomValidationResult(TResult value)
 	{
-		Result = result;
+		Value = value;
 	}
 
 	internal CustomValidationResult(CustomValidationProblemValues problems)
@@ -55,8 +55,8 @@ internal readonly struct CustomValidationResult<TResult> : IEquatable<CustomVali
 	{
 		return Succeeded == other.Succeeded &&
 		       Problems.Equals(other.Problems) &&
-		       ((Result is not null && Result.Equals(other.Result)) ||
-		        (Result is null && other.Result is null));
+		       ((Value is not null && Value.Equals(other.Value)) ||
+		        (Value is null && other.Value is null));
 	}
 
 	public override Boolean Equals(Object? obj)
@@ -66,7 +66,7 @@ internal readonly struct CustomValidationResult<TResult> : IEquatable<CustomVali
 
 	public override Int32 GetHashCode()
 	{
-		return HashCode.Combine(Succeeded, Result, Problems);
+		return HashCode.Combine(Succeeded, Value, Problems);
 	}
 
 	public static Boolean operator ==(CustomValidationResult<TResult> left, CustomValidationResult<TResult> right) => left.Equals(right);
