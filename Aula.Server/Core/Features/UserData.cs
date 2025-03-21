@@ -8,7 +8,7 @@ internal sealed record UserData
 	/// <summary>
 	///     The ID of the user.
 	/// </summary>
-	public required UInt64 Id { get; init; }
+	public required Snowflake Id { get; init; }
 
 	/// <summary>
 	///     The name of the user.
@@ -38,5 +38,5 @@ internal sealed record UserData
 	/// <summary>
 	///     The ID of the current room the user resides in.
 	/// </summary>
-	public required UInt64? CurrentRoomId { get; init; }
+	public required Snowflake? CurrentRoomId { get; init; }
 }
