@@ -29,6 +29,11 @@ internal sealed class Ban : DefaultDomainEntity
 			throw new ArgumentException($"{nameof(id)} cannot be 0.", nameof(id));
 		}
 
+		if (!Enum.IsDefined(type))
+		{
+			throw new ArgumentOutOfRangeException(nameof(type));
+		}
+
 		if (type is BanType.Id &&
 		    targetId is null)
 		{
