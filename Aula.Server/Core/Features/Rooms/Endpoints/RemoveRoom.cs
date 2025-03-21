@@ -22,7 +22,7 @@ internal sealed class RemoveRoom : IEndpoint
 	}
 
 	private static async Task<Results<NoContent, InternalServerError>> HandleAsync(
-		[FromRoute] UInt64 roomId,
+		[FromRoute] Snowflake roomId,
 		[FromServices] ApplicationDbContext dbContext)
 	{
 		var room = await dbContext.Rooms

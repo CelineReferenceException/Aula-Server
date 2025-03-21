@@ -30,9 +30,9 @@ internal sealed class GetMessages : IEndpoint
 	}
 
 	private static async Task<Results<Ok<IEnumerable<MessageData>>, ProblemHttpResult, InternalServerError>> HandleAsync(
-		[FromRoute] UInt64 roomId,
-		[FromQuery(Name = BeforeQueryParameter)] UInt64? beforeId,
-		[FromQuery(Name = AfterQueryParameter)] UInt64? afterId,
+		[FromRoute] Snowflake roomId,
+		[FromQuery(Name = BeforeQueryParameter)] Snowflake? beforeId,
+		[FromQuery(Name = AfterQueryParameter)] Snowflake? afterId,
 		[FromQuery(Name = CountQueryParameter)] Int32? count,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] UserManager userManager,

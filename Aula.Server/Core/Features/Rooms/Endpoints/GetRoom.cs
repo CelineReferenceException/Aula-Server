@@ -21,7 +21,7 @@ internal sealed class GetRoom : IEndpoint
 	}
 
 	private static async Task<Results<Ok<RoomData>, NotFound>> HandleAsync(
-		[FromRoute] UInt64 roomId,
+		[FromRoute] Snowflake roomId,
 		[FromServices] ApplicationDbContext dbContext)
 	{
 		var room = await dbContext.Rooms

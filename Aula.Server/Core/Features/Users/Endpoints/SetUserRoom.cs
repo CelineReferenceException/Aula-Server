@@ -23,7 +23,7 @@ internal sealed class SetUserRoom : IEndpoint
 	}
 
 	private static async Task<Results<NoContent, ProblemHttpResult, InternalServerError>> HandleAsync(
-		[FromRoute] UInt64 userId,
+		[FromRoute] Snowflake userId,
 		[FromBody] SetUserRoomRequestBody body,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] UserManager userManager,

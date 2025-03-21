@@ -8,15 +8,15 @@ internal sealed record UserCurrentRoomUpdatedEventData
 	/// <summary>
 	///     The ID of the user.
 	/// </summary>
-	public required UInt64 UserId { get; init; }
+	public required Snowflake UserId { get; init; }
 
 	/// <summary>
 	///     The previous room where the user was in.
 	/// </summary>
-	public UInt64? PreviousRoomId { get; init; }
+	public Snowflake? PreviousRoomId { get; init; }
 
 	/// <summary>
 	///     The new room where the user resides.
 	/// </summary>
-	public UInt64? CurrentRoomId { get; init; }
+	public Snowflake? CurrentRoomId { get; init; }
 }

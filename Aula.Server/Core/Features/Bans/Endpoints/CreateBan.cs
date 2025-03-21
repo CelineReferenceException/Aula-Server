@@ -23,7 +23,7 @@ internal sealed class CreateBan : IEndpoint
 	}
 
 	private static async Task<Results<Created<BanData>, ProblemHttpResult, InternalServerError>> HandleAsync(
-		[FromRoute] UInt64 userId,
+		[FromRoute] Snowflake userId,
 		[FromBody] CreateBanRequestBody body,
 		[FromServices] CreateBanRequestBodyValidator bodyValidator,
 		HttpContext httpContext,

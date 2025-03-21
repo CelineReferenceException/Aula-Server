@@ -8,10 +8,10 @@ internal sealed record UserTypingEventData
 	/// <summary>
 	///     The ID of the user typing.
 	/// </summary>
-	public required UInt64 UserId { get; init; }
+	public required Snowflake UserId { get; init; }
 
 	/// <summary>
 	///     The room where the user is typing.
 	/// </summary>
-	public required UInt64 RoomId { get; init; }
+	public required Snowflake RoomId { get; init; }
 }

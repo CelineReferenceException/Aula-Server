@@ -21,7 +21,7 @@ internal sealed class GetRoomUsers : IEndpoint
 	}
 
 	private static async Task<Results<Ok<List<UserData>>, NotFound>> HandleAsync(
-		[FromRoute] UInt64 roomId,
+		[FromRoute] Snowflake roomId,
 		[FromServices] ApplicationDbContext dbContext)
 	{
 		if (!await dbContext.Rooms.AnyAsync(r => r.Id == roomId))

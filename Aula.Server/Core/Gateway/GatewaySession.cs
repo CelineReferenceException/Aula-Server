@@ -22,7 +22,7 @@ internal sealed class GatewaySession
 	private WebSocket? _webSocket;
 
 	internal GatewaySession(
-		UInt64 userId,
+		Snowflake userId,
 		Intents intents,
 		JsonSerializerOptions jsonSerializerOptions,
 		IPublisher publisher)
@@ -41,7 +41,7 @@ internal sealed class GatewaySession
 
 	internal DateTime? CloseDate { get; private set; }
 
-	internal UInt64 UserId { get; }
+	internal Snowflake UserId { get; }
 
 	internal Intents Intents { get; }
 

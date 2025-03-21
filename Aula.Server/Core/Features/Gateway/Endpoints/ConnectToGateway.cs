@@ -62,7 +62,7 @@ internal sealed class ConnectToGateway : IEndpoint
 		else
 		{
 			var socket = await httpContext.WebSockets.AcceptWebSocketAsync();
-			session = gatewayService.CreateSession((UInt64)userId, intents);
+			session = gatewayService.CreateSession((Snowflake)userId, intents);
 			session.SetWebSocket(socket);
 		}
 

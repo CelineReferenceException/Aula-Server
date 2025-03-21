@@ -27,7 +27,7 @@ internal sealed class SendMessage : IEndpoint
 	}
 
 	private static async Task<Results<Created<MessageData>, ProblemHttpResult, InternalServerError>> HandleAsync(
-		[FromRoute] UInt64 roomId,
+		[FromRoute] Snowflake roomId,
 		[FromBody] SendMessageRequestBody body,
 		[FromServices] SendMessageRequestBodyValidator bodyValidator,
 		HttpContext httpContext,

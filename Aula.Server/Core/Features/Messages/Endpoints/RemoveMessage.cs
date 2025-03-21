@@ -24,8 +24,8 @@ internal sealed class RemoveMessage : IEndpoint
 	}
 
 	private static async Task<Results<NoContent, ForbidHttpResult, ProblemHttpResult, InternalServerError>> HandleAsync(
-		[FromRoute] UInt64 roomId,
-		[FromRoute] UInt64 messageId,
+		[FromRoute] Snowflake roomId,
+		[FromRoute] Snowflake messageId,
 		[FromServices] ApplicationDbContext dbContext,
 		HttpContext httpContext,
 		[FromServices] UserManager userManager)

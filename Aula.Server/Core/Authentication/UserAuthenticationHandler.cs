@@ -51,7 +51,7 @@ internal sealed class UserAuthenticationHandler : AuthenticationHandler<Authenti
 		}
 
 		if (!_tokenProvider.TryReadFromToken(tokenSegment, out var userIdString, out var securityStamp) ||
-		    !UInt64.TryParse(userIdString, out var userId))
+		    !Snowflake.TryParse(userIdString, out var userId))
 		{
 			return AuthenticateResult.NoResult();
 		}

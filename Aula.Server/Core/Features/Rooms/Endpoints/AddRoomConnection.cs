@@ -22,8 +22,8 @@ internal sealed class AddRoomConnection : IEndpoint
 	}
 
 	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(
-		[FromRoute] UInt64 roomId,
-		[FromRoute] UInt64 targetId,
+		[FromRoute] Snowflake roomId,
+		[FromRoute] Snowflake targetId,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] SnowflakeGenerator snowflakeGenerator)
 	{

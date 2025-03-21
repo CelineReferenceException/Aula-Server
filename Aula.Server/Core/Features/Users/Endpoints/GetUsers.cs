@@ -30,7 +30,7 @@ internal sealed class GetUsers : IEndpoint
 	private static async Task<Results<Ok<List<UserData>>, ProblemHttpResult>> HandleAsync(
 		[FromQuery(Name = TypeQueryParameter)] UserType? userType,
 		[FromQuery(Name = CountQueryParameter)] Int32? count,
-		[FromQuery(Name = AfterQueryParameter)] UInt64? afterId,
+		[FromQuery(Name = AfterQueryParameter)] Snowflake? afterId,
 		[FromServices] ApplicationDbContext dbContext)
 	{
 		count ??= DefaultUserCount;

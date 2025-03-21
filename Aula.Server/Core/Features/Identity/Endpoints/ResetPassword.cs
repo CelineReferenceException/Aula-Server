@@ -30,7 +30,7 @@ internal sealed class ResetPassword : IEndpoint
 		}
 
 		if (!tokenProvider.TryReadFromToken(body.Code, out var userIdString, out var resetToken) ||
-		    !UInt64.TryParse(userIdString, out var userId))
+		    !Snowflake.TryParse(userIdString, out var userId))
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.InvalidResetPasswordToken);
 		}

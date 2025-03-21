@@ -28,7 +28,7 @@ internal sealed class GetRooms : IEndpoint
 
 	private static async Task<Results<Ok<List<RoomData>>, ProblemHttpResult>> HandleAsync(
 		[FromQuery(Name = CountQueryParameter)] Int32? count,
-		[FromQuery(Name = AfterQueryParameter)] UInt64? afterId,
+		[FromQuery(Name = AfterQueryParameter)] Snowflake? afterId,
 		[FromServices] ApplicationDbContext dbContext)
 	{
 		count ??= DefaultRoomCount;

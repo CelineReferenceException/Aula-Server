@@ -21,7 +21,7 @@ internal sealed class SetUserPermissions : IEndpoint
 	}
 
 	private static async Task<Results<NoContent, ProblemHttpResult, InternalServerError>> HandleAsync(
-		[FromRoute] UInt64 userId,
+		[FromRoute] Snowflake userId,
 		[FromBody] SetUserPermissionsRequestBody body,
 		[FromServices] SetUserPermissionsRequestBodyValidator bodyValidator,
 		[FromServices] ApplicationDbContext dbContext)

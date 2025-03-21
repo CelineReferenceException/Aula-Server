@@ -25,7 +25,7 @@ internal sealed class StopTyping : IEndpoint
 	}
 
 	private static async Task<Results<NoContent, ProblemHttpResult, InternalServerError>> HandleAsync(
-		[FromRoute] UInt64 roomId,
+		[FromRoute] Snowflake roomId,
 		[FromServices] UserManager userManager,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] IPublisher publisher,
@@ -49,7 +49,7 @@ internal sealed class StopTyping : IEndpoint
 
 		await publisher.Publish(new UserStoppedTypingEvent
 		{
-			UserId = (UInt64)userId,
+			UserId = (Snowflake)userId,
 			RoomId = roomId,
 		});
 

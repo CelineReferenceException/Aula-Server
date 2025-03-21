@@ -8,5 +8,5 @@ internal sealed record SetRoomConnectionsRequestBody
 	/// <summary>
 	///     A collection of Ids of the target rooms to connect this room with.
 	/// </summary>
-	public required IReadOnlyList<UInt64> RoomIds { get; init; }
+	public required IReadOnlyList<Snowflake> RoomIds { get; init; }
 }

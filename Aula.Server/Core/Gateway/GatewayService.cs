@@ -24,7 +24,7 @@ internal sealed class GatewayService
 	internal IReadOnlyDictionary<String, GatewaySession> Sessions => _sessions;
 
 	internal GatewaySession CreateSession(
-		UInt64 userId,
+		Snowflake userId,
 		Intents intents)
 	{
 		var session = new GatewaySession(userId,

@@ -160,7 +160,7 @@ internal sealed class User : DefaultDomainEntity
 		AddEvent(new UserUpdatedEvent(this));
 	}
 
-	internal void SetCurrentRoom(UInt64? currentRoomId)
+	internal void SetCurrentRoom(Snowflake? currentRoomId)
 	{
 		if (CurrentRoomId == currentRoomId)
 		{

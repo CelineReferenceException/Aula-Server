@@ -22,8 +22,8 @@ internal sealed class GetMessage : IEndpoint
 	}
 
 	private static async Task<Results<Ok<MessageData>, NotFound, ProblemHttpResult, InternalServerError>> HandleAsync(
-		[FromRoute] UInt64 roomId,
-		[FromRoute] UInt64 messageId,
+		[FromRoute] Snowflake roomId,
+		[FromRoute] Snowflake messageId,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] UserManager userManager,
 		HttpContext httpContext)

@@ -15,8 +15,8 @@ internal sealed class UserManager
 	private const String LowercaseCharacters = "abcdefghijklmnopqrstuvwxyz";
 	private const String Digits = "0123456789";
 
-	private static readonly ConcurrentDictionary<UInt64, PendingEmailConfirmation> s_pendingEmailConfirmations = new();
-	private static readonly ConcurrentDictionary<UInt64, PendingPasswordReset> s_pendingPasswordResets = new();
+	private static readonly ConcurrentDictionary<Snowflake, PendingEmailConfirmation> s_pendingEmailConfirmations = new();
+	private static readonly ConcurrentDictionary<Snowflake, PendingPasswordReset> s_pendingPasswordResets = new();
 	private static readonly TimeSpan s_pendingEmailConfirmationsLifeTime = TimeSpan.FromMinutes(15);
 	private static readonly TimeSpan s_pendingPasswordResetsLifeTime = TimeSpan.FromMinutes(15);
 	private readonly ApplicationDbContext _dbContext;
@@ -37,11 +37,11 @@ internal sealed class UserManager
 	internal IdentityOptions Options { get; }
 
 	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Prefer to use an instance")]
-	internal UInt64? GetUserId(ClaimsPrincipal user)
+	internal Snowflake? GetUserId(ClaimsPrincipal user)
 	{
 		var idClaimValue = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 		if (idClaimValue is null ||
-		    !UInt64.TryParse(idClaimValue, out var id))
+		    !Snowflake.TryParse(idClaimValue, out var id))
 		{
 			return null;
 		}
@@ -57,10 +57,10 @@ internal sealed class UserManager
 			return null;
 		}
 
-		return await FindByIdAsync((UInt64)id);
+		return await FindByIdAsync((Snowflake)id);
 	}
 
-	internal async ValueTask<User?> FindByIdAsync(UInt64 userId)
+	internal async ValueTask<User?> FindByIdAsync(Snowflake userId)
 	{
 		var user = _users.FirstOrDefault(u => u.Id == userId);
 		if (user is not null)

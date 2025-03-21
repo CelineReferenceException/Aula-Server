@@ -22,8 +22,8 @@ internal sealed class RemoveRoomConnection : IEndpoint
 	}
 
 	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(
-		[FromRoute] UInt64 sourceRoomId,
-		[FromRoute] UInt64 targetRoomId,
+		[FromRoute] Snowflake sourceRoomId,
+		[FromRoute] Snowflake targetRoomId,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] SnowflakeGenerator snowflakeGenerator)
 	{

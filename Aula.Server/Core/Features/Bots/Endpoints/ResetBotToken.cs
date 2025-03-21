@@ -24,7 +24,7 @@ internal sealed class ResetBotToken : IEndpoint
 	}
 
 	private static async Task<Results<Ok<ResetBotTokenResponse>, ProblemHttpResult, InternalServerError>> HandleAsync(
-		[FromRoute] UInt64 userId,
+		[FromRoute] Snowflake userId,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] TokenProvider tokenProvider)
 	{

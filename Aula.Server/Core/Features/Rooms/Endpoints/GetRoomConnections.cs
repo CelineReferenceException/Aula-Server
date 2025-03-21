@@ -21,7 +21,7 @@ internal sealed class GetRoomConnections : IEndpoint
 	}
 
 	private static async Task<Results<Ok<RoomData[]>, ProblemHttpResult>> HandleAsync(
-		[FromRoute] UInt64 roomId,
+		[FromRoute] Snowflake roomId,
 		[FromServices] ApplicationDbContext dbContext)
 	{
 		if (!await dbContext.Rooms.AnyAsync(r => r.Id == roomId && !r.IsRemoved))

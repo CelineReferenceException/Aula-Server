@@ -21,7 +21,7 @@ internal sealed class GetUser : IEndpoint
 	}
 
 	private static async Task<Results<Ok<UserData>, NotFound>> HandleAsync(
-		[FromRoute] UInt64 userId,
+		[FromRoute] Snowflake userId,
 		[FromServices] ApplicationDbContext dbContext)
 	{
 		var user = await dbContext.Users

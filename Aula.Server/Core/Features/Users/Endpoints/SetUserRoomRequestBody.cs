@@ -8,5 +8,5 @@ internal sealed record SetUserRoomRequestBody
 	/// <summary>
 	///     The ID of the new current room.
 	/// </summary>
-	public required UInt64 RoomId { get; init; }
+	public required Snowflake RoomId { get; init; }
 }

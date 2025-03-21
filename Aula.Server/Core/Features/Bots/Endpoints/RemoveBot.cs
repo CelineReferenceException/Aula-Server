@@ -23,7 +23,7 @@ internal sealed class RemoveBot : IEndpoint
 	}
 
 	private static async Task<Results<NoContent, ProblemHttpResult, InternalServerError>> HandleAsync(
-		[FromRoute] UInt64 userId,
+		[FromRoute] Snowflake userId,
 		[FromServices] ApplicationDbContext dbContext)
 	{
 		var user = await dbContext.Users

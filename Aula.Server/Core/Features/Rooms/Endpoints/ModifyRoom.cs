@@ -22,7 +22,7 @@ internal sealed class ModifyRoom : IEndpoint
 	}
 
 	private static async Task<Results<Ok<RoomData>, NotFound, ProblemHttpResult, InternalServerError>> HandleAsync(
-		[FromRoute] UInt64 roomId,
+		[FromRoute] Snowflake roomId,
 		[FromBody] ModifyRoomRequestBody body,
 		[FromServices] ModifyRoomRequestBodyValidator bodyValidator,
 		[FromServices] ApplicationDbContext dbContext)

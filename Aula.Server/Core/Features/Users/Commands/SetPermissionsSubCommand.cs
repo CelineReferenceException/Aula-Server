@@ -44,7 +44,7 @@ internal sealed class SetPermissionsSubCommand : SubCommand
 	{
 		var userIdArgument = args[_userIdOption.Name];
 
-		if (!UInt64.TryParse(userIdArgument, out var userId))
+		if (!Snowflake.TryParse(userIdArgument, out var userId))
 		{
 			_logger.CommandFailed("The user ID must be numeric.");
 			return;

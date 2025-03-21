@@ -18,7 +18,7 @@ internal sealed class PresenceUpdater :
 	INotificationHandler<PayloadReceivedEvent>,
 	INotificationHandler<GatewayDisconnectedEvent>
 {
-	private static readonly ConcurrentDictionary<UInt64, UserPresenceState> s_presenceStates = new();
+	private static readonly ConcurrentDictionary<Snowflake, UserPresenceState> s_presenceStates = new();
 	private readonly ApplicationDbContext _dbContext;
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
 	private readonly ResiliencePipeline _retryOnDbConcurrencyProblem;

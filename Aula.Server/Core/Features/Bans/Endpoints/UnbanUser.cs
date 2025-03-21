@@ -22,7 +22,7 @@ internal sealed class UnbanUser : IEndpoint
 	}
 
 	private static async Task<Results<NoContent, ProblemHttpResult, InternalServerError>> HandleAsync(
-		[FromRoute] UInt64 userId,
+		[FromRoute] Snowflake userId,
 		[FromServices] ApplicationDbContext dbContext)
 	{
 		var ban = await dbContext.Bans
