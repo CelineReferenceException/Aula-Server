@@ -50,6 +50,12 @@ internal readonly struct Snowflake : ISpanParsable<Snowflake>, IEquatable<Snowfl
 	public static Boolean TryParse(ReadOnlySpan<Char> s, IFormatProvider? provider, out Snowflake value)
 	{
 		var success = UInt64.TryParse(s, provider, out var number);
+		if (number is 0)
+		{
+			value = default;
+			return false;
+		}
+
 		value = new Snowflake(number);
 		return success;
 	}
@@ -57,6 +63,12 @@ internal readonly struct Snowflake : ISpanParsable<Snowflake>, IEquatable<Snowfl
 	public static Boolean TryParse(ReadOnlySpan<Char> s, out Snowflake value)
 	{
 		var success = UInt64.TryParse(s, out var number);
+		if (number is 0)
+		{
+			value = default;
+			return false;
+		}
+
 		value = new Snowflake(number);
 		return success;
 	}
