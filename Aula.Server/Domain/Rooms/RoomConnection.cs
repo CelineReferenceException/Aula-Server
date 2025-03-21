@@ -4,10 +4,6 @@ namespace Aula.Server.Domain.Rooms;
 
 internal sealed class RoomConnection : DefaultDomainEntity
 {
-	private RoomConnection()
-	{
-	}
-
 	internal UInt64 Id { get; private init; }
 
 	internal UInt64 SourceRoomId { get; private init; }
@@ -24,17 +20,28 @@ internal sealed class RoomConnection : DefaultDomainEntity
 	[SuppressMessage("ReSharper", "UnassignedGetOnlyAutoProperty")]
 	internal Room TargetRoom { get; }
 
-	internal static RoomConnection Create(UInt64 id, UInt64 sourceRoomId, UInt64 targetRoomId)
+	internal RoomConnection(UInt64 id, UInt64 sourceRoomId, UInt64 targetRoomId)
 	{
-		var connection = new RoomConnection
+		if (id is 0)
 		{
-			Id = id,
-			SourceRoomId = sourceRoomId,
-			TargetRoomId = targetRoomId,
-		};
+			throw new ArgumentException($"{nameof(id)} cannot be 0.", nameof(id));
+		}
 
-		connection.AddEvent(new RoomConnectionCreatedEvent(connection));
-		return connection;
+		if (sourceRoomId is 0)
+		{
+			throw new ArgumentException($"{nameof(sourceRoomId)} cannot be 0.", nameof(sourceRoomId));
+		}
+
+		if (targetRoomId is 0)
+		{
+			throw new ArgumentException($"{nameof(targetRoomId)} cannot be 0.", nameof(targetRoomId));
+		}
+
+		Id = id;
+		SourceRoomId = sourceRoomId;
+		TargetRoomId = targetRoomId;
+
+		AddEvent(new RoomConnectionCreatedEvent(this));
 	}
 
 	internal void Remove()
