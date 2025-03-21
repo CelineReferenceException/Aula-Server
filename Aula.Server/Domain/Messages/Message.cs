@@ -10,7 +10,7 @@ internal sealed class Message : DefaultDomainEntity
 	internal const Int32 ContentMinimumLength = 1;
 	internal const Int32 ContentMaximumLength = 2048;
 
-	internal UInt64 Id { get; }
+	internal Snowflake Id { get; }
 
 	internal MessageType Type { get; }
 
@@ -18,9 +18,9 @@ internal sealed class Message : DefaultDomainEntity
 
 	internal MessageAuthorType AuthorType { get; }
 
-	internal UInt64? AuthorId { get; }
+	internal Snowflake? AuthorId { get; }
 
-	internal UInt64 RoomId { get; }
+	internal Snowflake RoomId { get; }
 
 	internal String? Content { get; }
 
@@ -35,19 +35,14 @@ internal sealed class Message : DefaultDomainEntity
 	internal Boolean IsRemoved { get; private set; }
 
 	internal Message(
-		UInt64 id,
+		Snowflake id,
 		MessageType type,
 		MessageFlags flags,
 		MessageAuthorType authorType,
-		UInt64? authorId,
+		Snowflake? authorId,
 		String? content,
-		UInt64 roomId)
+		Snowflake roomId)
 	{
-		if (id is 0)
-		{
-			throw new ArgumentException($"{nameof(id)} cannot be 0.", nameof(id));
-		}
-
 		if (!Enum.IsDefined(type))
 		{
 			throw new ArgumentOutOfRangeException(nameof(type));
@@ -86,11 +81,6 @@ internal sealed class Message : DefaultDomainEntity
 				nameof(authorId));
 		}
 
-		if (authorId is 0)
-		{
-			throw new ArgumentException($"{nameof(id)} cannot be 0.", nameof(id));
-		}
-
 		if (content is not null)
 		{
 			switch (content.Length)
@@ -103,11 +93,6 @@ internal sealed class Message : DefaultDomainEntity
 						$"{nameof(content)} length must be at most ${ContentMaximumLength}.");
 				default: break;
 			}
-		}
-
-		if (roomId is 0)
-		{
-			throw new ArgumentException($"{nameof(roomId)} cannot be 0.", nameof(roomId));
 		}
 
 		Id = id;
