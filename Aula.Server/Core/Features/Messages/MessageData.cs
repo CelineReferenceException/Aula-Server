@@ -8,7 +8,7 @@ internal sealed record MessageData
 	/// <summary>
 	///     The unique identifier of the message.
 	/// </summary>
-	public required UInt64 Id { get; init; }
+	public required Snowflake Id { get; init; }
 
 	/// <summary>
 	///     The type of the message, defines the message's data.
@@ -28,12 +28,12 @@ internal sealed record MessageData
 	/// <summary>
 	///     The ID of the author who created the message.
 	/// </summary>
-	public UInt64? AuthorId { get; init; }
+	public Snowflake? AuthorId { get; init; }
 
 	/// <summary>
 	///     The ID of the message's room.
 	/// </summary>
-	public required UInt64 RoomId { get; init; }
+	public required Snowflake RoomId { get; init; }
 
 	/// <summary>
 	///     The text content of the message.
