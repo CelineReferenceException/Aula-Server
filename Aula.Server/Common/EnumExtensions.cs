@@ -12,7 +12,7 @@ internal static class EnumExtensions
 
 	internal static Boolean IsEnumFlagDefined<TEnum>(this TEnum value) where TEnum : struct, Enum
 	{
-		return IsEnumFlagDefined(Unsafe.As<TEnum, Int64>(ref value), typeof(TEnum));
+		return IsEnumFlagDefined(Convert.ToInt64(value), typeof(TEnum));
 	}
 
 	private static Boolean IsEnumFlagDefined(Int64 value, Type enumType)
