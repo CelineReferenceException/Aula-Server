@@ -10,25 +10,25 @@ internal sealed class Message : DefaultDomainEntity
 	internal const Int32 ContentMinimumLength = 1;
 	internal const Int32 ContentMaximumLength = 2048;
 
-	internal UInt64 Id { get; private init; }
+	internal UInt64 Id { get; }
 
-	internal MessageType Type { get; private init; }
+	internal MessageType Type { get; }
 
-	internal MessageFlags Flags { get; private init; }
+	internal MessageFlags Flags { get; }
 
-	internal MessageAuthorType AuthorType { get; private init; }
+	internal MessageAuthorType AuthorType { get; }
 
-	internal UInt64? AuthorId { get; private init; }
+	internal UInt64? AuthorId { get; }
 
-	internal UInt64 RoomId { get; private init; }
+	internal UInt64 RoomId { get; }
 
-	internal String? Content { get; private init; }
+	internal String? Content { get; }
 
-	internal MessageUserJoin? JoinData { get; private init; }
+	internal MessageUserJoin? JoinData { get; }
 
-	internal MessageUserLeave? LeaveData { get; private init; }
+	internal MessageUserLeave? LeaveData { get; }
 
-	internal DateTime CreationDate { get; private init; }
+	internal DateTime CreationDate { get; }
 
 	internal Boolean IsRemoved { get; private set; }
 

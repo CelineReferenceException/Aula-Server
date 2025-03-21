@@ -4,16 +4,16 @@ namespace Aula.Server.Domain.Rooms;
 
 internal sealed class RoomConnection : DefaultDomainEntity
 {
-	internal UInt64 Id { get; private init; }
+	internal UInt64 Id { get; }
 
-	internal UInt64 SourceRoomId { get; private init; }
+	internal UInt64 SourceRoomId { get; }
 
 	// Navigation property, values are set through reflection.
 	[MaybeNull]
 	[SuppressMessage("ReSharper", "UnassignedGetOnlyAutoProperty")]
 	internal Room SourceRoom { get; }
 
-	internal UInt64 TargetRoomId { get; private init; }
+	internal UInt64 TargetRoomId { get; }
 
 	// Navigation property, values are set through reflection.
 	[MaybeNull]

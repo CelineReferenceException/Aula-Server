@@ -5,17 +5,17 @@ internal sealed class Ban : DefaultDomainEntity
 	internal const Int32 ReasonMinimumLength = 1;
 	internal const Int32 ReasonMaximumLength = 4096;
 
-	internal UInt64 Id { get; private init; }
+	internal UInt64 Id { get; }
 
-	internal BanType Type { get; private init; }
+	internal BanType Type { get; }
 
-	internal UInt64? ExecutorId { get; private init; }
+	internal UInt64? ExecutorId { get; }
 
-	internal String? Reason { get; private init; }
+	internal String? Reason { get; }
 
-	internal UInt64? TargetId { get; private init; }
+	internal UInt64? TargetId { get; }
 
-	internal DateTime CreationDate { get; private init; }
+	internal DateTime CreationDate { get; }
 
 	internal Ban(
 		UInt64 id,
