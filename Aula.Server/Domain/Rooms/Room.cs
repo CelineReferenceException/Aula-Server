@@ -1,19 +1,12 @@
-﻿using FluentValidation;
-
-namespace Aula.Server.Domain.Rooms;
+﻿namespace Aula.Server.Domain.Rooms;
 
 internal sealed class Room : DefaultDomainEntity
 {
 	internal const Int32 NameMinimumLength = 3;
 	internal const Int32 NameMaximumLength = 32;
 	internal const Int32 DescriptionMaximumLength = 2048;
-	private static readonly RoomValidator s_validator = new();
 
-	private Room()
-	{
-	}
-
-	internal UInt64 Id { get; private init; }
+	internal UInt64 Id { get; }
 
 	internal String Name { get; private set; }
 
@@ -24,30 +17,45 @@ internal sealed class Room : DefaultDomainEntity
 	internal String ConcurrencyStamp { get; private set; }
 
 	// Readonly navigation property
-	internal IReadOnlyList<RoomConnection> Connections { get; private init; }
+	internal IReadOnlyList<RoomConnection> Connections { get; }
 
-	internal DateTime CreationDate { get; private init; }
+	internal DateTime CreationDate { get; }
 
 	internal Boolean IsRemoved { get; private set; }
 
-	internal static Room Create(UInt64 id, String name, String description, Boolean isEntrance)
+	internal Room(UInt64 id, String name, String description, Boolean isEntrance)
 	{
-		var room = new Room
+		if (id is 0)
 		{
-			Id = id,
-			Name = name,
-			Description = description,
-			IsEntrance = isEntrance,
-			Connections = [],
-			ConcurrencyStamp = Guid.NewGuid().ToString("N"),
-			CreationDate = DateTime.UtcNow,
-		};
+			throw new ArgumentException($"{nameof(id)} cannot be 0.", nameof(id));
+		}
 
-		s_validator.ValidateAndThrow(room);
+		switch (name.Length)
+		{
+			case < NameMinimumLength:
+				throw new ArgumentOutOfRangeException(nameof(name),
+					$"{nameof(name)} length must be at least {NameMinimumLength}.");
+			case > NameMaximumLength:
+				throw new ArgumentOutOfRangeException(nameof(name),
+					$"{nameof(name)} length must be at most ${NameMaximumLength}.");
+			default: break;
+		}
 
-		room.AddEvent(new RoomCreatedEvent(room));
+		if (description.Length > DescriptionMaximumLength)
+		{
+			throw new ArgumentOutOfRangeException(nameof(description),
+				$"{nameof(description)} length must be at most ${DescriptionMaximumLength}.");
+		}
 
-		return room;
+		Id = id;
+		Name = name;
+		Description = description;
+		IsEntrance = isEntrance;
+		Connections = [];
+		ConcurrencyStamp = Guid.NewGuid().ToString("N");
+		CreationDate = DateTime.UtcNow;
+
+		AddEvent(new RoomCreatedEvent(this));
 	}
 
 	internal void Modify(
@@ -82,8 +90,6 @@ internal sealed class Room : DefaultDomainEntity
 		{
 			return;
 		}
-
-		s_validator.ValidateAndThrow(this);
 
 		AddEvent(new RoomUpdatedEvent(this));
 	}
