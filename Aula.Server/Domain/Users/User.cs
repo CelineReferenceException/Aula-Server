@@ -9,7 +9,7 @@ internal sealed class User : DefaultDomainEntity
 	internal const Int32 DescriptionMaximumLength = 1024;
 	internal const Int32 PasswordMaximumLength = 128;
 
-	internal UInt64 Id { get; }
+	internal Snowflake Id { get; }
 
 	internal String UserName { get; private set; }
 
@@ -35,7 +35,7 @@ internal sealed class User : DefaultDomainEntity
 
 	internal Presence Presence { get; set; }
 
-	internal UInt64? CurrentRoomId { get; private set; }
+	internal Snowflake? CurrentRoomId { get; private set; }
 
 	internal DateTime CreationDate { get; }
 
@@ -44,7 +44,7 @@ internal sealed class User : DefaultDomainEntity
 	internal String ConcurrencyStamp { get; private set; }
 
 	internal User(
-		UInt64 id,
+		Snowflake id,
 		String userName,
 		String? email,
 		String? displayName,
@@ -52,11 +52,6 @@ internal sealed class User : DefaultDomainEntity
 		UserType type,
 		Permissions permissions)
 	{
-		if (id is 0)
-		{
-			throw new ArgumentException($"{nameof(id)} cannot be 0.", nameof(id));
-		}
-
 		switch (userName.Length)
 		{
 			case < UserNameMinimumLength:
