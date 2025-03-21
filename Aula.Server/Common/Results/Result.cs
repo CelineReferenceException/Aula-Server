@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace Aula.Server.Common.Results;
 
 internal readonly struct Result : IEquatable<Result>
