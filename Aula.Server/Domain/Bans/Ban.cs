@@ -1,16 +1,9 @@
-﻿using FluentValidation;
-
-namespace Aula.Server.Domain.Bans;
+﻿namespace Aula.Server.Domain.Bans;
 
 internal sealed class Ban : DefaultDomainEntity
 {
 	internal const Int32 ReasonMinimumLength = 1;
 	internal const Int32 ReasonMaximumLength = 512;
-	private static readonly BanValidator s_validator = new();
-
-	private Ban()
-	{
-	}
 
 	internal UInt64 Id { get; private init; }
 
@@ -24,27 +17,52 @@ internal sealed class Ban : DefaultDomainEntity
 
 	internal DateTime CreationDate { get; private init; }
 
-	internal static Ban Create(
+	internal Ban(
 		UInt64 id,
 		BanType type,
 		UInt64? executorId = null,
 		String? reason = null,
 		UInt64? targetId = null)
 	{
-		var ban = new Ban
+		if (id is 0)
 		{
-			Id = id,
-			Type = type,
-			ExecutorId = executorId,
-			Reason = reason,
-			TargetId = targetId,
-			CreationDate = DateTime.Now,
-		};
+			throw new ArgumentException($"{nameof(id)} cannot be 0.", nameof(id));
+		}
 
-		s_validator.ValidateAndThrow(ban);
+		if (type is BanType.Id &&
+		    targetId is null)
+		{
+			throw new ArgumentException($"{nameof(targetId)} cannot be null when {nameof(type)} is {BanType.Id}.",
+				nameof(targetId));
+		}
 
-		ban.AddEvent(new BanCreatedEvent(ban));
-		return ban;
+		if (executorId is 0)
+		{
+			throw new ArgumentException($"{nameof(executorId)} cannot be 0.", nameof(executorId));
+		}
+
+		if (reason is not null)
+		{
+			switch (reason.Length)
+			{
+				case < ReasonMinimumLength:
+					throw new ArgumentOutOfRangeException(nameof(reason),
+						$"{nameof(reason)} length must be at least {ReasonMinimumLength}.");
+				case > ReasonMaximumLength:
+					throw new ArgumentOutOfRangeException(nameof(reason),
+						$"{nameof(reason)} length must be at most ${ReasonMaximumLength}.");
+				default: break;
+			}
+		}
+
+		Id = id;
+		Type = type;
+		ExecutorId = executorId;
+		Reason = reason;
+		TargetId = targetId;
+		CreationDate = DateTime.UtcNow;
+
+		AddEvent(new BanCreatedEvent(this));
 	}
 
 	internal void Remove()
