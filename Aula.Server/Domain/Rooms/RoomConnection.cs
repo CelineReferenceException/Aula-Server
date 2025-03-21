@@ -14,12 +14,14 @@ internal sealed class RoomConnection : DefaultDomainEntity
 
 
 	// Navigation property, values are set through reflection.
+	[MaybeNull]
 	[SuppressMessage("ReSharper", "UnassignedGetOnlyAutoProperty")]
 	internal Room SourceRoom { get; }
 
 	internal UInt64 TargetRoomId { get; private init; }
 
 	// Navigation property, values are set through reflection.
+	[MaybeNull]
 	[SuppressMessage("ReSharper", "UnassignedGetOnlyAutoProperty")]
 	internal Room TargetRoom { get; }
 
