@@ -8,10 +8,10 @@ internal sealed record MessageUserLeaveData
 	/// <summary>
 	///     The ID of user who moved out of the room.
 	/// </summary>
-	public required UInt64 UserId { get; init; }
+	public required Snowflake UserId { get; init; }
 
 	/// <summary>
 	///     The ID of the room where it resides now.
 	/// </summary>
-	public required UInt64? RoomId { get; init; }
+	public required Snowflake? RoomId { get; init; }
 }
