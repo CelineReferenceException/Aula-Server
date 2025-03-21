@@ -1,6 +1,6 @@
 namespace Aula.Server.Common.Results;
 
-internal readonly struct ResultProblemValues : IReadOnlyList<ResultProblem>, IEquatable<ResultProblemValues>
+internal readonly ref struct ResultProblemValues : IReadOnlyList<ResultProblem>, IEquatable<ResultProblemValues>
 {
 	internal static ResultProblemValues Empty => new();
 
@@ -31,7 +31,7 @@ internal readonly struct ResultProblemValues : IReadOnlyList<ResultProblem>, IEq
 
 	public override Boolean Equals(Object? obj)
 	{
-		return obj is ResultProblemValues other && Equals(other);
+		return false;
 	}
 
 	public override Int32 GetHashCode()
