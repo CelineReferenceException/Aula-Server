@@ -51,11 +51,6 @@ internal sealed class UserAuthenticationHandler : AuthenticationHandler<Authenti
 		var tokenSegmentLength = headerValueSegments.Current.End.Value - tokenSegmentStart;
 		var tokenSegment = headerValue.Slice(tokenSegmentStart, tokenSegmentLength);
 
-		if (tokenSegment.IsEmpty)
-		{
-			return AuthenticateResult.NoResult();
-		}
-
 		if (!_tokenProvider.TryReadFromToken(tokenSegment, out var userIdString, out var securityStamp) ||
 		    !Snowflake.TryParse(userIdString, out var userId))
 		{
