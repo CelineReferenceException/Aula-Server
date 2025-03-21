@@ -7,7 +7,6 @@ internal sealed record MessageUserLeave
 	internal UInt64 MessageId { get; }
 
 	// Navigation property, values are set through reflection.
-	[SuppressMessage("ReSharper", "UnassignedGetOnlyAutoProperty")]
 	internal Message? Message { get; init; }
 
 	internal UInt64 UserId { get; }
