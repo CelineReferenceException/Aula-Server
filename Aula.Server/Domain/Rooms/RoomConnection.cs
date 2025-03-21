@@ -12,7 +12,6 @@ internal sealed class RoomConnection : DefaultDomainEntity
 
 	internal UInt64 SourceRoomId { get; private init; }
 
-
 	// Navigation property, values are set through reflection.
 	[MaybeNull]
 	[SuppressMessage("ReSharper", "UnassignedGetOnlyAutoProperty")]
