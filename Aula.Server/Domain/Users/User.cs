@@ -1,7 +1,4 @@
-﻿using FluentValidation;
-
-#pragma warning disable CS8618
-namespace Aula.Server.Domain.Users;
+﻿namespace Aula.Server.Domain.Users;
 
 internal sealed class User : DefaultDomainEntity
 {
@@ -11,11 +8,6 @@ internal sealed class User : DefaultDomainEntity
 	internal const Int32 UserNameMaximumLength = 32;
 	internal const Int32 DescriptionMaximumLength = 1024;
 	internal const Int32 PasswordMaximumLength = 128;
-	private static readonly UserValidator s_validator = new();
-
-	private User()
-	{
-	}
 
 	internal UInt64 Id { get; private init; }
 
@@ -51,31 +43,72 @@ internal sealed class User : DefaultDomainEntity
 
 	internal String ConcurrencyStamp { get; private set; }
 
-	internal static User Create(
+	internal User(
 		UInt64 id,
 		String userName,
 		String? email,
 		String? displayName,
+		String description,
 		UserType type,
 		Permissions permissions)
 	{
-		var user = new User
+		if (id is 0)
 		{
-			Id = id,
-			UserName = userName,
-			Email = email?.ToUpper(),
-			DisplayName = displayName ?? userName,
-			Description = String.Empty,
-			Permissions = permissions,
-			Type = type,
-			CreationDate = DateTime.UtcNow,
-			ConcurrencyStamp = GenerateConcurrencyStamp(),
-			SecurityStamp = GenerateSecurityStamp(),
-		};
+			throw new ArgumentException($"{nameof(id)} cannot be 0.", nameof(id));
+		}
 
-		s_validator.ValidateAndThrow(user);
+		switch (userName.Length)
+		{
+			case < UserNameMinimumLength:
+				throw new ArgumentOutOfRangeException(nameof(userName),
+					$"{nameof(userName)} length must be at least {UserNameMinimumLength}.");
+			case > UserNameMaximumLength:
+				throw new ArgumentOutOfRangeException(nameof(userName),
+					$"{nameof(userName)} length must be at most ${UserNameMaximumLength}.");
+			default: break;
+		}
 
-		return user;
+		switch (type)
+		{
+			case UserType.Standard when email is null:
+				throw new ArgumentNullException(nameof(email),
+					$"${nameof(email)} cannot be null when {nameof(type)} is {UserType.Standard}.");
+			case UserType.Bot when email is not null:
+				throw new ArgumentNullException(nameof(email), $"{nameof(email)} should be null when {nameof(type)} is {UserType.Bot}.");
+			case UserType.Standard or UserType.Bot:
+			default: break;
+		}
+
+		if (displayName is not null)
+		{
+			switch (displayName.Length)
+			{
+				case < DisplayNameMinimumLength:
+					throw new ArgumentOutOfRangeException(nameof(displayName),
+						$"{nameof(displayName)} length must be at least {DisplayNameMinimumLength}.");
+				case > DisplayNameMaximumLength:
+					throw new ArgumentOutOfRangeException(nameof(displayName),
+						$"{nameof(displayName)} length must be at most ${DisplayNameMaximumLength}.");
+				default: break;
+			}
+		}
+
+		if (description.Length > DescriptionMaximumLength)
+		{
+			throw new ArgumentOutOfRangeException(nameof(description),
+				$"{nameof(description)} length must be at most ${DescriptionMaximumLength}.");
+		}
+
+		Id = id;
+		UserName = userName;
+		Email = email?.ToUpper();
+		DisplayName = displayName?.ToUpper() ?? userName;
+		Description = description ?? "";
+		Permissions = permissions;
+		Type = type;
+		CreationDate = DateTime.UtcNow;
+		ConcurrencyStamp = GenerateConcurrencyStamp();
+		SecurityStamp = GenerateSecurityStamp();
 	}
 
 	internal void Modify(
@@ -119,8 +152,6 @@ internal sealed class User : DefaultDomainEntity
 			return;
 		}
 
-		s_validator.ValidateAndThrow(this);
-
 		AddEvent(new UserUpdatedEvent(this));
 	}
 
@@ -133,8 +164,6 @@ internal sealed class User : DefaultDomainEntity
 
 		var previousCurrentRoomId = CurrentRoomId;
 		CurrentRoomId = currentRoomId;
-
-		s_validator.ValidateAndThrow(this);
 
 		AddEvent(new UserCurrentRoomUpdatedEvent(Id, previousCurrentRoomId, CurrentRoomId));
 	}
