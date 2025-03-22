@@ -9,11 +9,6 @@ indent_style = tab
 indent_size = tab
 trim_trailing_whitespace = true
 
-# Warping properties
-max_line_length = 140
-resharper_csharp_max_line_length = 140
-resharper_max_attribute_length_for_same_line = 70
-
 # ReSharper properties
 resharper_csharp_max_enum_members_on_line = 1
 resharper_csharp_wrap_after_declaration_lpar = true
@@ -46,6 +41,11 @@ resharper_wrap_list_pattern = chop_if_long
 
 # C# files
 [*.cs]
+
+# Warping properties
+max_line_length = 140
+resharper_csharp_max_line_length = 140
+resharper_max_attribute_length_for_same_line = 70
 
 # New line preferences
 csharp_new_line_before_open_brace = all
