@@ -174,19 +174,27 @@ internal sealed class User : DefaultDomainEntity
 				permissions, type, Presence.Offline, null, DateTime.UtcNow, false, GenerateConcurrencyStamp());
 	}
 
-	internal void Modify(
+	internal Result Modify(
 		String? displayName = null,
 		String? description = null,
 		Permissions? permissions = null,
 		Presence? presence = null)
 	{
 		var modified = false;
+		var errors = new Items<ResultProblem>();
 
 		if (displayName is not null &&
 		    displayName != DisplayName)
 		{
 			DisplayName = displayName;
 			modified = true;
+
+			switch (displayName.Length)
+			{
+				case < DisplayNameMinimumLength: errors.Add(s_displayNameTooShort); break;
+				case > DisplayNameMaximumLength: errors.Add(s_displayNameTooLong); break;
+				default: break;
+			}
 		}
 
 		if (description is not null &&
@@ -194,6 +202,11 @@ internal sealed class User : DefaultDomainEntity
 		{
 			Description = description;
 			modified = true;
+
+			if (description.Length > DescriptionMaximumLength)
+			{
+				errors.Add(s_descriptionTooLong);
+			}
 		}
 
 		if (permissions is not null &&
@@ -210,12 +223,17 @@ internal sealed class User : DefaultDomainEntity
 			modified = true;
 		}
 
-		if (!modified)
+		if (errors.Count > 0)
 		{
-			return;
+			return new ResultProblemValues(errors);
 		}
 
-		AddEvent(new UserUpdatedEvent(this));
+		if (modified)
+		{
+			AddEvent(new UserUpdatedEvent(this));
+		}
+
+		return Result.Success;
 	}
 
 	internal void SetCurrentRoom(Snowflake? currentRoomId)
