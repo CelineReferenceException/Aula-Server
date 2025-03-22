@@ -170,7 +170,8 @@ internal sealed class User : DefaultDomainEntity
 
 		return errors.Count > 0
 			? new ResultProblemValues(errors)
-			: new User(id, userName, email, displayName, description, type, permissions);
+			: new User(id, userName, email, false, null, GenerateSecurityStamp(), 0, null, displayName ?? userName, description,
+				permissions, type, Presence.Offline, null, DateTime.UtcNow, false, GenerateConcurrencyStamp());
 	}
 
 	internal void Modify(
