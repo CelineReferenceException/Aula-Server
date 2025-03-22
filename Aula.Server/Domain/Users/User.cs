@@ -19,10 +19,10 @@ internal sealed class User : DefaultDomainEntity
 		new("Invalid email", "email is not a valid email address.");
 
 	private static readonly ResultProblem s_standardUserWithNullEmail =
-		new("Invalid email", $"Standard users cannot have a null email address.");
+		new("Invalid email", "Standard users cannot have a null email address.");
 
 	private static readonly ResultProblem s_botUserWithEmail =
-		new("Invalid email", $"Bot users cannot have an email address.");
+		new("Invalid email", "Bot users cannot have an email address.");
 
 	private static readonly ResultProblem s_displayNameTooShort =
 		new("Display name is too short", $"Display name length must be at least {DisplayNameMinimumLength}.");
@@ -34,10 +34,10 @@ internal sealed class User : DefaultDomainEntity
 		new("Description is too long", $"Display name length must be at most {DisplayNameMaximumLength}.");
 
 	private static readonly ResultProblem s_unknownUserType =
-		new("Unknown user type", $"An unknown user type was provided.");
+		new("Unknown user type", "An unknown user type was provided.");
 
 	private static readonly ResultProblem s_unknownPermissions =
-		new("Unknown permissions", $"One or more of the permissions provided are not valid.");
+		new("Unknown permissions", "One or more of the permissions provided are not valid.");
 
 	private User(
 		Snowflake id,
