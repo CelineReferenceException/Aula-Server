@@ -108,7 +108,7 @@ internal sealed class User : DefaultDomainEntity
 		UserName = userName.ToUpper();
 		Email = email?.ToUpper();
 		DisplayName = displayName ?? userName;
-		Description = description ?? "";
+		Description = description;
 		Permissions = permissions;
 		Type = type;
 		CreationDate = DateTime.UtcNow;
