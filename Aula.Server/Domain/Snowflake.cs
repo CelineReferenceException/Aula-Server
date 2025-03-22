@@ -28,7 +28,7 @@ internal readonly struct Snowflake : ISpanParsable<Snowflake>, IEquatable<Snowfl
 
 	internal UInt16 WorkerId => (UInt16)((Value >> 12) & 0b11_1111_1111);
 
-	internal UInt64 CreationDate => Value >> 22;
+	internal UInt64 MillisecondsSinceEpoch => Value >> 22;
 
 	public static Snowflake Parse(String s, IFormatProvider? provider)
 	{
