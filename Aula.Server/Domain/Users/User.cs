@@ -206,6 +206,7 @@ internal sealed class User : DefaultDomainEntity
 	internal void ChangePassword(String newPasswordHash)
 	{
 		PasswordHash = newPasswordHash;
+		UpdateConcurrencyStamp();
 	}
 
 	internal void UpdateSecurityStamp()
