@@ -181,7 +181,7 @@ internal sealed class User : DefaultDomainEntity
 		Presence? presence = null)
 	{
 		var modified = false;
-		var errors = new Items<ResultProblem>();
+		var problems = new Items<ResultProblem>();
 
 		if (displayName is not null &&
 		    displayName != DisplayName)
@@ -191,8 +191,8 @@ internal sealed class User : DefaultDomainEntity
 
 			switch (displayName.Length)
 			{
-				case < DisplayNameMinimumLength: errors.Add(s_displayNameTooShort); break;
-				case > DisplayNameMaximumLength: errors.Add(s_displayNameTooLong); break;
+				case < DisplayNameMinimumLength: problems.Add(s_displayNameTooShort); break;
+				case > DisplayNameMaximumLength: problems.Add(s_displayNameTooLong); break;
 				default: break;
 			}
 		}
@@ -205,7 +205,7 @@ internal sealed class User : DefaultDomainEntity
 
 			if (description.Length > DescriptionMaximumLength)
 			{
-				errors.Add(s_descriptionTooLong);
+				problems.Add(s_descriptionTooLong);
 			}
 		}
 
@@ -223,9 +223,9 @@ internal sealed class User : DefaultDomainEntity
 			modified = true;
 		}
 
-		if (errors.Count > 0)
+		if (problems.Count > 0)
 		{
-			return new ResultProblemValues(errors);
+			return new ResultProblemValues(problems);
 		}
 
 		if (modified)
