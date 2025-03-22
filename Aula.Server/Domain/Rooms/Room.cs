@@ -96,6 +96,11 @@ internal sealed class Room : DefaultDomainEntity
 
 	internal void Remove()
 	{
+		if (IsRemoved)
+		{
+			return;
+		}
+
 		IsRemoved = true;
 		AddEvent(new RoomRemovedEvent(this));
 	}
