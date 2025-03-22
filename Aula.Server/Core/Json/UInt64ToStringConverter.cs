@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Aula.Server.Core.Json;
 
-internal sealed class UInt64StringConverter : JsonConverter<UInt64>
+internal sealed class UInt64ToStringConverter : JsonConverter<UInt64>
 {
 	[SuppressMessage("Style", "IDE0072:Add missing cases")]
 	public override UInt64 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
