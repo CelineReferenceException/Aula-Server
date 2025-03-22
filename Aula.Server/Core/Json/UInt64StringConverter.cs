@@ -9,12 +9,13 @@ internal sealed class UInt64JsonConverter : JsonConverter<UInt64>
 	[SuppressMessage("Style", "IDE0072:Add missing cases")]
 	public override UInt64 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 	{
-		return reader.TokenType switch
+		if (reader.TokenType is not JsonTokenType.String ||
+		    !UInt64.TryParse(reader.ValueSpan, out var result))
 		{
-			JsonTokenType.Number => reader.GetUInt64(),
-			JsonTokenType.String => UInt64.Parse(reader.ValueSpan),
-			_ => throw new JsonException(),
-		};
+			throw new JsonException();
+		}
+
+		return result;
 	}
 
 	public override void Write(Utf8JsonWriter writer, UInt64 value, JsonSerializerOptions options)
