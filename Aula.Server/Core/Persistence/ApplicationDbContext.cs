@@ -293,11 +293,13 @@ internal sealed class ApplicationDbContext : DbContext
 			var snowflakeConverter = new SnowflakeToUInt64Converter();
 			foreach (var property in entityType.GetProperties())
 			{
-				if (property.ClrType == typeof(DateTime))
+				if (property.ClrType == typeof(DateTime) ||
+				    property.ClrType == typeof(DateTime?))
 				{
 					property.SetValueConverter(dateTimeConverter);
 				}
-				else if (property.ClrType == typeof(Snowflake))
+				else if (property.ClrType == typeof(Snowflake) ||
+				         property.ClrType == typeof(Snowflake?))
 				{
 					property.SetValueConverter(snowflakeConverter);
 				}
