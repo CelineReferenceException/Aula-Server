@@ -293,6 +293,11 @@ internal sealed class User : DefaultDomainEntity
 
 	internal void Remove()
 	{
+		if (IsRemoved)
+		{
+			return;
+		}
+
 		IsRemoved = true;
 		SecurityStamp = null;
 		Email = null;
