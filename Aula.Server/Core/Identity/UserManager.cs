@@ -251,7 +251,6 @@ internal sealed class UserManager
 
 		_ = _dbContext.Attach(user);
 		user.ChangePassword(_passwordHasher.HashPassword(user, newPassword));
-		user.UpdateSecurityStamp();
 		_ = await _dbContext.SaveChangesWithConcurrencyCheckBypassAsync();
 
 		return ResetPasswordResult.Success;
