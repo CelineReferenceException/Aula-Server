@@ -66,7 +66,7 @@
 		<Rule Id="SA1126" Action="None"/>             <!-- Prefix calls correctly -->
 		<Rule Id="SA1127" Action="Warning"/>          <!-- Generic type constraints should be on their own line -->
 		<Rule Id="SA1128" Action="Warning"/>          <!-- Put constructor initializers on their own line -->
-		<Rule Id="SA1129" Action="Warning"/>          <!-- Do not use default value type constructor -->
+		<Rule Id="SA1129" Action="None"/>             <!-- Do not use default value type constructor -->
 		<Rule Id="SA1130" Action="Warning"/>          <!-- Use lambda syntax -->
 		<Rule Id="SA1131" Action="Warning"/>          <!-- Use readable conditions -->
 		<Rule Id="SA1132" Action="Warning"/>          <!-- Do not combine fields -->
