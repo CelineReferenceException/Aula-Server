@@ -67,7 +67,7 @@ internal sealed class User : DefaultDomainEntity
 		{
 			case UserType.Standard when email is null:
 				throw new ArgumentNullException(nameof(email),
-					$"${nameof(email)} cannot be null when {nameof(type)} is {UserType.Standard}.");
+					$"{nameof(email)} cannot be null when {nameof(type)} is {UserType.Standard}.");
 			case UserType.Bot when email is not null:
 				throw new ArgumentNullException(nameof(email), $"{nameof(email)} should be null when {nameof(type)} is {UserType.Bot}.");
 			case UserType.Standard or UserType.Bot:
