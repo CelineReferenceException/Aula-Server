@@ -39,6 +39,44 @@ internal sealed class User : DefaultDomainEntity
 	private static readonly ResultProblem s_unknownPermissions =
 		new("Unknown permissions", $"One or more of the permissions provided are not valid.");
 
+	private User(
+		Snowflake id,
+		String userName,
+		String? email,
+		Boolean emailConfirmed,
+		String? passwordHash,
+		String? securityStamp,
+		Int32 accessFailedCount,
+		DateTime? lockoutEndTime,
+		String displayName,
+		String description,
+		Permissions permissions,
+		UserType type,
+		Presence presence,
+		Snowflake? currentRoomId,
+		DateTime creationDate,
+		Boolean isRemoved,
+		String concurrencyStamp)
+	{
+		Id = id;
+		UserName = userName;
+		Email = email;
+		EmailConfirmed = emailConfirmed;
+		PasswordHash = passwordHash;
+		SecurityStamp = securityStamp;
+		AccessFailedCount = accessFailedCount;
+		LockoutEndTime = lockoutEndTime;
+		DisplayName = displayName;
+		Description = description;
+		Permissions = permissions;
+		Type = type;
+		Presence = presence;
+		CurrentRoomId = currentRoomId;
+		CreationDate = creationDate;
+		IsRemoved = isRemoved;
+		ConcurrencyStamp = concurrencyStamp;
+	}
+
 	internal Snowflake Id { get; }
 
 	internal String UserName { get; private set; }
@@ -72,79 +110,6 @@ internal sealed class User : DefaultDomainEntity
 	internal Boolean IsRemoved { get; private set; }
 
 	internal String ConcurrencyStamp { get; private set; }
-
-	internal User(
-		Snowflake id,
-		String userName,
-		String? email,
-		String? displayName,
-		String description,
-		UserType type,
-		Permissions permissions)
-	{
-		switch (userName.Length)
-		{
-			case < UserNameMinimumLength:
-				throw new ArgumentOutOfRangeException(nameof(userName),
-					$"{nameof(userName)} length must be at least {UserNameMinimumLength}.");
-			case > UserNameMaximumLength:
-				throw new ArgumentOutOfRangeException(nameof(userName),
-					$"{nameof(userName)} length must be at most ${UserNameMaximumLength}.");
-			default: break;
-		}
-
-		switch (type)
-		{
-			case UserType.Standard when email is null:
-				throw new ArgumentNullException(nameof(email),
-					$"{nameof(email)} cannot be null when {nameof(type)} is {UserType.Standard}.");
-			case UserType.Bot when email is not null:
-				throw new ArgumentNullException(nameof(email), $"{nameof(email)} should be null when {nameof(type)} is {UserType.Bot}.");
-			case UserType.Standard or UserType.Bot:
-			default: break;
-		}
-
-		if (displayName is not null)
-		{
-			switch (displayName.Length)
-			{
-				case < DisplayNameMinimumLength:
-					throw new ArgumentOutOfRangeException(nameof(displayName),
-						$"{nameof(displayName)} length must be at least {DisplayNameMinimumLength}.");
-				case > DisplayNameMaximumLength:
-					throw new ArgumentOutOfRangeException(nameof(displayName),
-						$"{nameof(displayName)} length must be at most ${DisplayNameMaximumLength}.");
-				default: break;
-			}
-		}
-
-		if (description.Length > DescriptionMaximumLength)
-		{
-			throw new ArgumentOutOfRangeException(nameof(description),
-				$"{nameof(description)} length must be at most ${DescriptionMaximumLength}.");
-		}
-
-		if (!Enum.IsDefined(type))
-		{
-			throw new ArgumentOutOfRangeException(nameof(type));
-		}
-
-		if (!permissions.IsEnumFlagDefined())
-		{
-			throw new ArgumentOutOfRangeException(nameof(permissions));
-		}
-
-		Id = id;
-		UserName = userName.ToUpper();
-		Email = email?.ToUpper();
-		DisplayName = displayName ?? userName;
-		Description = description;
-		Permissions = permissions;
-		Type = type;
-		CreationDate = DateTime.UtcNow;
-		ConcurrencyStamp = GenerateConcurrencyStamp();
-		SecurityStamp = GenerateSecurityStamp();
-	}
 
 	internal static Result<User> Create(
 		Snowflake id,
