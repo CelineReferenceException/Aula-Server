@@ -20,6 +20,7 @@ internal static class DependencyInjection
 		_ = services.Configure<PasswordHasherOptions>(static options =>
 		{
 			options.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3;
+			options.IterationCount = 100000;
 		});
 
 		return services;
