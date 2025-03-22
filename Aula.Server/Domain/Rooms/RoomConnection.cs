@@ -10,14 +10,14 @@ internal sealed class RoomConnection : DefaultDomainEntity
 
 	// Navigation property, values are set through reflection.
 	[MaybeNull]
-	[SuppressMessage("ReSharper", "UnassignedGetOnlyAutoProperty")]
+	[SuppressMessage("ReSharper", "UnassignedGetOnlyAutoProperty", Justification = "Navigation property accessed through reflection")]
 	internal Room SourceRoom { get; }
 
 	internal Snowflake TargetRoomId { get; }
 
 	// Navigation property, values are set through reflection.
 	[MaybeNull]
-	[SuppressMessage("ReSharper", "UnassignedGetOnlyAutoProperty")]
+	[SuppressMessage("ReSharper", "UnassignedGetOnlyAutoProperty", Justification = "Navigation property accessed through reflection")]
 	internal Room TargetRoom { get; }
 
 	internal RoomConnection(Snowflake id, Snowflake sourceRoomId, Snowflake targetRoomId)
