@@ -13,6 +13,8 @@ internal readonly ref struct Result : IEquatable<Result>
 
 	internal Boolean Succeeded => Problems.Count is 0;
 
+	public static implicit operator Result(ResultProblemValues problems) => new(problems);
+
 	public static Boolean operator ==(Result left, Result right) => left.Equals(right);
 
 	public static Boolean operator !=(Result left, Result right) => !left.Equals(right);

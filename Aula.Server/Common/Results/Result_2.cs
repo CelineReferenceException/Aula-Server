@@ -23,6 +23,10 @@ internal readonly ref struct Result<TResult>
 
 	internal Boolean Succeeded => Problems.Count is 0;
 
+	public static implicit operator Result<TResult>(TResult value) => new(value);
+
+	public static implicit operator Result<TResult>(ResultProblemValues problemValues) => new(problemValues);
+
 	public static Boolean operator ==(Result<TResult> left, Result<TResult> right) => left.Equals(right);
 
 	public static Boolean operator !=(Result<TResult> left, Result<TResult> right) => !left.Equals(right);
