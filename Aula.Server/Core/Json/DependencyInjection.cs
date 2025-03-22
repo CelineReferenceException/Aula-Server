@@ -20,6 +20,8 @@ internal static class DependencyInjection
 				var instance = Activator.CreateInstance(converter) as JsonConverter ?? throw new UnreachableException();
 				options.SerializerOptions.Converters.Add(instance);
 			}
+
+			options.SerializerOptions.Converters.Add(new UInt64EnumToStringConverter<Permissions>());
 		});
 
 		return services;
