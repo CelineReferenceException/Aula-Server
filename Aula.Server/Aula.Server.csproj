@@ -53,4 +53,10 @@
 	<ItemGroup>
 		<InternalsVisibleTo Include="WhiteTale.Server.IntegrationTests"/>
 	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="**\*_*.cs">
+			<DependentUpon>Result.cs</DependentUpon>
+		</Compile>
+	</ItemGroup>
 </Project>
