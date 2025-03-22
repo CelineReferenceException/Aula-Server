@@ -17,6 +17,11 @@ internal static class DependencyInjection
 		_ = services.AddSingleton<PasswordHasher<User>>();
 		_ = services.AddSingleton<TokenProvider>();
 
+		_ = services.Configure<PasswordHasherOptions>(static options =>
+		{
+			options.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3;
+		});
+
 		return services;
 	}
 }
