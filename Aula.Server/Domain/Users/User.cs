@@ -31,7 +31,7 @@ internal sealed class User : DefaultDomainEntity
 		new("Display name is too long", $"Display name length must be at most {DisplayNameMaximumLength}.");
 
 	private static readonly ResultProblem s_descriptionTooLong =
-		new("Description is too long", $"Display name length must be at most {DisplayNameMaximumLength}.");
+		new("Description is too long", $"Description length must be at most {DescriptionMaximumLength}.");
 
 	private static readonly ResultProblem s_unknownUserType =
 		new("Unknown user type", "An unknown user type was provided.");
