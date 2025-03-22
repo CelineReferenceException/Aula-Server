@@ -17,7 +17,7 @@ internal sealed class User : DefaultDomainEntity
 
 	internal Boolean EmailConfirmed { get; private set; }
 
-	internal String? PasswordHash { get; set; }
+	internal String? PasswordHash { get; private set; }
 
 	internal String? SecurityStamp { get; private set; }
 
