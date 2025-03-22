@@ -4,7 +4,7 @@
 ///     Enumerates permissions that can be assigned to a user within the application.
 /// </summary>
 [Flags]
-internal enum Permissions
+internal enum Permissions : UInt64
 {
 	None = 0,
 
