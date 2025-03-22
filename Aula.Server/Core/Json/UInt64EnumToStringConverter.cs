@@ -8,11 +8,6 @@ namespace Aula.Server.Core.Json;
 [SuppressMessage("Performance", "CA1812: Avoid uninstantiated internal classes")]
 internal sealed class UInt64EnumToStringConverter<T> : JsonConverter<T> where T : struct, Enum
 {
-	public override Boolean CanConvert(Type typeToConvert)
-	{
-		return typeToConvert.IsEnum && typeToConvert.BaseType == typeof(UInt64);
-	}
-
 	public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 	{
 		if (reader.TokenType is not JsonTokenType.String ||
