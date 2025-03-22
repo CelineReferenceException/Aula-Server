@@ -120,25 +120,25 @@ internal sealed class User : DefaultDomainEntity
 		UserType type,
 		Permissions permissions)
 	{
-		var errors = new Items<ResultProblem>();
+		var problems = new Items<ResultProblem>();
 
 		switch (userName.Length)
 		{
-			case < UserNameMinimumLength: errors.Add(s_userNameTooShort); break;
-			case > UserNameMaximumLength: errors.Add(s_userNameTooLong); break;
+			case < UserNameMinimumLength: problems.Add(s_userNameTooShort); break;
+			case > UserNameMaximumLength: problems.Add(s_userNameTooLong); break;
 			default: break;
 		}
 
 		if (email is not null &&
 		    !EmailAddressValidator.IsValid(email))
 		{
-			errors.Add(s_invalidEmail);
+			problems.Add(s_invalidEmail);
 		}
 
 		switch (type)
 		{
-			case UserType.Standard when email is null: errors.Add(s_standardUserWithNullEmail); break;
-			case UserType.Bot when email is not null: errors.Add(s_botUserWithEmail); break;
+			case UserType.Standard when email is null: problems.Add(s_standardUserWithNullEmail); break;
+			case UserType.Bot when email is not null: problems.Add(s_botUserWithEmail); break;
 			case UserType.Standard or UserType.Bot:
 			default: break;
 		}
@@ -147,29 +147,29 @@ internal sealed class User : DefaultDomainEntity
 		{
 			switch (displayName.Length)
 			{
-				case < DisplayNameMinimumLength: errors.Add(s_displayNameTooShort); break;
-				case > DisplayNameMaximumLength: errors.Add(s_displayNameTooLong); break;
+				case < DisplayNameMinimumLength: problems.Add(s_displayNameTooShort); break;
+				case > DisplayNameMaximumLength: problems.Add(s_displayNameTooLong); break;
 				default: break;
 			}
 		}
 
 		if (description.Length > DescriptionMaximumLength)
 		{
-			errors.Add(s_descriptionTooLong);
+			problems.Add(s_descriptionTooLong);
 		}
 
 		if (!Enum.IsDefined(type))
 		{
-			errors.Add(s_unknownUserType);
+			problems.Add(s_unknownUserType);
 		}
 
 		if (!permissions.IsEnumFlagDefined())
 		{
-			errors.Add(s_unknownPermissions);
+			problems.Add(s_unknownPermissions);
 		}
 
-		return errors.Count > 0
-			? new ResultProblemValues(errors)
+		return problems.Count > 0
+			? new ResultProblemValues(problems)
 			: new User(id, userName, email, false, null, GenerateSecurityStamp(), 0, null, displayName ?? userName, description,
 				permissions, type, Presence.Offline, null, DateTime.UtcNow, false, GenerateConcurrencyStamp());
 	}
