@@ -2,13 +2,13 @@ namespace Aula.Server.Common.Results;
 
 internal sealed class ResultProblem
 {
-	internal ResultProblem(String title, String details)
+	internal ResultProblem(String name, String description)
 	{
-		Title = title;
-		Details = details;
+		Name = name;
+		Description = description;
 	}
 
-	internal String Title { get; }
+	internal String Name { get; }
 
-	internal String Details { get; }
+	internal String Description { get; }
 }
