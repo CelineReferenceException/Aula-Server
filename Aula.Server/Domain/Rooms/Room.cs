@@ -74,7 +74,7 @@ internal sealed class Room : DefaultDomainEntity
 		}
 
 		var room = new Room(id, name, description, isEntrance, GenerateConcurrencyStamp(), [], DateTime.UtcNow, false);
-		room.AddEvent(new RoomCreatedEvent(room));
+		room.Events.Add(new RoomCreatedEvent(room));
 		return room;
 	}
 
@@ -126,7 +126,7 @@ internal sealed class Room : DefaultDomainEntity
 
 		if (modified)
 		{
-			AddEvent(new RoomUpdatedEvent(this));
+			Events.Add(new RoomUpdatedEvent(this));
 		}
 
 		return Result.Success;
@@ -145,7 +145,7 @@ internal sealed class Room : DefaultDomainEntity
 		}
 
 		IsRemoved = true;
-		AddEvent(new RoomRemovedEvent(this));
+		Events.Add(new RoomRemovedEvent(this));
 	}
 
 	private static String GenerateConcurrencyStamp()
