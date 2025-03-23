@@ -124,7 +124,7 @@ internal sealed class Room : DefaultDomainEntity
 			return new ResultProblemValues(problems);
 		}
 
-		if (modified)
+		if (modified && Events.All(e => e is not RoomUpdatedEvent))
 		{
 			Events.Add(new RoomUpdatedEvent(this));
 		}
