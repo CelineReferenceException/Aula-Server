@@ -39,6 +39,11 @@ internal sealed class RoomConnection : DefaultDomainEntity
 
 	internal void Remove()
 	{
+		if (Events.Any(e => e is RoomConnectionRemovedEvent))
+		{
+			return;
+		}
+
 		Events.Add(new RoomConnectionRemovedEvent(this));
 	}
 }
