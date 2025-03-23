@@ -230,7 +230,7 @@ internal sealed class User : DefaultDomainEntity
 
 		if (modified)
 		{
-			AddEvent(new UserUpdatedEvent(this));
+			Events.Add(new UserUpdatedEvent(this));
 		}
 
 		return Result.Success;
@@ -246,7 +246,7 @@ internal sealed class User : DefaultDomainEntity
 		var previousCurrentRoomId = CurrentRoomId;
 		CurrentRoomId = currentRoomId;
 
-		AddEvent(new UserCurrentRoomUpdatedEvent(Id, previousCurrentRoomId, CurrentRoomId));
+		Events.Add(new UserCurrentRoomUpdatedEvent(Id, previousCurrentRoomId, CurrentRoomId));
 	}
 
 	internal void UpdateConcurrencyStamp()
@@ -288,7 +288,7 @@ internal sealed class User : DefaultDomainEntity
 	internal void UpdateSecurityStamp()
 	{
 		SecurityStamp = GenerateSecurityStamp();
-		AddEvent(new UserSecurityStampUpdatedEvent(this));
+		Events.Add(new UserSecurityStampUpdatedEvent(this));
 	}
 
 	internal void Remove()
@@ -306,7 +306,7 @@ internal sealed class User : DefaultDomainEntity
 		UserName = $"removed_user_{nameStamp}";
 		DisplayName = $"Removed user {nameStamp}";
 
-		AddEvent(new UserRemovedEvent(this));
+		Events.Add(new UserRemovedEvent(this));
 	}
 
 	private static String GenerateConcurrencyStamp()
