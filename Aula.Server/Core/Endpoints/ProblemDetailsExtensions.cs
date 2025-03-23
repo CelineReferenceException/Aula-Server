@@ -6,6 +6,7 @@ namespace Aula.Server.Core.Endpoints;
 
 internal static class ProblemDetailsExtensions
 {
+	[Obsolete]
 	internal static HttpValidationProblemDetails ToProblemDetails(this IEnumerable<ValidationFailure> validationFailures)
 	{
 		var problemErrors = validationFailures
