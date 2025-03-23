@@ -2,17 +2,18 @@
 
 internal abstract class DefaultDomainEntity : IDomainEntity
 {
-	private readonly List<DomainEvent> _events = [];
+	IReadOnlyList<DomainEvent> IDomainEntity.Events => Events;
 
-	IReadOnlyList<DomainEvent> IDomainEntity.Events => _events;
+	private protected List<DomainEvent> Events { get; } = [];
 
 	void IDomainEntity.ClearEvents()
 	{
-		_events.Clear();
+		Events.Clear();
 	}
 
+	[Obsolete($"Use {nameof(Events)}${nameof(Events.Add)} method instead.")]
 	private protected void AddEvent(DomainEvent domainEvent)
 	{
-		_events.Add(domainEvent);
+		Events.Add(domainEvent);
 	}
 }
