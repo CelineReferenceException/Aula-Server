@@ -19,7 +19,7 @@ internal sealed class User : DefaultDomainEntity
 		new("Invalid email", "email is not a valid email address.");
 
 	private static readonly ResultProblem s_standardUserWithNullEmail =
-		new("Invalid email", "Standard users cannot have a null email address.");
+		new("Invalid email", "Standard users are required to define an email address.");
 
 	private static readonly ResultProblem s_botUserWithEmail =
 		new("Invalid email", "Bot users cannot have an email address.");
