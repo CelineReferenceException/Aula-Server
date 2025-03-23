@@ -138,7 +138,7 @@ internal sealed class Message : DefaultDomainEntity
 		}
 
 		var message = new Message(id, type, flags, authorType, authorId, roomId, content, DateTime.UtcNow, false);
-		message.AddEvent(new MessageCreatedEvent(message));
+		message.Events.Add(new MessageCreatedEvent(message));
 		return message;
 	}
 
@@ -150,6 +150,6 @@ internal sealed class Message : DefaultDomainEntity
 		}
 
 		IsRemoved = true;
-		AddEvent(new MessageRemovedEvent(this));
+		Events.Add(new MessageRemovedEvent(this));
 	}
 }
