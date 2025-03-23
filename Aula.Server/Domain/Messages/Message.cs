@@ -109,6 +109,11 @@ internal sealed class Message : DefaultDomainEntity
 
 	internal void Remove()
 	{
+		if (IsRemoved)
+		{
+			return;
+		}
+
 		IsRemoved = true;
 		AddEvent(new MessageRemovedEvent(this));
 	}
