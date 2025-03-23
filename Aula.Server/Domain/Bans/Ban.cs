@@ -81,6 +81,11 @@ internal sealed class Ban : DefaultDomainEntity
 
 	internal void Remove()
 	{
+		if (Events.Any(e => e is BanRemovedEvent))
+		{
+			return;
+		}
+
 		Events.Add(new BanRemovedEvent(this));
 	}
 }
