@@ -75,12 +75,12 @@ internal sealed class Ban : DefaultDomainEntity
 		}
 
 		var ban = new Ban(id, type, executorId, reason, targetId, DateTime.UtcNow);
-		ban.AddEvent(new BanCreatedEvent(ban));
+		ban.Events.Add(new BanCreatedEvent(ban));
 		return ban;
 	}
 
 	internal void Remove()
 	{
-		AddEvent(new BanRemovedEvent(this));
+		Events.Add(new BanRemovedEvent(this));
 	}
 }
