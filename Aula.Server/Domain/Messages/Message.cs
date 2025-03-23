@@ -10,6 +10,46 @@ internal sealed class Message : DefaultDomainEntity
 	internal const Int32 ContentMinimumLength = 1;
 	internal const Int32 ContentMaximumLength = 2048;
 
+	private static readonly ResultProblem s_unknownMessageType =
+		new("Unknown message type", "An unknown message type was provided.");
+
+	private static readonly ResultProblem s_unknownMessageFlags =
+		new("Unknown message flags", "One or more of the permissions provided are not valid.");
+
+	private static readonly ResultProblem s_unknownAuthorType =
+		new("Unknown author type", "An unknown author type was provided.");
+
+	private static readonly ResultProblem s_contentTooShort =
+		new("Content is too short", $"Content length must be at least {ContentMinimumLength}.");
+
+	private static readonly ResultProblem s_contentTooLong =
+		new("Content is too long", $"Content length must be at most {ContentMaximumLength}.");
+
+	private static readonly ResultProblem s_userAuthorWithNullId =
+		new("Invalid author", "A user author cannot have a null id.");
+
+	private Message(
+		Snowflake id,
+		MessageType type,
+		MessageFlags flags,
+		MessageAuthorType authorType,
+		Snowflake? authorId,
+		Snowflake roomId,
+		String? content,
+		DateTime creationDate,
+		Boolean isRemoved)
+	{
+		Id = id;
+		Type = type;
+		Flags = flags;
+		AuthorType = authorType;
+		AuthorId = authorId;
+		RoomId = roomId;
+		Content = content;
+		CreationDate = creationDate;
+		IsRemoved = isRemoved;
+	}
+
 	internal Snowflake Id { get; }
 
 	internal MessageType Type { get; }
@@ -34,7 +74,7 @@ internal sealed class Message : DefaultDomainEntity
 
 	internal Boolean IsRemoved { get; private set; }
 
-	internal Message(
+	internal static Result<Message> Create(
 		Snowflake id,
 		MessageType type,
 		MessageFlags flags,
@@ -43,19 +83,21 @@ internal sealed class Message : DefaultDomainEntity
 		String? content,
 		Snowflake roomId)
 	{
+		var problems = new Items<ResultProblem>();
+
 		if (!Enum.IsDefined(type))
 		{
-			throw new ArgumentOutOfRangeException(nameof(type));
+			problems.Add(s_unknownMessageType);
 		}
 
 		if (!Enum.IsDefined(flags))
 		{
-			throw new ArgumentOutOfRangeException(nameof(type));
+			problems.Add(s_unknownMessageFlags);
 		}
 
 		if (!Enum.IsDefined(authorType))
 		{
-			throw new ArgumentOutOfRangeException(nameof(type));
+			problems.Add(s_unknownAuthorType);
 		}
 
 		if (flags > 0)
@@ -77,34 +119,27 @@ internal sealed class Message : DefaultDomainEntity
 		if (authorType is MessageAuthorType.User &&
 		    authorId is null)
 		{
-			throw new ArgumentException($"{nameof(authorId)} cannot be null when {nameof(authorType)} is {MessageAuthorType.User}.",
-				nameof(authorId));
+			problems.Add(s_userAuthorWithNullId);
 		}
 
 		if (content is not null)
 		{
 			switch (content.Length)
 			{
-				case < ContentMinimumLength:
-					throw new ArgumentOutOfRangeException(nameof(content),
-						$"{nameof(content)} length must be at least {ContentMinimumLength}.");
-				case > ContentMaximumLength:
-					throw new ArgumentOutOfRangeException(nameof(content),
-						$"{nameof(content)} length must be at most ${ContentMaximumLength}.");
+				case < ContentMinimumLength: problems.Add(s_contentTooShort); break;
+				case > ContentMaximumLength: problems.Add(s_contentTooLong); break;
 				default: break;
 			}
 		}
 
-		Id = id;
-		Type = type;
-		Flags = flags;
-		AuthorType = authorType;
-		AuthorId = authorId;
-		RoomId = roomId;
-		Content = content;
-		CreationDate = DateTime.UtcNow;
+		if (problems.Count > 0)
+		{
+			return new ResultProblemValues(problems);
+		}
 
-		AddEvent(new MessageCreatedEvent(this));
+		var message = new Message(id, type, flags, authorType, authorId, roomId, content, DateTime.UtcNow, false);
+		message.AddEvent(new MessageCreatedEvent(message));
+		return message;
 	}
 
 	internal void Remove()
