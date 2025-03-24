@@ -1,41 +1,41 @@
 namespace Aula.Server.Common.Results;
 
-internal readonly ref struct Result<TResult, TProblem>
-	where TProblem : class?
+internal readonly ref struct Result<TResult, TError>
+	where TError : class?
 {
 	internal Result(TResult value)
 	{
 		Value = value;
 	}
 
-	internal Result(ResultProblemValues<TProblem> problems)
+	internal Result(ResultErrorValues<TError> errors)
 	{
-		if (problems.Count < 1)
+		if (errors.Count < 1)
 		{
-			throw new ArgumentException($"{nameof(problems)} cannot be empty.", nameof(problems));
+			throw new ArgumentException($"{nameof(errors)} cannot be empty.", nameof(errors));
 		}
 
-		Problems = problems;
+		Errors = errors;
 	}
 
 	internal TResult? Value { get; }
 
-	internal ResultProblemValues<TProblem> Problems { get; }
+	internal ResultErrorValues<TError> Errors { get; }
 
-	internal Boolean Succeeded => Problems.Count is 0;
+	internal Boolean Succeeded => Errors.Count is 0;
 
-	public static implicit operator Result<TResult, TProblem>(TResult value) => new(value);
+	public static implicit operator Result<TResult, TError>(TResult value) => new(value);
 
-	public static implicit operator Result<TResult, TProblem>(ResultProblemValues<TProblem> problemValues) => new(problemValues);
+	public static implicit operator Result<TResult, TError>(ResultErrorValues<TError> errorValues) => new(errorValues);
 
-	public static Boolean operator ==(Result<TResult, TProblem> left, Result<TResult, TProblem> right) => left.Equals(right);
+	public static Boolean operator ==(Result<TResult, TError> left, Result<TResult, TError> right) => left.Equals(right);
 
-	public static Boolean operator !=(Result<TResult, TProblem> left, Result<TResult, TProblem> right) => !left.Equals(right);
+	public static Boolean operator !=(Result<TResult, TError> left, Result<TResult, TError> right) => !left.Equals(right);
 
-	public Boolean Equals(Result<TResult, TProblem> other)
+	public Boolean Equals(Result<TResult, TError> other)
 	{
 		return Succeeded == other.Succeeded &&
-		       Problems.Equals(other.Problems) &&
+		       Errors.Equals(other.Errors) &&
 		       ((Value is not null && Value.Equals(other.Value)) ||
 		        (Value is null && other.Value is null));
 	}
@@ -47,6 +47,6 @@ internal readonly ref struct Result<TResult, TProblem>
 
 	public override Int32 GetHashCode()
 	{
-		return HashCode.Combine(Value, Problems.GetHashCode());
+		return HashCode.Combine(Value, Errors.GetHashCode());
 	}
 }

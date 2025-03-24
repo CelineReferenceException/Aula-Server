@@ -1,8 +1,8 @@
 namespace Aula.Server.Common.Results;
 
-internal sealed class ResultProblem
+internal sealed class ResultError
 {
-	internal ResultProblem(String name, String description)
+	internal ResultError(String name, String description)
 	{
 		Name = name;
 		Description = description;

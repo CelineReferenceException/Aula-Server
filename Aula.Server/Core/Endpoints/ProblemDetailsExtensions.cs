@@ -26,7 +26,7 @@ internal static class ProblemDetailsExtensions
 	{
 		var propertyProblems = new Dictionary<String, List<String>>();
 
-		foreach (var problem in result.Problems)
+		foreach (var problem in result.Errors)
 		{
 			if (propertyProblems.TryGetValue(problem.Name, out var problems))
 			{
