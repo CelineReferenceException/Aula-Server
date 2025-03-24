@@ -88,7 +88,7 @@ internal sealed class Message : DefaultDomainEntity
 		var validationResult = MessageValidator.Instance.Validate(message);
 		return validationResult.IsValid
 			? message
-			: new ResultErrorValues<ValidationFailure>(new Items<ValidationFailure>(validationResult.Errors));
+			: new ResultErrorValues<ValidationFailure>(validationResult.Errors);
 	}
 
 	internal void Remove()
