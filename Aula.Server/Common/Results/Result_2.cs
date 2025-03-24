@@ -3,9 +3,11 @@ namespace Aula.Server.Common.Results;
 internal readonly ref struct Result<TResult, TError>
 	where TError : class?
 {
+	private readonly TResult? _value;
+
 	internal Result(TResult value)
 	{
-		Value = value;
+		_value = value;
 	}
 
 	internal Result(ResultErrorValues<TError> errors)
@@ -18,7 +20,7 @@ internal readonly ref struct Result<TResult, TError>
 		Errors = errors;
 	}
 
-	internal TResult? Value { get; }
+	internal TResult? Value => Succeeded ? _value : throw new InvalidOperationException("Result did not succeed.");
 
 	internal ResultErrorValues<TError> Errors { get; }
 
