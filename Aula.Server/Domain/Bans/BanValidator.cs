@@ -11,24 +11,24 @@ internal sealed class BanValidator : AbstractValidator<Ban>
 		_ = RuleFor(x => x.Type)
 			.IsInEnum()
 			.WithErrorCode(nameof(Ban.Type))
-			.WithMessage($"Unknown value. Known values are {String.Join(", ", banTypes.Cast<Int32>())}.");
+			.WithMessage($"Unknown value. Known values are {String.Join(", ", banTypes.Cast<Int32>())}");
 
 		_ = RuleFor(x => x.Reason)
 			.MinimumLength(Ban.ReasonMinimumLength)
 			.WithErrorCode(nameof(Ban.Reason))
-			.WithMessage($"Length must be at least {Ban.ReasonMinimumLength}.");
+			.WithMessage($"Length must be at least {Ban.ReasonMinimumLength}");
 
 		_ = RuleFor(x => x.Reason)
 			.MaximumLength(Ban.ReasonMaximumLength)
 			.WithErrorCode(nameof(Ban.Reason))
-			.WithMessage($"Length must be at most {Ban.ReasonMaximumLength}.");
+			.WithMessage($"Length must be at most {Ban.ReasonMaximumLength}");
 
 		_ = When(x => x.Type is BanType.Id, () =>
 		{
 			_ = RuleFor(x => x.TargetId)
 				.NotNull()
 				.WithErrorCode(nameof(Ban.TargetId))
-				.WithMessage($"Required when {nameof(Ban.Type)} is {(Int32)BanType.Id}.");
+				.WithMessage($"Required when {nameof(Ban.Type)} is {(Int32)BanType.Id}");
 		});
 	}
 
