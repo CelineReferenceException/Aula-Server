@@ -64,7 +64,9 @@ internal sealed class Message : DefaultDomainEntity
 		MessageAuthorType authorType,
 		Snowflake? authorId,
 		String? content,
-		Snowflake roomId)
+		Snowflake roomId,
+		MessageUserJoin? joinData,
+		MessageUserLeave? leaveData)
 	{
 		if (flags > 0)
 		{
@@ -82,7 +84,11 @@ internal sealed class Message : DefaultDomainEntity
 				.Aggregate((x, y) => x | y);
 		}
 
-		var message = new Message(id, type, flags, authorType, authorId, roomId, content, DateTime.UtcNow, false);
+		var message = new Message(id, type, flags, authorType, authorId, roomId, content, DateTime.UtcNow, false)
+		{
+			JoinData = joinData,
+			LeaveData = leaveData,
+		};
 		message.Events.Add(new MessageCreatedEvent(message));
 
 		var validationResult = MessageValidator.Instance.Validate(message);
