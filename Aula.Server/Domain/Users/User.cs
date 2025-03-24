@@ -175,7 +175,10 @@ internal sealed class User : DefaultDomainEntity
 		var previousCurrentRoomId = CurrentRoomId;
 		CurrentRoomId = currentRoomId;
 
-		Events.Add(new UserCurrentRoomUpdatedEvent(Id, previousCurrentRoomId, CurrentRoomId));
+		if (Events.All(e => e is not UserCurrentRoomUpdatedEvent))
+		{
+			Events.Add(new UserCurrentRoomUpdatedEvent(Id, previousCurrentRoomId, CurrentRoomId));
+		}
 	}
 
 	internal void UpdateConcurrencyStamp()
