@@ -1,5 +1,6 @@
 namespace Aula.Server.Common.Results;
 
+[Obsolete]
 internal sealed class ResultError
 {
 	internal ResultError(String name, String description)
