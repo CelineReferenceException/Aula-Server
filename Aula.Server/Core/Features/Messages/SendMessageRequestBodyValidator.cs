@@ -6,13 +6,14 @@ internal sealed class SendMessageRequestBodyValidator : AbstractValidator<SendMe
 {
 	public SendMessageRequestBodyValidator()
 	{
-		var messageTypes = Enum.GetValues<MessageType>();
+		var allowedMessageTypes = new[] { MessageType.Standard, };
 		var messageFlags = Enum.GetValues<MessageFlags>();
 
 		_ = RuleFor(x => x.Type)
 			.IsInEnum()
+			.Must(v => allowedMessageTypes.Any(allowedType => v == allowedType))
 			.WithErrorCode(nameof(SendMessageRequestBody.Type).ToCamel())
-			.WithMessage($"Unknown value. Known values are {String.Join(", ", messageTypes.Cast<Int32>())}.");
+			.WithMessage($"Invalid value. Valid values are: {String.Join(", ", allowedMessageTypes.Cast<Int32>())}.");
 
 		_ = RuleFor(x => x.Flags)
 			.IsInEnum()
