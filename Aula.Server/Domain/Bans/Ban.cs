@@ -43,7 +43,7 @@ internal sealed class Ban : DefaultDomainEntity
 		var validationResult = BanValidator.Instance.Validate(ban);
 		return validationResult.IsValid
 			? ban
-			: new ResultErrorValues<ValidationFailure>(new Items<ValidationFailure>(validationResult.Errors));
+			: new ResultErrorValues<ValidationFailure>(validationResult.Errors);
 	}
 
 	internal void Remove()
