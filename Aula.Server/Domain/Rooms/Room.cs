@@ -1,19 +1,12 @@
-﻿namespace Aula.Server.Domain.Rooms;
+﻿using FluentValidation.Results;
+
+namespace Aula.Server.Domain.Rooms;
 
 internal sealed class Room : DefaultDomainEntity
 {
 	internal const Int32 NameMinimumLength = 3;
 	internal const Int32 NameMaximumLength = 32;
 	internal const Int32 DescriptionMaximumLength = 2048;
-
-	private static readonly ResultProblem s_nameTooShort =
-		new("Username is too short", $"Username length must be at least {NameMinimumLength}.");
-
-	private static readonly ResultProblem s_nameTooLong =
-		new("Username is too long", $"Username length must be at most {NameMaximumLength}.");
-
-	private static readonly ResultProblem s_descriptionTooLong =
-		new("Description is too long", $"Description length must be at most {DescriptionMaximumLength}.");
 
 	private Room(
 		Snowflake id,
@@ -52,52 +45,32 @@ internal sealed class Room : DefaultDomainEntity
 
 	internal Boolean IsRemoved { get; private set; }
 
-	internal static Result<Room> Create(Snowflake id, String name, String description, Boolean isEntrance)
+	internal static Result<Room, ValidationFailure> Create(Snowflake id, String name, String description, Boolean isEntrance)
 	{
-		var problems = new Items<ResultProblem>();
-
-		switch (name.Length)
-		{
-			case < NameMinimumLength: problems.Add(s_nameTooShort); break;
-			case > NameMaximumLength: problems.Add(s_nameTooLong); break;
-			default: break;
-		}
-
-		if (description.Length > DescriptionMaximumLength)
-		{
-			problems.Add(s_descriptionTooLong);
-		}
-
-		if (problems.Count > 0)
-		{
-			return new ResultProblemValues(problems);
-		}
-
 		var room = new Room(id, name, description, isEntrance, GenerateConcurrencyStamp(), [], DateTime.UtcNow, false);
 		room.Events.Add(new RoomCreatedEvent(room));
-		return room;
+
+		var validationResult = RoomValidator.Instance.Validate(room);
+		return validationResult.IsValid
+			? room
+			: new ResultErrorValues<ValidationFailure>(new Items<ValidationFailure>(validationResult.Errors));
 	}
 
-	internal Result Modify(
+	internal Result<ValidationFailure> Modify(
 		String? name = null,
 		String? description = null,
 		Boolean? isEntrance = null)
 	{
+		var oldName = Name;
+		var oldDescription = Description;
+		var oldIsEntrance = IsEntrance;
 		var modified = false;
-		var problems = new Items<ResultProblem>();
 
 		if (name is not null &&
 		    name != Name)
 		{
 			Name = name;
 			modified = true;
-
-			switch (name.Length)
-			{
-				case < NameMinimumLength: problems.Add(s_nameTooShort); break;
-				case > NameMaximumLength: problems.Add(s_nameTooLong); break;
-				default: break;
-			}
 		}
 
 		if (description is not null &&
@@ -105,11 +78,6 @@ internal sealed class Room : DefaultDomainEntity
 		{
 			Description = description;
 			modified = true;
-
-			if (description.Length > DescriptionMaximumLength)
-			{
-				problems.Add(s_descriptionTooLong);
-			}
 		}
 
 		if (isEntrance is not null &&
@@ -119,17 +87,27 @@ internal sealed class Room : DefaultDomainEntity
 			modified = true;
 		}
 
-		if (problems.Count > 0)
+		if (!modified)
 		{
-			return new ResultProblemValues(problems);
+			return Result<ValidationFailure>.Success;
 		}
 
-		if (modified && Events.All(e => e is not RoomUpdatedEvent))
+		var validationResult = RoomValidator.Instance.Validate(this);
+		if (!validationResult.IsValid)
+		{
+			Name = oldName;
+			Description = oldDescription;
+			IsEntrance = oldIsEntrance;
+
+			return new ResultErrorValues<ValidationFailure>(validationResult.Errors);
+		}
+
+		if (Events.All(e => e is not RoomUpdatedEvent))
 		{
 			Events.Add(new RoomUpdatedEvent(this));
 		}
 
-		return Result.Success;
+		return Result<ValidationFailure>.Success;
 	}
 
 	internal void UpdateConcurrencyStamp()
