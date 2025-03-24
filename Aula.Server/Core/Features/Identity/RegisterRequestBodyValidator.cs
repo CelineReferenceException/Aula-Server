@@ -1,10 +1,12 @@
-﻿using FluentValidation;
+﻿using Aula.Server.Core.Identity;
+using FluentValidation;
+using Microsoft.Extensions.Options;
 
 namespace Aula.Server.Core.Features.Identity;
 
 internal sealed class RegisterRequestBodyValidator : AbstractValidator<RegisterRequestBody>
 {
-	public RegisterRequestBodyValidator()
+	public RegisterRequestBodyValidator(IOptions<IdentityOptions> options)
 	{
 		_ = RuleFor(x => x.DisplayName)
 			.MinimumLength(User.DisplayNameMinimumLength)
@@ -32,8 +34,13 @@ internal sealed class RegisterRequestBodyValidator : AbstractValidator<RegisterR
 			.WithMessage($"Must be a valid email address");
 
 		_ = RuleFor(x => x.Password)
-			.NotEmpty()
-			.WithErrorCode($"{nameof(RegisterRequestBody.Password)} is empty")
-			.WithMessage($"{nameof(RegisterRequestBody.Password)} cannot be empty.");
+			.MinimumLength(options.Value.Password.RequiredLength)
+			.WithErrorCode(nameof(RegisterRequestBody.Password).ToCamel())
+			.WithMessage($"Length must be at least {options.Value.Password.RequiredLength}");
+
+		_ = RuleFor(x => x.Password)
+			.MaximumLength(User.PasswordMaximumLength)
+			.WithErrorCode(nameof(RegisterRequestBody.Password).ToCamel())
+			.WithMessage($"Length must be at most {User.PasswordMaximumLength}");
 	}
 }
