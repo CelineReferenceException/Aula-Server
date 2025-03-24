@@ -34,7 +34,7 @@ internal sealed class CreateRoomEndpoint : IEndpoint
 			return TypedResults.Problem(problemDetails);
 		}
 
-		var room = new Room(await snowflakeGenerator.NewSnowflakeAsync(), body.Name, body.Description, body.IsEntrance ?? false);
+		var room = Room.Create(await snowflakeGenerator.NewSnowflakeAsync(), body.Name, body.Description, body.IsEntrance ?? false).Value!;
 
 		_ = dbContext.Rooms.Add(room);
 		_ = await dbContext.SaveChangesAsync();
