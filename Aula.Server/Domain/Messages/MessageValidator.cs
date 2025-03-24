@@ -98,4 +98,6 @@ internal sealed class MessageValidator : AbstractValidator<Message>
 				.WithMessage($"Required when {nameof(Message.Type)} is {(Int32)MessageType.UserLeave}.");
 		});
 	}
+
+	internal static MessageValidator Instance { get; } = new();
 }
