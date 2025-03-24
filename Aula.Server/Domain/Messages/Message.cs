@@ -48,10 +48,10 @@ internal sealed class Message : DefaultDomainEntity
 	internal String? Content { get; }
 
 	// Navigation property, values are set through reflection.
-	internal MessageUserJoin? JoinData { get; init; }
+	internal MessageUserJoin? JoinData { get; private init; }
 
 	// Navigation property, values are set through reflection.
-	internal MessageUserLeave? LeaveData { get; init; }
+	internal MessageUserLeave? LeaveData { get; private init; }
 
 	internal DateTime CreationDate { get; }
 
