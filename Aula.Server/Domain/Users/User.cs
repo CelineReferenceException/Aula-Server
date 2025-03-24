@@ -241,7 +241,10 @@ internal sealed class User : DefaultDomainEntity
 		UserName = $"removed_user_{nameStamp}";
 		DisplayName = $"Removed user {nameStamp}";
 
-		Events.Add(new UserRemovedEvent(this));
+		if (Events.All(e => e is not UserRemovedEvent))
+		{
+			Events.Add(new UserRemovedEvent(this));
+		}
 	}
 
 	private static String GenerateConcurrencyStamp()
