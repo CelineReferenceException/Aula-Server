@@ -157,7 +157,10 @@ internal sealed class User : DefaultDomainEntity
 			return new ResultErrorValues<ValidationFailure>(validationResult.Errors);
 		}
 
-		Events.Add(new UserUpdatedEvent(this));
+		if (Events.All(e => e is not UserUpdatedEvent))
+		{
+			Events.Add(new UserUpdatedEvent(this));
+		}
 
 		return Result<ValidationFailure>.Success;
 	}
