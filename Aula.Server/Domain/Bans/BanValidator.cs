@@ -10,30 +10,30 @@ internal sealed class BanValidator : AbstractValidator<Ban>
 
 		_ = RuleFor(x => x.Id)
 			.NotNull()
-			.WithErrorCode(nameof(Ban.Id).ToCamelCase())
+			.WithErrorCode(nameof(Ban.Id))
 			.WithMessage("Required.");
 
 		_ = RuleFor(x => x.Type)
 			.IsInEnum()
-			.WithErrorCode(nameof(Ban.Type).ToCamelCase())
+			.WithErrorCode(nameof(Ban.Type))
 			.WithMessage($"Unknown type. Known values are {String.Join(", ", banTypes.Cast<Int32>())}.");
 
 		_ = RuleFor(x => x.Reason)
 			.MinimumLength(Ban.ReasonMinimumLength)
-			.WithErrorCode(nameof(Ban.Reason).ToCamelCase())
+			.WithErrorCode(nameof(Ban.Reason))
 			.WithMessage($"Length must be at least {Ban.ReasonMinimumLength}.");
 
 		_ = RuleFor(x => x.Reason)
 			.MaximumLength(Ban.ReasonMaximumLength)
-			.WithErrorCode(nameof(Ban.Reason).ToCamelCase())
+			.WithErrorCode(nameof(Ban.Reason))
 			.WithMessage($"Length must be at most {Ban.ReasonMaximumLength}.");
 
 		_ = When(x => x.Type is BanType.Id, () =>
 		{
 			_ = RuleFor(x => x.TargetId)
 				.NotNull()
-				.WithErrorCode(nameof(Ban.TargetId).ToCamelCase())
-				.WithMessage($"Required when {nameof(Type).ToCamelCase()} is {(Int32)BanType.Id}.");
+				.WithErrorCode(nameof(Ban.TargetId))
+				.WithMessage($"Required when {nameof(Type)} is {(Int32)BanType.Id}.");
 		});
 	}
 
