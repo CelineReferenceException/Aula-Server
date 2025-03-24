@@ -42,8 +42,9 @@ internal sealed class RegisterEndpoint : IEndpoint
 			return TypedResults.NoContent();
 		}
 
-		var newUser = new User(await snowflakeGenerator.NewSnowflakeAsync(), body.UserName, body.Email, body.DisplayName, "",
-			UserType.Standard, featureOptions.Value.DefaultPermissions);
+		var newUser = User.Create(await snowflakeGenerator.NewSnowflakeAsync(), body.UserName, body.Email, body.DisplayName, String.Empty,
+				UserType.Standard, featureOptions.Value.DefaultPermissions)
+			.Value!;
 		newUser.ChangePassword(passwordHasher.HashPassword(newUser, body.Password));
 
 		var registerResult = await userManager.RegisterAsync(newUser);
