@@ -2,7 +2,7 @@ namespace Aula.Server.Common;
 
 internal static class StringExtensions
 {
-	internal static String ToCamelCase(this ReadOnlySpan<Char> span)
+	internal static String ToCamel(this ReadOnlySpan<Char> span)
 	{
 		return String.Create(span.Length, span, static (newSpan, span) =>
 		{
@@ -11,8 +11,8 @@ internal static class StringExtensions
 		});
 	}
 
-	internal static String ToCamelCase(this String str)
+	internal static String ToCamel(this String str)
 	{
-		return str.AsSpan().ToCamelCase();
+		return str.AsSpan().ToCamel();
 	}
 }
