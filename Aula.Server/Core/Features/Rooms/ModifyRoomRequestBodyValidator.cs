@@ -8,17 +8,17 @@ internal sealed class ModifyRoomRequestBodyValidator : AbstractValidator<ModifyR
 	{
 		_ = RuleFor(x => x.Name)
 			.MinimumLength(Room.NameMinimumLength)
-			.WithErrorCode($"{nameof(ModifyRoomRequestBody.Name)} is too short")
-			.WithMessage($"{nameof(ModifyRoomRequestBody.Name)} length must be at least {Room.NameMinimumLength}");
+			.WithErrorCode(nameof(CreateRoomRequestBody.Name).ToCamel())
+			.WithMessage($"Length must be at least {Room.NameMinimumLength}");
 
 		_ = RuleFor(x => x.Name)
 			.MaximumLength(Room.NameMaximumLength)
-			.WithErrorCode($"{nameof(ModifyRoomRequestBody.Name)} is too long")
-			.WithMessage($"{nameof(ModifyRoomRequestBody.Name)} length must be at most {Room.NameMaximumLength}");
+			.WithErrorCode(nameof(CreateRoomRequestBody.Name).ToCamel())
+			.WithMessage($"Length must be at most {Room.NameMaximumLength}");
 
 		_ = RuleFor(x => x.Description)
 			.MaximumLength(Room.DescriptionMaximumLength)
-			.WithErrorCode($"{nameof(ModifyRoomRequestBody.Description)} is too long")
-			.WithMessage($"{nameof(ModifyRoomRequestBody.Description)} length must be at most {Room.DescriptionMaximumLength}");
+			.WithErrorCode(nameof(CreateRoomRequestBody.Description).ToCamel())
+			.WithMessage($"Length must be at most {Room.DescriptionMaximumLength}");
 	}
 }
