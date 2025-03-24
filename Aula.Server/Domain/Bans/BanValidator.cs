@@ -8,11 +8,6 @@ internal sealed class BanValidator : AbstractValidator<Ban>
 	{
 		var banTypes = Enum.GetValues<BanType>();
 
-		_ = RuleFor(x => x.Id)
-			.NotNull()
-			.WithErrorCode(nameof(Ban.Id))
-			.WithMessage("Required.");
-
 		_ = RuleFor(x => x.Type)
 			.IsInEnum()
 			.WithErrorCode(nameof(Ban.Type))
