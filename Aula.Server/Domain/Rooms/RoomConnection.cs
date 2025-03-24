@@ -30,7 +30,7 @@ internal sealed class RoomConnection : DefaultDomainEntity
 		init => _targetRoom = value;
 	}
 
-	internal static Result<RoomConnection> Create(Snowflake id, Snowflake sourceRoomId, Snowflake targetRoomId)
+	internal static Result<RoomConnection, Object?> Create(Snowflake id, Snowflake sourceRoomId, Snowflake targetRoomId)
 	{
 		var roomConnection = new RoomConnection(id, sourceRoomId, targetRoomId);
 		roomConnection.Events.Add(new RoomConnectionCreatedEvent(roomConnection));
