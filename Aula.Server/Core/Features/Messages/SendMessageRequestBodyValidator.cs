@@ -18,8 +18,8 @@ internal sealed class SendMessageRequestBodyValidator : AbstractValidator<SendMe
 		_ = RuleFor(x => x.Flags)
 			.IsInEnum()
 			.WithErrorCode(nameof(SendMessageRequestBody.Flags).ToCamel())
-			.WithMessage("Invalid value. " +
-			             $"Valid values are combinations of the following flags: {String.Join(", ", messageFlags.Cast<Int32>())}.");
+			.WithMessage("Unknown value. " +
+			             $"Known values are combinations of the following flags: {String.Join(", ", messageFlags.Cast<Int32>())}.");
 
 		_ = When(x => x.Type is MessageType.Standard, () =>
 		{
