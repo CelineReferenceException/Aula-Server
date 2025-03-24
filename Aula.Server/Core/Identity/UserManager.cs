@@ -215,7 +215,8 @@ internal sealed class UserManager
 			return ResetPasswordResult.MissingDigit;
 		}
 
-		if (newPassword.Length < Options.Password.RequiredLength)
+		if (newPassword.Length < Options.Password.RequiredLength ||
+		    newPassword.Length > User.PasswordMaximumLength)
 		{
 			return ResetPasswordResult.InvalidLength;
 		}
