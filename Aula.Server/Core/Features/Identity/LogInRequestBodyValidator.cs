@@ -8,12 +8,12 @@ internal sealed class LogInRequestBodyValidator : AbstractValidator<LogInRequest
 	{
 		_ = RuleFor(x => x.UserName)
 			.NotEmpty()
-			.WithErrorCode($"{nameof(LogInRequestBody.UserName)} is empty")
-			.WithMessage($"{nameof(LogInRequestBody.UserName)} cannot be empty.");
+			.WithErrorCode(nameof(LogInRequestBody.UserName).ToCamel())
+			.WithMessage("Cannot be null or empty");
 
 		_ = RuleFor(x => x.Password)
 			.NotEmpty()
-			.WithErrorCode($"{nameof(LogInRequestBody.Password)} is empty")
-			.WithMessage($"{nameof(LogInRequestBody.Password)} cannot be empty.");
+			.WithErrorCode(nameof(LogInRequestBody.UserName).ToCamel())
+			.WithMessage("Cannot be null or empty");
 	}
 }
