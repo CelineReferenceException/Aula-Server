@@ -24,4 +24,6 @@ internal sealed class UserValidator : AbstractValidator<User>
 
 		_ = When(x => x.Type is UserType.Standard, () => { _ = RuleFor(x => x.Email).EmailAddress(); });
 	}
+
+	internal static UserValidator Instance { get; } = new();
 }
