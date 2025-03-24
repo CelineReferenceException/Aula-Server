@@ -8,12 +8,12 @@ internal sealed class CreateBanRequestBodyValidator : AbstractValidator<CreateBa
 	{
 		_ = RuleFor(x => x.Reason)
 			.MinimumLength(Ban.ReasonMinimumLength)
-			.WithErrorCode($"{nameof(CreateBanRequestBody.Reason)} is too short")
-			.WithMessage($"{nameof(CreateBanRequestBody.Reason)} length must be at least {Ban.ReasonMinimumLength}");
+			.WithErrorCode(nameof(CreateBanRequestBody.Reason).ToCamelCase())
+			.WithMessage($"Length must be at least {Ban.ReasonMinimumLength}");
 
 		_ = RuleFor(x => x.Reason)
 			.MaximumLength(Ban.ReasonMaximumLength)
-			.WithErrorCode($"{nameof(CreateBanRequestBody.Reason)} is too long")
-			.WithMessage($"{nameof(CreateBanRequestBody.Reason)} length must be at most {Ban.ReasonMaximumLength}");
+			.WithErrorCode(nameof(CreateBanRequestBody.Reason).ToCamelCase())
+			.WithMessage($"Length must be at most {Ban.ReasonMaximumLength}");
 	}
 }
