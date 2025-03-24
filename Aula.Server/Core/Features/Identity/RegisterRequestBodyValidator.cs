@@ -8,28 +8,28 @@ internal sealed class RegisterRequestBodyValidator : AbstractValidator<RegisterR
 	{
 		_ = RuleFor(x => x.DisplayName)
 			.MinimumLength(User.DisplayNameMinimumLength)
-			.WithErrorCode($"{nameof(RegisterRequestBody.DisplayName)} is too short")
-			.WithMessage($"{nameof(RegisterRequestBody.DisplayName)} length must be at least {User.DisplayNameMinimumLength}");
+			.WithErrorCode(nameof(RegisterRequestBody.DisplayName).ToCamel())
+			.WithMessage($"Length must be at least {User.DisplayNameMinimumLength}");
 
 		_ = RuleFor(x => x.DisplayName)
 			.MaximumLength(User.DisplayNameMaximumLength)
-			.WithErrorCode($"{nameof(RegisterRequestBody.DisplayName)} is too long")
-			.WithMessage($"{nameof(RegisterRequestBody.DisplayName)} length must be at most {User.DisplayNameMaximumLength}");
+			.WithErrorCode(nameof(RegisterRequestBody.DisplayName).ToCamel())
+			.WithMessage($"Length must be at most {User.DisplayNameMaximumLength}");
 
 		_ = RuleFor(x => x.UserName)
 			.MinimumLength(User.UserNameMinimumLength)
-			.WithErrorCode($"{nameof(RegisterRequestBody.UserName)} is too short")
-			.WithMessage($"{nameof(RegisterRequestBody.UserName)} length must be at least {User.DisplayNameMinimumLength}");
+			.WithErrorCode(nameof(RegisterRequestBody.UserName).ToCamel())
+			.WithMessage($"Length must be at least {User.DisplayNameMinimumLength}");
 
 		_ = RuleFor(x => x.UserName)
 			.MaximumLength(User.UserNameMaximumLength)
-			.WithErrorCode($"{nameof(RegisterRequestBody.UserName)} is too long")
-			.WithMessage($"{nameof(RegisterRequestBody.UserName)} length must be at most {User.DisplayNameMaximumLength}");
+			.WithErrorCode(nameof(RegisterRequestBody.UserName).ToCamel())
+			.WithMessage($"Length must be at most {User.DisplayNameMaximumLength}");
 
 		_ = RuleFor(x => x.Email)
 			.EmailAddress()
-			.WithErrorCode($"Invalid {nameof(RegisterRequestBody.Email)}")
-			.WithMessage($"{nameof(RegisterRequestBody.Email)} is not a valid email address.");
+			.WithErrorCode(nameof(RegisterRequestBody.Email).ToCamel())
+			.WithMessage($"Must be a valid email address");
 
 		_ = RuleFor(x => x.Password)
 			.NotEmpty()
