@@ -220,7 +220,10 @@ internal sealed class User : DefaultDomainEntity
 	internal void UpdateSecurityStamp()
 	{
 		SecurityStamp = GenerateSecurityStamp();
-		Events.Add(new UserSecurityStampUpdatedEvent(this));
+		if (Events.All(e => e is not UserSecurityStampUpdatedEvent))
+		{
+			Events.Add(new UserSecurityStampUpdatedEvent(this));
+		}
 	}
 
 	internal void Remove()
