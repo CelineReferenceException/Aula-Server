@@ -17,4 +17,6 @@ internal sealed class BanValidator : AbstractValidator<Ban>
 
 		_ = When(x => x.Type is BanType.Id, () => { _ = RuleFor(x => x.TargetId).NotNull(); });
 	}
+
+	internal static BanValidator Instance { get; } = new();
 }
