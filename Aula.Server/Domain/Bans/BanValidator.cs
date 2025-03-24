@@ -16,7 +16,7 @@ internal sealed class BanValidator : AbstractValidator<Ban>
 		_ = RuleFor(x => x.Type)
 			.IsInEnum()
 			.WithErrorCode(nameof(Ban.Type))
-			.WithMessage($"Unknown type. Known values are {String.Join(", ", banTypes.Cast<Int32>())}.");
+			.WithMessage($"Unknown value. Known values are {String.Join(", ", banTypes.Cast<Int32>())}.");
 
 		_ = RuleFor(x => x.Reason)
 			.MinimumLength(Ban.ReasonMinimumLength)
