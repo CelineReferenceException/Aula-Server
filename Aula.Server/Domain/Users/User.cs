@@ -1,4 +1,6 @@
-﻿namespace Aula.Server.Domain.Users;
+﻿using FluentValidation.Results;
+
+namespace Aula.Server.Domain.Users;
 
 internal sealed class User : DefaultDomainEntity
 {
@@ -8,36 +10,6 @@ internal sealed class User : DefaultDomainEntity
 	internal const Int32 UserNameMaximumLength = 32;
 	internal const Int32 DescriptionMaximumLength = 1024;
 	internal const Int32 PasswordMaximumLength = 128;
-
-	private static readonly ResultProblem s_userNameTooShort =
-		new("Username is too short", $"Username length must be at least {UserNameMinimumLength}.");
-
-	private static readonly ResultProblem s_userNameTooLong =
-		new("Username is too long", $"Username length must be at most {UserNameMaximumLength}.");
-
-	private static readonly ResultProblem s_invalidEmail =
-		new("Invalid email", "email is not a valid email address.");
-
-	private static readonly ResultProblem s_standardUserWithNullEmail =
-		new("Invalid email", "Standard users are required to define an email address.");
-
-	private static readonly ResultProblem s_botUserWithEmail =
-		new("Invalid email", "Bot users cannot have an email address.");
-
-	private static readonly ResultProblem s_displayNameTooShort =
-		new("Display name is too short", $"Display name length must be at least {DisplayNameMinimumLength}.");
-
-	private static readonly ResultProblem s_displayNameTooLong =
-		new("Display name is too long", $"Display name length must be at most {DisplayNameMaximumLength}.");
-
-	private static readonly ResultProblem s_descriptionTooLong =
-		new("Description is too long", $"Description length must be at most {DescriptionMaximumLength}.");
-
-	private static readonly ResultProblem s_unknownUserType =
-		new("Unknown user type", "An unknown user type was provided.");
-
-	private static readonly ResultProblem s_unknownPermissions =
-		new("Unknown permissions", "One or more of the permissions provided are not valid.");
 
 	private User(
 		Snowflake id,
@@ -111,7 +83,7 @@ internal sealed class User : DefaultDomainEntity
 
 	internal String ConcurrencyStamp { get; private set; }
 
-	internal static Result<User> Create(
+	internal static Result<User, ValidationFailure> Create(
 		Snowflake id,
 		String userName,
 		String? email,
@@ -120,81 +92,32 @@ internal sealed class User : DefaultDomainEntity
 		UserType type,
 		Permissions permissions)
 	{
-		var problems = new Items<ResultProblem>();
+		var user = new User(id, userName, email, false, null, GenerateSecurityStamp(), 0, null, displayName ?? userName, description,
+			permissions, type, Presence.Offline, null, DateTime.UtcNow, false, GenerateConcurrencyStamp());
 
-		switch (userName.Length)
-		{
-			case < UserNameMinimumLength: problems.Add(s_userNameTooShort); break;
-			case > UserNameMaximumLength: problems.Add(s_userNameTooLong); break;
-			default: break;
-		}
-
-		if (email is not null &&
-		    !EmailAddressValidator.IsValid(email))
-		{
-			problems.Add(s_invalidEmail);
-		}
-
-		switch (type)
-		{
-			case UserType.Standard when email is null: problems.Add(s_standardUserWithNullEmail); break;
-			case UserType.Bot when email is not null: problems.Add(s_botUserWithEmail); break;
-			case UserType.Standard or UserType.Bot:
-			default: break;
-		}
-
-		if (displayName is not null)
-		{
-			switch (displayName.Length)
-			{
-				case < DisplayNameMinimumLength: problems.Add(s_displayNameTooShort); break;
-				case > DisplayNameMaximumLength: problems.Add(s_displayNameTooLong); break;
-				default: break;
-			}
-		}
-
-		if (description.Length > DescriptionMaximumLength)
-		{
-			problems.Add(s_descriptionTooLong);
-		}
-
-		if (!Enum.IsDefined(type))
-		{
-			problems.Add(s_unknownUserType);
-		}
-
-		if (!permissions.IsEnumFlagDefined())
-		{
-			problems.Add(s_unknownPermissions);
-		}
-
-		return problems.Count > 0
-			? new ResultProblemValues(problems)
-			: new User(id, userName, email, false, null, GenerateSecurityStamp(), 0, null, displayName ?? userName, description,
-				permissions, type, Presence.Offline, null, DateTime.UtcNow, false, GenerateConcurrencyStamp());
+		var validationResult = UserValidator.Instance.Validate(user);
+		return validationResult.IsValid
+			? user
+			: new ResultErrorValues<ValidationFailure>(validationResult.Errors);
 	}
 
-	internal Result Modify(
+	internal Result<ValidationFailure> Modify(
 		String? displayName = null,
 		String? description = null,
 		Permissions? permissions = null,
 		Presence? presence = null)
 	{
+		var oldDisplayName = DisplayName;
+		var oldDescription = Description;
+		var oldPermissions = Permissions;
+		var oldPresence = Presence;
 		var modified = false;
-		var problems = new Items<ResultProblem>();
 
 		if (displayName is not null &&
 		    displayName != DisplayName)
 		{
 			DisplayName = displayName;
 			modified = true;
-
-			switch (displayName.Length)
-			{
-				case < DisplayNameMinimumLength: problems.Add(s_displayNameTooShort); break;
-				case > DisplayNameMaximumLength: problems.Add(s_displayNameTooLong); break;
-				default: break;
-			}
 		}
 
 		if (description is not null &&
@@ -202,11 +125,6 @@ internal sealed class User : DefaultDomainEntity
 		{
 			Description = description;
 			modified = true;
-
-			if (description.Length > DescriptionMaximumLength)
-			{
-				problems.Add(s_descriptionTooLong);
-			}
 		}
 
 		if (permissions is not null &&
@@ -223,17 +141,25 @@ internal sealed class User : DefaultDomainEntity
 			modified = true;
 		}
 
-		if (problems.Count > 0)
+		if (!modified)
 		{
-			return new ResultProblemValues(problems);
+			return Result<ValidationFailure>.Success;
 		}
 
-		if (modified)
+		var validationResult = UserValidator.Instance.Validate(this);
+		if (!validationResult.IsValid)
 		{
-			Events.Add(new UserUpdatedEvent(this));
+			DisplayName = oldDisplayName;
+			Description = oldDescription;
+			Permissions = oldPermissions;
+			Presence = oldPresence;
+
+			return new ResultErrorValues<ValidationFailure>(validationResult.Errors);
 		}
 
-		return Result.Success;
+		Events.Add(new UserUpdatedEvent(this));
+
+		return Result<ValidationFailure>.Success;
 	}
 
 	internal void SetCurrentRoom(Snowflake? currentRoomId)
