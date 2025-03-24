@@ -48,8 +48,7 @@ internal sealed class ApplicationDbContext : DbContext
 			.IsRequired();
 
 		_ = userModel.Property(x => x.PasswordHash)
-			.IsRequired(false)
-			.HasMaxLength(User.PasswordMaximumLength);
+			.IsRequired(false);
 
 		_ = userModel.Property(x => x.SecurityStamp)
 			.IsRequired(false);
