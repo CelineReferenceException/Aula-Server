@@ -8,16 +8,26 @@ internal static class ProblemDetailsExtensions
 	[Obsolete]
 	internal static HttpValidationProblemDetails ToProblemDetails(this IEnumerable<ValidationFailure> validationFailures)
 	{
-		var problemErrors = validationFailures
-			.Select(static failure => new KeyValuePair<String, String[]>(failure.ErrorCode, [failure.ErrorMessage,]))
-			.ToDictionary();
+		var propertyProblems = new Dictionary<String, List<String>>();
+
+		foreach (var failure in validationFailures)
+		{
+			if (propertyProblems.TryGetValue(failure.ErrorCode, out var problems))
+			{
+				problems.Add(failure.ErrorMessage);
+			}
+			else
+			{
+				propertyProblems.Add(failure.ErrorCode, [failure.ErrorMessage,]);
+			}
+		}
 
 		return new HttpValidationProblemDetails
 		{
 			Status = StatusCodes.Status400BadRequest,
 			Title = "Validation problem",
 			Detail = "One or more validation errors occurred.",
-			Errors = problemErrors,
+			Errors = propertyProblems.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToArray(), StringComparer.OrdinalIgnoreCase),
 		};
 	}
 }
