@@ -1,6 +1,5 @@
 ﻿using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Aula.Server.Core.Endpoints;
 
@@ -19,31 +18,6 @@ internal static class ProblemDetailsExtensions
 			Title = "Validation problem",
 			Detail = "One or more validation errors occurred.",
 			Errors = problemErrors,
-		};
-	}
-
-	internal static ValidationProblemDetails ToProblemDetails(this Result<Object> result)
-	{
-		var propertyProblems = new Dictionary<String, List<String>>();
-
-		foreach (var problem in result.Errors)
-		{
-			if (propertyProblems.TryGetValue(problem.Name, out var problems))
-			{
-				problems.Add(problem.Description);
-			}
-			else
-			{
-				propertyProblems.Add(problem.Name, [problem.Description,]);
-			}
-		}
-
-		return new ValidationProblemDetails
-		{
-			Status = StatusCodes.Status400BadRequest,
-			Title = "Validation problem",
-			Detail = "One or more validation errors occurred.",
-			Errors = propertyProblems.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToArray(), StringComparer.OrdinalIgnoreCase),
 		};
 	}
 }
