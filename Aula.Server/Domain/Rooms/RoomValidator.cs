@@ -32,4 +32,6 @@ internal sealed class RoomValidator : AbstractValidator<Room>
 			.WithErrorCode(nameof(Room.Description))
 			.WithMessage($"Length must be at most {Room.DescriptionMaximumLength}.");
 	}
+
+	internal static RoomValidator Instance { get; } = new();
 }
