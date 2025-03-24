@@ -33,7 +33,7 @@ internal sealed class BanValidator : AbstractValidator<Ban>
 			_ = RuleFor(x => x.TargetId)
 				.NotNull()
 				.WithErrorCode(nameof(Ban.TargetId))
-				.WithMessage($"Required when {nameof(Type)} is {(Int32)BanType.Id}.");
+				.WithMessage($"Required when {nameof(Ban.Type)} is {(Int32)BanType.Id}.");
 		});
 	}
 
