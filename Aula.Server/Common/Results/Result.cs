@@ -1,25 +1,26 @@
 namespace Aula.Server.Common.Results;
 
-internal readonly ref struct Result : IEquatable<Result>
+internal readonly ref struct Result<TProblem> : IEquatable<Result<TProblem>>
+	where TProblem : class?
 {
-	internal Result(ResultProblemValues problems)
+	internal Result(ResultProblemValues<TProblem> problems)
 	{
 		Problems = problems;
 	}
 
-	internal static Result Success => default;
+	internal static Result<TProblem> Success => default;
 
-	internal ResultProblemValues Problems { get; }
+	internal ResultProblemValues<TProblem> Problems { get; }
 
 	internal Boolean Succeeded => Problems.Count is 0;
 
-	public static implicit operator Result(ResultProblemValues problems) => new(problems);
+	public static implicit operator Result<TProblem>(ResultProblemValues<TProblem> problems) => new(problems);
 
-	public static Boolean operator ==(Result left, Result right) => left.Equals(right);
+	public static Boolean operator ==(Result<TProblem> left, Result<TProblem> right) => left.Equals(right);
 
-	public static Boolean operator !=(Result left, Result right) => !left.Equals(right);
+	public static Boolean operator !=(Result<TProblem> left, Result<TProblem> right) => !left.Equals(right);
 
-	public Boolean Equals(Result other)
+	public Boolean Equals(Result<TProblem> other)
 	{
 		return Problems.Equals(other.Problems);
 	}

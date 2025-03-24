@@ -1,13 +1,14 @@
 namespace Aula.Server.Common.Results;
 
-internal readonly ref struct Result<TResult>
+internal readonly ref struct Result<TResult, TProblem>
+	where TProblem : class?
 {
 	internal Result(TResult value)
 	{
 		Value = value;
 	}
 
-	internal Result(ResultProblemValues problems)
+	internal Result(ResultProblemValues<TProblem> problems)
 	{
 		if (problems.Count < 1)
 		{
@@ -19,19 +20,19 @@ internal readonly ref struct Result<TResult>
 
 	internal TResult? Value { get; }
 
-	internal ResultProblemValues Problems { get; }
+	internal ResultProblemValues<TProblem> Problems { get; }
 
 	internal Boolean Succeeded => Problems.Count is 0;
 
-	public static implicit operator Result<TResult>(TResult value) => new(value);
+	public static implicit operator Result<TResult, TProblem>(TResult value) => new(value);
 
-	public static implicit operator Result<TResult>(ResultProblemValues problemValues) => new(problemValues);
+	public static implicit operator Result<TResult, TProblem>(ResultProblemValues<TProblem> problemValues) => new(problemValues);
 
-	public static Boolean operator ==(Result<TResult> left, Result<TResult> right) => left.Equals(right);
+	public static Boolean operator ==(Result<TResult, TProblem> left, Result<TResult, TProblem> right) => left.Equals(right);
 
-	public static Boolean operator !=(Result<TResult> left, Result<TResult> right) => !left.Equals(right);
+	public static Boolean operator !=(Result<TResult, TProblem> left, Result<TResult, TProblem> right) => !left.Equals(right);
 
-	public Boolean Equals(Result<TResult> other)
+	public Boolean Equals(Result<TResult, TProblem> other)
 	{
 		return Succeeded == other.Succeeded &&
 		       Problems.Equals(other.Problems) &&

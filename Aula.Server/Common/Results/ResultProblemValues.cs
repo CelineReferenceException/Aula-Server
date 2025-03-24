@@ -1,34 +1,35 @@
 namespace Aula.Server.Common.Results;
 
-internal readonly ref struct ResultProblemValues : IReadOnlyList<ResultProblem>, IEquatable<ResultProblemValues>
+internal readonly ref struct ResultProblemValues<TProblem> : IReadOnlyList<TProblem>, IEquatable<ResultProblemValues<TProblem>>
+	where TProblem : class?
 {
-	private readonly Items<ResultProblem> _values;
+	private readonly Items<TProblem> _values;
 
-	internal ResultProblemValues(Items<ResultProblem> values)
+	internal ResultProblemValues(Items<TProblem> values)
 	{
 		_values = values;
 	}
 
 	public Int32 Count => _values.Count;
 
-	internal static ResultProblemValues Empty => new();
+	internal static ResultProblemValues<TProblem> Empty => new();
 
-	public ResultProblem this[Int32 index]
+	public TProblem this[Int32 index]
 	{
 		get => _values[index];
 		set => throw new NotSupportedException();
 	}
 
-	public static Boolean operator ==(ResultProblemValues left, ResultProblemValues right) => left.Equals(right);
+	public static Boolean operator ==(ResultProblemValues<TProblem> left, ResultProblemValues<TProblem> right) => left.Equals(right);
 
-	public static Boolean operator !=(ResultProblemValues left, ResultProblemValues right) => !left.Equals(right);
+	public static Boolean operator !=(ResultProblemValues<TProblem> left, ResultProblemValues<TProblem> right) => !left.Equals(right);
 
-	public Items<ResultProblem>.Enumerator GetEnumerator()
+	public Items<TProblem>.Enumerator GetEnumerator()
 	{
 		return _values.GetEnumerator();
 	}
 
-	public Boolean Equals(ResultProblemValues other)
+	public Boolean Equals(ResultProblemValues<TProblem> other)
 	{
 		return _values.Equals(other._values);
 	}
@@ -43,7 +44,7 @@ internal readonly ref struct ResultProblemValues : IReadOnlyList<ResultProblem>,
 		return _values.GetHashCode();
 	}
 
-	IEnumerator<ResultProblem> IEnumerable<ResultProblem>.GetEnumerator()
+	IEnumerator<TProblem> IEnumerable<TProblem>.GetEnumerator()
 	{
 		return GetEnumerator();
 	}
