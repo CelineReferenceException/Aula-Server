@@ -86,7 +86,7 @@ internal sealed partial class CommandLine
 
 		var pendingOptions = command.Options
 			.Select(kvp => kvp.Value)
-			.Where(o => o.RequiresArgument)
+			.Where(o => o.IsRequired)
 			.ToList();
 		var arguments = new Dictionary<String, String>();
 		while (inputSegments.MoveNext())
