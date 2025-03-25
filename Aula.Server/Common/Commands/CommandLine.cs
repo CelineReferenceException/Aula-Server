@@ -5,7 +5,7 @@ namespace Aula.Server.Common.Commands;
 /// <summary>
 ///     Provides a service for handling and executing command-line commands.
 /// </summary>
-internal sealed class CommandLine
+internal sealed partial class CommandLine
 {
 	private readonly ConcurrentDictionary<String, Command> _commands = new();
 	private readonly ILogger<CommandLine> _logger;
@@ -46,6 +46,9 @@ internal sealed class CommandLine
 		return await ProcessCommandAsync(input, _commands, cancellationToken);
 	}
 
+	[LoggerMessage(LogLevel.Error, Message = "Missing required arguments for parameters {optionNames}.")]
+	private static partial void LogMissingRequiredArguments(ILogger logger, String optionNames);
+
 	private async ValueTask<Boolean> ProcessCommandAsync(
 		ReadOnlyMemory<Char> input,
 		IReadOnlyDictionary<String, Command> commands,
@@ -72,6 +75,10 @@ internal sealed class CommandLine
 			return false;
 		}
 
+		var pendingOptions = command.Options
+			.Select(kvp => kvp.Value)
+			.Where(o => o.RequiresArgument)
+			.ToList();
 		var arguments = new Dictionary<String, String>();
 		while (inputSegments.MoveNext())
 		{
@@ -113,6 +120,7 @@ internal sealed class CommandLine
 				}
 
 				arguments.Add(option.Name, String.Empty);
+				_ = pendingOptions.Remove(option);
 				continue;
 			}
 
@@ -143,6 +151,13 @@ internal sealed class CommandLine
 			}
 
 			arguments.Add(option.Name, input.Slice(argumentStart, argumentLength).ToString());
+			_ = pendingOptions.Remove(option);
+		}
+
+		if (pendingOptions.Count > 0)
+		{
+			LogMissingRequiredArguments(_logger, String.Join(", ", pendingOptions.Select(o => $"\"{o.Name}\"")));
+			return false;
 		}
 
 		await command.Callback(arguments, cancellationToken);
