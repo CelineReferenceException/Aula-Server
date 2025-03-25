@@ -4,11 +4,11 @@ using Aula.Server.Core.Domain.Users;
 namespace Aula.Server.Core.Commands.Users;
 
 [CommandLineIgnore]
-internal sealed class ListPermissionsCommand : Command
+internal sealed class ListPermissionsSubCommand : Command
 {
 	private readonly ILogger<PermissionsCommand> _logger;
 
-	public ListPermissionsCommand(ILogger<PermissionsCommand> logger, IServiceProvider serviceProvider)
+	public ListPermissionsSubCommand(ILogger<PermissionsCommand> logger, IServiceProvider serviceProvider)
 		: base(serviceProvider)
 	{
 		_logger = logger;

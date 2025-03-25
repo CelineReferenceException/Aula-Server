@@ -6,7 +6,7 @@ internal sealed class PermissionsCommand : Command
 	public PermissionsCommand(IServiceProvider serviceProvider)
 		: base(serviceProvider)
 	{
-		AddSubCommand<ListPermissionsCommand>();
+		AddSubCommand<ListPermissionsSubCommand>();
 		AddSubCommand<SetPermissionsSubCommand>();
 	}
 
