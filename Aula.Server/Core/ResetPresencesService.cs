@@ -2,7 +2,7 @@
 using Aula.Server.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
-namespace Aula.Server.Core.Api.Users;
+namespace Aula.Server.Core;
 
 internal sealed class ResetPresencesService : IHostedService, IDisposable
 {
