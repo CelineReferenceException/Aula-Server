@@ -20,7 +20,7 @@ internal static class DependencyInjection
 	internal static IServiceCollection AddCommandLine(this IServiceCollection services, Type assemblyType)
 	{
 		_ = services.AddSingleton<CommandLine>();
-		_ = services.AddHostedService<ConsoleCommandLine>();
+		_ = services.AddHostedService<CommandLineConsoleReader>();
 
 		var assembly = assemblyType.Assembly;
 
