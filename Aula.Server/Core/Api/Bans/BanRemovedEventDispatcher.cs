@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using Aula.Server.Common.Gateway;
 using Aula.Server.Common.Persistence;
 using Aula.Server.Domain.Bans;
 using Aula.Server.Domain.Users;

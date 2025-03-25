@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using Aula.Server.Common.Commands;
 
 namespace Aula.Server.Core.Commands;
 

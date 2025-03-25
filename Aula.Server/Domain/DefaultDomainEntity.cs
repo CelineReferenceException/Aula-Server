@@ -2,9 +2,8 @@
 
 internal abstract class DefaultDomainEntity : IDomainEntity
 {
-	IReadOnlyList<DomainEvent> IDomainEntity.Events => Events;
-
 	private protected List<DomainEvent> Events { get; } = [];
+	IReadOnlyList<DomainEvent> IDomainEntity.Events => Events;
 
 	void IDomainEntity.ClearEvents()
 	{

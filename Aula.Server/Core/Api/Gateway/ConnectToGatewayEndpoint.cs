@@ -1,8 +1,5 @@
 ﻿using Aula.Server.Common.Authorization;
-using Aula.Server.Common.Endpoints;
-using Aula.Server.Common.Gateway;
 using Aula.Server.Common.Identity;
-using Aula.Server.Common.RateLimiting;
 using Aula.Server.Core.Api.Users;
 using Aula.Server.Domain;
 using Microsoft.AspNetCore.Builder;

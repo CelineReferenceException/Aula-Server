@@ -36,9 +36,9 @@ internal sealed class ResetPasswordEmailSender
 		var code = _tokenProvider.CreateToken(user.Id.ToString(), resetToken);
 		var content =
 			$"""
-			 <p>Hello! did you forget your password? Here's your reset password code: <code>{code}</code></p>
-			 <p>If you didn't request a password reset, you can ignore this email.</p>
-			 """;
+			<p>Hello! did you forget your password? Here's your reset password code: <code>{code}</code></p>
+			<p>If you didn't request a password reset, you can ignore this email.</p>
+			""";
 
 		if (_redirectUri is not null)
 		{

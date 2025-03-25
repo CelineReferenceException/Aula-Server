@@ -10,7 +10,13 @@
 			"allowBuiltInTypeAliases": true
 		},
 		"orderingRules": {
-			"elementOrder": [ "kind", "accessibility", "constant", "static", "readonly" ],
+			"elementOrder": [
+				"kind",
+				"accessibility",
+				"constant",
+				"static",
+				"readonly"
+			],
 			"systemUsingDirectivesFirst": true,
 			"usingDirectivesPlacement": "outsideNamespace",
 			"blankLinesBetweenUsingGroups": "omit"
@@ -21,7 +27,13 @@
 			"tupleElementNameCasing": "PascalCase"
 		},
 		"maintainabilityRules": {
-			"topLevelTypes": [ "class", "interface", "struct", "enum", "delegate" ]
+			"topLevelTypes": [
+				"class",
+				"interface",
+				"struct",
+				"enum",
+				"delegate"
+			]
 		},
 		"layoutRules": {
 			"newlineAtEndOfFile": "require",

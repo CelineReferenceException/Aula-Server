@@ -1,5 +1,4 @@
 ﻿using Aula.Server.Common.Authorization;
-using Aula.Server.Common.Endpoints;
 using Aula.Server.Common.Persistence;
 using Aula.Server.Domain.Bans;
 using Aula.Server.Domain.Users;

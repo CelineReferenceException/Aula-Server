@@ -1,5 +1,4 @@
 ﻿using Aula.Server.Common.Authorization;
-using Aula.Server.Common.Endpoints;
 using Aula.Server.Common.Identity;
 using Aula.Server.Common.Persistence;
 using Microsoft.AspNetCore.Builder;

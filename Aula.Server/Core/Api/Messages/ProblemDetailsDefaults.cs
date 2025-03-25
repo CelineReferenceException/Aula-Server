@@ -36,7 +36,8 @@ internal static class ProblemDetailsDefaults
 	internal static ProblemDetails InvalidMessageCount { get; } = new()
 	{
 		Title = "Invalid message count.",
-		Detail = $"The message count must be between {GetMessagesEndpoint.MinimumMessageCount} and {GetMessagesEndpoint.MaximumMessageCount}.",
+		Detail =
+			$"The message count must be between {GetMessagesEndpoint.MinimumMessageCount} and {GetMessagesEndpoint.MaximumMessageCount}.",
 		Status = StatusCodes.Status400BadRequest,
 	};
 

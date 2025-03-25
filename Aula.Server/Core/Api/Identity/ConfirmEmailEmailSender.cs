@@ -35,10 +35,10 @@ internal sealed class ConfirmEmailEmailSender
 		confirmationToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));
 		var content =
 			$"""
-			 <p>Hello {user.UserName}, Welcome to {_applicationName}!</p>
-			 <p>Here's your email confirmation token: <code>{confirmationToken}</code>
-			 <p>If you didn’t sign up for {_applicationName}, you can ignore this email.</p>
-			 """;
+			<p>Hello {user.UserName}, Welcome to {_applicationName}!</p>
+			<p>Here's your email confirmation token: <code>{confirmationToken}</code>
+			<p>If you didn’t sign up for {_applicationName}, you can ignore this email.</p>
+			""";
 		await _emailSender.SendEmailAsync(user.Email!, "Confirm your email", content);
 	}
 }

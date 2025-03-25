@@ -2,8 +2,8 @@
 
 internal sealed class ExpiredSessionsCleanerService : BackgroundService
 {
-	private readonly GatewayService _gatewayService;
 	private readonly TimeSpan _cleanupInterval = TimeSpan.FromMinutes(5);
+	private readonly GatewayService _gatewayService;
 
 	public ExpiredSessionsCleanerService(GatewayService gatewayService)
 	{

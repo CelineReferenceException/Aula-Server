@@ -1,8 +1,4 @@
 using System.Diagnostics;
-using Aula.Server.Common.Commands;
-using Aula.Server.Common.Endpoints;
-using Aula.Server.Common.Gateway;
-using Aula.Server.Common.RateLimiting;
 using Aula.Server.Core.Api;
 using MartinCostello.OpenApi;
 using Microsoft.AspNetCore.Builder;

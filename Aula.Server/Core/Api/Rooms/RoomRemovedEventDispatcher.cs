@@ -1,5 +1,4 @@
-﻿using Aula.Server.Common.Gateway;
-using Aula.Server.Domain.Rooms;
+﻿using Aula.Server.Domain.Rooms;
 using MediatR;
 
 namespace Aula.Server.Core.Api.Rooms;

@@ -32,7 +32,7 @@ internal sealed class RegisterRequestBodyValidator : AbstractValidator<RegisterR
 		_ = RuleFor(x => x.Email)
 			.EmailAddress()
 			.WithErrorCode(nameof(RegisterRequestBody.Email).ToCamel())
-			.WithMessage($"Must be a valid email address");
+			.WithMessage("Must be a valid email address");
 
 		_ = RuleFor(x => x.Password)
 			.MinimumLength(options.Value.Password.RequiredLength)

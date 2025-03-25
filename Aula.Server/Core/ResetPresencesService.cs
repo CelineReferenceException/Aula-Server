@@ -13,11 +13,6 @@ internal sealed class ResetPresencesService : IHostedService, IDisposable
 		_serviceScope = serviceProvider.CreateScope();
 	}
 
-	~ResetPresencesService()
-	{
-		Dispose(false);
-	}
-
 	public void Dispose()
 	{
 		Dispose(true);
@@ -32,6 +27,11 @@ internal sealed class ResetPresencesService : IHostedService, IDisposable
 	public async Task StopAsync(CancellationToken cancellationToken)
 	{
 		await ResetPresencesAsync(cancellationToken);
+	}
+
+	~ResetPresencesService()
+	{
+		Dispose(false);
 	}
 
 	private async Task ResetPresencesAsync(CancellationToken cancellationToken)

@@ -1,5 +1,4 @@
-﻿using Aula.Server.Common.Endpoints;
-using Aula.Server.Common.Identity;
+﻿using Aula.Server.Common.Identity;
 using Aula.Server.Domain.Users;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
