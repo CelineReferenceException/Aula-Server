@@ -8,12 +8,12 @@ namespace Aula.Server.Common.Json;
 
 internal static class DependencyInjection
 {
-	internal static IServiceCollection AddJsonSerialization<TAssemblyType>(this IServiceCollection services)
+	internal static IServiceCollection AddJson<TAssemblyType>(this IServiceCollection services)
 	{
-		return services.AddJsonSerialization(typeof(TAssemblyType).Assembly);
+		return services.AddJson(typeof(TAssemblyType).Assembly);
 	}
 
-	internal static IServiceCollection AddJsonSerialization(this IServiceCollection services, Assembly assemblyType)
+	internal static IServiceCollection AddJson(this IServiceCollection services, Assembly assemblyType)
 	{
 		_ = services.Configure<JsonOptions>(options =>
 		{

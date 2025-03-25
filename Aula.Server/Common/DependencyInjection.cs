@@ -42,7 +42,7 @@ internal static class DependencyInjection
 		});
 		_ = builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>(ServiceLifetime.Singleton, includeInternalTypes: true);
 		_ = builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<IAssemblyMarker>());
-		_ = builder.Services.AddJsonSerialization<IAssemblyMarker>();
+		_ = builder.Services.AddJson<IAssemblyMarker>();
 
 		_ = builder.Services.AddCustomRateLimiter();
 		_ = builder.Services.AddMailSender();
