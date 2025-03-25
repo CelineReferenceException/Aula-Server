@@ -77,7 +77,7 @@ internal sealed partial class HelpCommand : Command
 		}, cancellationToken);
 	}
 
-	private static String CreateHelpMessage(Command command)
+	internal static String CreateHelpMessage(Command command)
 	{
 		var message = new StringBuilder();
 		var alignment = 16;
@@ -145,7 +145,7 @@ internal sealed partial class HelpCommand : Command
 		return message.ToString();
 	}
 
-	private static String CreateHelpMessage(params ICollection<Command> commands)
+	internal static String CreateHelpMessage(params ICollection<Command> commands)
 	{
 		var message = new StringBuilder();
 		var alignment = commands
