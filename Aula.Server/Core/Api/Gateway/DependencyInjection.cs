@@ -8,6 +8,12 @@ namespace Aula.Server.Core.Api.Gateway;
 
 internal static class DependencyInjection
 {
+	internal static IServiceCollection AddGatewayApi(this IServiceCollection services)
+	{
+		_ = services.AddGatewayEndpointRateLimiters();
+		return services;
+	}
+
 	internal static IServiceCollection AddGatewayEndpointRateLimiters(this IServiceCollection services)
 	{
 		_ = services.AddOptions<RateLimitOptions>(GatewayRateLimitPolicies.Gateway)

@@ -2,6 +2,12 @@
 
 internal static class DependencyInjection
 {
+	internal static IServiceCollection AddIdentityApi(this IServiceCollection services)
+	{
+		_ = services.AddIdentityEndpointEmailSenders();
+		return services;
+	}
+
 	internal static IServiceCollection AddIdentityEndpointEmailSenders(this IServiceCollection services)
 	{
 		_ = services.AddOptions<IdentityFeatureOptions>()

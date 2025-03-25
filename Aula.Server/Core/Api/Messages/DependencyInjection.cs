@@ -8,6 +8,12 @@ namespace Aula.Server.Core.Api.Messages;
 
 internal static class DependencyInjection
 {
+	internal static IServiceCollection AddMessageApi(this IServiceCollection services)
+	{
+		_ = services.AddMessageEndpointRateLimiters();
+		return services;
+	}
+
 	internal static IServiceCollection AddMessageEndpointRateLimiters(this IServiceCollection services)
 	{
 		_ = services.AddOptions<RateLimitOptions>(MessageRateLimitingPolicies.SendMessage)
