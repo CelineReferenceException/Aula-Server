@@ -69,6 +69,14 @@ internal sealed partial class HelpCommand : Command
 		return ValueTask.CompletedTask;
 	}
 
+	internal ValueTask Callback(String commandName, CancellationToken ct = default)
+	{
+		return Callback(new Dictionary<String, String>
+		{
+			{ CommandOption.Name, commandName },
+		}, ct);
+	}
+
 	private static String FormatCommands(Command command)
 	{
 		var message = new StringBuilder();
