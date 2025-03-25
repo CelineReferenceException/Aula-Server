@@ -13,13 +13,13 @@
 		<RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
 		<RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
 		<AnalysisLevel>latest-all</AnalysisLevel>
-		<CodeAnalysisRuleSet>./stylecop.ruleset</CodeAnalysisRuleSet>
+		<CodeAnalysisRuleSet>../stylecop.ruleset</CodeAnalysisRuleSet>
 		<WarningLevel>4</WarningLevel>
 		<NoWarn>1701;1702;RS1035</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<AdditionalFiles Include="stylecop.json"/>
+		<AdditionalFiles Include="../stylecop.json"/>
 	</ItemGroup>
 
 	<ItemGroup>
