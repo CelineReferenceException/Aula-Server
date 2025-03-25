@@ -48,7 +48,7 @@ if (application.Environment.IsDevelopment())
 			.WithSidebar(true)
 			.WithDefaultOpenAllTags(false)
 			.WithModels(true)
-			.WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
+			.WithDefaultHttpClient(ScalarTarget.Node, ScalarClient.Fetch)
 			.WithEndpointPrefix("/scalar/{documentName}")
 			.OpenApiRoutePattern = "/docs/openapi/{documentName}.json";
 	});
