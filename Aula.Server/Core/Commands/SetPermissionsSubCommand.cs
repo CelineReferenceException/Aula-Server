@@ -22,7 +22,7 @@ internal sealed class SetPermissionsSubCommand : Command
 	private readonly CommandOption _userIdOption = new()
 	{
 		Name = "u",
-		Description = "The ID of the user to set the permissions for.",
+		Description = "The id of the user to set the permissions for.",
 		IsRequired = true,
 		RequiresArgument = true,
 		CanOverflow = false,
