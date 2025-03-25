@@ -14,7 +14,6 @@ internal sealed class Room : DefaultDomainEntity
 		String description,
 		Boolean isEntrance,
 		String concurrencyStamp,
-		IReadOnlyList<RoomConnection> connections,
 		DateTime creationDate,
 		Boolean isRemoved)
 	{
@@ -23,7 +22,6 @@ internal sealed class Room : DefaultDomainEntity
 		Description = description;
 		IsEntrance = isEntrance;
 		ConcurrencyStamp = concurrencyStamp;
-		Connections = connections;
 		CreationDate = creationDate;
 		IsRemoved = isRemoved;
 	}
@@ -39,7 +37,7 @@ internal sealed class Room : DefaultDomainEntity
 	internal String ConcurrencyStamp { get; private set; }
 
 	// Readonly navigation property
-	internal IReadOnlyList<RoomConnection> Connections { get; }
+	internal IReadOnlyList<RoomConnection> Connections { get; private init; }
 
 	internal DateTime CreationDate { get; }
 
@@ -47,7 +45,10 @@ internal sealed class Room : DefaultDomainEntity
 
 	internal static Result<Room, ValidationFailure> Create(Snowflake id, String name, String description, Boolean isEntrance)
 	{
-		var room = new Room(id, name, description, isEntrance, GenerateConcurrencyStamp(), [], DateTime.UtcNow, false);
+		var room = new Room(id, name, description, isEntrance, GenerateConcurrencyStamp(), DateTime.UtcNow, false)
+		{
+			Connections = [],
+		};
 		room.Events.Add(new RoomCreatedEvent(room));
 
 		var validationResult = RoomValidator.Instance.Validate(room);
