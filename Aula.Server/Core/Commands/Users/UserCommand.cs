@@ -13,7 +13,7 @@ internal sealed class UserCommand : Command
 
 	internal override async ValueTask Callback(IReadOnlyDictionary<String, String> args, CancellationToken ct)
 	{
-		var help = ServiceProvider.GetRequiredService<HelpCommand>();
-		await help.Callback(Name, ct);
+		var helpCommand = ServiceProvider.GetRequiredService<HelpCommand>();
+		await helpCommand.Callback(Name, ct);
 	}
 }
