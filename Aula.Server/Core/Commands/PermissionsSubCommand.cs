@@ -1,4 +1,4 @@
-﻿namespace Aula.Server.Core.Commands.Users;
+﻿namespace Aula.Server.Core.Commands;
 
 [CommandLineIgnore]
 internal sealed class PermissionsSubCommand : Command

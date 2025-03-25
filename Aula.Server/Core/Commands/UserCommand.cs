@@ -1,4 +1,4 @@
-﻿namespace Aula.Server.Core.Commands.Users;
+﻿namespace Aula.Server.Core.Commands;
 
 internal sealed class UserCommand : Command
 {

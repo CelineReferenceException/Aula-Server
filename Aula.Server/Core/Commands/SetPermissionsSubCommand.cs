@@ -3,7 +3,7 @@ using Aula.Server.Domain;
 using Aula.Server.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
-namespace Aula.Server.Core.Commands.Users;
+namespace Aula.Server.Core.Commands;
 
 [CommandLineIgnore]
 internal sealed class SetPermissionsSubCommand : Command
