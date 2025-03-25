@@ -20,12 +20,13 @@ builder.Services.AddOpenApiExtensions(static options => options.XmlDocumentation
 
 var application = builder.Build();
 
+application.MapCommands();
+
 if (!application.Environment.IsDevelopment())
 {
 	_ = application.UseHttpsRedirection();
 }
 
-application.MapCommands();
 application.UseCors();
 application.UseWebSockets();
 application.UseWebSocketHeaderParsing();
