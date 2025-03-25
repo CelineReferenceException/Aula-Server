@@ -43,7 +43,7 @@ if (application.Environment.IsDevelopment())
 	_ = documentationRoute.MapScalarApiReference(options =>
 	{
 		options.WithTitle($"{nameof(Aula)} API {{documentName}}")
-			.WithTheme(ScalarTheme.DeepSpace)
+			.WithTheme(ScalarTheme.Alternate)
 			.WithDarkMode(false) // hehehe
 			.WithSidebar(true)
 			.WithDefaultOpenAllTags(false)
