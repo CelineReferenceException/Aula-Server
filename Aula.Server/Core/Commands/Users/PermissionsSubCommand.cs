@@ -1,9 +1,9 @@
 ﻿namespace Aula.Server.Core.Commands.Users;
 
 [CommandLineIgnore]
-internal sealed class PermissionsCommand : Command
+internal sealed class PermissionsSubCommand : Command
 {
-	public PermissionsCommand(IServiceProvider serviceProvider)
+	public PermissionsSubCommand(IServiceProvider serviceProvider)
 		: base(serviceProvider)
 	{
 		AddSubCommand<ListPermissionsSubCommand>();

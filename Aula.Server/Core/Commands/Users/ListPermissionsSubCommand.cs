@@ -6,9 +6,9 @@ namespace Aula.Server.Core.Commands.Users;
 [CommandLineIgnore]
 internal sealed class ListPermissionsSubCommand : Command
 {
-	private readonly ILogger<PermissionsCommand> _logger;
+	private readonly ILogger<PermissionsSubCommand> _logger;
 
-	public ListPermissionsSubCommand(ILogger<PermissionsCommand> logger, IServiceProvider serviceProvider)
+	public ListPermissionsSubCommand(ILogger<PermissionsSubCommand> logger, IServiceProvider serviceProvider)
 		: base(serviceProvider)
 	{
 		_logger = logger;
