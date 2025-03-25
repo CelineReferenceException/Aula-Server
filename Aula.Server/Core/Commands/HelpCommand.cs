@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Aula.Server.Common.Commands;
+namespace Aula.Server.Core.Commands;
 
 internal sealed partial class HelpCommand : Command
 {
