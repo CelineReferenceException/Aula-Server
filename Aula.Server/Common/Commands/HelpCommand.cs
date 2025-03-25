@@ -31,9 +31,9 @@ internal sealed partial class HelpCommand : Command
 		CanOverflow = true,
 	};
 
-	internal override ValueTask Callback(IReadOnlyDictionary<String, String> args, CancellationToken ct)
+	internal override ValueTask Callback(IReadOnlyDictionary<String, String> args, CancellationToken cancellationToken)
 	{
-		ct.ThrowIfCancellationRequested();
+		cancellationToken.ThrowIfCancellationRequested();
 
 		var commands = _commandLine.Commands
 			.Select(static kvp => kvp.Value)
@@ -69,12 +69,12 @@ internal sealed partial class HelpCommand : Command
 		return ValueTask.CompletedTask;
 	}
 
-	internal ValueTask Callback(String commandName, CancellationToken ct = default)
+	internal ValueTask Callback(String commandName, CancellationToken cancellationToken = default)
 	{
 		return Callback(new Dictionary<String, String>
 		{
 			{ CommandOption.Name, commandName },
-		}, ct);
+		}, cancellationToken);
 	}
 
 	private static String FormatCommands(Command command)
