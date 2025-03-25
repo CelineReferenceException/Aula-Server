@@ -6,13 +6,12 @@
 internal abstract class Command
 {
 	private readonly Dictionary<String, CommandOption> _options = [];
-	private readonly IServiceProvider _serviceProvider;
 	private readonly Dictionary<String, Command> _subCommands = [];
 	private CommandOption? _previousDefinedOption;
 
 	private protected Command(IServiceProvider serviceProvider)
 	{
-		_serviceProvider = serviceProvider;
+		ServiceProvider = serviceProvider;
 	}
 
 	/// <summary>
@@ -34,6 +33,8 @@ internal abstract class Command
 	///     A dictionary with the registered the sub-commands, where the <see cref="Command.Name" /> is the key.
 	/// </summary>
 	internal IReadOnlyDictionary<String, Command> SubCommands => _subCommands;
+
+	protected IServiceProvider ServiceProvider { get; }
 
 	/// <summary>
 	///     The callback function called each time the command is executed.
@@ -100,7 +101,7 @@ internal abstract class Command
 	/// <exception cref="InvalidOperationException">A subcommand with the same name is already registered.</exception>
 	private protected void AddSubCommand(Type type)
 	{
-		var subCommand = (Command)_serviceProvider.GetRequiredService(type);
+		var subCommand = (Command)ServiceProvider.GetRequiredService(type);
 		if (!_subCommands.TryAdd(subCommand.Name, subCommand))
 		{
 			throw new InvalidOperationException($"A subcommand with the name '{type.Name}' has already been registered.");
