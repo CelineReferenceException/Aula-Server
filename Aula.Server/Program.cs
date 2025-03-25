@@ -72,6 +72,7 @@ var logger = application.Services.GetRequiredService<ILogger<Program>>();
 
 logger.LogStartupMessage($"Now listening on: {String.Join(" - ", application.Urls)}");
 logger.LogStartupMessage($"{nameof(Aula)} is Ready — It only took {(Int32)elapsedTime.TotalMilliseconds} milliseconds!");
+logger.LogStartupMessage("Type 'help' to see a list of available commands.");
 logger.LogStartupMessage("You can press Ctrl+C to shut down.");
 
 await application.WaitForShutdownAsync();
