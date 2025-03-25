@@ -28,6 +28,7 @@ internal sealed partial class HelpCommand : Command
 	{
 		Name = "c",
 		Description = "Show information about a specific command.",
+		IsRequired = false,
 		CanOverflow = true,
 	};
 
