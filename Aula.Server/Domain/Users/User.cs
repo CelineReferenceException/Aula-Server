@@ -73,7 +73,7 @@ internal sealed class User : DefaultDomainEntity
 
 	internal UserType Type { get; }
 
-	internal Presence Presence { get; set; }
+	internal Presence Presence { get; private set; }
 
 	internal Snowflake? CurrentRoomId { get; private set; }
 
