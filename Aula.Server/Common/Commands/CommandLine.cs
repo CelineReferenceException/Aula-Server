@@ -126,7 +126,7 @@ internal sealed partial class CommandLine
 
 			if (command.Options.Count is 1)
 			{
-				// If a command has no subcommands, only one option, and no option name is provided,
+				// If a command has no subcommands, only one option, and no option is provided,
 				// then that option is automatically selected.
 				option = command.Options
 					.Select(kvp => kvp.Value)
