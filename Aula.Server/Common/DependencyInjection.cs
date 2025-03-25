@@ -63,6 +63,8 @@ internal static class DependencyInjection
 	internal static TApp UseCommon<TApp>(this TApp app)
 		where TApp : IApplicationBuilder, IEndpointRouteBuilder
 	{
+		_ = app.MapCommands();
+
 		_ = app.UseCors();
 		_ = app.UseWebSockets();
 		_ = app.UseWebSocketHeaderParsing();
@@ -70,7 +72,6 @@ internal static class DependencyInjection
 		_ = app.UseCustomRateLimiting();
 		_ = app.UseAuthorization();
 		_ = app.MapEndpoints();
-		_ = app.MapCommands();
 
 		return app;
 	}
