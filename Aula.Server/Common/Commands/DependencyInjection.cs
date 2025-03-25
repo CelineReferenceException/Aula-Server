@@ -18,7 +18,7 @@ internal static class DependencyInjection
 	/// <returns>The modified <see cref="IServiceCollection" />.</returns>
 	internal static IServiceCollection AddCommandLine(this IServiceCollection services, Type assemblyType)
 	{
-		_ = services.AddSingleton<CommandLine>();
+		services.TryAddSingleton<CommandLine>();
 		_ = services.AddHostedService<CommandLineConsoleReader>();
 
 		var assembly = assemblyType.Assembly;
@@ -36,7 +36,7 @@ internal static class DependencyInjection
 		services.TryAddEnumerable(abstractDescriptors);
 		foreach (var descriptor in concreteDescriptors)
 		{
-			services.Add(descriptor);
+			services.TryAdd(descriptor);
 		}
 
 		return services;

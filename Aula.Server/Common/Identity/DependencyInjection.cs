@@ -12,10 +12,10 @@ internal static class DependencyInjection
 			.ValidateDataAnnotations()
 			.ValidateOnStart();
 
-		_ = services.AddScoped<UserManager>();
+		services.TryAddScoped<UserManager>();
+		services.TryAddSingleton<PasswordHasher<User>>();
 		_ = services.AddHostedService<PendingEmailConfirmationsCleanerService>();
 		_ = services.AddHostedService<PendingPasswordResetsCleanerService>();
-		_ = services.AddSingleton<PasswordHasher<User>>();
 
 		_ = services.Configure<PasswordHasherOptions>(static options =>
 		{
