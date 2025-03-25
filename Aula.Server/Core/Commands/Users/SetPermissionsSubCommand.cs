@@ -7,7 +7,6 @@ namespace Aula.Server.Core.Commands.Users;
 
 internal sealed class SetPermissionsSubCommand : SubCommand
 {
-	private readonly ApplicationDbContext _dbContext;
 	private readonly ILogger<SetPermissionsSubCommand> _logger;
 
 	private readonly CommandOption _permissionsOption = new()
@@ -29,12 +28,10 @@ internal sealed class SetPermissionsSubCommand : SubCommand
 	};
 
 	public SetPermissionsSubCommand(
-		ApplicationDbContext dbContext,
 		ILogger<SetPermissionsSubCommand> logger,
 		IServiceProvider serviceProvider)
 		: base(serviceProvider)
 	{
-		_dbContext = dbContext;
 		_logger = logger;
 		AddOptions(_userIdOption, _permissionsOption);
 	}
@@ -53,7 +50,10 @@ internal sealed class SetPermissionsSubCommand : SubCommand
 			return;
 		}
 
-		var user = await _dbContext.Users
+		using var serviceScope = ServiceProvider.CreateScope();
+		var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+		var user = await dbContext.Users
 			.AsTracking()
 			.Where(u => u.Id == userId)
 			.FirstOrDefaultAsync(cancellationToken);
@@ -76,7 +76,7 @@ internal sealed class SetPermissionsSubCommand : SubCommand
 
 		try
 		{
-			_ = await _dbContext.SaveChangesAsync(cancellationToken);
+			_ = await dbContext.SaveChangesAsync(cancellationToken);
 		}
 		catch (DbUpdateConcurrencyException)
 		{
