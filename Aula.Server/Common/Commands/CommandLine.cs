@@ -46,6 +46,15 @@ internal sealed partial class CommandLine
 		return await ProcessCommandAsync(input, _commands, cancellationToken);
 	}
 
+	[LoggerMessage(LogLevel.Error, Message = "Unknown command: '{name}'")]
+	private static partial void UnknownCommand(ILogger logger, String name);
+
+	[LoggerMessage(LogLevel.Error, Message = "Invalid command option name: '{name}'")]
+	private static partial void InvalidCommandOption(ILogger logger, String name);
+
+	[LoggerMessage(LogLevel.Error, Message = "Missing argument: '{optionName}'")]
+	private static partial void MissingArgument(ILogger logger, String optionName);
+
 	[LoggerMessage(LogLevel.Error, Message = "Missing required arguments for parameters {optionNames}.")]
 	private static partial void LogMissingRequiredArguments(ILogger logger, String optionNames);
 
@@ -71,7 +80,7 @@ internal sealed partial class CommandLine
 		var commandName = inputSpan.Slice(inputSegments.Current.Start.Value, inputSegments.Current.End.Value).ToString();
 		if (!commands.TryGetValue(commandName, out var command))
 		{
-			_logger.UnknownCommand(commandName);
+			UnknownCommand(_logger, commandName);
 			return false;
 		}
 
@@ -108,7 +117,7 @@ internal sealed partial class CommandLine
 				var optionName = segment[CommandOption.Prefix.Length..].ToString();
 				if (!command.Options.TryGetValue(optionName, out option))
 				{
-					_logger.InvalidCommandOption(optionName);
+					InvalidCommandOption(_logger, optionName);
 					return false;
 				}
 
@@ -121,7 +130,7 @@ internal sealed partial class CommandLine
 
 				if (!inputSegments.MoveNext())
 				{
-					_logger.MissingArgument(option.Name);
+					MissingArgument(_logger, option.Name);
 					return false;
 				}
 			}
@@ -140,7 +149,7 @@ internal sealed partial class CommandLine
 				{
 					// The command multiple options, and we cannot guess which select.
 					// returns the same response for unrecognized subcommands.
-					_logger.UnknownCommand(commandName);
+					UnknownCommand(_logger, commandName);
 					return false;
 				}
 			}
