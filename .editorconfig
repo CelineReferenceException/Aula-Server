@@ -17,6 +17,7 @@ resharper_csharp_wrap_parameters_style = chop_if_long
 resharper_force_chop_compound_do_expression = true
 resharper_force_chop_compound_if_expression = true
 resharper_force_chop_compound_while_expression = true
+resharper_indent_raw_literal_string = indent
 resharper_keep_existing_declaration_parens_arrangement = false
 resharper_keep_existing_embedded_arrangement = false
 resharper_keep_existing_expr_member_arrangement = false
