@@ -55,7 +55,7 @@ internal sealed partial class CommandLine
 	[LoggerMessage(LogLevel.Error, Message = "The required option \"{optionName}\" was declared but no value was provided.")]
 	private static partial void MissingArgument(ILogger logger, String optionName);
 
-	[LoggerMessage(LogLevel.Error, Message = "Missing required arguments for options {optionNames}.")]
+	[LoggerMessage(LogLevel.Error, Message = "options {optionNames} are required but they were not provided.")]
 	private static partial void LogMissingRequiredArguments(ILogger logger, String optionNames);
 
 	private async ValueTask<Boolean> ProcessCommandAsync(
