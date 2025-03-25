@@ -34,6 +34,14 @@ internal readonly ref struct Result<TResult, TError>
 
 	public static Boolean operator !=(Result<TResult, TError> left, Result<TResult, TError> right) => !left.Equals(right);
 
+	public void ThrowIfFailed()
+	{
+		if (!Succeeded)
+		{
+			throw new ResultFailureException();
+		}
+	}
+
 	public Boolean Equals(Result<TResult, TError> other)
 	{
 		return Succeeded == other.Succeeded &&

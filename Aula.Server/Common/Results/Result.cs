@@ -20,6 +20,14 @@ internal readonly ref struct Result<TProblem> : IEquatable<Result<TProblem>>
 
 	public static Boolean operator !=(Result<TProblem> left, Result<TProblem> right) => !left.Equals(right);
 
+	public void ThrowIfFailed()
+	{
+		if (!Succeeded)
+		{
+			throw new ResultFailureException();
+		}
+	}
+
 	public Boolean Equals(Result<TProblem> other)
 	{
 		return Errors.Equals(other.Errors);
