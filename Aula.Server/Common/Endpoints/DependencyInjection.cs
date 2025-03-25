@@ -26,9 +26,9 @@ internal static class DependencyInjection
 		return services;
 	}
 
-	internal static IServiceCollection AddEndpoints<TAssembly>(this IServiceCollection services)
+	internal static IServiceCollection AddEndpoints<TAssemblyType>(this IServiceCollection services)
 	{
-		return AddEndpoints(services, typeof(TAssembly));
+		return AddEndpoints(services, typeof(TAssemblyType));
 	}
 
 	internal static IEndpointRouteBuilder MapEndpoints(this IEndpointRouteBuilder builder)
