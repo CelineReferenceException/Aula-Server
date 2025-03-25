@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Aula.Server.Core.Commands;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Aula.Server.Core.Commands;
+namespace Aula.Server.Common.Commands;
 
 internal static class DependencyInjection
 {
