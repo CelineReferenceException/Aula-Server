@@ -78,10 +78,15 @@ internal sealed partial class HelpCommand : Command
 			_ = message.AppendLine("OPTIONS: ");
 		}
 
-		foreach (var param in parameters.Options)
+		for (var i = 0; i < parameters.Options.Count; i++)
 		{
+			var param = parameters.Options[i];
 			_ = message.Append(param.Name.PadLeft(param.Name.Length + padding));
-			_ = message.AppendLine(param.Description.PadLeft(param.Description.Length + alignment - param.Name.Length - padding));
+			_ = message.Append(param.Description.PadLeft(param.Description.Length + alignment - param.Name.Length - padding));
+			if (i < parameters.SubCommands.Count - 1)
+			{
+				_ = message.AppendLine();
+			}
 		}
 
 		if (parameters.SubCommands.Count > 0)
@@ -90,16 +95,21 @@ internal sealed partial class HelpCommand : Command
 			_ = message.AppendLine("SUB-COMMANDS: ");
 		}
 
-		foreach (var param in parameters.SubCommands)
+		for (var i = 0; i < parameters.SubCommands.Count; i++)
 		{
+			var param = parameters.SubCommands[i];
 			_ = message.Append(param.Name.PadLeft(param.Name.Length + padding));
-			_ = message.AppendLine(param.Description.PadLeft(param.Description.Length + alignment - param.Name.Length - padding));
+			_ = message.Append(param.Description.PadLeft(param.Description.Length + alignment - param.Name.Length - padding));
+			if (i < parameters.SubCommands.Count - 1)
+			{
+				_ = message.AppendLine();
+			}
 		}
 
 		return message.ToString();
 	}
 
-	internal static String CreateHelpMessage(params ICollection<Command> commands)
+	internal static String CreateHelpMessage(params IReadOnlyList<Command> commands)
 	{
 		var message = new StringBuilder();
 		var alignment = commands
@@ -110,10 +120,15 @@ internal sealed partial class HelpCommand : Command
 		alignment++;
 
 		_ = message.AppendLine();
-		foreach (var command in commands)
+		for (var i = 0; i < commands.Count; i++)
 		{
+			var command = commands[i];
 			_ = message.Append($"{command.Name}");
-			_ = message.AppendLine(command.Description.PadLeft(command.Description.Length + alignment - command.Name.Length));
+			_ = message.Append(command.Description.PadLeft(command.Description.Length + alignment - command.Name.Length));
+			if (i < commands.Count - 1)
+			{
+				_ = message.AppendLine();
+			}
 		}
 
 		return message.ToString();
