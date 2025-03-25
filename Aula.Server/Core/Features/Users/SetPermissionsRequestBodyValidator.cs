@@ -6,14 +6,14 @@ internal sealed class SetPermissionsRequestBodyValidator : AbstractValidator<Set
 {
 	public SetPermissionsRequestBodyValidator()
 	{
-		_ = RuleFor(x => x.Permissions)
-			.IsInEnum()
-			.WithErrorCode("Invalid permissions")
-			.WithMessage("The permissions contains an invalid value.");
+		var disallowedPermissions = new[] { Permissions.Administrator, };
+		var allowedPermissions = Enum.GetValues<Permissions>().Except(disallowedPermissions);
 
 		_ = RuleFor(x => x.Permissions)
-			.Must(x => !x.HasFlag(Permissions.Administrator))
-			.WithErrorCode("Invalid permissions")
-			.WithMessage($"'{nameof(Permissions.Administrator)}' is not allowed to be set.");
+			.IsInEnum()
+			.Must(v => disallowedPermissions.All(disallowedPermission => !v.HasFlag(disallowedPermission)))
+			.WithErrorCode(nameof(Permissions).ToCamel())
+			.WithMessage("Invalid value." +
+			             $"Valid values are combinations of the following flags: {String.Join(", ", allowedPermissions.Cast<UInt64>())}");
 	}
 }
