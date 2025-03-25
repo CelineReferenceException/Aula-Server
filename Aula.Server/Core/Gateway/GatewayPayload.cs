@@ -1,9 +1,4 @@
-﻿using System.Text.Json;
-
-namespace Aula.Server.Core.Gateway;
-
-/// <inheritdoc />
-internal sealed class GatewayPayload : GatewayPayload<JsonElement>;
+﻿namespace Aula.Server.Core.Gateway;
 
 /// <summary>
 ///     Represents a payload sent over a Gateway connection.

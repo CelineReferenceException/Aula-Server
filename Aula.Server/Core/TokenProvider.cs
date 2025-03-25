@@ -129,6 +129,7 @@ internal sealed class TokenProvider
 	private readonly ref struct Base64TokenSegments
 	{
 		internal required ReadOnlySpan<Byte> Id { get; init; }
+
 		internal required ReadOnlySpan<Byte> SecurityStamp { get; init; }
 	}
 }

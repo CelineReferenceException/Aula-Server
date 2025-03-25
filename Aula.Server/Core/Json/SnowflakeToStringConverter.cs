@@ -7,7 +7,7 @@ namespace Aula.Server.Core.Json;
 
 internal sealed class SnowflakeToStringConverter : JsonConverter<Snowflake>
 {
-	[SuppressMessage("Style", "IDE0072:Add missing cases")]
+	[SuppressMessage("Style", "IDE0072:Add missing cases", Justification = "Readability.")]
 	public override Snowflake Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 	{
 		return reader.TokenType switch

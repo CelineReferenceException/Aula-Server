@@ -53,7 +53,8 @@ internal static class DependencyInjection
 		return services.AddCommandLine(typeof(TAssembly));
 	}
 
-	internal static TBuilder MapCommands<TBuilder>(this TBuilder builder) where TBuilder : IApplicationBuilder
+	internal static TBuilder MapCommands<TBuilder>(this TBuilder builder)
+		where TBuilder : IApplicationBuilder
 	{
 		s_serviceScope = builder.ApplicationServices.CreateScope();
 		var service = s_serviceScope.ServiceProvider.GetRequiredService<CommandLine>();

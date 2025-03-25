@@ -25,7 +25,6 @@ internal sealed class UserManager
 	private readonly PasswordHasher<User> _passwordHasher;
 	private readonly List<User> _users = [];
 
-
 	public UserManager(
 		ApplicationDbContext dbContext,
 		PasswordHasher<User> passwordHasher,
@@ -37,6 +36,32 @@ internal sealed class UserManager
 	}
 
 	internal IdentityOptions Options { get; }
+
+	internal static void CleanPendingEmailConfirmations()
+	{
+		var now = DateTime.UtcNow;
+
+		foreach (var pendingEmailConfirmation in s_pendingEmailConfirmations)
+		{
+			if (now - pendingEmailConfirmation.Value.CreationDate > s_pendingEmailConfirmationsLifeTime)
+			{
+				_ = s_pendingEmailConfirmations.TryRemove(pendingEmailConfirmation.Key, out _);
+			}
+		}
+	}
+
+	internal static void CleanPendingPasswordResets()
+	{
+		var now = DateTime.UtcNow;
+
+		foreach (var pendingPasswordReset in s_pendingPasswordResets)
+		{
+			if (now - pendingPasswordReset.Value.CreationDate > s_pendingPasswordResetsLifeTime)
+			{
+				_ = s_pendingEmailConfirmations.TryRemove(pendingPasswordReset.Key, out _);
+			}
+		}
+	}
 
 	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Prefer to use an instance")]
 	internal Snowflake? GetUserId(ClaimsPrincipal user)
@@ -181,7 +206,6 @@ internal sealed class UserManager
 		return result is PasswordVerificationResult.Success or PasswordVerificationResult.SuccessRehashNeeded;
 	}
 
-
 	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Prefer to use an instance")]
 	internal String GeneratePasswordResetToken(User user)
 	{
@@ -270,32 +294,6 @@ internal sealed class UserManager
 		}
 
 		_ = await _dbContext.SaveChangesWithConcurrencyCheckBypassAsync();
-	}
-
-	internal static void CleanPendingEmailConfirmations()
-	{
-		var now = DateTime.UtcNow;
-
-		foreach (var pendingEmailConfirmation in s_pendingEmailConfirmations)
-		{
-			if (now - pendingEmailConfirmation.Value.CreationDate > s_pendingEmailConfirmationsLifeTime)
-			{
-				_ = s_pendingEmailConfirmations.TryRemove(pendingEmailConfirmation.Key, out _);
-			}
-		}
-	}
-
-	internal static void CleanPendingPasswordResets()
-	{
-		var now = DateTime.UtcNow;
-
-		foreach (var pendingPasswordReset in s_pendingPasswordResets)
-		{
-			if (now - pendingPasswordReset.Value.CreationDate > s_pendingPasswordResetsLifeTime)
-			{
-				_ = s_pendingEmailConfirmations.TryRemove(pendingPasswordReset.Key, out _);
-			}
-		}
 	}
 
 	private sealed class PendingEmailConfirmation

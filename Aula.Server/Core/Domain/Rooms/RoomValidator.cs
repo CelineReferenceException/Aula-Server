@@ -16,7 +16,6 @@ internal sealed class RoomValidator : AbstractValidator<Room>
 			.WithErrorCode(nameof(Room.Name))
 			.WithMessage($"Length must be at least {Room.NameMinimumLength}.");
 
-
 		_ = RuleFor(x => x.Name)
 			.MaximumLength(Room.NameMaximumLength)
 			.WithErrorCode(nameof(Room.Name))

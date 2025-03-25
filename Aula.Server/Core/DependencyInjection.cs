@@ -18,7 +18,8 @@ namespace Aula.Server.Core;
 
 internal static class DependencyInjection
 {
-	internal static TBuilder AddCommon<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
+	internal static TBuilder AddCommon<TBuilder>(this TBuilder builder)
+		where TBuilder : IHostApplicationBuilder
 	{
 		_ = builder.Configuration.AddJsonFile("configuration.json", false, true);
 
@@ -59,7 +60,8 @@ internal static class DependencyInjection
 		return builder;
 	}
 
-	internal static TApp UseCommon<TApp>(this TApp app) where TApp : IApplicationBuilder, IEndpointRouteBuilder
+	internal static TApp UseCommon<TApp>(this TApp app)
+		where TApp : IApplicationBuilder, IEndpointRouteBuilder
 	{
 		_ = app.UseCors();
 		_ = app.UseWebSockets();

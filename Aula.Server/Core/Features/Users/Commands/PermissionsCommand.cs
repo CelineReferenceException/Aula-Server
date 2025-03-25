@@ -2,7 +2,8 @@
 
 internal sealed class PermissionsCommand : SubCommand
 {
-	public PermissionsCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+	public PermissionsCommand(IServiceProvider serviceProvider)
+		: base(serviceProvider)
 	{
 		AddSubCommand<ListPermissionsCommand>();
 		AddSubCommand<SetPermissionsSubCommand>();

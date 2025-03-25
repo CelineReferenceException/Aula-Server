@@ -1,10 +1,9 @@
-using System.Collections;
 using System.Runtime.CompilerServices;
-using Microsoft.Extensions.Primitives;
 
 namespace Aula.Server.Common.Collections;
 
-internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>> where T : class?
+internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>>
+	where T : class?
 {
 	private Object? _items;
 
@@ -17,6 +16,8 @@ internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>> where T : clas
 	{
 		_items = items;
 	}
+
+	readonly Int32 IReadOnlyCollection<T>.Count => Count;
 
 	internal readonly Int32 Count
 	{
@@ -40,7 +41,9 @@ internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>> where T : clas
 
 	internal readonly List<T>? UnderlyingList => _items as List<T>;
 
-	internal readonly T this[Int32 index]
+	readonly T IReadOnlyList<T>.this[Int32 index] => this[index];
+
+	public readonly T this[Int32 index]
 	{
 		get
 		{
@@ -65,25 +68,13 @@ internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>> where T : clas
 		set => throw new NotSupportedException();
 	}
 
-	internal void Add(T value)
-	{
-		if (_items is List<T> list)
-		{
-			list.Add(value);
-		}
-		else if (_items is not null)
-		{
-			_items = new List<T>
-			{
-				(_items as T)!,
-				value,
-			};
-		}
-		else
-		{
-			_items = value is not null ? value : NullItem.Instance;
-		}
-	}
+	public static implicit operator Items<T?>(T value) => new(value);
+
+	public static implicit operator Items<T>(List<T> values) => new(values);
+
+	public static Boolean operator ==(Items<T> left, Items<T> right) => left.Equals(right);
+
+	public static Boolean operator !=(Items<T> left, Items<T> right) => !left.Equals(right);
 
 	public readonly Enumerator GetEnumerator()
 	{
@@ -139,18 +130,6 @@ internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>> where T : clas
 		return _items != null ? _items.GetHashCode() : 0;
 	}
 
-	public static Boolean operator ==(Items<T> left, Items<T> right) => left.Equals(right);
-
-	public static Boolean operator !=(Items<T> left, Items<T> right) => !left.Equals(right);
-
-	public static implicit operator Items<T?>(T value) => new(value);
-
-	public static implicit operator Items<T>(List<T> values) => new(values);
-
-	readonly T IReadOnlyList<T>.this[Int32 index] => this[index];
-
-	readonly Int32 IReadOnlyCollection<T>.Count => Count;
-
 	readonly IEnumerator<T> IEnumerable<T>.GetEnumerator()
 	{
 		return GetEnumerator();
@@ -159,6 +138,26 @@ internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>> where T : clas
 	readonly IEnumerator IEnumerable.GetEnumerator()
 	{
 		return GetEnumerator();
+	}
+
+	internal void Add(T value)
+	{
+		if (_items is List<T> list)
+		{
+			list.Add(value);
+		}
+		else if (_items is not null)
+		{
+			_items = new List<T>
+			{
+				(_items as T)!,
+				value,
+			};
+		}
+		else
+		{
+			_items = value is not null ? value : NullItem.Instance;
+		}
 	}
 
 	internal struct Enumerator : IEnumerator<T>
@@ -184,6 +183,10 @@ internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>> where T : clas
 				_index = -1;
 			}
 		}
+
+		public readonly T Current => (_current as T)!;
+
+		readonly Object? IEnumerator.Current => Current;
 
 		public Boolean MoveNext()
 		{
@@ -215,10 +218,6 @@ internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>> where T : clas
 			throw new NotSupportedException();
 		}
 
-		public readonly T Current => (_current as T)!;
-
-		readonly Object? IEnumerator.Current => Current;
-
 		public readonly void Dispose()
 		{
 		}
@@ -226,10 +225,10 @@ internal struct Items<T> : IReadOnlyList<T>, IEquatable<Items<T>> where T : clas
 
 	internal sealed class NullItem
 	{
-		internal static NullItem Instance { get; } = new();
-
 		private NullItem()
 		{
 		}
+
+		internal static NullItem Instance { get; } = new();
 	}
 }

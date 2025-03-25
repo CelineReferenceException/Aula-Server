@@ -4,7 +4,8 @@ namespace Aula.Server.Core.Gateway;
 
 internal static class HeaderParsingMiddlewareHelper
 {
-	internal static TBuilder UseWebSocketHeaderParsing<TBuilder>(this TBuilder builder) where TBuilder : IApplicationBuilder
+	internal static TBuilder UseWebSocketHeaderParsing<TBuilder>(this TBuilder builder)
+		where TBuilder : IApplicationBuilder
 	{
 		_ = builder.UseMiddleware<HeaderParsingMiddleware>();
 

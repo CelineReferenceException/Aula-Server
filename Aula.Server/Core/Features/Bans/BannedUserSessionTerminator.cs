@@ -52,7 +52,7 @@ internal sealed class BannedUserSessionTerminator : INotificationHandler<BanCrea
 				return;
 			}
 
-			user.Modify(permissions: 0);
+			user.Modify(permissions: 0).ThrowIfFailed();
 			user.SetCurrentRoom(null);
 			user.UpdateConcurrencyStamp();
 

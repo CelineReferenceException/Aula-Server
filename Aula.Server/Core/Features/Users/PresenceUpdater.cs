@@ -52,7 +52,7 @@ internal sealed class PresenceUpdater :
 				.Where(u => u.Id == session.UserId)
 				.FirstOrDefaultAsync(ct) ?? throw new UnreachableException("User expected to exist");
 
-			user.Modify(presence: GetPresence(notification.Presence));
+			user.Modify(presence: GetPresence(notification.Presence)).ThrowIfFailed();
 			user.UpdateConcurrencyStamp();
 
 			_ = await _dbContext.SaveChangesAsync(ct);
@@ -86,7 +86,7 @@ internal sealed class PresenceUpdater :
 				.Where(u => u.Id == notification.Session.UserId)
 				.FirstOrDefaultAsync(ct) ?? throw new UnreachableException("User expected to exist");
 
-			user.Modify(presence: Presence.Offline);
+			user.Modify(presence: Presence.Offline).ThrowIfFailed();
 			user.UpdateConcurrencyStamp();
 
 			_ = await _dbContext.SaveChangesAsync(ct);
@@ -130,7 +130,7 @@ internal sealed class PresenceUpdater :
 				.Where(u => u.Id == session.UserId)
 				.FirstOrDefaultAsync(ct) ?? throw new UnreachableException("User expected to exist");
 
-			user.Modify(presence: GetPresence(data.Presence));
+			user.Modify(presence: GetPresence(data.Presence)).ThrowIfFailed();
 			user.UpdateConcurrencyStamp();
 
 			_ = await _dbContext.SaveChangesAsync(ct);

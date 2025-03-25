@@ -54,7 +54,7 @@
 		<Rule Id="SA1113" Action="Warning"/>          <!-- Comma should be on the same line as previous parameter -->
 		<Rule Id="SA1114" Action="Warning"/>          <!-- Parameter list should follow declaration -->
 		<Rule Id="SA1115" Action="Warning"/>          <!-- Parameter should follow comma -->
-		<Rule Id="SA1116" Action="Warning"/>          <!-- Split parameters should start on line after declaration -->
+		<Rule Id="SA1116" Action="None"/>          <!-- Split parameters should start on line after declaration -->
 		<Rule Id="SA1117" Action="None"/>             <!-- Parameters should be on same line or separate lines -->
 		<Rule Id="SA1118" Action="Warning"/>          <!-- Parameter should not span multiple lines -->
 		<Rule Id="SA1120" Action="Warning"/>          <!-- Comments should contain text -->
@@ -129,7 +129,7 @@
 		<Rule Id="SA1404" Action="Warning"/>          <!-- Code analysis suppression should have justification -->
 		<Rule Id="SA1405" Action="Warning"/>          <!-- Debug.Assert should provide message text -->
 		<Rule Id="SA1406" Action="Warning"/>          <!-- Debug.Fail should provide message text -->
-		<Rule Id="SA1407" Action="Warning"/>          <!-- Arithmetic expressions should declare precedence -->
+		<Rule Id="SA1407" Action="None"/>          <!-- Arithmetic expressions should declare precedence -->
 		<Rule Id="SA1408" Action="Warning"/>          <!-- Conditional expressions should declare precedence -->
 		<Rule Id="SA1409" Action="None"/>             <!-- Remove unnecessary code -->
 		<Rule Id="SA1410" Action="Warning"/>          <!-- Remove delegate parenthesis when possible -->

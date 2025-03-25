@@ -19,8 +19,6 @@ internal sealed class DateTimeToStringConverter : ValueConverter<DateTime, Strin
 	private static Expression<Func<String, DateTime>> FromProvider()
 	{
 		return static s => DateTime.ParseExact(s, "O", CultureInfo.InvariantCulture,
-			DateTimeStyles.NoCurrentDateDefault |
-			DateTimeStyles.AssumeUniversal |
-			DateTimeStyles.AdjustToUniversal);
+			DateTimeStyles.NoCurrentDateDefault | DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
 	}
 }

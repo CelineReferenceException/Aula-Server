@@ -7,7 +7,8 @@ internal sealed class ListPermissionsCommand : SubCommand
 {
 	private readonly ILogger<PermissionsCommand> _logger;
 
-	public ListPermissionsCommand(ILogger<PermissionsCommand> logger, IServiceProvider serviceProvider) : base(serviceProvider)
+	public ListPermissionsCommand(ILogger<PermissionsCommand> logger, IServiceProvider serviceProvider)
+		: base(serviceProvider)
 	{
 		_logger = logger;
 	}

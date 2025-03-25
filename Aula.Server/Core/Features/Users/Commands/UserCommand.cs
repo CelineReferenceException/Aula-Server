@@ -2,7 +2,8 @@
 
 internal sealed class UserCommand : Command
 {
-	public UserCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+	public UserCommand(IServiceProvider serviceProvider)
+		: base(serviceProvider)
 	{
 		AddSubCommand<PermissionsCommand>();
 	}

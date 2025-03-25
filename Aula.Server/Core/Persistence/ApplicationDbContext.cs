@@ -1,4 +1,5 @@
-﻿using Aula.Server.Core.Domain;
+﻿using System.Diagnostics.CodeAnalysis;
+using Aula.Server.Core.Domain;
 using Aula.Server.Core.Domain.Bans;
 using Aula.Server.Core.Domain.Messages;
 using Aula.Server.Core.Domain.Rooms;
@@ -14,7 +15,8 @@ internal sealed class ApplicationDbContext : DbContext
 
 	public ApplicationDbContext(
 		DbContextOptions<ApplicationDbContext> options,
-		IPublisher publisher) : base(options)
+		IPublisher publisher)
+		: base(options)
 	{
 		_publisher = publisher;
 	}
@@ -313,6 +315,7 @@ internal sealed class ApplicationDbContext : DbContext
 		base.OnModelCreating(modelBuilder);
 	}
 
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Reviewed.")]
 	public override async Task<Int32> SaveChangesAsync(CancellationToken cancellationToken = default)
 	{
 		var entriesWritten = await base.SaveChangesAsync(cancellationToken);

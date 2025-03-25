@@ -31,7 +31,8 @@ internal sealed class SetPermissionsSubCommand : SubCommand
 	public SetPermissionsSubCommand(
 		ApplicationDbContext dbContext,
 		ILogger<SetPermissionsSubCommand> logger,
-		IServiceProvider serviceProvider) : base(serviceProvider)
+		IServiceProvider serviceProvider)
+		: base(serviceProvider)
 	{
 		_dbContext = dbContext;
 		_logger = logger;
@@ -70,7 +71,7 @@ internal sealed class SetPermissionsSubCommand : SubCommand
 			return;
 		}
 
-		user.Modify(permissions: permissions);
+		user.Modify(permissions: permissions).ThrowIfFailed();
 		user.UpdateConcurrencyStamp();
 
 		try

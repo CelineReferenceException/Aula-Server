@@ -2,19 +2,19 @@
 
 internal sealed record MessageUserLeave
 {
-	internal Snowflake MessageId { get; }
-
-	// Navigation property, values are set through reflection.
-	internal Message? Message { get; init; }
-
-	internal Snowflake UserId { get; }
-
-	internal Snowflake? RoomId { get; }
-
 	internal MessageUserLeave(Snowflake messageId, Snowflake userId, Snowflake? roomId)
 	{
 		MessageId = messageId;
 		UserId = userId;
 		RoomId = roomId;
 	}
+
+	internal Snowflake MessageId { get; }
+
+	internal Snowflake UserId { get; }
+
+	internal Snowflake? RoomId { get; }
+
+	// Navigation property, values are set through reflection.
+	internal Message? Message { get; init; }
 }

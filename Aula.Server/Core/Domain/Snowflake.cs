@@ -30,6 +30,14 @@ internal readonly struct Snowflake : ISpanParsable<Snowflake>, IEquatable<Snowfl
 
 	internal UInt64 MillisecondsSinceEpoch => Value >> 22;
 
+	public static implicit operator Snowflake(UInt64 value) => new(value);
+
+	public static implicit operator UInt64(Snowflake value) => value.Value;
+
+	public static Boolean operator ==(Snowflake left, Snowflake right) => left.Equals(right);
+
+	public static Boolean operator !=(Snowflake left, Snowflake right) => !left.Equals(right);
+
 	public static Snowflake Parse(String s, IFormatProvider? provider)
 	{
 		return UInt64.Parse(s, provider);
@@ -92,12 +100,4 @@ internal readonly struct Snowflake : ISpanParsable<Snowflake>, IEquatable<Snowfl
 	{
 		return Value.ToString();
 	}
-
-	public static Boolean operator ==(Snowflake left, Snowflake right) => left.Equals(right);
-
-	public static Boolean operator !=(Snowflake left, Snowflake right) => !left.Equals(right);
-
-	public static implicit operator Snowflake(UInt64 value) => new(value);
-
-	public static implicit operator UInt64(Snowflake value) => value.Value;
 }

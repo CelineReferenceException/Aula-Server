@@ -17,7 +17,7 @@ internal sealed partial class QueueHostedService<T> : BackgroundService
 		_logger = logger;
 	}
 
-	[SuppressMessage("Design", "CA1031:Do not catch general exception types")]
+	[SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Reviewed.")]
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 	{
 		while (!stoppingToken.IsCancellationRequested)

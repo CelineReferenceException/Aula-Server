@@ -7,7 +7,8 @@ namespace Aula.Server.Common.Commands;
 /// </summary>
 internal abstract class SubCommand : Command
 {
-	private protected SubCommand(IServiceProvider serviceProvider) : base(serviceProvider)
+	private protected SubCommand(IServiceProvider serviceProvider)
+		: base(serviceProvider)
 	{
 	}
 }

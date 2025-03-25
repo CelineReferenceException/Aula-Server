@@ -16,6 +16,10 @@ internal readonly struct DefaultKeyType : IEquatable<DefaultKeyType>
 	// This is really a Func<TPartitionKey, RateLimiter>
 	internal Object? Factory { get; }
 
+	public static Boolean operator ==(DefaultKeyType left, DefaultKeyType right) => left.Equals(right);
+
+	public static Boolean operator !=(DefaultKeyType left, DefaultKeyType right) => !left.Equals(right);
+
 	public Boolean Equals(DefaultKeyType other)
 	{
 		return PolicyName == other.PolicyName && Equals(Key, other.Key);
@@ -30,8 +34,4 @@ internal readonly struct DefaultKeyType : IEquatable<DefaultKeyType>
 	{
 		return HashCode.Combine(PolicyName, Key);
 	}
-
-	public static Boolean operator ==(DefaultKeyType left, DefaultKeyType right) => left.Equals(right);
-
-	public static Boolean operator !=(DefaultKeyType left, DefaultKeyType right) => !left.Equals(right);
 }

@@ -14,12 +14,12 @@ namespace Aula.Server.Core.Features.Users;
 
 internal sealed class GetUsersEndpoint : IEndpoint
 {
-	private const String TypeQueryParameter = "type";
-	private const String CountQueryParameter = "count";
+	internal const String TypeQueryParameter = "type";
+	internal const String CountQueryParameter = "count";
 	internal const String AfterQueryParameter = "after";
 	internal const Int32 MinimumUserCount = 2;
 	internal const Int32 MaximumUserCount = 100;
-	private const Int32 DefaultUserCount = 10;
+	internal const Int32 DefaultUserCount = 10;
 
 	public void Build(IEndpointRouteBuilder route)
 	{

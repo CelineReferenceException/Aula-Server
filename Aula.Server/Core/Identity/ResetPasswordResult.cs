@@ -11,13 +11,6 @@ internal sealed class ResetPasswordResult
 		Succeeded = succeeded;
 	}
 
-	internal String Description { get; }
-
-	/// <summary>
-	///     Whether the operation succeeded.
-	/// </summary>
-	internal Boolean Succeeded { get; private set; }
-
 	/// <summary>
 	///     The operation succeeded.
 	/// </summary>
@@ -63,4 +56,11 @@ internal sealed class ResetPasswordResult
 	///     The password has not enough unique characters.
 	/// </summary>
 	internal static ResetPasswordResult NotEnoughUniqueCharacters { get; } = new("The password has not enough unique characters.", false);
+
+	internal String Description { get; }
+
+	/// <summary>
+	///     Whether the operation succeeded.
+	/// </summary>
+	internal Boolean Succeeded { get; private set; }
 }

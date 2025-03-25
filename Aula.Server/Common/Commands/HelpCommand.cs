@@ -18,7 +18,8 @@ internal sealed partial class HelpCommand : Command
 	public HelpCommand(
 		CommandLine commandLine,
 		ILogger<HelpCommand> logger,
-		IServiceProvider serviceProvider) : base(serviceProvider)
+		IServiceProvider serviceProvider)
+		: base(serviceProvider)
 	{
 		_commandLine = commandLine;
 		_logger = logger;
@@ -35,7 +36,7 @@ internal sealed partial class HelpCommand : Command
 		ct.ThrowIfCancellationRequested();
 
 		var commands = _commandLine.Commands
-			.Select(kvp => kvp.Value)
+			.Select(static kvp => kvp.Value)
 			.ToArray();
 
 		if (!args.TryGetValue(_commandOption.Name, out var query) ||
@@ -75,7 +76,7 @@ internal sealed partial class HelpCommand : Command
 
 		var parameters = new CommandParameters();
 
-		foreach (var parameter in command.Options.Select(kvp => kvp.Value))
+		foreach (var parameter in command.Options.Select(static kvp => kvp.Value))
 		{
 			var name = $"{CommandOption.Prefix}{parameter.Name}";
 			parameters.Options.Add(new ParameterInfo(name, parameter.Description));
@@ -168,6 +169,7 @@ internal sealed partial class HelpCommand : Command
 	private readonly struct CommandParameters()
 	{
 		internal List<ParameterInfo> Options { get; } = [];
+
 		internal List<ParameterInfo> SubCommands { get; } = [];
 	}
 

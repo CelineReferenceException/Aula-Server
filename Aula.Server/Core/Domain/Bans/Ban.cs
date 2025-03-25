@@ -36,7 +36,6 @@ internal sealed class Ban : DefaultDomainEntity
 		String? reason = null,
 		Snowflake? targetId = null)
 	{
-
 		var ban = new Ban(id, type, executorId, reason, targetId, DateTime.UtcNow);
 		ban.Events.Add(new BanCreatedEvent(ban));
 

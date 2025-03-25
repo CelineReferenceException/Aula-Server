@@ -2,7 +2,6 @@
 using Aula.Server.Core.Domain.Messages;
 using Aula.Server.Core.Domain.Users;
 using Aula.Server.Core.Gateway;
-using Aula.Server.Core.Json;
 using Aula.Server.Core.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Http.Json;

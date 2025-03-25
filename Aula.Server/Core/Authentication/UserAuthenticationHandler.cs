@@ -18,7 +18,8 @@ internal sealed class UserAuthenticationHandler : AuthenticationHandler<Authenti
 		IOptionsMonitor<AuthenticationSchemeOptions> options,
 		ILoggerFactory logger,
 		UrlEncoder encoder,
-		TokenProvider tokenProvider) : base(options, logger, encoder)
+		TokenProvider tokenProvider)
+		: base(options, logger, encoder)
 	{
 		_tokenProvider = tokenProvider;
 	}

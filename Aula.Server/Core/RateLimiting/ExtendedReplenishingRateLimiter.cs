@@ -21,20 +21,6 @@ internal sealed class ExtendedReplenishingRateLimiter : ReplenishingRateLimiter
 
 	internal DateTime? ReplenishmentDate => FirstWindowAcquireDate + _underlyingRateLimiter.ReplenishmentPeriod;
 
-	protected override async ValueTask<RateLimitLease> AcquireAsyncCore(Int32 permitCount, CancellationToken cancellationToken)
-	{
-		ReplenishIfAcceptable();
-		FirstWindowAcquireDate ??= DateTime.UtcNow;
-		return await _underlyingRateLimiter.AcquireAsync(permitCount, cancellationToken);
-	}
-
-	protected override RateLimitLease AttemptAcquireCore(Int32 permitCount)
-	{
-		ReplenishIfAcceptable();
-		FirstWindowAcquireDate ??= DateTime.UtcNow;
-		return _underlyingRateLimiter.AttemptAcquire(permitCount);
-	}
-
 	public override RateLimiterStatistics? GetStatistics()
 	{
 		return _underlyingRateLimiter.GetStatistics();
@@ -49,6 +35,20 @@ internal sealed class ExtendedReplenishingRateLimiter : ReplenishingRateLimiter
 		}
 
 		return replenished;
+	}
+
+	protected override async ValueTask<RateLimitLease> AcquireAsyncCore(Int32 permitCount, CancellationToken cancellationToken)
+	{
+		ReplenishIfAcceptable();
+		FirstWindowAcquireDate ??= DateTime.UtcNow;
+		return await _underlyingRateLimiter.AcquireAsync(permitCount, cancellationToken);
+	}
+
+	protected override RateLimitLease AttemptAcquireCore(Int32 permitCount)
+	{
+		ReplenishIfAcceptable();
+		FirstWindowAcquireDate ??= DateTime.UtcNow;
+		return _underlyingRateLimiter.AttemptAcquire(permitCount);
 	}
 
 	private void ReplenishIfAcceptable()

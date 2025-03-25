@@ -46,7 +46,7 @@ internal sealed class ModifyRoomEndpoint : IEndpoint
 			return TypedResults.NotFound();
 		}
 
-		room.Modify(body.Name, body.Description, body.IsEntrance);
+		room.Modify(body.Name, body.Description, body.IsEntrance).ThrowIfFailed();
 		room.UpdateConcurrencyStamp();
 
 		try

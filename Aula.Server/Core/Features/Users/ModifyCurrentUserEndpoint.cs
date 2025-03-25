@@ -51,7 +51,7 @@ internal sealed class ModifyCurrentUserEndpoint : IEndpoint
 			return TypedResults.InternalServerError();
 		}
 
-		user.Modify(body.DisplayName, body.Description);
+		user.Modify(body.DisplayName, body.Description).ThrowIfFailed();
 		user.UpdateConcurrencyStamp();
 
 		try

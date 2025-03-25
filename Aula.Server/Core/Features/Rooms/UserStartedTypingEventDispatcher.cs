@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
 using Aula.Server.Core.Domain.Users;
 using Aula.Server.Core.Gateway;
-using Aula.Server.Core.Json;
 using Aula.Server.Core.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Http.Json;
@@ -22,7 +21,6 @@ internal sealed class UserStartedTypingEventDispatcher : INotificationHandler<Us
 		_dbContext = dbContext;
 		_gatewayService = gatewayService;
 	}
-
 
 	public async Task Handle(UserStartedTypingEvent notification, CancellationToken cancellationToken)
 	{

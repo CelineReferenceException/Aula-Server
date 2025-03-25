@@ -74,7 +74,8 @@ internal static class DependencyInjection
 		return services;
 	}
 
-	internal static TBuilder UseCustomRateLimiting<TBuilder>(this TBuilder builder) where TBuilder : IApplicationBuilder
+	internal static TBuilder UseCustomRateLimiting<TBuilder>(this TBuilder builder)
+		where TBuilder : IApplicationBuilder
 	{
 		_ = builder.Use((httpContext, next) =>
 		{
@@ -165,7 +166,8 @@ internal static class DependencyInjection
 		return builder;
 	}
 
-	internal static TBuilder IgnoreRateLimiting<TBuilder>(this TBuilder builder) where TBuilder : IEndpointConventionBuilder
+	internal static TBuilder IgnoreRateLimiting<TBuilder>(this TBuilder builder)
+		where TBuilder : IEndpointConventionBuilder
 	{
 		return builder.WithMetadata(new IgnoreRateLimitingAttribute());
 	}

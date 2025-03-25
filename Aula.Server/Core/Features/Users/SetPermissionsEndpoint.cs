@@ -43,7 +43,7 @@ internal sealed class SetPermissionsEndpoint : IEndpoint
 			return TypedResults.Problem(ProblemDetailsDefaults.UserDoesNotExist);
 		}
 
-		user.Modify(permissions: body.Permissions);
+		user.Modify(permissions: body.Permissions).ThrowIfFailed();
 		user.UpdateConcurrencyStamp();
 
 		try

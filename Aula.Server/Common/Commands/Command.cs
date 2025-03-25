@@ -31,7 +31,7 @@ internal abstract class Command
 	internal IReadOnlyDictionary<String, CommandOption> Options => _options;
 
 	/// <summary>
-	///     A dictionary with the registered the sub-commands, where the <see cref="SubCommand.Name" /> is the key.
+	///     A dictionary with the registered the sub-commands, where the <see cref="Command.Name" /> is the key.
 	/// </summary>
 	internal IReadOnlyDictionary<String, Command> SubCommands => _subCommands;
 
@@ -112,7 +112,8 @@ internal abstract class Command
 	/// </summary>
 	/// <typeparam name="TCommand">The subcommand class.</typeparam>
 	/// <exception cref="InvalidOperationException">A subcommand with the same name is already registered.</exception>
-	private protected void AddSubCommand<TCommand>() where TCommand : Command
+	private protected void AddSubCommand<TCommand>()
+		where TCommand : Command
 	{
 		AddSubCommand(typeof(TCommand));
 	}

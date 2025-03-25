@@ -35,6 +35,7 @@ internal sealed class ConfirmEmailEndpoint : IEndpoint
 		{
 			return TypedResults.Problem(ProblemDetailsDefaults.InvalidBase64UrlEmail);
 		}
+
 		email = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(email));
 		var redirectUri = featureOptions.Value.ConfirmEmailRedirectUri?.ToString();
 

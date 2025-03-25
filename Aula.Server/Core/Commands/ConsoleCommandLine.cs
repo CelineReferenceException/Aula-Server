@@ -17,7 +17,7 @@ internal sealed class ConsoleCommandLine : BackgroundService
 		_logger = logger;
 	}
 
-	[SuppressMessage("Design", "CA1031:Do not catch general exception types")]
+	[SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Reviewed.")]
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 	{
 		// Console.In.ReadLineAsync is blocking, so we use the standard input stream directly and read it asynchronously.

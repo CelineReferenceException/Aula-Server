@@ -12,16 +12,6 @@ internal sealed class RegisterUserResult
 	}
 
 	/// <summary>
-	///     A more detailed description of the result.
-	/// </summary>
-	internal String Description { get; }
-
-	/// <summary>
-	///     Whether the operation succeeded.
-	/// </summary>
-	internal Boolean Succeeded { get; private set; }
-
-	/// <summary>
 	///     The operation succeeded.
 	/// </summary>
 	internal static RegisterUserResult Success { get; } = new("Register succeeded", true);
@@ -30,7 +20,6 @@ internal sealed class RegisterUserResult
 	///     The email provided is already in use.
 	/// </summary>
 	internal static RegisterUserResult EmailInUse { get; } = new("The email provided is already in use.", false);
-
 
 	/// <summary>
 	///     The username provided is already in use.
@@ -42,4 +31,14 @@ internal sealed class RegisterUserResult
 	/// </summary>
 	internal static RegisterUserResult InvalidUserNameCharacter { get; } =
 		new($"Usernames can only contain the following characters: {UserManager.UserNameAllowedCharacters}", false);
+
+	/// <summary>
+	///     A more detailed description of the result.
+	/// </summary>
+	internal String Description { get; }
+
+	/// <summary>
+	///     Whether the operation succeeded.
+	/// </summary>
+	internal Boolean Succeeded { get; private set; }
 }
