@@ -42,7 +42,7 @@ internal sealed partial class HelpCommand : Command
 		if (!args.TryGetValue(CommandOption.Name, out var query) ||
 		    String.IsNullOrWhiteSpace(query))
 		{
-			LogHelpMessage(_logger, FormatCommands(commands));
+			LogHelpMessage(_logger, CreateHelpMessage(commands));
 			return ValueTask.CompletedTask;
 		}
 
@@ -65,7 +65,7 @@ internal sealed partial class HelpCommand : Command
 			command = subCommand;
 		}
 
-		LogHelpMessage(_logger, FormatCommands(command));
+		LogHelpMessage(_logger, CreateHelpMessage(command));
 		return ValueTask.CompletedTask;
 	}
 
@@ -77,7 +77,7 @@ internal sealed partial class HelpCommand : Command
 		}, cancellationToken);
 	}
 
-	private static String FormatCommands(Command command)
+	private static String CreateHelpMessage(Command command)
 	{
 		var message = new StringBuilder();
 		var alignment = 16;
@@ -145,7 +145,7 @@ internal sealed partial class HelpCommand : Command
 		return message.ToString();
 	}
 
-	private static String FormatCommands(params ICollection<Command> commands)
+	private static String CreateHelpMessage(params ICollection<Command> commands)
 	{
 		var message = new StringBuilder();
 		var alignment = commands
