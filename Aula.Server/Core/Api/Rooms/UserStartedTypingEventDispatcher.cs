@@ -1,11 +1,8 @@
-﻿using System.Text.Json;
-using Aula.Server.Common.Gateway;
+﻿using Aula.Server.Common.Gateway;
 using Aula.Server.Common.Persistence;
 using Aula.Server.Domain.Users;
 using MediatR;
-using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace Aula.Server.Core.Api.Rooms;
 
@@ -13,11 +10,9 @@ internal sealed class UserStartedTypingEventDispatcher : INotificationHandler<Us
 {
 	private readonly ApplicationDbContext _dbContext;
 	private readonly GatewayService _gatewayService;
-	private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-	public UserStartedTypingEventDispatcher(IOptions<JsonOptions> jsonOptions, ApplicationDbContext dbContext, GatewayService gatewayService)
+	public UserStartedTypingEventDispatcher(ApplicationDbContext dbContext, GatewayService gatewayService)
 	{
-		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
 		_dbContext = dbContext;
 		_gatewayService = gatewayService;
 	}

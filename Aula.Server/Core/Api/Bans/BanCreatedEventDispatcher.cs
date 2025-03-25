@@ -1,13 +1,10 @@
 ﻿using System.Diagnostics;
-using System.Text.Json;
 using Aula.Server.Common.Gateway;
 using Aula.Server.Common.Persistence;
 using Aula.Server.Domain.Bans;
 using Aula.Server.Domain.Users;
 using MediatR;
-using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace Aula.Server.Core.Api.Bans;
 
@@ -15,13 +12,11 @@ internal sealed class BanCreatedEventDispatcher : INotificationHandler<BanCreate
 {
 	private readonly ApplicationDbContext _dbContext;
 	private readonly GatewayService _gatewayService;
-	private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-	public BanCreatedEventDispatcher(IOptions<JsonOptions> jsonOptions, GatewayService gatewayService, ApplicationDbContext dbContext)
+	public BanCreatedEventDispatcher(GatewayService gatewayService, ApplicationDbContext dbContext)
 	{
 		_gatewayService = gatewayService;
 		_dbContext = dbContext;
-		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
 	}
 
 	public async Task Handle(BanCreatedEvent notification, CancellationToken cancellationToken)

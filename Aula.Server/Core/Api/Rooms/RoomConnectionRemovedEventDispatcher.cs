@@ -1,21 +1,16 @@
-﻿using System.Text.Json;
-using Aula.Server.Common.Gateway;
+﻿using Aula.Server.Common.Gateway;
 using Aula.Server.Domain.Rooms;
 using MediatR;
-using Microsoft.AspNetCore.Http.Json;
-using Microsoft.Extensions.Options;
 
 namespace Aula.Server.Core.Api.Rooms;
 
 internal sealed class RoomConnectionRemovedEventDispatcher : INotificationHandler<RoomConnectionRemovedEvent>
 {
 	private readonly GatewayService _gatewayService;
-	private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-	public RoomConnectionRemovedEventDispatcher(IOptions<JsonOptions> jsonOptions, GatewayService gatewayService)
+	public RoomConnectionRemovedEventDispatcher(GatewayService gatewayService)
 	{
 		_gatewayService = gatewayService;
-		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
 	}
 
 	public Task Handle(RoomConnectionRemovedEvent notification, CancellationToken cancellationToken)

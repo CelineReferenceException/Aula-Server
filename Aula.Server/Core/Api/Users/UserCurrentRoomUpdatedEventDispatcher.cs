@@ -1,21 +1,16 @@
-﻿using System.Text.Json;
-using Aula.Server.Common.Gateway;
+﻿using Aula.Server.Common.Gateway;
 using Aula.Server.Domain.Users;
 using MediatR;
-using Microsoft.AspNetCore.Http.Json;
-using Microsoft.Extensions.Options;
 
 namespace Aula.Server.Core.Api.Users;
 
 internal sealed class UserCurrentRoomUpdatedEventDispatcher : INotificationHandler<UserCurrentRoomUpdatedEvent>
 {
 	private readonly GatewayService _gatewayService;
-	private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-	public UserCurrentRoomUpdatedEventDispatcher(IOptions<JsonOptions> jsonOptions, GatewayService gatewayService)
+	public UserCurrentRoomUpdatedEventDispatcher(GatewayService gatewayService)
 	{
 		_gatewayService = gatewayService;
-		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
 	}
 
 	public Task Handle(UserCurrentRoomUpdatedEvent notification, CancellationToken cancellationToken)
