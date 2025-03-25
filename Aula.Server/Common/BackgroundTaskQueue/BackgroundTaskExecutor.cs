@@ -6,12 +6,12 @@ namespace Aula.Server.Common.BackgroundTaskQueue;
 ///     Whenever available, dequeues work from a specific <see cref="IBackgroundTaskQueue{T}" /> instance and executes it sequentially.
 /// </summary>
 /// <typeparam name="T">The type parameter of the assigned <see cref="IBackgroundTaskQueue{T}" />.</typeparam>
-internal sealed partial class QueueHostedService<T> : BackgroundService
+internal sealed partial class BackgroundTaskExecutor<T> : BackgroundService
 {
-	private readonly ILogger<QueueHostedService<T>> _logger;
+	private readonly ILogger<BackgroundTaskExecutor<T>> _logger;
 	private readonly IBackgroundTaskQueue<T> _taskQueue;
 
-	public QueueHostedService(IBackgroundTaskQueue<T> taskQueue, ILogger<QueueHostedService<T>> logger)
+	public BackgroundTaskExecutor(IBackgroundTaskQueue<T> taskQueue, ILogger<BackgroundTaskExecutor<T>> logger)
 	{
 		_taskQueue = taskQueue;
 		_logger = logger;
