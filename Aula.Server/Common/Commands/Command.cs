@@ -104,7 +104,12 @@ internal abstract class Command
 	/// <exception cref="InvalidOperationException">A subcommand with the same name is already registered.</exception>
 	private protected void AddSubCommand(Type type)
 	{
-		var subCommand = (Command)ServiceProvider.GetRequiredService(type);
+		if (!type.IsSubclassOf(typeof(Command)))
+		{
+			throw new InvalidOperationException($"'{nameof(type)}' parameter is not a subclass of {nameof(SubCommand)}.");
+		}
+
+		var subCommand = (SubCommand)ServiceProvider.GetRequiredService(type);
 		if (!_subCommands.TryAdd(subCommand.Name, subCommand))
 		{
 			throw new InvalidOperationException($"A subcommand with the name '{type.Name}' has already been registered.");
