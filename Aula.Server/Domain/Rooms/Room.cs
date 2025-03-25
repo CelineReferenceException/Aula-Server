@@ -36,8 +36,10 @@ internal sealed class Room : DefaultDomainEntity
 
 	internal String ConcurrencyStamp { get; private set; }
 
-	// Readonly navigation property
-	internal IReadOnlyList<RoomConnection> Connections { get; private init; }
+	// Readonly navigation property.
+	// We set the initial value to null to avoid instantiating an extra List<T>
+	// when the property is being initialized through reflection
+	internal IReadOnlyList<RoomConnection> Connections { get; private init; } = null!;
 
 	internal DateTime CreationDate { get; }
 
