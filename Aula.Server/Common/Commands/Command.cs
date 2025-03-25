@@ -34,6 +34,9 @@ internal abstract class Command
 	/// </summary>
 	internal IReadOnlyDictionary<String, Command> SubCommands => _subCommands;
 
+	/// <summary>
+	///     Provides the <see cref="Callback" /> a way to access to services.
+	/// </summary>
 	protected IServiceProvider ServiceProvider { get; }
 
 	/// <summary>
