@@ -31,52 +31,6 @@ internal sealed partial class HelpCommand : Command
 		CanOverflow = true,
 	};
 
-	internal override ValueTask Callback(IReadOnlyDictionary<String, String> args, CancellationToken cancellationToken)
-	{
-		cancellationToken.ThrowIfCancellationRequested();
-
-		var commands = _commandLine.Commands
-			.Select(static kvp => kvp.Value)
-			.ToArray();
-
-		if (!args.TryGetValue(CommandOption.Name, out var query) ||
-		    String.IsNullOrWhiteSpace(query))
-		{
-			LogHelpMessage(_logger, CreateHelpMessage(commands));
-			return ValueTask.CompletedTask;
-		}
-
-		var querySegments = query.Split(' ');
-		var commandName = querySegments[0];
-		if (!_commandLine.Commands.TryGetValue(commandName, out var command))
-		{
-			LogUnknownCommandMessage(_logger, commandName);
-			return ValueTask.CompletedTask;
-		}
-
-		foreach (var subCommandName in querySegments.Skip(1))
-		{
-			if (!command.SubCommands.TryGetValue(subCommandName, out var subCommand))
-			{
-				LogUnknownSubCommandMessage(_logger, subCommandName);
-				return ValueTask.CompletedTask;
-			}
-
-			command = subCommand;
-		}
-
-		LogHelpMessage(_logger, CreateHelpMessage(command));
-		return ValueTask.CompletedTask;
-	}
-
-	internal ValueTask Callback(String commandName, CancellationToken cancellationToken = default)
-	{
-		return Callback(new Dictionary<String, String>
-		{
-			{ CommandOption.Name, commandName },
-		}, cancellationToken);
-	}
-
 	internal static String CreateHelpMessage(Command command)
 	{
 		var message = new StringBuilder();
@@ -163,6 +117,52 @@ internal sealed partial class HelpCommand : Command
 		}
 
 		return message.ToString();
+	}
+
+	internal override ValueTask Callback(IReadOnlyDictionary<String, String> args, CancellationToken cancellationToken)
+	{
+		cancellationToken.ThrowIfCancellationRequested();
+
+		var commands = _commandLine.Commands
+			.Select(static kvp => kvp.Value)
+			.ToArray();
+
+		if (!args.TryGetValue(CommandOption.Name, out var query) ||
+		    String.IsNullOrWhiteSpace(query))
+		{
+			LogHelpMessage(_logger, CreateHelpMessage(commands));
+			return ValueTask.CompletedTask;
+		}
+
+		var querySegments = query.Split(' ');
+		var commandName = querySegments[0];
+		if (!_commandLine.Commands.TryGetValue(commandName, out var command))
+		{
+			LogUnknownCommandMessage(_logger, commandName);
+			return ValueTask.CompletedTask;
+		}
+
+		foreach (var subCommandName in querySegments.Skip(1))
+		{
+			if (!command.SubCommands.TryGetValue(subCommandName, out var subCommand))
+			{
+				LogUnknownSubCommandMessage(_logger, subCommandName);
+				return ValueTask.CompletedTask;
+			}
+
+			command = subCommand;
+		}
+
+		LogHelpMessage(_logger, CreateHelpMessage(command));
+		return ValueTask.CompletedTask;
+	}
+
+	internal ValueTask Callback(String commandName, CancellationToken cancellationToken = default)
+	{
+		return Callback(new Dictionary<String, String>
+		{
+			{ CommandOption.Name, commandName },
+		}, cancellationToken);
 	}
 
 	[LoggerMessage(LogLevel.Information, Message = "Here's a list of all available commands: {message}")]
