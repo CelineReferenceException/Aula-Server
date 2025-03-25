@@ -6,13 +6,6 @@ internal sealed partial class HelpCommand : Command
 {
 	private readonly CommandLine _commandLine;
 
-	private readonly CommandOption _commandOption = new()
-	{
-		Name = "c",
-		Description = "Show information about a specific command.",
-		CanOverflow = true,
-	};
-
 	private readonly ILogger<HelpCommand> _logger;
 
 	public HelpCommand(
@@ -24,12 +17,19 @@ internal sealed partial class HelpCommand : Command
 		_commandLine = commandLine;
 		_logger = logger;
 
-		AddOptions(_commandOption);
+		AddOptions(CommandOption);
 	}
 
 	internal override String Name => "help";
 
 	internal override String Description => "Displays the list of available commands.";
+
+	internal CommandOption CommandOption { get; } = new()
+	{
+		Name = "c",
+		Description = "Show information about a specific command.",
+		CanOverflow = true,
+	};
 
 	internal override ValueTask Callback(IReadOnlyDictionary<String, String> args, CancellationToken ct)
 	{
@@ -39,7 +39,7 @@ internal sealed partial class HelpCommand : Command
 			.Select(static kvp => kvp.Value)
 			.ToArray();
 
-		if (!args.TryGetValue(_commandOption.Name, out var query) ||
+		if (!args.TryGetValue(CommandOption.Name, out var query) ||
 		    String.IsNullOrWhiteSpace(query))
 		{
 			LogHelpMessage(_logger, FormatCommands(commands));
