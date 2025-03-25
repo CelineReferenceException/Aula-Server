@@ -27,9 +27,6 @@ internal static class DependencyInjection
 			.ValidateDataAnnotations()
 			.ValidateOnStart();
 
-		_ = builder.Services.AddIdentity();
-		_ = builder.Services.AddCustomAuthentication();
-		_ = builder.Services.AddCustomAuthorization();
 
 		_ = builder.Services.AddCors(options =>
 		{
@@ -40,22 +37,25 @@ internal static class DependencyInjection
 					.AllowAnyMethod();
 			});
 		});
+
 		_ = builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>(ServiceLifetime.Singleton, includeInternalTypes: true);
 		_ = builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<IAssemblyMarker>());
-		_ = builder.Services.AddJson<IAssemblyMarker>();
-
-		_ = builder.Services.AddCustomRateLimiter();
-		_ = builder.Services.AddMailSender();
 		_ = builder.Services.AddSingleton<SnowflakeGenerator>();
 		_ = builder.Services.AddSingleton<TokenProvider>();
 		_ = builder.Services.AddPersistence(builder.Configuration);
 		_ = builder.Services.AddResilience();
+		_ = builder.Services.AddJson<IAssemblyMarker>();
+		_ = builder.Services.AddCustomRateLimiter();
+		_ = builder.Services.AddMailSender();
+		_ = builder.Services.AddIdentity();
+		_ = builder.Services.AddCustomAuthentication();
+		_ = builder.Services.AddCustomAuthorization();
 		_ = builder.Services.AddEndpoints<IAssemblyMarker>();
 		_ = builder.Services.AddGateway();
+		_ = builder.Services.AddCommandLine<IAssemblyMarker>();
 
 		_ = builder.Logging.ClearProviders();
 		_ = builder.Logging.AddLogging();
-		_ = builder.Services.AddCommandLine<IAssemblyMarker>();
 
 		return builder;
 	}
