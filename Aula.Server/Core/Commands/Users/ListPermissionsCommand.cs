@@ -3,7 +3,8 @@ using Aula.Server.Core.Domain.Users;
 
 namespace Aula.Server.Core.Commands.Users;
 
-internal sealed class ListPermissionsCommand : SubCommand
+[CommandLineIgnore]
+internal sealed class ListPermissionsCommand : Command
 {
 	private readonly ILogger<PermissionsCommand> _logger;
 

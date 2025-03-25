@@ -5,7 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Aula.Server.Core.Commands.Users;
 
-internal sealed class SetPermissionsSubCommand : SubCommand
+[CommandLineIgnore]
+internal sealed class SetPermissionsSubCommand : Command
 {
 	private readonly ILogger<SetPermissionsSubCommand> _logger;
 

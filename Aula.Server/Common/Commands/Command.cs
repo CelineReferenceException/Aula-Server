@@ -98,7 +98,7 @@ internal abstract class Command
 	}
 
 	/// <summary>
-	///     Adds a <see cref="SubCommand" /> to this <see cref="Command" /> instance.
+	///     Adds a sub-command to this <see cref="Command" /> instance.
 	/// </summary>
 	/// <param name="type">The <see cref="Type" /> of the subcommand class.</param>
 	/// <exception cref="InvalidOperationException">A subcommand with the same name is already registered.</exception>
@@ -106,10 +106,10 @@ internal abstract class Command
 	{
 		if (!type.IsSubclassOf(typeof(Command)))
 		{
-			throw new InvalidOperationException($"'{nameof(type)}' parameter is not a subclass of {nameof(SubCommand)}.");
+			throw new InvalidOperationException($"'{nameof(type)}' parameter is not a subclass of {nameof(Command)}.");
 		}
 
-		var subCommand = (SubCommand)ServiceProvider.GetRequiredService(type);
+		var subCommand = (Command)ServiceProvider.GetRequiredService(type);
 		if (!_subCommands.TryAdd(subCommand.Name, subCommand))
 		{
 			throw new InvalidOperationException($"A subcommand with the name '{type.Name}' has already been registered.");
@@ -117,7 +117,7 @@ internal abstract class Command
 	}
 
 	/// <summary>
-	///     Registers a <see cref="SubCommand" /> for this <see cref="Command" /> instance.
+	///     Registers a sub-command for this <see cref="Command" /> instance.
 	/// </summary>
 	/// <typeparam name="TCommand">The subcommand class.</typeparam>
 	/// <exception cref="InvalidOperationException">A subcommand with the same name is already registered.</exception>

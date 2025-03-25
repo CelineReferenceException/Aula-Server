@@ -63,7 +63,8 @@ internal static class DependencyInjection
 
 		foreach (var command in commands)
 		{
-			if (command.GetType().IsAssignableTo(typeof(SubCommand)))
+			var commandType = command.GetType();
+			if (commandType.CustomAttributes.Any(a => a.AttributeType == typeof(CommandLineIgnoreAttribute)))
 			{
 				continue;
 			}
