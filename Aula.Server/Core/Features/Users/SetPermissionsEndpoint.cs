@@ -2,6 +2,7 @@
 using Aula.Server.Core.Domain;
 using Aula.Server.Core.Endpoints;
 using Aula.Server.Core.Persistence;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -24,7 +25,7 @@ internal sealed class SetPermissionsEndpoint : IEndpoint
 	private static async Task<Results<NoContent, ProblemHttpResult, InternalServerError>> HandleAsync(
 		[FromRoute] Snowflake userId,
 		[FromBody] SetPermissionsRequestBody body,
-		[FromServices] SetPermissionsRequestBodyValidator bodyValidator,
+		[FromServices] IValidator<SetPermissionsRequestBody> bodyValidator,
 		[FromServices] ApplicationDbContext dbContext)
 	{
 		var validation = await bodyValidator.ValidateAsync(body);

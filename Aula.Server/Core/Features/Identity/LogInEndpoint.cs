@@ -1,6 +1,7 @@
 ﻿using Aula.Server.Core.Domain.Users;
 using Aula.Server.Core.Endpoints;
 using Aula.Server.Core.Identity;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -19,7 +20,7 @@ internal sealed class LogInEndpoint : IEndpoint
 
 	private static async Task<Results<Ok<LogInResponse>, ProblemHttpResult, EmptyHttpResult>> HandleAsync(
 		[FromBody] LogInRequestBody body,
-		[FromServices] LogInRequestBodyValidator bodyValidator,
+		[FromServices] IValidator<LogInRequestBody> bodyValidator,
 		[FromServices] UserManager userManager,
 		[FromServices] TokenProvider tokenProvider)
 	{

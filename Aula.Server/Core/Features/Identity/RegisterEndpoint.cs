@@ -1,6 +1,7 @@
 ﻿using Aula.Server.Core.Domain.Users;
 using Aula.Server.Core.Endpoints;
 using Aula.Server.Core.Identity;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -21,7 +22,7 @@ internal sealed class RegisterEndpoint : IEndpoint
 
 	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(
 		[FromBody] RegisterRequestBody body,
-		[FromServices] RegisterRequestBodyValidator bodyValidator,
+		[FromServices] IValidator<RegisterRequestBody> bodyValidator,
 		[FromServices] SnowflakeGenerator snowflakeGenerator,
 		[FromServices] UserManager userManager,
 		[FromServices] PasswordHasher<User> passwordHasher,

@@ -3,6 +3,7 @@ using Aula.Server.Core.Authorization;
 using Aula.Server.Core.Domain.Users;
 using Aula.Server.Core.Endpoints;
 using Aula.Server.Core.Identity;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -24,7 +25,7 @@ internal sealed class CreateBotEndpoint : IEndpoint
 
 	private static async Task<Results<Ok<CreateBotResponse>, ProblemHttpResult, InternalServerError>> HandleAsync(
 		[FromBody] CreateBotRequestBody body,
-		[FromServices] CreateBotRequestBodyValidator bodyValidator,
+		[FromServices] IValidator<CreateBotRequestBody> bodyValidator,
 		[FromServices] UserManager userManager,
 		[FromServices] SnowflakeGenerator snowflakeGenerator,
 		[FromServices] TokenProvider tokenProvider,

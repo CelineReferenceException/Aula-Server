@@ -2,6 +2,7 @@
 using Aula.Server.Core.Endpoints;
 using Aula.Server.Core.Identity;
 using Aula.Server.Core.Persistence;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -25,7 +26,7 @@ internal sealed class ModifyCurrentUserEndpoint : IEndpoint
 		[FromBody] ModifyCurrentUserRequestBody body,
 		HttpContext httpContext,
 		[FromServices] UserManager userManager,
-		[FromServices] ModifyCurrentUserRequestBodyValidator bodyValidator,
+		[FromServices] IValidator<ModifyCurrentUserRequestBody> bodyValidator,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] ILogger<ModifyCurrentUserEndpoint> logger)
 	{

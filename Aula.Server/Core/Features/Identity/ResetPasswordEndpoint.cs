@@ -2,6 +2,7 @@
 using Aula.Server.Core.Domain.Users;
 using Aula.Server.Core.Endpoints;
 using Aula.Server.Core.Identity;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -20,7 +21,7 @@ internal sealed class ResetPasswordEndpoint : IEndpoint
 
 	private static async Task<Results<NoContent, ProblemHttpResult>> HandleAsync(
 		[FromBody] ResetPasswordRequestBody body,
-		[FromServices] ResetPasswordRequestBodyValidator bodyValidator,
+		[FromServices] IValidator<ResetPasswordRequestBody> bodyValidator,
 		[FromServices] UserManager userManager,
 		[FromServices] TokenProvider tokenProvider)
 	{

@@ -3,6 +3,7 @@ using Aula.Server.Core.Domain.Rooms;
 using Aula.Server.Core.Domain.Users;
 using Aula.Server.Core.Endpoints;
 using Aula.Server.Core.Persistence;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -24,7 +25,7 @@ internal sealed class CreateRoomEndpoint : IEndpoint
 
 	private static async Task<Results<Created<RoomData>, ProblemHttpResult>> HandleAsync(
 		[FromBody] CreateRoomRequestBody body,
-		[FromServices] CreateRoomRequestBodyValidator bodyValidator,
+		[FromServices] IValidator<CreateRoomRequestBody> bodyValidator,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] SnowflakeGenerator snowflakeGenerator,
 		HttpContext httpContext)

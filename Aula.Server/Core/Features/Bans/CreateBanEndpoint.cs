@@ -5,6 +5,7 @@ using Aula.Server.Core.Domain.Users;
 using Aula.Server.Core.Endpoints;
 using Aula.Server.Core.Identity;
 using Aula.Server.Core.Persistence;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -28,7 +29,7 @@ internal sealed class CreateBanEndpoint : IEndpoint
 	private static async Task<Results<Created<BanData>, ProblemHttpResult, InternalServerError>> HandleAsync(
 		[FromRoute] Snowflake userId,
 		[FromBody] CreateBanRequestBody body,
-		[FromServices] CreateBanRequestBodyValidator bodyValidator,
+		[FromServices] IValidator<CreateBanRequestBody> bodyValidator,
 		HttpContext httpContext,
 		[FromServices] UserManager userManager,
 		[FromServices] ApplicationDbContext dbContext,

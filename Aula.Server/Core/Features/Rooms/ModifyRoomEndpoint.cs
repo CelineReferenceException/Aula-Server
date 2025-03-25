@@ -3,6 +3,7 @@ using Aula.Server.Core.Domain;
 using Aula.Server.Core.Domain.Users;
 using Aula.Server.Core.Endpoints;
 using Aula.Server.Core.Persistence;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -26,7 +27,7 @@ internal sealed class ModifyRoomEndpoint : IEndpoint
 	private static async Task<Results<Ok<RoomData>, NotFound, ProblemHttpResult, InternalServerError>> HandleAsync(
 		[FromRoute] Snowflake roomId,
 		[FromBody] ModifyRoomRequestBody body,
-		[FromServices] ModifyRoomRequestBodyValidator bodyValidator,
+		[FromServices] IValidator<ModifyRoomRequestBody> bodyValidator,
 		[FromServices] ApplicationDbContext dbContext)
 	{
 		var validation = await bodyValidator.ValidateAsync(body);

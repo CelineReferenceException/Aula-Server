@@ -6,6 +6,7 @@ using Aula.Server.Core.Endpoints;
 using Aula.Server.Core.Identity;
 using Aula.Server.Core.Persistence;
 using Aula.Server.Core.RateLimiting;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -32,7 +33,7 @@ internal sealed class SendMessageEndpoint : IEndpoint
 	private static async Task<Results<Created<MessageData>, ProblemHttpResult, InternalServerError>> HandleAsync(
 		[FromRoute] Snowflake roomId,
 		[FromBody] SendMessageRequestBody body,
-		[FromServices] SendMessageRequestBodyValidator bodyValidator,
+		[FromServices] IValidator<SendMessageRequestBody> bodyValidator,
 		HttpContext httpContext,
 		[FromServices] UserManager userManager,
 		[FromServices] ApplicationDbContext dbContext,
