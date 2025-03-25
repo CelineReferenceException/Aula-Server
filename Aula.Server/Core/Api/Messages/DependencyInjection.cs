@@ -14,7 +14,7 @@ internal static class DependencyInjection
 		return services;
 	}
 
-	internal static IServiceCollection AddMessageEndpointRateLimiters(this IServiceCollection services)
+	private static IServiceCollection AddMessageEndpointRateLimiters(this IServiceCollection services)
 	{
 		_ = services.AddOptions<RateLimitOptions>(MessageRateLimitingPolicies.SendMessage)
 			.BindConfiguration($"RateLimiters:{nameof(MessageRateLimitingPolicies.SendMessage)}")
