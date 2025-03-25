@@ -46,16 +46,16 @@ internal sealed partial class CommandLine
 		return await ProcessCommandAsync(input, _commands, cancellationToken);
 	}
 
-	[LoggerMessage(LogLevel.Error, Message = "Unknown command: '{name}'")]
+	[LoggerMessage(LogLevel.Error, Message = "Unknown command \"{name}\"")]
 	private static partial void UnknownCommand(ILogger logger, String name);
 
-	[LoggerMessage(LogLevel.Error, Message = "Invalid command option name: '{name}'")]
+	[LoggerMessage(LogLevel.Error, Message = "Invalid command option name \"{name}\"")]
 	private static partial void InvalidCommandOption(ILogger logger, String name);
 
-	[LoggerMessage(LogLevel.Error, Message = "Missing argument: '{optionName}'")]
+	[LoggerMessage(LogLevel.Error, Message = "The required option \"{optionName}\" was declared but no value was provided.")]
 	private static partial void MissingArgument(ILogger logger, String optionName);
 
-	[LoggerMessage(LogLevel.Error, Message = "Missing required arguments for parameters {optionNames}.")]
+	[LoggerMessage(LogLevel.Error, Message = "Missing required arguments for options {optionNames}.")]
 	private static partial void LogMissingRequiredArguments(ILogger logger, String optionNames);
 
 	private async ValueTask<Boolean> ProcessCommandAsync(
