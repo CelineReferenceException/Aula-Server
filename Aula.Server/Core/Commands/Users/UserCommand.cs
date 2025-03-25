@@ -5,6 +5,7 @@ internal sealed class UserCommand : Command
 	public UserCommand(IServiceProvider serviceProvider)
 		: base(serviceProvider)
 	{
+		AddSubCommand<PermissionsSubCommand>();
 	}
 
 	internal override String Name => "user";
