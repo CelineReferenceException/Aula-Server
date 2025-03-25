@@ -9,12 +9,12 @@ namespace Aula.Server.Core.Api.Messages;
 internal sealed class MessageRemovedEventDispatcher : INotificationHandler<MessageRemovedEvent>
 {
 	private readonly ApplicationDbContext _dbContext;
-	private readonly GatewayService _gatewayService;
+	private readonly GatewaySessionManager _gatewaySessionManager;
 
-	public MessageRemovedEventDispatcher(ApplicationDbContext dbContext, GatewayService gatewayService)
+	public MessageRemovedEventDispatcher(ApplicationDbContext dbContext, GatewaySessionManager gatewaySessionManager)
 	{
 		_dbContext = dbContext;
-		_gatewayService = gatewayService;
+		_gatewaySessionManager = gatewaySessionManager;
 	}
 
 	public async Task Handle(MessageRemovedEvent notification, CancellationToken cancellationToken)
@@ -50,7 +50,7 @@ internal sealed class MessageRemovedEventDispatcher : INotificationHandler<Messa
 			},
 		};
 
-		var sessionUserIds = _gatewayService.Sessions.Values
+		var sessionUserIds = _gatewaySessionManager.Sessions.Values
 			.Select(connection => connection.UserId);
 
 		var sessionUsers = await _dbContext.Users
@@ -67,7 +67,7 @@ internal sealed class MessageRemovedEventDispatcher : INotificationHandler<Messa
 				u.Permissions,
 			}, cancellationToken);
 
-		foreach (var session in _gatewayService.Sessions.Values)
+		foreach (var session in _gatewaySessionManager.Sessions.Values)
 		{
 			if (!session.Intents.HasFlag(Intents.Messages) ||
 			    !sessionUsers.TryGetValue(session.UserId, out var user) ||

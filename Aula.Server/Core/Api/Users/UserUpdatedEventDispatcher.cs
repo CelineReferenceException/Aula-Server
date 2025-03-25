@@ -5,11 +5,11 @@ namespace Aula.Server.Core.Api.Users;
 
 internal sealed class UserUpdatedEventDispatcher : INotificationHandler<UserUpdatedEvent>
 {
-	private readonly GatewayService _gatewayService;
+	private readonly GatewaySessionManager _gatewaySessionManager;
 
-	public UserUpdatedEventDispatcher(GatewayService gatewayService)
+	public UserUpdatedEventDispatcher(GatewaySessionManager gatewaySessionManager)
 	{
-		_gatewayService = gatewayService;
+		_gatewaySessionManager = gatewaySessionManager;
 	}
 
 	public Task Handle(UserUpdatedEvent notification, CancellationToken cancellationToken)
@@ -31,7 +31,7 @@ internal sealed class UserUpdatedEventDispatcher : INotificationHandler<UserUpda
 			},
 		};
 
-		foreach (var session in _gatewayService.Sessions.Values)
+		foreach (var session in _gatewaySessionManager.Sessions.Values)
 		{
 			if (!session.Intents.HasFlag(Intents.Users))
 			{

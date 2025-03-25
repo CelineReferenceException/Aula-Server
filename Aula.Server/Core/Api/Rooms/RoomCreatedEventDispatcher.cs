@@ -5,11 +5,11 @@ namespace Aula.Server.Core.Api.Rooms;
 
 internal sealed class RoomCreatedEventDispatcher : INotificationHandler<RoomCreatedEvent>
 {
-	private readonly GatewayService _gatewayService;
+	private readonly GatewaySessionManager _gatewaySessionManager;
 
-	public RoomCreatedEventDispatcher(GatewayService gatewayService)
+	public RoomCreatedEventDispatcher(GatewaySessionManager gatewaySessionManager)
 	{
-		_gatewayService = gatewayService;
+		_gatewaySessionManager = gatewaySessionManager;
 	}
 
 	public Task Handle(RoomCreatedEvent notification, CancellationToken cancellationToken)
@@ -30,7 +30,7 @@ internal sealed class RoomCreatedEventDispatcher : INotificationHandler<RoomCrea
 			},
 		};
 
-		foreach (var session in _gatewayService.Sessions.Values)
+		foreach (var session in _gatewaySessionManager.Sessions.Values)
 		{
 			if (!session.Intents.HasFlag(Intents.Rooms))
 			{

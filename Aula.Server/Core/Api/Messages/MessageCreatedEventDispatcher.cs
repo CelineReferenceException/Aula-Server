@@ -9,12 +9,12 @@ namespace Aula.Server.Core.Api.Messages;
 internal sealed class MessageCreatedEventDispatcher : INotificationHandler<MessageCreatedEvent>
 {
 	private readonly ApplicationDbContext _dbContext;
-	private readonly GatewayService _gatewayService;
+	private readonly GatewaySessionManager _gatewaySessionManager;
 
-	public MessageCreatedEventDispatcher(ApplicationDbContext dbContext, GatewayService gatewayService)
+	public MessageCreatedEventDispatcher(ApplicationDbContext dbContext, GatewaySessionManager gatewaySessionManager)
 	{
 		_dbContext = dbContext;
-		_gatewayService = gatewayService;
+		_gatewaySessionManager = gatewaySessionManager;
 	}
 
 	public async Task Handle(MessageCreatedEvent notification, CancellationToken cancellationToken)
@@ -50,7 +50,7 @@ internal sealed class MessageCreatedEventDispatcher : INotificationHandler<Messa
 			},
 		};
 
-		var sessionUserIds = _gatewayService.Sessions.Values
+		var sessionUserIds = _gatewaySessionManager.Sessions.Values
 			.Select(session => session.UserId);
 
 		var sessionUsers = await _dbContext.Users
@@ -67,7 +67,7 @@ internal sealed class MessageCreatedEventDispatcher : INotificationHandler<Messa
 				u.Permissions,
 			}, cancellationToken);
 
-		foreach (var session in _gatewayService.Sessions.Values)
+		foreach (var session in _gatewaySessionManager.Sessions.Values)
 		{
 			if (!session.Intents.HasFlag(Intents.Messages) ||
 			    !sessionUsers.TryGetValue(session.UserId, out var user) ||

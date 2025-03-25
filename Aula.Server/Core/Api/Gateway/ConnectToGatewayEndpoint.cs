@@ -27,7 +27,7 @@ internal sealed class ConnectToGatewayEndpoint : IEndpoint
 		[FromHeader(Name = "X-SessionId")] String? sessionId,
 		[FromHeader(Name = "X-Presence")] PresenceOptions? presence,
 		[FromServices] UserManager userManager,
-		[FromServices] GatewayService gatewayService)
+		[FromServices] GatewaySessionManager gatewaySessionManager)
 	{
 		if (!httpContext.WebSockets.IsWebSocketRequest)
 		{
@@ -44,10 +44,10 @@ internal sealed class ConnectToGatewayEndpoint : IEndpoint
 
 		if (sessionId is not null)
 		{
-			if (!gatewayService.Sessions.TryGetValue(sessionId, out var previousSession) ||
+			if (!gatewaySessionManager.Sessions.TryGetValue(sessionId, out var previousSession) ||
 			    previousSession.UserId != userId ||
 			    previousSession.IsActive ||
-			    previousSession.CloseDate < DateTime.UtcNow - gatewayService.ExpirePeriod)
+			    previousSession.CloseDate < DateTime.UtcNow - gatewaySessionManager.ExpirePeriod)
 			{
 				return TypedResults.BadRequest();
 			}
@@ -60,7 +60,7 @@ internal sealed class ConnectToGatewayEndpoint : IEndpoint
 		else
 		{
 			var socket = await httpContext.WebSockets.AcceptWebSocketAsync();
-			session = gatewayService.CreateSession((Snowflake)userId, intents);
+			session = gatewaySessionManager.CreateSession((Snowflake)userId, intents);
 			session.SetWebSocket(socket);
 		}
 

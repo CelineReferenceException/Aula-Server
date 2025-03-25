@@ -11,7 +11,7 @@ internal static class DependencyInjection
 			.ValidateDataAnnotations()
 			.ValidateOnStart();
 
-		services.TryAddSingleton<GatewayService>();
+		services.TryAddSingleton<GatewaySessionManager>();
 		_ = services.AddHostedService<ExpiredSessionsCleanerService>();
 
 		_ = services.AddWebSockets(options =>

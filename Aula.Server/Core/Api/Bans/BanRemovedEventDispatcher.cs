@@ -10,11 +10,11 @@ namespace Aula.Server.Core.Api.Bans;
 internal sealed class BanRemovedEventDispatcher : INotificationHandler<BanRemovedEvent>
 {
 	private readonly ApplicationDbContext _dbContext;
-	private readonly GatewayService _gatewayService;
+	private readonly GatewaySessionManager _gatewaySessionManager;
 
-	public BanRemovedEventDispatcher(GatewayService gatewayService, ApplicationDbContext dbContext)
+	public BanRemovedEventDispatcher(GatewaySessionManager gatewaySessionManager, ApplicationDbContext dbContext)
 	{
-		_gatewayService = gatewayService;
+		_gatewaySessionManager = gatewaySessionManager;
 		_dbContext = dbContext;
 	}
 
@@ -35,7 +35,7 @@ internal sealed class BanRemovedEventDispatcher : INotificationHandler<BanRemove
 			},
 		};
 
-		foreach (var session in _gatewayService.Sessions.Values)
+		foreach (var session in _gatewaySessionManager.Sessions.Values)
 		{
 			var sessionUser = await _dbContext.Users
 				.Where(u => u.Id == session.UserId)

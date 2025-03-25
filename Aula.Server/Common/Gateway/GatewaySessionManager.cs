@@ -7,13 +7,13 @@ using Microsoft.Extensions.Options;
 
 namespace Aula.Server.Common.Gateway;
 
-internal sealed class GatewayService
+internal sealed class GatewaySessionManager
 {
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
 	private readonly IServiceScope _serviceScope;
 	private readonly ConcurrentDictionary<String, GatewaySession> _sessions = [];
 
-	public GatewayService(IOptions<GatewayOptions> gatewayOptions, IOptions<JsonOptions> jsonOptions, IServiceScopeFactory scopeFactory)
+	public GatewaySessionManager(IOptions<GatewayOptions> gatewayOptions, IOptions<JsonOptions> jsonOptions, IServiceScopeFactory scopeFactory)
 	{
 		_jsonSerializerOptions = jsonOptions.Value.SerializerOptions;
 		ExpirePeriod = TimeSpan.FromSeconds(gatewayOptions.Value.SecondsToExpire);

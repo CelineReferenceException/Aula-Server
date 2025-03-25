@@ -3,12 +3,12 @@
 internal sealed class ExpiredSessionsCleanerService : BackgroundService
 {
 	private readonly TimeSpan _cleanupInterval = TimeSpan.FromMinutes(5);
-	private readonly GatewayService _gatewayService;
+	private readonly GatewaySessionManager _gatewaySessionManager;
 
-	public ExpiredSessionsCleanerService(GatewayService gatewayService)
+	public ExpiredSessionsCleanerService(GatewaySessionManager gatewaySessionManager)
 	{
-		_gatewayService = gatewayService;
-		_cleanupInterval = gatewayService.ExpirePeriod < _cleanupInterval ? gatewayService.ExpirePeriod : _cleanupInterval;
+		_gatewaySessionManager = gatewaySessionManager;
+		_cleanupInterval = gatewaySessionManager.ExpirePeriod < _cleanupInterval ? gatewaySessionManager.ExpirePeriod : _cleanupInterval;
 	}
 
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -16,7 +16,7 @@ internal sealed class ExpiredSessionsCleanerService : BackgroundService
 		while (!stoppingToken.IsCancellationRequested)
 		{
 			await Task.Delay(_cleanupInterval, stoppingToken);
-			_gatewayService.ClearExpiredSessions();
+			_gatewaySessionManager.ClearExpiredSessions();
 		}
 	}
 }

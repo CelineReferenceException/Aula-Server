@@ -5,11 +5,11 @@ namespace Aula.Server.Core.Api.Rooms;
 
 internal sealed class RoomConnectionRemovedEventDispatcher : INotificationHandler<RoomConnectionRemovedEvent>
 {
-	private readonly GatewayService _gatewayService;
+	private readonly GatewaySessionManager _gatewaySessionManager;
 
-	public RoomConnectionRemovedEventDispatcher(GatewayService gatewayService)
+	public RoomConnectionRemovedEventDispatcher(GatewaySessionManager gatewaySessionManager)
 	{
-		_gatewayService = gatewayService;
+		_gatewaySessionManager = gatewaySessionManager;
 	}
 
 	public Task Handle(RoomConnectionRemovedEvent notification, CancellationToken cancellationToken)
@@ -26,7 +26,7 @@ internal sealed class RoomConnectionRemovedEventDispatcher : INotificationHandle
 			},
 		};
 
-		foreach (var session in _gatewayService.Sessions.Values)
+		foreach (var session in _gatewaySessionManager.Sessions.Values)
 		{
 			if (!session.Intents.HasFlag(Intents.Rooms))
 			{

@@ -11,17 +11,17 @@ namespace Aula.Server.Core.Api.Bans;
 internal sealed class BannedUserSessionTerminator : INotificationHandler<BanCreatedEvent>
 {
 	private readonly ApplicationDbContext _dbContext;
-	private readonly GatewayService _gatewayService;
+	private readonly GatewaySessionManager _gatewaySessionManager;
 	private readonly ResiliencePipeline _retryOnDbConcurrencyProblem;
 
 	public BannedUserSessionTerminator(
 		ApplicationDbContext dbContext,
 		[FromKeyedServices(ResiliencePipelines.RetryOnDbConcurrencyProblem)] ResiliencePipeline retryOnDbConcurrencyProblem,
-		GatewayService gatewayService)
+		GatewaySessionManager gatewaySessionManager)
 	{
 		_dbContext = dbContext;
 		_retryOnDbConcurrencyProblem = retryOnDbConcurrencyProblem;
-		_gatewayService = gatewayService;
+		_gatewaySessionManager = gatewaySessionManager;
 	}
 
 	public async Task Handle(BanCreatedEvent notification, CancellationToken cancellationToken)
@@ -32,7 +32,7 @@ internal sealed class BannedUserSessionTerminator : INotificationHandler<BanCrea
 			return;
 		}
 
-		var targetSessions = _gatewayService.Sessions
+		var targetSessions = _gatewaySessionManager.Sessions
 			.Select(kvp => kvp.Value)
 			.Where(s => s.UserId == ban.TargetId);
 		foreach (var session in targetSessions)
