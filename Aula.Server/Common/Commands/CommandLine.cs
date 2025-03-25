@@ -52,7 +52,7 @@ internal sealed partial class CommandLine
 	[LoggerMessage(LogLevel.Error, Message = "Invalid command option name \"{name}\"")]
 	private static partial void InvalidCommandOption(ILogger logger, String name);
 
-	[LoggerMessage(LogLevel.Error, Message = "The required option \"{optionName}\" was declared but no value was provided.")]
+	[LoggerMessage(LogLevel.Error, Message = "The option \"{optionName}\" requires to provide a value.")]
 	private static partial void MissingArgument(ILogger logger, String optionName);
 
 	[LoggerMessage(LogLevel.Error, Message = "options {optionNames} are required but they were not provided.")]
