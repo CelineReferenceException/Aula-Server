@@ -24,9 +24,9 @@ internal sealed class ResetPresencesService : IHostedService, IDisposable
 		GC.SuppressFinalize(this);
 	}
 
-	public async Task StartAsync(CancellationToken cancellationToken)
+	public Task StartAsync(CancellationToken cancellationToken)
 	{
-		await ResetPresencesAsync(cancellationToken);
+		return Task.CompletedTask;
 	}
 
 	public async Task StopAsync(CancellationToken cancellationToken)
