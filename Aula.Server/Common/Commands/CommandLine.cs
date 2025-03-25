@@ -102,7 +102,7 @@ internal sealed partial class CommandLine
 					cancellationToken);
 			}
 
-			CommandOption? option;
+			CommandOption? option = null;
 			if (startsWithParameterPrefix)
 			{
 				var optionName = segment[CommandOption.Prefix.Length..].ToString();
@@ -112,32 +112,37 @@ internal sealed partial class CommandLine
 					return false;
 				}
 
-				if (option.RequiresArgument &&
-				    !inputSegments.MoveNext())
+				if (!option.RequiresArgument)
+				{
+					arguments.Add(option.Name, String.Empty);
+					_ = pendingOptions.Remove(option);
+					continue;
+				}
+
+				if (!inputSegments.MoveNext())
 				{
 					_logger.MissingArgument(option.Name);
 					return false;
 				}
-
-				arguments.Add(option.Name, String.Empty);
-				_ = pendingOptions.Remove(option);
-				continue;
 			}
 
-			if (command.Options.Count is 1)
+			if (option is null)
 			{
-				// If a command has no subcommands, only one option, and no option is provided,
-				// then that option is automatically selected.
-				option = command.Options
-					.Select(kvp => kvp.Value)
-					.First();
-			}
-			else
-			{
-				// The command multiple options, and we cannot guess which select.
-				// returns the same response for unrecognized subcommands.
-				_logger.UnknownCommand(commandName);
-				return false;
+				if (command.Options.Count is 1)
+				{
+					// If a command has no subcommands, only one option, and no option is provided,
+					// then that option is automatically selected.
+					option = command.Options
+						.Select(kvp => kvp.Value)
+						.First();
+				}
+				else
+				{
+					// The command multiple options, and we cannot guess which select.
+					// returns the same response for unrecognized subcommands.
+					_logger.UnknownCommand(commandName);
+					return false;
+				}
 			}
 
 			var argumentStart = inputSegments.Current.Start.Value;
