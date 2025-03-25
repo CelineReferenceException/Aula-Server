@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Aula.Server.Core.Domain.Users;
 
-namespace Aula.Server.Core.Api.Users.Commands;
+namespace Aula.Server.Core.Commands.Users;
 
 internal sealed class ListPermissionsCommand : SubCommand
 {

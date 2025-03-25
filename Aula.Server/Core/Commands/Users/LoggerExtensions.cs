@@ -1,4 +1,4 @@
-﻿namespace Aula.Server.Core.Api.Users.Commands;
+﻿namespace Aula.Server.Core.Commands.Users;
 
 internal static partial class LoggerExtensions
 {
