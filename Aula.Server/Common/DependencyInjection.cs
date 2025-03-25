@@ -11,8 +11,6 @@ using Aula.Server.Common.Persistence;
 using Aula.Server.Common.RateLimiting;
 using Aula.Server.Common.Resilience;
 using FluentValidation;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
 
 namespace Aula.Server.Common;
 
