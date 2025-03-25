@@ -27,7 +27,6 @@ internal static class DependencyInjection
 			.ValidateDataAnnotations()
 			.ValidateOnStart();
 
-
 		_ = builder.Services.AddCors(options =>
 		{
 			options.AddDefaultPolicy(policy =>
