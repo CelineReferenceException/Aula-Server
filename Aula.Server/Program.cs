@@ -1,5 +1,14 @@
 using System.Diagnostics;
+using Aula.Server.Common.Authentication;
+using Aula.Server.Common.Authorization;
+using Aula.Server.Common.Identity;
+using Aula.Server.Common.Json;
+using Aula.Server.Common.Logging;
+using Aula.Server.Common.Mail;
+using Aula.Server.Common.Persistence;
+using Aula.Server.Common.Resilience;
 using Aula.Server.Core.Api;
+using FluentValidation;
 using MartinCostello.OpenApi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Options;
@@ -9,10 +18,44 @@ var startTimestamp = Stopwatch.GetTimestamp();
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddCommon();
-builder.Services.AddApi();
+builder.Configuration.AddJsonFile("configuration.json", false, true);
+
+builder.Services.AddOptions<ApplicationOptions>()
+	.BindConfiguration(ApplicationOptions.SectionName)
+	.ValidateDataAnnotations()
+	.ValidateOnStart();
+
+builder.Services.AddCors(options =>
+{
+	options.AddDefaultPolicy(policy =>
+	{
+		_ = policy.AllowAnyOrigin()
+			.AllowAnyHeader()
+			.AllowAnyMethod();
+	});
+});
+
 builder.Services.AddOpenApi();
 builder.Services.AddOpenApiExtensions(static options => options.XmlDocumentationAssemblies.Add(typeof(IAssemblyMarker).Assembly));
+builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>(ServiceLifetime.Singleton, includeInternalTypes: true);
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<IAssemblyMarker>());
+builder.Services.AddSingleton<SnowflakeGenerator>();
+builder.Services.AddSingleton<TokenProvider>();
+builder.Services.AddPersistence(builder.Configuration);
+builder.Services.AddResilience();
+builder.Services.AddJson<IAssemblyMarker>();
+builder.Services.AddCustomRateLimiter();
+builder.Services.AddMailSender();
+builder.Services.AddIdentity();
+builder.Services.AddCustomAuthentication();
+builder.Services.AddCustomAuthorization();
+builder.Services.AddEndpoints<IAssemblyMarker>();
+builder.Services.AddGateway();
+builder.Services.AddCommandLine<IAssemblyMarker>();
+builder.Services.AddApi();
+
+builder.Logging.ClearProviders();
+builder.Logging.AddLogging();
 
 var application = builder.Build();
 
