@@ -1,4 +1,4 @@
-﻿using Aula.Server.Core.Domain.Messages;
+﻿using Aula.Server.Domain.Messages;
 
 namespace Aula.Server.Core.Api.Messages;
 

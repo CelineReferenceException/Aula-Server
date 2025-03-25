@@ -1,5 +1,5 @@
-﻿using Aula.Server.Core.Domain;
-using Aula.Server.Core.Domain.Bans;
+﻿using Aula.Server.Domain;
+using Aula.Server.Domain.Bans;
 
 namespace Aula.Server.Core.Api.Bans;
 

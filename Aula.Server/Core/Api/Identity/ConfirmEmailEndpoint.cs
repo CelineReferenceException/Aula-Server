@@ -1,8 +1,8 @@
 ﻿using System.Buffers.Text;
 using System.Text;
-using Aula.Server.Core.Domain.Users;
-using Aula.Server.Core.Endpoints;
-using Aula.Server.Core.Identity;
+using Aula.Server.Common.Endpoints;
+using Aula.Server.Common.Identity;
+using Aula.Server.Domain.Users;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;

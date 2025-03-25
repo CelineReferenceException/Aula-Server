@@ -1,4 +1,4 @@
-﻿using Aula.Server.Core.Domain.Rooms;
+﻿using Aula.Server.Domain.Rooms;
 using FluentValidation;
 
 namespace Aula.Server.Core.Api.Rooms;

@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Threading.RateLimiting;
-using Aula.Server.Core.Identity;
-using Aula.Server.Core.RateLimiting;
+using Aula.Server.Common.Identity;
+using Aula.Server.Common.RateLimiting;
 using Microsoft.Extensions.Options;
 
 namespace Aula.Server.Core.Api.Messages;

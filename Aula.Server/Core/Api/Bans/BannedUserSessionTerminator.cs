@@ -1,8 +1,8 @@
 ﻿using System.Net.WebSockets;
-using Aula.Server.Core.Domain.Bans;
-using Aula.Server.Core.Gateway;
-using Aula.Server.Core.Persistence;
-using Aula.Server.Core.Resilience;
+using Aula.Server.Common.Gateway;
+using Aula.Server.Common.Persistence;
+using Aula.Server.Common.Resilience;
+using Aula.Server.Domain.Bans;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Polly;

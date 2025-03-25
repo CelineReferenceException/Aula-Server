@@ -1,4 +1,4 @@
-﻿using Aula.Server.Core.Domain.Bans;
+﻿using Aula.Server.Domain.Bans;
 using FluentValidation;
 
 namespace Aula.Server.Core.Api.Bans;

@@ -1,5 +1,5 @@
-﻿using Aula.Server.Core.Domain;
-using Aula.Server.Core.Domain.Users;
+﻿using Aula.Server.Domain;
+using Aula.Server.Domain.Users;
 
 namespace Aula.Server.Core.Api;
 

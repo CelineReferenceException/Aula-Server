@@ -1,4 +1,4 @@
-﻿using Aula.Server.Core.Domain;
+﻿using Aula.Server.Domain;
 
 namespace Aula.Server.Core.Api.Rooms;
 

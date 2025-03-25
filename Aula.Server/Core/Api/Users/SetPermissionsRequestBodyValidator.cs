@@ -1,4 +1,4 @@
-﻿using Aula.Server.Core.Domain.Users;
+﻿using Aula.Server.Domain.Users;
 using FluentValidation;
 
 namespace Aula.Server.Core.Api.Users;

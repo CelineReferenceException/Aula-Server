@@ -1,5 +1,5 @@
-﻿using Aula.Server.Core.Domain;
-using Aula.Server.Core.Domain.Messages;
+﻿using Aula.Server.Domain;
+using Aula.Server.Domain.Messages;
 
 namespace Aula.Server.Core.Api.Messages;
 

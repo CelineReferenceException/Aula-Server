@@ -1,5 +1,5 @@
-﻿using Aula.Server.Core.Domain.Users;
-using Aula.Server.Core.Identity;
+﻿using Aula.Server.Common.Identity;
+using Aula.Server.Domain.Users;
 using FluentValidation;
 using Microsoft.Extensions.Options;
 

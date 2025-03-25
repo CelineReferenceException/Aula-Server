@@ -1,6 +1,6 @@
-﻿using Aula.Server.Core.Domain.Messages;
-using Aula.Server.Core.Domain.Users;
-using Aula.Server.Core.Persistence;
+﻿using Aula.Server.Common.Persistence;
+using Aula.Server.Domain.Messages;
+using Aula.Server.Domain.Users;
 using MediatR;
 
 namespace Aula.Server.Core.Api.Messages;

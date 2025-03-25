@@ -2,11 +2,11 @@
 using System.Diagnostics;
 using System.Net.WebSockets;
 using System.Text.Json;
-using Aula.Server.Core.Domain;
-using Aula.Server.Core.Domain.Users;
-using Aula.Server.Core.Gateway;
-using Aula.Server.Core.Persistence;
-using Aula.Server.Core.Resilience;
+using Aula.Server.Common.Gateway;
+using Aula.Server.Common.Persistence;
+using Aula.Server.Common.Resilience;
+using Aula.Server.Domain;
+using Aula.Server.Domain.Users;
 using MediatR;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
