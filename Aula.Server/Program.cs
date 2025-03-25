@@ -72,7 +72,7 @@ catch (AggregateException e)
 		}
 	}
 
-	if (e.InnerExceptions.All(innerE => innerE is not OptionsValidationException))
+	if (e.InnerExceptions.Any(innerE => innerE is not OptionsValidationException))
 	{
 		throw;
 	}
