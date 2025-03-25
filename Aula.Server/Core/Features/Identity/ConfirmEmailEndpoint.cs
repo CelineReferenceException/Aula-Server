@@ -1,5 +1,6 @@
 ﻿using System.Buffers.Text;
 using System.Text;
+using Aula.Server.Core.Domain.Users;
 using Aula.Server.Core.Endpoints;
 using Aula.Server.Core.Identity;
 using Microsoft.AspNetCore.Builder;

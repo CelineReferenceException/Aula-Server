@@ -1,4 +1,6 @@
-﻿namespace Aula.Server.Core.Features.Users;
+﻿using Aula.Server.Core.Domain;
+
+namespace Aula.Server.Core.Features.Users;
 
 /// <summary>
 ///     Occurs when a user updates its current room.

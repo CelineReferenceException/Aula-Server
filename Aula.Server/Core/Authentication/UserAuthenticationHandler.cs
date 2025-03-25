@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Text.Encodings.Web;
+using Aula.Server.Core.Domain;
 using Aula.Server.Core.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;

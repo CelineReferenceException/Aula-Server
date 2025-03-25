@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Aula.Server.Core.Domain.Users;
+using FluentValidation;
 
 namespace Aula.Server.Core.Features.Bots;
 

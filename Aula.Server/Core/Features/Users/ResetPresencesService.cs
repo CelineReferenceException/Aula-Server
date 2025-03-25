@@ -1,4 +1,5 @@
-﻿using Aula.Server.Core.Persistence;
+﻿using Aula.Server.Core.Domain.Users;
+using Aula.Server.Core.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace Aula.Server.Core.Features.Users;

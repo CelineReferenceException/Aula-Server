@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Aula.Server.Core.Domain;
+using MediatR;
 
 namespace Aula.Server.Core.Features.Rooms;
 

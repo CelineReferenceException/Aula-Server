@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Aula.Server.Core.Domain.Users;
 using Aula.Server.Core.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;

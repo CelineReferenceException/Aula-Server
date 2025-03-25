@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text.Json.Serialization;
+using Aula.Server.Core.Domain.Users;
 using Microsoft.AspNetCore.Http.Json;
 
 namespace Aula.Server.Core.Json;

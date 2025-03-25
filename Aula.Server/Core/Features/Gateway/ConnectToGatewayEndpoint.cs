@@ -1,4 +1,5 @@
 ﻿using Aula.Server.Core.Authorization;
+using Aula.Server.Core.Domain;
 using Aula.Server.Core.Endpoints;
 using Aula.Server.Core.Features.Users;
 using Aula.Server.Core.Gateway;

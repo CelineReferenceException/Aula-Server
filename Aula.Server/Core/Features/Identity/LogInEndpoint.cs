@@ -1,4 +1,5 @@
-﻿using Aula.Server.Core.Endpoints;
+﻿using Aula.Server.Core.Domain.Users;
+using Aula.Server.Core.Endpoints;
 using Aula.Server.Core.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

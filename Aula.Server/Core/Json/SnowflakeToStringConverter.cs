@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Aula.Server.Core.Domain;
 
 namespace Aula.Server.Core.Json;
 

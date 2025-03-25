@@ -1,4 +1,6 @@
-﻿namespace Aula.Server.Core.Features.Rooms;
+﻿using Aula.Server.Core.Domain;
+
+namespace Aula.Server.Core.Features.Rooms;
 
 /// <summary>
 ///     Represents a room within the application.

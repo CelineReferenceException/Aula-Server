@@ -1,3 +1,5 @@
+using Aula.Server.Core.Domain.Users;
+
 namespace Aula.Server.Core.Identity;
 
 internal static class TokenProviderExtensions

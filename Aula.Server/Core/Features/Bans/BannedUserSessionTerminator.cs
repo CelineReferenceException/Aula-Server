@@ -1,4 +1,5 @@
 ﻿using System.Net.WebSockets;
+using Aula.Server.Core.Domain.Bans;
 using Aula.Server.Core.Gateway;
 using Aula.Server.Core.Persistence;
 using Aula.Server.Core.Resilience;

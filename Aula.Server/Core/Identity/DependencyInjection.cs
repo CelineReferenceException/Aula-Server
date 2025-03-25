@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Aula.Server.Core.Domain.Users;
+using Microsoft.AspNetCore.Identity;
 
 namespace Aula.Server.Core.Identity;
 

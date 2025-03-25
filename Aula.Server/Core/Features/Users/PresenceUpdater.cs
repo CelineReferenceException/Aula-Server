@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Net.WebSockets;
 using System.Text.Json;
+using Aula.Server.Core.Domain;
+using Aula.Server.Core.Domain.Users;
 using Aula.Server.Core.Gateway;
 using Aula.Server.Core.Persistence;
 using Aula.Server.Core.Resilience;

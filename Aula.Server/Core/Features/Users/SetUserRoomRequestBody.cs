@@ -1,4 +1,6 @@
-﻿namespace Aula.Server.Core.Features.Users;
+﻿using Aula.Server.Core.Domain;
+
+namespace Aula.Server.Core.Features.Users;
 
 /// <summary>
 ///     Holds the data required to set the current room of a user.

@@ -1,4 +1,6 @@
-﻿namespace Aula.Server.Core.Features.Messages;
+﻿using Aula.Server.Core.Domain.Messages;
+
+namespace Aula.Server.Core.Features.Messages;
 
 /// <summary>
 ///     Holds the data required to send a message.

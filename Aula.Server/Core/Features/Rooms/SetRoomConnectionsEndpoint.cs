@@ -1,4 +1,7 @@
 ﻿using Aula.Server.Core.Authorization;
+using Aula.Server.Core.Domain;
+using Aula.Server.Core.Domain.Rooms;
+using Aula.Server.Core.Domain.Users;
 using Aula.Server.Core.Endpoints;
 using Aula.Server.Core.Persistence;
 using Microsoft.AspNetCore.Builder;

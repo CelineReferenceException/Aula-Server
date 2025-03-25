@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Aula.Server.Core.Domain;
+using Microsoft.Extensions.Options;
 
 namespace Aula.Server.Core;
 

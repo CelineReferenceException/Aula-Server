@@ -1,4 +1,7 @@
-﻿namespace Aula.Server.Core.Features.Messages;
+﻿using Aula.Server.Core.Domain;
+using Aula.Server.Core.Domain.Messages;
+
+namespace Aula.Server.Core.Features.Messages;
 
 /// <summary>
 ///     Holds data required by <see cref="MessageType.UserLeave" /> messages.

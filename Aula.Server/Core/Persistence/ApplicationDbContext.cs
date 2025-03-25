@@ -1,4 +1,9 @@
-﻿using MediatR;
+﻿using Aula.Server.Core.Domain;
+using Aula.Server.Core.Domain.Bans;
+using Aula.Server.Core.Domain.Messages;
+using Aula.Server.Core.Domain.Rooms;
+using Aula.Server.Core.Domain.Users;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Aula.Server.Core.Persistence;

@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Aula.Server.Core.Domain.Rooms;
 using Aula.Server.Core.Gateway;
 using Aula.Server.Core.Json;
 using MediatR;

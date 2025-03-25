@@ -1,6 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
+using Aula.Server.Core.Domain;
+using Aula.Server.Core.Domain.Users;
 using Aula.Server.Core.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

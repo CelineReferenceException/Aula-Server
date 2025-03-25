@@ -1,4 +1,7 @@
-﻿namespace Aula.Server.Core.Features.Bans;
+﻿using Aula.Server.Core.Domain;
+using Aula.Server.Core.Domain.Bans;
+
+namespace Aula.Server.Core.Features.Bans;
 
 internal sealed record BanData
 {

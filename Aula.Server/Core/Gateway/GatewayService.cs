@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Text.Json;
+using Aula.Server.Core.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;

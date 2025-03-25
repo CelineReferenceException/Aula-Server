@@ -1,4 +1,6 @@
-﻿namespace Aula.Server.Core.Features.Identity;
+﻿using Aula.Server.Core.Domain.Users;
+
+namespace Aula.Server.Core.Features.Identity;
 
 /// <summary>
 ///     User identity related configurations.

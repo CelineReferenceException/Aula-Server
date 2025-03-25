@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using Aula.Server.Core.Domain;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Aula.Server.Core.Persistence;
