@@ -47,6 +47,7 @@ internal static class DependencyInjection
 		_ = builder.Services.AddCustomRateLimiter();
 		_ = builder.Services.AddMailSender();
 		_ = builder.Services.AddSingleton<SnowflakeGenerator>();
+		_ = builder.Services.AddSingleton<TokenProvider>();
 		_ = builder.Services.AddPersistence(builder.Configuration);
 		_ = builder.Services.AddResilience();
 		_ = builder.Services.AddEndpoints<IAssemblyMarker>();

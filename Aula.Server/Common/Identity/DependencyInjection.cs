@@ -16,7 +16,6 @@ internal static class DependencyInjection
 		_ = services.AddHostedService<PendingEmailConfirmationsCleanerService>();
 		_ = services.AddHostedService<PendingPasswordResetsCleanerService>();
 		_ = services.AddSingleton<PasswordHasher<User>>();
-		_ = services.AddSingleton<TokenProvider>();
 
 		_ = services.Configure<PasswordHasherOptions>(static options =>
 		{
