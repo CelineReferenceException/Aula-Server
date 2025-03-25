@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using Aula.Server.Common.Commands;
 
 namespace Aula.Server.Core.Commands;
 

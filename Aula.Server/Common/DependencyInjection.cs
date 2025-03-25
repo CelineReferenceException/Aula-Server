@@ -1,5 +1,6 @@
 ﻿using Aula.Server.Common.Authentication;
 using Aula.Server.Common.Authorization;
+using Aula.Server.Common.Commands;
 using Aula.Server.Common.Endpoints;
 using Aula.Server.Common.Gateway;
 using Aula.Server.Common.Identity;
