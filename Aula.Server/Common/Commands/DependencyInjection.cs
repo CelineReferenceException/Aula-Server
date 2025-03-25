@@ -16,7 +16,7 @@ internal static class DependencyInjection
 	/// <param name="services">The service collection to configure.</param>
 	/// <param name="assemblyType">A type from the assembly containing command implementations.</param>
 	/// <returns>The modified <see cref="IServiceCollection" />.</returns>
-	internal static IServiceCollection AddCommandLine(this IServiceCollection services, Type assemblyType)
+	internal static IServiceCollection AddCommands(this IServiceCollection services, Type assemblyType)
 	{
 		services.TryAddSingleton<CommandLine>();
 		_ = services.AddHostedService<CommandLineConsoleReader>();
@@ -48,9 +48,9 @@ internal static class DependencyInjection
 	/// <typeparam name="TAssembly">A type within the target assembly.</typeparam>
 	/// <param name="services">The service collection to configure.</param>
 	/// <returns>The modified <see cref="IServiceCollection" />.</returns>
-	internal static IServiceCollection AddCommandLine<TAssembly>(this IServiceCollection services)
+	internal static IServiceCollection AddCommands<TAssembly>(this IServiceCollection services)
 	{
-		return services.AddCommandLine(typeof(TAssembly));
+		return services.AddCommands(typeof(TAssembly));
 	}
 
 	internal static TBuilder MapCommands<TBuilder>(this TBuilder builder)

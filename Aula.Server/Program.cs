@@ -51,7 +51,7 @@ builder.Services.AddCustomAuthentication();
 builder.Services.AddCustomAuthorization();
 builder.Services.AddEndpoints<IAssemblyMarker>();
 builder.Services.AddGateway();
-builder.Services.AddCommandLine<IAssemblyMarker>();
+builder.Services.AddCommands<IAssemblyMarker>();
 builder.Services.AddApi();
 
 builder.Logging.ClearProviders();
