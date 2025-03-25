@@ -114,13 +114,6 @@ internal sealed class GatewaySession
 		await _eventsQueue.Writer.WriteAsync(payload.GetJsonUtf8Bytes(_jsonSerializerOptions), cancellationToken);
 	}
 
-	[Obsolete($"Use the overload that accepts a {nameof(GatewayPayload)} instead.")]
-	internal async Task QueueEventAsync(Byte[] payload, CancellationToken cancellationToken = default)
-	{
-		_ = await _eventsQueue.Writer.WaitToWriteAsync(cancellationToken);
-		await _eventsQueue.Writer.WriteAsync(payload, cancellationToken);
-	}
-
 	internal void SetWebSocket(WebSocket webSocket)
 	{
 		ArgumentNullException.ThrowIfNull(webSocket, nameof(webSocket));
