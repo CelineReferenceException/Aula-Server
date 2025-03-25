@@ -192,7 +192,7 @@ dotnet_diagnostic.ide0160.severity = suggestion
 
 # IDE0058: Expression value is never used
 csharp_style_unused_value_expression_statement_preference = discard_variable
-dotnet_diagnostic.ide0058.severity = suggestion
+dotnet_diagnostic.ide0058.severity = warning
 
 # IDE0290: Use primary constructor
 csharp_style_prefer_primary_constructors = false
