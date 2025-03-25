@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Aula.Server.Core;
-using Aula.Server.Core.Features;
+using Aula.Server.Core.Api;
 using MartinCostello.OpenApi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Options;
@@ -11,7 +11,7 @@ var startTimestamp = Stopwatch.GetTimestamp();
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddCommon();
-builder.Services.AddFeatures();
+builder.Services.AddApi();
 builder.Services.AddOpenApi();
 builder.Services.AddOpenApiExtensions(static options => options.XmlDocumentationAssemblies.Add(typeof(IAssemblyMarker).Assembly));
 

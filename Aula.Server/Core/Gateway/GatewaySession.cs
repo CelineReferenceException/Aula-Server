@@ -4,8 +4,8 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Channels;
+using Aula.Server.Core.Api.Users;
 using Aula.Server.Core.Domain;
-using Aula.Server.Core.Features.Users;
 using Aula.Server.Core.Json;
 using MediatR;
 
