@@ -10,7 +10,7 @@ internal sealed class UserCommand : Command
 
 	internal override String Name => "user";
 
-	internal override String Description => "User related commands.";
+	internal override String Description => "Shows a list of user related commands.";
 
 	internal override async ValueTask Callback(IReadOnlyDictionary<String, String> args, CancellationToken ct)
 	{
