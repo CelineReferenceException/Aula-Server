@@ -10,10 +10,4 @@ internal abstract class DefaultDomainEntity : IDomainEntity
 	{
 		Events.Clear();
 	}
-
-	[Obsolete($"Use {nameof(Events)}${nameof(Events.Add)} method instead.")]
-	private protected void AddEvent(DomainEvent domainEvent)
-	{
-		Events.Add(domainEvent);
-	}
 }
