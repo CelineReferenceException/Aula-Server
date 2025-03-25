@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Reflection;
 using System.Text.Json.Serialization;
 using Aula.Server.Domain.Users;
 using Microsoft.AspNetCore.Http.Json;
@@ -7,13 +8,18 @@ namespace Aula.Server.Common.Json;
 
 internal static class DependencyInjection
 {
-	internal static IServiceCollection AddJsonSerialization(this IServiceCollection services)
+	internal static IServiceCollection AddJsonSerialization<TAssemblyType>(this IServiceCollection services)
+	{
+		return services.AddJsonSerialization(typeof(TAssemblyType).Assembly);
+	}
+
+	internal static IServiceCollection AddJsonSerialization(this IServiceCollection services, Assembly assemblyType)
 	{
 		_ = services.Configure<JsonOptions>(options =>
 		{
 			options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 
-			var converters = typeof(IAssemblyMarker).Assembly.DefinedTypes
+			var converters = assemblyType.DefinedTypes
 				.Where(x => x.BaseType is not null && !x.IsGenericType && x.IsAssignableTo(typeof(JsonConverter)));
 
 			foreach (var converter in converters)
