@@ -14,7 +14,7 @@ internal static class DependencyInjection
 		return services;
 	}
 
-	internal static IServiceCollection AddGatewayEndpointRateLimiters(this IServiceCollection services)
+	private static IServiceCollection AddGatewayEndpointRateLimiters(this IServiceCollection services)
 	{
 		_ = services.AddOptions<RateLimitOptions>(GatewayRateLimitPolicies.Gateway)
 			.BindConfiguration($"RateLimiters:{nameof(GatewayRateLimitPolicies.Gateway)}")
