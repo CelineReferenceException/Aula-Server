@@ -8,7 +8,7 @@ internal static class DependencyInjection
 		return services;
 	}
 
-	internal static IServiceCollection AddIdentityEndpointEmailSenders(this IServiceCollection services)
+	private static IServiceCollection AddIdentityEndpointEmailSenders(this IServiceCollection services)
 	{
 		_ = services.AddOptions<IdentityFeatureOptions>()
 			.BindConfiguration(IdentityFeatureOptions.SectionName)
