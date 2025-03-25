@@ -16,7 +16,7 @@ internal sealed class ListPermissionsSubCommand : Command
 
 	internal override String Name => "list";
 
-	internal override String Description => "Shows a list of all the existing permissions and their corresponding flags.";
+	internal override String Description => "Shows a list of all the existing permissions and their corresponding values.";
 
 	internal override ValueTask Callback(IReadOnlyDictionary<String, String> args, CancellationToken cancellationToken)
 	{
