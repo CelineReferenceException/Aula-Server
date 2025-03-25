@@ -35,7 +35,7 @@ internal sealed class UserStoppedTypingEventDispatcher : INotificationHandler<Us
 				UserId = notification.UserId,
 				RoomId = notification.RoomId,
 			},
-		}.GetJsonUtf8Bytes(_jsonSerializerOptions);
+		};
 
 		var sessionUserIds = _gatewayService.Sessions.Values
 			.Select(session => session.UserId);

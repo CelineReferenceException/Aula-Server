@@ -27,7 +27,7 @@ internal sealed class GatewaySessionReadyEventHandler : INotificationHandler<Gat
 			{
 				SessionId = session.Id,
 			},
-		}.GetJsonUtf8Bytes(_jsonSerializerOptions);
+		};
 
 		_ = session.QueueEventAsync(payload, cancellationToken);
 		return Task.CompletedTask;

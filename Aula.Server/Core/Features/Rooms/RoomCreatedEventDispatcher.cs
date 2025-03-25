@@ -35,7 +35,7 @@ internal sealed class RoomCreatedEventDispatcher : INotificationHandler<RoomCrea
 				ConnectedRoomIds = room.Connections.Select(x => x.TargetRoomId).ToArray(),
 				CreationDate = room.CreationDate,
 			},
-		}.GetJsonUtf8Bytes(_jsonSerializerOptions);
+		};
 
 		foreach (var session in _gatewayService.Sessions.Values)
 		{

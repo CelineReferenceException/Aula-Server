@@ -55,7 +55,7 @@ internal sealed class MessageRemovedEventDispatcher : INotificationHandler<Messa
 					: null,
 				CreationDate = message.CreationDate,
 			},
-		}.GetJsonUtf8Bytes(_jsonSerializerOptions);
+		};
 
 		var sessionUserIds = _gatewayService.Sessions.Values
 			.Select(connection => connection.UserId);

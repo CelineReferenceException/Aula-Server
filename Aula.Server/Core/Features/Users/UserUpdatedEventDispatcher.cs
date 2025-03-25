@@ -36,7 +36,7 @@ internal sealed class UserUpdatedEventDispatcher : INotificationHandler<UserUpda
 				Permissions = user.Permissions,
 				CurrentRoomId = user.CurrentRoomId,
 			},
-		}.GetJsonUtf8Bytes(_jsonSerializerOptions);
+		};
 
 		foreach (var session in _gatewayService.Sessions.Values)
 		{

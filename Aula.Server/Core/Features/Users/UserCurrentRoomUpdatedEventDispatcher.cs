@@ -31,7 +31,7 @@ internal sealed class UserCurrentRoomUpdatedEventDispatcher : INotificationHandl
 				PreviousRoomId = notification.PreviousRoomId,
 				CurrentRoomId = notification.CurrentRoomId,
 			},
-		}.GetJsonUtf8Bytes(_jsonSerializerOptions);
+		};
 
 		foreach (var session in _gatewayService.Sessions.Values)
 		{

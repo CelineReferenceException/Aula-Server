@@ -40,7 +40,7 @@ internal sealed class BanCreatedEventDispatcher : INotificationHandler<BanCreate
 				TargetId = ban.TargetId,
 				CreationDate = ban.CreationDate,
 			},
-		}.GetJsonUtf8Bytes(_jsonSerializerOptions);
+		};
 
 		foreach (var session in _gatewayService.Sessions.Values)
 		{
