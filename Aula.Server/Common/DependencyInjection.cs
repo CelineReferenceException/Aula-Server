@@ -59,20 +59,4 @@ internal static class DependencyInjection
 
 		return builder;
 	}
-
-	internal static TApp UseCommon<TApp>(this TApp app)
-		where TApp : IApplicationBuilder, IEndpointRouteBuilder
-	{
-		_ = app.MapCommands();
-
-		_ = app.UseCors();
-		_ = app.UseWebSockets();
-		_ = app.UseWebSocketHeaderParsing();
-		_ = app.UseAuthentication();
-		_ = app.UseCustomRateLimiting();
-		_ = app.UseAuthorization();
-		_ = app.MapEndpoints();
-
-		return app;
-	}
 }

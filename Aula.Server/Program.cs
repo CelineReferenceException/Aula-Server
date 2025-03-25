@@ -1,4 +1,8 @@
 using System.Diagnostics;
+using Aula.Server.Common.Commands;
+using Aula.Server.Common.Endpoints;
+using Aula.Server.Common.Gateway;
+using Aula.Server.Common.RateLimiting;
 using Aula.Server.Core.Api;
 using MartinCostello.OpenApi;
 using Microsoft.AspNetCore.Builder;
@@ -21,7 +25,14 @@ if (!application.Environment.IsDevelopment())
 	_ = application.UseHttpsRedirection();
 }
 
-application.UseCommon();
+application.MapCommands();
+application.UseCors();
+application.UseWebSockets();
+application.UseWebSocketHeaderParsing();
+application.UseAuthentication();
+application.UseCustomRateLimiting();
+application.UseAuthorization();
+application.MapEndpoints();
 
 if (application.Environment.IsDevelopment())
 {
