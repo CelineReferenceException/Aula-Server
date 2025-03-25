@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
-
-namespace Aula.Server.Common.Logging;
+﻿namespace Aula.Server.Common.Logging;
 
 internal static class DependencyInjection
 {

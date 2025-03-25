@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
-
-namespace Aula.Server.Common.BackgroundTaskQueue;
+﻿namespace Aula.Server.Common.BackgroundTaskQueue;
 
 internal static class DependencyInjection
 {

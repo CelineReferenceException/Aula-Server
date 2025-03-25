@@ -3,7 +3,6 @@ using System.Threading.RateLimiting;
 using Aula.Server.Common.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 
 namespace Aula.Server.Common.RateLimiting;

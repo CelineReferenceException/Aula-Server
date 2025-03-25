@@ -1,6 +1,5 @@
 ﻿using Aula.Server.Core.Commands;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Aula.Server.Common.Commands;
 
