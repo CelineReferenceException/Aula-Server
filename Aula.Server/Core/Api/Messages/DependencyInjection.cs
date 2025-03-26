@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Threading.RateLimiting;
 using Aula.Server.Common.Identity;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 
 namespace Aula.Server.Core.Api.Messages;
@@ -9,6 +10,7 @@ internal static class DependencyInjection
 {
 	internal static IServiceCollection AddMessageApi(this IServiceCollection services)
 	{
+		_ = services.Configure<JsonOptions>(options => options.SerializerOptions.TypeInfoResolverChain.Add(MessageJsonContext.Default));
 		_ = services.AddMessageEndpointRateLimiters();
 		return services;
 	}
