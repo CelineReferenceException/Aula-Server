@@ -29,6 +29,7 @@ internal static class DependencyInjection
 			}
 
 			options.SerializerOptions.Converters.Add(new UInt64EnumToStringConverter<Permissions>());
+			options.SerializerOptions.TypeInfoResolverChain.Add(CommonJsonContext.Default);
 		});
 
 		return services;
