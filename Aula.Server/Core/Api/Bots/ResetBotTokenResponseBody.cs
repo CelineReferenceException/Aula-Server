@@ -1,6 +1,6 @@
 ﻿namespace Aula.Server.Core.Api.Bots;
 
-internal sealed record ResetBotTokenResponse
+internal sealed record ResetBotTokenResponseBody
 {
 	public required String Token { get; init; }
 }

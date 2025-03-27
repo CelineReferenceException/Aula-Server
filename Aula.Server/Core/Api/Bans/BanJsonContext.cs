@@ -4,5 +4,5 @@ namespace Aula.Server.Core.Api.Bans;
 
 [JsonSerializable(typeof(BanData))]
 [JsonSerializable(typeof(CreateBanRequestBody))]
-[JsonSerializable(typeof(GetCurrentUserBanStatusResponse))]
+[JsonSerializable(typeof(GetCurrentUserBanStatusResponseBody))]
 internal sealed partial class BanJsonContext : JsonSerializerContext;

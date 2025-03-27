@@ -1,6 +1,6 @@
 ﻿namespace Aula.Server.Core.Api.Bots;
 
-internal sealed record CreateBotResponse
+internal sealed record CreateBotResponseBody
 {
 	public required UserData User { get; set; }
 

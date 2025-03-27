@@ -24,7 +24,7 @@ internal sealed class ResetBotTokenEndpoint : IEndpoint
 			.HasApiVersion(1);
 	}
 
-	private static async Task<Results<Ok<ResetBotTokenResponse>, ProblemHttpResult, InternalServerError>> HandleAsync(
+	private static async Task<Results<Ok<ResetBotTokenResponseBody>, ProblemHttpResult, InternalServerError>> HandleAsync(
 		[FromRoute] Snowflake userId,
 		[FromServices] ApplicationDbContext dbContext,
 		[FromServices] TokenProvider tokenProvider)
@@ -49,7 +49,7 @@ internal sealed class ResetBotTokenEndpoint : IEndpoint
 			return TypedResults.InternalServerError();
 		}
 
-		return TypedResults.Ok(new ResetBotTokenResponse
+		return TypedResults.Ok(new ResetBotTokenResponseBody
 		{
 			Token = tokenProvider.CreateToken(user),
 		});

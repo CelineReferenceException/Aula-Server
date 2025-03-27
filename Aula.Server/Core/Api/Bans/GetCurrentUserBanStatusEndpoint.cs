@@ -19,7 +19,7 @@ internal sealed class GetCurrentUserBanStatusEndpoint : IEndpoint
 			.HasApiVersion(1);
 	}
 
-	private static async Task<Results<Ok<GetCurrentUserBanStatusResponse>, InternalServerError>> HandleAsync(
+	private static async Task<Results<Ok<GetCurrentUserBanStatusResponseBody>, InternalServerError>> HandleAsync(
 		HttpContext httpContext,
 		[FromServices] UserManager userManager,
 		[FromServices] ApplicationDbContext dbContext)
@@ -30,7 +30,7 @@ internal sealed class GetCurrentUserBanStatusEndpoint : IEndpoint
 			return TypedResults.InternalServerError();
 		}
 
-		return TypedResults.Ok(new GetCurrentUserBanStatusResponse
+		return TypedResults.Ok(new GetCurrentUserBanStatusResponseBody
 		{
 			Banned = await dbContext.Bans.AnyAsync(x => x.TargetId == userId),
 		});

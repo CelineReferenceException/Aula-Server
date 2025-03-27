@@ -17,7 +17,7 @@ internal sealed class LogInEndpoint : IEndpoint
 			.HasApiVersion(1);
 	}
 
-	private static async Task<Results<Ok<LogInResponse>, ProblemHttpResult, EmptyHttpResult>> HandleAsync(
+	private static async Task<Results<Ok<LogInResponseBody>, ProblemHttpResult, EmptyHttpResult>> HandleAsync(
 		[FromBody] LogInRequestBody body,
 		[FromServices] IValidator<LogInRequestBody> bodyValidator,
 		[FromServices] UserManager userManager,
@@ -54,7 +54,7 @@ internal sealed class LogInEndpoint : IEndpoint
 			return TypedResults.Problem(ProblemDetailsDefaults.EmailNotConfirmed);
 		}
 
-		return TypedResults.Ok(new LogInResponse
+		return TypedResults.Ok(new LogInResponseBody
 		{
 			Token = tokenProvider.CreateToken(user),
 		});

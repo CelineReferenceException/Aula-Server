@@ -22,7 +22,7 @@ internal sealed class CreateBotEndpoint : IEndpoint
 			.HasApiVersion(1);
 	}
 
-	private static async Task<Results<Ok<CreateBotResponse>, ProblemHttpResult, InternalServerError>> HandleAsync(
+	private static async Task<Results<Ok<CreateBotResponseBody>, ProblemHttpResult, InternalServerError>> HandleAsync(
 		[FromBody] CreateBotRequestBody body,
 		[FromServices] IValidator<CreateBotRequestBody> bodyValidator,
 		[FromServices] UserManager userManager,
@@ -52,7 +52,7 @@ internal sealed class CreateBotEndpoint : IEndpoint
 			});
 		}
 
-		return TypedResults.Ok(new CreateBotResponse
+		return TypedResults.Ok(new CreateBotResponseBody
 		{
 			User = new UserData
 			{
