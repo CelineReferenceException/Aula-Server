@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Aula.Server.Domain;
 using Aula.Server.Domain.Bans;
+using Aula.Server.Domain.Content;
 using Aula.Server.Domain.Messages;
 using Aula.Server.Domain.Rooms;
 using Aula.Server.Domain.Users;
@@ -30,6 +31,8 @@ internal sealed class ApplicationDbContext : DbContext
 	internal DbSet<RoomConnection> RoomConnections => Set<RoomConnection>();
 
 	internal DbSet<Message> Messages => Set<Message>();
+
+	internal DbSet<File> Files => Set<File>();
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -290,6 +293,25 @@ internal sealed class ApplicationDbContext : DbContext
 				x.TargetId,
 			})
 			.HasDatabaseName($"IX_{nameof(Ban)}_{nameof(Ban.TargetId)}");
+
+		#endregion
+
+		#region File model
+
+		var fileModel = modelBuilder.Entity<File>();
+
+		_ = fileModel.Property(x => x.Id)
+			.IsRequired()
+			.ValueGeneratedNever();
+		_ = fileModel.HasKey(x => x.Id);
+
+		_ = fileModel.Property(x => x.Name)
+			.IsRequired()
+			.HasMaxLength(File.NameMaximumLength);
+
+		_ = fileModel.Property(x => x.Extension)
+			.IsRequired()
+			.HasMaxLength(File.ExtensionMaximumLength);
 
 		#endregion
 
