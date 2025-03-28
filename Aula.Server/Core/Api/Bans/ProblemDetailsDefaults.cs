@@ -25,4 +25,18 @@ internal static class ProblemDetailsDefaults
 		Detail = "The specified user has administrator permissions.",
 		Status = StatusCodes.Status403Forbidden,
 	};
+
+	internal static ProblemDetails InvalidBanCount { get; } = new()
+	{
+		Title = "Invalid ban count.",
+		Detail = $"The ban count must be between {GetUserBansEndpoint.MinimumBanCount} and {GetUserBansEndpoint.MaximumBanCount}.",
+		Status = StatusCodes.Status400BadRequest,
+	};
+
+	internal static ProblemDetails InvalidAfterUser { get; } = new()
+	{
+		Title = $"Invalid '{GetUserBansEndpoint.AfterQueryParameter}' query parameter.",
+		Detail = "A ban with the specified user ID was not found.",
+		Status = StatusCodes.Status400BadRequest,
+	};
 }

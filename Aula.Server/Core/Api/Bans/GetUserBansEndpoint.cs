@@ -1,5 +1,6 @@
 ﻿using Aula.Server.Common.Authorization;
 using Aula.Server.Common.Persistence;
+using Aula.Server.Domain;
 using Aula.Server.Domain.Bans;
 using Aula.Server.Domain.Users;
 using Microsoft.AspNetCore.Builder;
@@ -13,6 +14,13 @@ namespace Aula.Server.Core.Api.Bans;
 
 internal sealed class GetUserBansEndpoint : IEndpoint
 {
+	internal const String TypeQueryParameter = "type";
+	internal const String AfterQueryParameter = "after";
+	internal const String CountQueryParameter = "count";
+	internal const Int32 MinimumBanCount = 1;
+	internal const Int32 MaximumBanCount = 100;
+	internal const Int32 DefaultBanCount = 10;
+
 	public void Build(IEndpointRouteBuilder route)
 	{
 		_ = route.MapGet("bans/users", HandleAsync)
@@ -22,10 +30,20 @@ internal sealed class GetUserBansEndpoint : IEndpoint
 			.HasApiVersion(1);
 	}
 
-	private static async Task<Ok<List<BanData>>> HandleAsync([FromServices] ApplicationDbContext dbContext)
+	private static async Task<Results<Ok<List<BanData>>, ProblemHttpResult>> HandleAsync(
+		[FromQuery(Name = TypeQueryParameter)] BanType? banType,
+		[FromQuery(Name = AfterQueryParameter)] Snowflake? afterId,
+		[FromQuery(Name = CountQueryParameter)] Int32? count,
+		[FromServices] ApplicationDbContext dbContext)
 	{
-		var bans = await dbContext.Bans
-			.Where(b => b.Type == BanType.Id)
+		count ??= DefaultBanCount;
+		if (count is > MaximumBanCount or < MinimumBanCount)
+		{
+			return TypedResults.Problem(ProblemDetailsDefaults.InvalidBanCount);
+		}
+
+		var bansQuery = dbContext.Bans
+			.OrderBy(r => r.CreationDate)
 			.Select(b => new BanData
 			{
 				Type = b.Type,
@@ -34,8 +52,32 @@ internal sealed class GetUserBansEndpoint : IEndpoint
 				TargetId = b.TargetId,
 				CreationDate = b.CreationDate,
 			})
-			.ToListAsync();
+			.Take((Int32)count);
 
-		return TypedResults.Ok(bans);
+		if (banType is not null)
+		{
+			bansQuery = bansQuery.Where(u => u.Type == banType);
+		}
+
+		if (afterId is not null)
+		{
+			var afterBan = await dbContext.Bans
+				.Where(b => b.ExecutorId == afterId)
+				.OrderByDescending(r => r.CreationDate)
+				.Select(b => new
+				{
+					b.CreationDate,
+				})
+				.FirstOrDefaultAsync();
+			if (afterBan is null)
+			{
+				return TypedResults.Problem(ProblemDetailsDefaults.InvalidAfterUser);
+			}
+
+			bansQuery = bansQuery.Where(b => b.CreationDate > afterBan.CreationDate);
+		}
+
+
+		return TypedResults.Ok(await bansQuery.ToListAsync());
 	}
 }
