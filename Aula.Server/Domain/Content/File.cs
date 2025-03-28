@@ -9,11 +9,12 @@ internal sealed class File
 	internal const Int32 ExtensionMinimumLength = 1;
 	internal const Int32 ExtensionMaximumLength = 8;
 
-	private File(Snowflake id, String name, String extension)
+	private File(Snowflake id, String name, String extension, Byte[] content)
 	{
 		Id = id;
 		Name = name;
 		Extension = extension;
+		Content = content;
 	}
 
 	internal Snowflake Id { get; }
@@ -22,9 +23,11 @@ internal sealed class File
 
 	internal String Extension { get; }
 
-	internal static Result<File, ValidationFailure> Create(Snowflake id, String name, String extension)
+	internal Byte[] Content { get; }
+
+	internal static Result<File, ValidationFailure> Create(Snowflake id, String name, String extension, Byte[] content)
 	{
-		var file = new File(id, name, extension);
+		var file = new File(id, name, extension, content);
 
 		var validationResult = FileValidator.Instance.Validate(file);
 		return validationResult.IsValid
