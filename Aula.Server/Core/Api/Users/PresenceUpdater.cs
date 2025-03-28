@@ -142,7 +142,7 @@ internal sealed class PresenceUpdater :
 		{
 			PresenceOptions.Invisible => Presence.Offline,
 			PresenceOptions.Online => Presence.Online,
-			_ => throw new InvalidOperationException($"Unhandled {nameof(PresenceOptions)} case: {presenceOptions})"),
+			_ => throw new UnreachableException($"Unhandled {nameof(PresenceOptions)} case: {presenceOptions})"),
 		};
 	}
 
