@@ -29,13 +29,13 @@ internal static class ProblemDetailsDefaults
 	internal static ProblemDetails InvalidBanCount { get; } = new()
 	{
 		Title = "Invalid ban count.",
-		Detail = $"The ban count must be between {GetBansEndpoint.MinimumBanCount} and {GetBansEndpoint.MaximumBanCount}.",
+		Detail = $"The ban count must be between {GetBansApiEndpoint.MinimumBanCount} and {GetBansApiEndpoint.MaximumBanCount}.",
 		Status = StatusCodes.Status400BadRequest,
 	};
 
 	internal static ProblemDetails InvalidAfterUser { get; } = new()
 	{
-		Title = $"Invalid '{GetBansEndpoint.AfterQueryParameter}' query parameter.",
+		Title = $"Invalid '{GetBansApiEndpoint.AfterQueryParameter}' query parameter.",
 		Detail = "A ban with the specified user ID was not found.",
 		Status = StatusCodes.Status400BadRequest,
 	};

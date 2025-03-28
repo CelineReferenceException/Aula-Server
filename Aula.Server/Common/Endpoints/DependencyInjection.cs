@@ -10,8 +10,8 @@ internal static class DependencyInjection
 	internal static IServiceCollection AddEndpoints(this IServiceCollection services, Type assemblyType)
 	{
 		var descriptors = assemblyType.Assembly.DefinedTypes
-			.Where(static t => t.IsAssignableTo(typeof(IEndpoint)) && t is { IsInterface: false, IsAbstract: false, })
-			.Select(static t => ServiceDescriptor.Transient(typeof(IEndpoint), t));
+			.Where(static t => t.IsAssignableTo(typeof(IApiEndpoint)) && t is { IsInterface: false, IsAbstract: false, })
+			.Select(static t => ServiceDescriptor.Transient(typeof(IApiEndpoint), t));
 
 		services.TryAddEnumerable(descriptors);
 
@@ -40,7 +40,7 @@ internal static class DependencyInjection
 
 		var apiGroup = builder.MapGroup("api/v{apiVersion:apiVersion}").WithApiVersionSet(apiVersionSet);
 
-		var endpoints = builder.ServiceProvider.GetRequiredService<IEnumerable<IEndpoint>>();
+		var endpoints = builder.ServiceProvider.GetRequiredService<IEnumerable<IApiEndpoint>>();
 
 		foreach (var endpoint in endpoints)
 		{
