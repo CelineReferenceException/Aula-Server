@@ -169,11 +169,6 @@ internal sealed class ApplicationDbContext : DbContext
 		_ = roomConnectionModel.Property(x => x.SourceRoomId)
 			.IsRequired();
 
-		_ = roomConnectionModel.HasOne(x => x.SourceRoom)
-			.WithMany(x => x.Connections)
-			.HasForeignKey(x => x.SourceRoomId)
-			.HasPrincipalKey(x => x.Id);
-
 		_ = roomConnectionModel.Property(x => x.TargetRoomId)
 			.IsRequired();
 
