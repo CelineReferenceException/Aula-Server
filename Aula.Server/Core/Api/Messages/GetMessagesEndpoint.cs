@@ -17,7 +17,7 @@ internal sealed class GetMessagesEndpoint : IEndpoint
 	internal const String BeforeQueryParameter = "before";
 	internal const String AfterQueryParameter = "after";
 	internal const String CountQueryParameter = "count";
-	internal const Int32 MinimumMessageCount = 2;
+	internal const Int32 MinimumMessageCount = 1;
 	internal const Int32 MaximumMessageCount = 100;
 	private const Int32 DefaultMessageCount = 10;
 

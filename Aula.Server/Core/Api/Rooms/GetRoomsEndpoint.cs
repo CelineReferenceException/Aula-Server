@@ -14,7 +14,7 @@ internal sealed class GetRoomsEndpoint : IEndpoint
 {
 	internal const String CountQueryParameter = "count";
 	internal const String AfterQueryParameter = "after";
-	internal const Int32 MinimumRoomCount = 2;
+	internal const Int32 MinimumRoomCount = 1;
 	internal const Int32 MaximumRoomCount = 100;
 	internal const Int32 DefaultRoomCount = 10;
 

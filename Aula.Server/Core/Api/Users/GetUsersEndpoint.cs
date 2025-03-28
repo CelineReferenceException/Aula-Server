@@ -16,7 +16,7 @@ internal sealed class GetUsersEndpoint : IEndpoint
 	internal const String TypeQueryParameter = "type";
 	internal const String CountQueryParameter = "count";
 	internal const String AfterQueryParameter = "after";
-	internal const Int32 MinimumUserCount = 2;
+	internal const Int32 MinimumUserCount = 1;
 	internal const Int32 MaximumUserCount = 100;
 	internal const Int32 DefaultUserCount = 10;
 
