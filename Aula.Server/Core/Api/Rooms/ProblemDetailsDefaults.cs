@@ -7,15 +7,15 @@ internal static class ProblemDetailsDefaults
 {
 	internal static ProblemDetails InvalidRoomCount { get; } = new()
 	{
-		Title = "Invalid message count.",
-		Detail = $"The message count must be between {GetRoomsEndpoint.MinimumRoomCount} and {GetRoomsEndpoint.MaximumRoomCount}.",
+		Title = "Invalid room count.",
+		Detail = $"The room count must be between {GetRoomsEndpoint.MinimumRoomCount} and {GetRoomsEndpoint.MaximumRoomCount}.",
 		Status = StatusCodes.Status400BadRequest,
 	};
 
 	internal static ProblemDetails InvalidAfterRoom { get; } = new()
 	{
 		Title = $"Invalid '{GetRoomsEndpoint.AfterQueryParameter}' query parameter.",
-		Detail = "A message with the specified ID was not found.",
+		Detail = "A room with the specified ID was not found.",
 		Status = StatusCodes.Status400BadRequest,
 	};
 
