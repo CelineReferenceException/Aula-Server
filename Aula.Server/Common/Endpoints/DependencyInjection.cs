@@ -37,8 +37,6 @@ internal static class DependencyInjection
 
 	internal static IEndpointRouteBuilder MapEndpoints(this IEndpointRouteBuilder builder)
 	{
-		ArgumentNullException.ThrowIfNull(builder, nameof(builder));
-
 		var endpoints = builder.ServiceProvider.GetRequiredService<IEnumerable<IEndpoint>>();
 
 		foreach (var endpoint in endpoints)
