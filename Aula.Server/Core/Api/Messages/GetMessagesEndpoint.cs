@@ -78,7 +78,7 @@ internal sealed class GetMessagesEndpoint : IEndpoint
 				m.LeaveData,
 				CreationTime = m.CreationDate,
 			})
-			.Take(count.Value);
+			.Take((Int32)count);
 
 		if (beforeId is not null)
 		{
