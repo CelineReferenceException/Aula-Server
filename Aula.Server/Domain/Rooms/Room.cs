@@ -43,6 +43,7 @@ internal sealed class Room : DefaultDomainEntity
 	// Readonly navigation property.
 	// We set the initial value to null to avoid instantiating an extra List<T>
 	// when the property is being initialized through reflection
+	[Obsolete]
 	internal IReadOnlyList<RoomConnection> Connections { get; private init; } = null!;
 
 	internal DateTime CreationDate { get; }
