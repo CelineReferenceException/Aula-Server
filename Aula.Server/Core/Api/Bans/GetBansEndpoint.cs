@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Aula.Server.Core.Api.Bans;
 
-internal sealed class GetUserBansEndpoint : IEndpoint
+internal sealed class GetBansEndpoint : IEndpoint
 {
 	internal const String TypeQueryParameter = "type";
 	internal const String AfterQueryParameter = "after";
