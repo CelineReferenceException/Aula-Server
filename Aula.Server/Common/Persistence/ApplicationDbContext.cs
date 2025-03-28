@@ -313,6 +313,12 @@ internal sealed class ApplicationDbContext : DbContext
 			.IsRequired()
 			.HasMaxLength(File.ExtensionMaximumLength);
 
+		_ = fileModel.Property(x => x.Content)
+			.IsRequired();
+
+		_ = fileModel.Property(x => x.CreationDate)
+			.IsRequired();
+
 		#endregion
 
 		foreach (var entityType in modelBuilder.Model.GetEntityTypes())
