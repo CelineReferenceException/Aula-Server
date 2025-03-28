@@ -8,13 +8,13 @@ internal static class ProblemDetailsDefaults
 	internal static ProblemDetails InvalidRoomCount { get; } = new()
 	{
 		Title = "Invalid room count.",
-		Detail = $"The room count must be between {GetRoomsApiEndpoint.MinimumRoomCount} and {GetRoomsApiEndpoint.MaximumRoomCount}.",
+		Detail = $"The room count must be between {GetRoomsEndpoint.MinimumRoomCount} and {GetRoomsEndpoint.MaximumRoomCount}.",
 		Status = StatusCodes.Status400BadRequest,
 	};
 
 	internal static ProblemDetails InvalidAfterRoom { get; } = new()
 	{
-		Title = $"Invalid '{GetRoomsApiEndpoint.AfterQueryParameter}' query parameter.",
+		Title = $"Invalid '{GetRoomsEndpoint.AfterQueryParameter}' query parameter.",
 		Detail = "A room with the specified ID was not found.",
 		Status = StatusCodes.Status400BadRequest,
 	};

@@ -37,20 +37,20 @@ internal static class ProblemDetailsDefaults
 	{
 		Title = "Invalid message count.",
 		Detail =
-			$"The message count must be between {GetMessagesApiEndpoint.MinimumMessageCount} and {GetMessagesApiEndpoint.MaximumMessageCount}.",
+			$"The message count must be between {GetMessagesEndpoint.MinimumMessageCount} and {GetMessagesEndpoint.MaximumMessageCount}.",
 		Status = StatusCodes.Status400BadRequest,
 	};
 
 	internal static ProblemDetails InvalidBeforeMessage { get; } = new()
 	{
-		Title = $"Invalid '{GetMessagesApiEndpoint.BeforeQueryParameter}' query parameter.",
+		Title = $"Invalid '{GetMessagesEndpoint.BeforeQueryParameter}' query parameter.",
 		Detail = "A message with the specified ID was not found.",
 		Status = StatusCodes.Status400BadRequest,
 	};
 
 	internal static ProblemDetails InvalidAfterMessage { get; } = new()
 	{
-		Title = $"Invalid '{GetMessagesApiEndpoint.AfterQueryParameter}' query parameter.",
+		Title = $"Invalid '{GetMessagesEndpoint.AfterQueryParameter}' query parameter.",
 		Detail = "A message with the specified ID was not found.",
 		Status = StatusCodes.Status400BadRequest,
 	};

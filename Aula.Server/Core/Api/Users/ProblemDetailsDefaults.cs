@@ -36,13 +36,13 @@ internal static class ProblemDetailsDefaults
 	internal static ProblemDetails InvalidUserCount { get; } = new()
 	{
 		Title = "Invalid user count.",
-		Detail = $"The user count must be between {GetUsersApiEndpoint.MinimumUserCount} and {GetUsersApiEndpoint.MaximumUserCount}.",
+		Detail = $"The user count must be between {GetUsersEndpoint.MinimumUserCount} and {GetUsersEndpoint.MaximumUserCount}.",
 		Status = StatusCodes.Status400BadRequest,
 	};
 
 	internal static ProblemDetails InvalidAfterUser { get; } = new()
 	{
-		Title = $"Invalid '{GetUsersApiEndpoint.AfterQueryParameter}' query parameter.",
+		Title = $"Invalid '{GetUsersEndpoint.AfterQueryParameter}' query parameter.",
 		Detail = "A user with the specified ID was not found.",
 		Status = StatusCodes.Status400BadRequest,
 	};
