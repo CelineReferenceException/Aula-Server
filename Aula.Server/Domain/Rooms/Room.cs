@@ -13,6 +13,7 @@ internal sealed class Room : DefaultDomainEntity
 		String name,
 		String description,
 		Boolean isEntrance,
+		Snowflake? musicId,
 		String concurrencyStamp,
 		DateTime creationDate,
 		Boolean isRemoved)
@@ -21,6 +22,7 @@ internal sealed class Room : DefaultDomainEntity
 		Name = name;
 		Description = description;
 		IsEntrance = isEntrance;
+		MusicId = musicId;
 		ConcurrencyStamp = concurrencyStamp;
 		CreationDate = creationDate;
 		IsRemoved = isRemoved;
@@ -34,6 +36,8 @@ internal sealed class Room : DefaultDomainEntity
 
 	internal Boolean IsEntrance { get; private set; }
 
+	internal Snowflake? MusicId { get; private set; }
+
 	internal String ConcurrencyStamp { get; private set; }
 
 	// Readonly navigation property.
@@ -45,9 +49,14 @@ internal sealed class Room : DefaultDomainEntity
 
 	internal Boolean IsRemoved { get; private set; }
 
-	internal static Result<Room, ValidationFailure> Create(Snowflake id, String name, String description, Boolean isEntrance)
+	internal static Result<Room, ValidationFailure> Create(
+		Snowflake id,
+		String name,
+		String description,
+		Boolean isEntrance,
+		Snowflake? musicId)
 	{
-		var room = new Room(id, name, description, isEntrance, GenerateConcurrencyStamp(), DateTime.UtcNow, false)
+		var room = new Room(id, name, description, isEntrance, musicId, GenerateConcurrencyStamp(), DateTime.UtcNow, false)
 		{
 			Connections = [],
 		};
@@ -105,6 +114,17 @@ internal sealed class Room : DefaultDomainEntity
 			return new ResultErrorValues<ValidationFailure>(validationResult.Errors);
 		}
 
+		if (Events.All(e => e is not RoomUpdatedEvent))
+		{
+			Events.Add(new RoomUpdatedEvent(this));
+		}
+
+		return Result<ValidationFailure>.Success;
+	}
+
+	internal Result<ValidationFailure> SetMusic(Snowflake? id)
+	{
+		MusicId = id;
 		if (Events.All(e => e is not RoomUpdatedEvent))
 		{
 			Events.Add(new RoomUpdatedEvent(this));
