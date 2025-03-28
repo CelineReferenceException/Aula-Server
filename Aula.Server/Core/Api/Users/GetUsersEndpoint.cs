@@ -52,7 +52,8 @@ internal sealed class GetUsersEndpoint : IEndpoint
 				Presence = u.Presence,
 				Permissions = u.Permissions,
 				CurrentRoomId = u.CurrentRoomId,
-			});
+			})
+			.Take((Int32)count);
 		if (userType is not null)
 		{
 			userQuery = userQuery.Where(u => u.Type == userType);
