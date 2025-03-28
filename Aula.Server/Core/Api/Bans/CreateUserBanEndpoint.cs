@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Aula.Server.Core.Api.Bans;
 
-internal sealed class CreateBanEndpoint : IEndpoint
+internal sealed class CreateUserBanEndpoint : IEndpoint
 {
 	public void Build(IEndpointRouteBuilder route)
 	{
@@ -27,8 +27,8 @@ internal sealed class CreateBanEndpoint : IEndpoint
 
 	private static async Task<Results<Created<BanData>, ProblemHttpResult, InternalServerError>> HandleAsync(
 		[FromRoute] Snowflake userId,
-		[FromBody] CreateBanRequestBody body,
-		[FromServices] IValidator<CreateBanRequestBody> bodyValidator,
+		[FromBody] CreateUserBanRequestBody body,
+		[FromServices] IValidator<CreateUserBanRequestBody> bodyValidator,
 		HttpContext httpContext,
 		[FromServices] UserManager userManager,
 		[FromServices] ApplicationDbContext dbContext,

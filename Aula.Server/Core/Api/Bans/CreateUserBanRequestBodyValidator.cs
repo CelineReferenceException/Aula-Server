@@ -3,18 +3,18 @@ using FluentValidation;
 
 namespace Aula.Server.Core.Api.Bans;
 
-internal sealed class CreateBanRequestBodyValidator : AbstractValidator<CreateBanRequestBody>
+internal sealed class CreateUserBanRequestBodyValidator : AbstractValidator<CreateUserBanRequestBody>
 {
-	public CreateBanRequestBodyValidator()
+	public CreateUserBanRequestBodyValidator()
 	{
 		_ = RuleFor(x => x.Reason)
 			.MinimumLength(Ban.ReasonMinimumLength)
-			.WithErrorCode(nameof(CreateBanRequestBody.Reason).ToCamel())
+			.WithErrorCode(nameof(CreateUserBanRequestBody.Reason).ToCamel())
 			.WithMessage($"Length must be at least {Ban.ReasonMinimumLength}");
 
 		_ = RuleFor(x => x.Reason)
 			.MaximumLength(Ban.ReasonMaximumLength)
-			.WithErrorCode(nameof(CreateBanRequestBody.Reason).ToCamel())
+			.WithErrorCode(nameof(CreateUserBanRequestBody.Reason).ToCamel())
 			.WithMessage($"Length must be at most {Ban.ReasonMaximumLength}");
 	}
 }
