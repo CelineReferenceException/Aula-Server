@@ -18,12 +18,14 @@ internal sealed class RoomConnection : DefaultDomainEntity
 
 	internal Snowflake TargetRoomId { get; }
 
+	// Navigation property
 	internal Room SourceRoom
 	{
 		get => _sourceRoom ?? throw new InvalidOperationException($"{nameof(SourceRoom)} is null");
 		init => _sourceRoom = value;
 	}
 
+	// Navigation property
 	internal Room TargetRoom
 	{
 		get => _targetRoom ?? throw new InvalidOperationException($"{nameof(TargetRoom)} is null");
