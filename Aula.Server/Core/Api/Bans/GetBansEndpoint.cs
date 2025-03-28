@@ -23,7 +23,7 @@ internal sealed class GetBansEndpoint : IEndpoint
 
 	public void Build(IEndpointRouteBuilder route)
 	{
-		_ = route.MapGet("bans/users", HandleAsync)
+		_ = route.MapGet("bans", HandleAsync)
 			.RequireAuthenticatedUser()
 			.RequirePermissions(Permissions.BanUsers)
 			.DenyBannedUsers()
