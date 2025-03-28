@@ -20,13 +20,13 @@ internal sealed class RoomConnection : DefaultDomainEntity
 
 	internal Room SourceRoom
 	{
-		get => _sourceRoom ?? throw new InvalidOperationException("SourceRoom is null");
+		get => _sourceRoom ?? throw new InvalidOperationException($"{nameof(SourceRoom)} is null");
 		init => _sourceRoom = value;
 	}
 
 	internal Room TargetRoom
 	{
-		get => _targetRoom ?? throw new InvalidOperationException("TargetRoom is null");
+		get => _targetRoom ?? throw new InvalidOperationException($"{nameof(TargetRoom)} is null");
 		init => _targetRoom = value;
 	}
 
