@@ -9,11 +9,16 @@ internal static class DependencyInjection
 {
 	internal static IServiceCollection AddEndpoints(this IServiceCollection services, Type assemblyType)
 	{
-		var descriptors = assemblyType.Assembly.DefinedTypes
+		var endpointDescriptors = assemblyType.Assembly.DefinedTypes
+			.Where(static t => t.IsAssignableTo(typeof(IEndpoint)) && t is { IsInterface: false, IsAbstract: false, })
+			.Select(static t => ServiceDescriptor.Transient(typeof(IEndpoint), t));
+
+		var apiEndpointDescriptors = assemblyType.Assembly.DefinedTypes
 			.Where(static t => t.IsAssignableTo(typeof(IApiEndpoint)) && t is { IsInterface: false, IsAbstract: false, })
 			.Select(static t => ServiceDescriptor.Transient(typeof(IApiEndpoint), t));
 
-		services.TryAddEnumerable(descriptors);
+		services.TryAddEnumerable(endpointDescriptors);
+		services.TryAddEnumerable(apiEndpointDescriptors);
 
 		_ = services.AddApiVersioning(options =>
 		{
@@ -34,15 +39,22 @@ internal static class DependencyInjection
 	{
 		ArgumentNullException.ThrowIfNull(builder, nameof(builder));
 
+		var endpoints = builder.ServiceProvider.GetRequiredService<IEnumerable<IEndpoint>>();
+
+		foreach (var endpoint in endpoints)
+		{
+			endpoint.Build(builder);
+		}
+
 		var apiVersionSet = builder.NewApiVersionSet()
 			.HasApiVersion(new ApiVersion(1))
 			.Build();
 
 		var apiGroup = builder.MapGroup("api/v{apiVersion:apiVersion}").WithApiVersionSet(apiVersionSet);
 
-		var endpoints = builder.ServiceProvider.GetRequiredService<IEnumerable<IApiEndpoint>>();
+		var apiEndpoints = builder.ServiceProvider.GetRequiredService<IEnumerable<IApiEndpoint>>();
 
-		foreach (var endpoint in endpoints)
+		foreach (var endpoint in apiEndpoints)
 		{
 			endpoint.Build(apiGroup);
 		}
