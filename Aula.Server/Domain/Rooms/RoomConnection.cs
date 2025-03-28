@@ -18,7 +18,7 @@ internal sealed class RoomConnection : DefaultDomainEntity
 
 	internal Snowflake TargetRoomId { get; }
 
-	// Navigation property
+	// Navigation property for relationships
 	internal Room SourceRoom
 	{
 		get => _sourceRoom ?? throw new InvalidOperationException($"{nameof(SourceRoom)} is null");
